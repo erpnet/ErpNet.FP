@@ -6,4 +6,8 @@
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
+  </ItemGroup>
+
 </Project>
