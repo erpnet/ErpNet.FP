@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Core", "ErpNet.FP.Core\ErpNet.FP.Core.csproj", "{33D19BCA-541E-4B4C-B1F5-0060721AB861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Core", "ErpNet.FP.Core\ErpNet.FP.Core.csproj", "{33D19BCA-541E-4B4C-B1F5-0060721AB861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Daisy", "ErpNet.FP.Daisy\ErpNet.FP.Daisy.csproj", "{24CCF7D6-828B-4811-893B-4660405499D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Daisy", "ErpNet.FP.Daisy\ErpNet.FP.Daisy.csproj", "{24CCF7D6-828B-4811-893B-4660405499D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Eltrade", "ErpNet.FP.Eltrade\ErpNet.FP.Eltrade.csproj", "{785496BE-7E74-4CC3-B2BE-B2E353452735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Eltrade", "ErpNet.FP.Eltrade\ErpNet.FP.Eltrade.csproj", "{785496BE-7E74-4CC3-B2BE-B2E353452735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.PrintServer", "ErpNet.FP.PrintServer\ErpNet.FP.PrintServer.csproj", "{686BA380-2032-4452-A58E-0E27060BFABB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.PrintServer", "ErpNet.FP.PrintServer\ErpNet.FP.PrintServer.csproj", "{686BA380-2032-4452-A58E-0E27060BFABB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Tremol", "ErpNet.FP.Tremol\ErpNet.FP.Tremol.csproj", "{36BA4E62-F306-4DB0-906D-E6D3A2F39F41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Tremol", "ErpNet.FP.Tremol\ErpNet.FP.Tremol.csproj", "{36BA4E62-F306-4DB0-906D-E6D3A2F39F41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6DBD3A2-307E-428A-8B28-4009808DED62}"
+	ProjectSection(SolutionItems) = preProject
+		Publishing.md = Publishing.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +26,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{33D19BCA-541E-4B4C-B1F5-0060721AB861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -86,5 +88,11 @@ Global
 		{36BA4E62-F306-4DB0-906D-E6D3A2F39F41}.Release|x64.Build.0 = Release|Any CPU
 		{36BA4E62-F306-4DB0-906D-E6D3A2F39F41}.Release|x86.ActiveCfg = Release|Any CPU
 		{36BA4E62-F306-4DB0-906D-E6D3A2F39F41}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B765DC6-609B-4316-B270-FF956A1A0D3C}
 	EndGlobalSection
 EndGlobal

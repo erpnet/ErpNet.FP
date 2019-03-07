@@ -6,4 +6,22 @@
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <!-- Nuget 
+  https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
+  -->
+  <PropertyGroup>
+    <!-- Default is true anyway -->
+    <!--<IsPackable>true</IsPackable>-->
+
+    <!--Specify using command-line-->
+    <PackageVersion>0.1.0</PackageVersion>
+    <PackageId>ErpNet.FP.Core</PackageId>
+    
+    <Title>ErpNet Fiscal Printers - Interfaces</Title>
+    <Authors>dilyanrusev;NikolayNikolov</Authors>
+    <PackageDescription>Common interface for fiscal printer drivers</PackageDescription>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
+  </PropertyGroup>
+
 </Project>
