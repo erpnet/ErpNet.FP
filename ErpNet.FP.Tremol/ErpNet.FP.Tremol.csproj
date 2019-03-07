@@ -6,8 +6,30 @@
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
   </ItemGroup>
+
+  <!-- Nuget 
+  https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
+  -->
+  <PropertyGroup>
+    <!-- Default is true anyway -->
+    <!--<IsPackable>true</IsPackable>-->
+
+    <!--Specify using command-line-->
+    <PackageVersion>0.1.0</PackageVersion>
+    <PackageId>ErpNet.FP.Tremol</PackageId>
+
+    <Title>ErpNet Fiscal Printers - Tremol drivers</Title>
+    <Authors>dilyanrusev;NikolayNikolov</Authors>
+    <PackageDescription>Implements common fiscal printing interfaces for Tremol devices using ZFP protocol</PackageDescription>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
+  </PropertyGroup>
 
 </Project>
