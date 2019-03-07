@@ -25,9 +25,12 @@
     <PackageVersion>0.1.0</PackageVersion>
     <PackageId>ErpNet.FP.Tremol</PackageId>
 
-    <Title>ErpNet Fiscal Printers - Tremol drivers</Title>
+    <Title>ErpNet Fiscal Printers - Drivers for Tremol printers</Title>
     <Authors>dilyanrusev;NikolayNikolov</Authors>
-    <PackageDescription>Implements common fiscal printing interfaces for Tremol devices using ZFP protocol</PackageDescription>
+    <PackageDescription>
+      Implements common fiscal printing interfaces for Tremol devices using ZFP protocol. 
+      See https://tremol.bg/bg
+    </PackageDescription>
     <PackageReleaseNotes></PackageReleaseNotes>
     <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
   </PropertyGroup>
