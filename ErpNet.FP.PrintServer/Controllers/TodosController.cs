@@ -89,13 +89,13 @@ namespace ErpNet.FP.PrintServer.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Todo> Post([FromBody] NewTodo value)
+        public ActionResult<Todo> Create([FromBody] NewTodo value)
         {
             var model = new Todo();
             model.Id = Guid.NewGuid();
             model.Text = value.Text;
             todos.Add(model.Id, model);
-            return CreatedAtAction(nameof(GetById), value);
+            return CreatedAtAction(nameof(GetById), new { id =model.Id } , value);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ErpNet.FP.PrintServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Put(Guid id, [FromBody] Todo value)
+        public ActionResult Update(Guid id, [FromBody] Todo value)
         {
             if (id != value.Id) return BadRequest();
             if (todos.TryGetValue(id, out var existing))
