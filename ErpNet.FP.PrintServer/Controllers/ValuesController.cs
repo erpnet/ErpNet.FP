@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,17 @@ namespace ErpNet.FP.PrintServer.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public class NewTodo
+        {
+            [Required]
+            public string Value;
+        }
+
         public class Todo
         {
-            public Guid? Id;
+            [Required]
+            public Guid Id;
+            [Required]
             public string Value;
         }
 
@@ -41,10 +50,12 @@ namespace ErpNet.FP.PrintServer.Controllers
 
         // POST api/values
         [HttpPost]
-        public ActionResult<Todo> Post([FromBody] Todo value)
+        public ActionResult<Todo> Post([FromBody] NewTodo value)
         {
-            value.Id = Guid.NewGuid();
-            todos.Add(value.Id.Value, value);
+            var model = new Todo();
+            model.Id = Guid.NewGuid();
+            model.Value = value.Value;
+            todos.Add(model.Id, model);
             return CreatedAtAction(nameof(Get), value);
         }
 
