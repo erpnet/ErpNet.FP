@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.PrintServer
 {
-    public class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {

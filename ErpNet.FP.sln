@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Tremol", "ErpNet.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6DBD3A2-307E-428A-8B28-4009808DED62}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		Publishing.md = Publishing.md
 	EndProjectSection
 EndProject

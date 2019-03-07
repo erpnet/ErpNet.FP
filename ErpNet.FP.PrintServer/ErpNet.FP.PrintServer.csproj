@@ -4,7 +4,10 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+    <DocumentationFile>bin\$(Configuration)\$(RuntimeIdentifier)\$(AssemblyName).xml</DocumentationFile>
+    <!-- the following should work, but it seems $(OutputPath) and $(Target) are resolved later -->
+    <!--<DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>-->
     <Version>0.1.0</Version>
   </PropertyGroup>
 
@@ -13,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
     <PackageReference Include="ErpNet.FP.Tremol" Version="0.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <!-- Nuget 
