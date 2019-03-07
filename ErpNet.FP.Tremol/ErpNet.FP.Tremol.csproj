@@ -4,11 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+    <Version>0.1.0</Version>
   </PropertyGroup>
-
-  <!--<ItemGroup>
-    <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
-  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
@@ -18,13 +15,6 @@
   https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
   -->
   <PropertyGroup>
-    <!-- Default is true anyway -->
-    <!--<IsPackable>true</IsPackable>-->
-
-    <!--Specify using command-line-->
-    <PackageVersion>0.1.0</PackageVersion>
-    <PackageId>ErpNet.FP.Tremol</PackageId>
-
     <Title>ErpNet Fiscal Printers - Drivers for Tremol printers</Title>
     <Authors>dilyanrusev;NikolayNikolov</Authors>
     <PackageDescription>

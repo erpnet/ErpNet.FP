@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <!-- Nuget 
@@ -12,10 +13,6 @@
   <PropertyGroup>
     <!-- Default is true anyway -->
     <!--<IsPackable>true</IsPackable>-->
-
-    <!--Specify using command-line-->
-    <PackageVersion>0.1.0</PackageVersion>
-    <PackageId>ErpNet.FP.Core</PackageId>
     
     <Title>ErpNet Fiscal Printers - Interfaces</Title>
     <Authors>dilyanrusev;NikolayNikolov</Authors>

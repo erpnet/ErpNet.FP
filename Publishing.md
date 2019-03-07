@@ -16,6 +16,6 @@ dotnet nuget push <project name and version>.nupkg  -k <nuget api key>  -s https
 
 ## General notes
 
-* Make sure assembly version matches package version
+* Update `Version` tag in `.csproj` file
 * Change `ReleaseNotes` tag in the `.csproj` file
 * Create a tag for the version

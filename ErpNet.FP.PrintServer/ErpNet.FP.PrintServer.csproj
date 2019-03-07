@@ -5,11 +5,28 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
+    <PackageReference Include="ErpNet.FP.Tremol" Version="0.1.0" />
   </ItemGroup>
+
+  <!-- Nuget 
+  https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
+  -->
+  <PropertyGroup>
+    <!-- Default is true anyway -->
+    <IsPackable>true</IsPackable>
+
+    <Title>ErpNet Fiscal Printers - Web API</Title>
+    <Authors>dilyanrusev;NikolayNikolov</Authors>
+    <PackageDescription>Web API that servese as a facade for individual printer drivers</PackageDescription>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
+  </PropertyGroup>
 
 </Project>
