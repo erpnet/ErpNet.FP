@@ -6,12 +6,28 @@
     public struct FiscalDeviceInfo
     {
         /// <summary>
-        /// Version of the device, according to <see cref="Model"/>
+        /// Fiscal printer serial number
         /// </summary>
-        public string Version;
+        public string SerialNumber;
         /// <summary>
-        /// Model of the device
+        /// Fiscal printer memory serial number
+        /// </summary>
+        public string FiscalMemorySerialNumber;
+        /// <summary>
+        /// Company that produces the printer
+        /// </summary>
+        public string Company;
+        /// <summary>
+        /// Model
         /// </summary>
         public string Model;
+        /// <summary>
+        /// Optional. 
+        /// </summary>
+        public string Type;
+        /// <summary>
+        /// Optional. Firmware version.
+        /// </summary>
+        public string FirmwareVersion;
     }
 }

@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+
+    <!-- Nuget 
+  https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
+  -->
+    <Version>0.1.0</Version>
+    <!-- Default is true anyway -->
+    <!--<IsPackable>true</IsPackable>-->
+
+    <Title>ErpNet Fiscal Printers - Interfaces</Title>
+    <Authors>dilyanrusev;NikolayNikolov</Authors>
+    <PackageDescription>Common interface for fiscal printer drivers</PackageDescription>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
+  </PropertyGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
+    <ProjectReference Include="..\ErpNet.FP.Daisy\ErpNet.FP.Daisy.csproj" />
+    <ProjectReference Include="..\ErpNet.FP.Datecs\ErpNet.FP.Datecs.csproj" />
+    <ProjectReference Include="..\ErpNet.FP.Eltrade\ErpNet.FP.Eltrade.csproj" />
+    <ProjectReference Include="..\ErpNet.FP.Tremol\ErpNet.FP.Tremol.csproj" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
+    <PackageReference Include="ErpNet.FP.Tremol" Version="0.1.0" />
+  </ItemGroup>-->
+</Project>
