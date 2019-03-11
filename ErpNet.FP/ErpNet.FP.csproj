@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../ErpNet.FP.snk</AssemblyOriginatorKeyFile>
+
+    <PackageId>ErpNet.FP</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>dilyanrusev;NikolayNikolov</Authors>
+    <Company>ERP.BG</Company>
+    <PackageDescription>Library for accessing fiscal printers via common interface</PackageDescription>
+    <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>
