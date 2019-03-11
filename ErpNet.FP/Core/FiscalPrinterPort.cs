@@ -3,9 +3,9 @@
     /// <summary>
     /// If fiscal printer is connected via COM port, this specifies which port is used
     /// </summary>
-    public enum FiscalPrinterPort
+    public enum FiscalPrinterPort : int
     {
-        COM1,
+        COM1 = 1,
         COM2,
         COM3,
         COM4,

@@ -37,6 +37,13 @@ namespace ErpNet.FP.Tremol.Zfp
                 }
 
                 printer.ServerSetDeviceSerialPortSettings(serialPort, baudRate);
+
+                if (paymentTypesMap.Count == 0)
+                {
+                    var paymentTypes = printer.ReadPayments();
+                    FillPaymentTypes(paymentTypes);
+                }
+
                 operation(printer);
             }
             catch (FiscalPrinterException)
