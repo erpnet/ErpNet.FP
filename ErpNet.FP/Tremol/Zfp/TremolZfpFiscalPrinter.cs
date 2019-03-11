@@ -22,6 +22,11 @@ namespace ErpNet.FP.Tremol.Zfp
             TremolZFP.FP printer = null;
             try
             {
+                if (GetType() != state.Driver)
+                {
+                    throw new FiscalPrinterDeviceTypeMismatchException($"Expected {GetType()}, got {state.Driver}");
+                }
+
                 string apiAdddress = string.IsNullOrEmpty(state.DriverApiAddress) ? "http://localhost:4444/" : state.DriverApiAddress;
 
                 printer = new TremolZFP.FP() { ServerAddress = apiAdddress };
