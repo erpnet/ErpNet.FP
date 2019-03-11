@@ -222,7 +222,7 @@ namespace ErpNet.FP.Tremol.Zfp
 
                 if (sale.PaymentInfoLines.Count == 1 && sale.PaymentInfoLines[0].Amount == 0m)
                 {
-                    printer.CashPayCloseReceipt();
+                    printer.PayExactSum(PaymentTypeToPrinterPaymentType(sale.PaymentInfoLines[0].Type));
                 }
                 else
                 {
@@ -234,9 +234,14 @@ namespace ErpNet.FP.Tremol.Zfp
                             amount: payment.Amount,
                             optionChangeType: null);
                     }
-
-                    printer.CloseReceipt();
                 }
+
+                foreach (var nonFiscalText in sale.NonFiscalLines)
+                {
+                    printer.PrintText(nonFiscalText);
+                }
+
+                printer.CloseReceipt();
             }
             catch (Exception e)
             {

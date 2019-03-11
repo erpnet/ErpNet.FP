@@ -42,6 +42,11 @@ namespace ErpNet.FP.Core
         public List<PaymentInfoLine> PaymentInfoLines { get; }
 
         /// <summary>
+        /// Non-fiscal text to be appended to the sale
+        /// </summary>
+        public List<string> NonFiscalLines { get; }
+
+        /// <summary>
         /// Default constructor for <see cref="Sale"/>
         /// </summary>
         public Sale()
