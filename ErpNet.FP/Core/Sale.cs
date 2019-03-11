@@ -53,6 +53,7 @@ namespace ErpNet.FP.Core
         {
             Lines = new List<SaleLine>();
             PaymentInfoLines = new List<PaymentInfoLine>();
+            NonFiscalLines = new List<string>();
         }
 
         /// <summary>

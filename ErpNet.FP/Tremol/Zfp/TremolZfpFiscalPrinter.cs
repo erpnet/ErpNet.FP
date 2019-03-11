@@ -1,185 +1,150 @@
 ﻿using ErpNet.FP.Core;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using TremolZFP;
 
 namespace ErpNet.FP.Tremol.Zfp
 {
-    public class ZfpOperator
-    {
-        public int OperatorNo;
-        public string OperatorPassword;
-
-        public static readonly ZfpOperator Default = new ZfpOperator { OperatorNo = 1, OperatorPassword = "0" };
-    }
-
-    public class ZfpOperatorEventArgs : EventArgs
-    {
-        public ZfpOperator Operator;
-    }
-
-    public class ZfpStatusResEventArgs : EventArgs
-    {
-        public StatusRes Status;
-    }
-
     public class TremolZfpFiscalPrinter : IFiscalPrinter
     {
-        internal readonly bool isDemoDevice;
-        internal readonly TremolZFP.FP printer;
-        internal Dictionary<PaymentType, OptionPaymentType> paymentTypesMap;
-
-        public event EventHandler<ZfpOperatorEventArgs> OperatorNeeded;
-        public event EventHandler<ZfpStatusResEventArgs> StatusError;
-
-        public TremolZfpFiscalPrinter(bool isDemoDevice)
-            : this("http://localhost:4444/", null, null, isDemoDevice)
-        { }
+        private readonly Dictionary<PaymentType, OptionPaymentType> paymentTypesMap;
 
         public TremolZfpFiscalPrinter()
-            : this(false)
-        { }
-
-        internal TremolZfpFiscalPrinter(string address, FiscalPrinterPort? comPort, int? baudRate, bool isDemoDevice)
         {
+            paymentTypesMap = new Dictionary<PaymentType, OptionPaymentType>();
+        }
+
+        /// <summary>Subce </summary>
+        internal void Do(FiscalPrinterState state, Action<TremolZFP.FP> operation, [CallerMemberName] string callerMemberName = null)
+        {
+            TremolZFP.FP printer = null;
             try
             {
-                this.isDemoDevice = isDemoDevice;
-                paymentTypesMap = new Dictionary<PaymentType, OptionPaymentType>();
-                printer = new TremolZFP.FP() { ServerAddress = address };
+                string apiAdddress = string.IsNullOrEmpty(state.DriverApiAddress) ? "http://localhost:4444/" : state.DriverApiAddress;
 
-                string serialPort;
-                int serialPortBaudRate;
-                if (comPort.HasValue)
-                {
-                    serialPort = comPort.Value.ToString();
-                    serialPortBaudRate = baudRate ?? 115200;
-                }
-                else
-                {
-                    if (!printer.ServerFindDevice(out serialPort, out serialPortBaudRate))
-                    {
-                        throw new FiscalPrinterException("COM port wasn't specified explicitly and we couldn't auto-discover fiscal device");
-                    }
-                }
-
+                printer = new TremolZFP.FP() { ServerAddress = apiAdddress };
+                
+                // Note(Dilyan): samples suggest that we close before we open
                 printer.ServerCloseDeviceConnection();
-                printer.ServerSetDeviceSerialPortSettings(serialPort, serialPortBaudRate);
 
-                var paymentTypes = printer.ReadPayments();
-                FillPaymentTypes(paymentTypes);
+                // always attempt auto-discovery
+                if (!printer.ServerFindDevice(out var serialPort, out var baudRate))
+                {
+                    serialPort = state.ComPort.ToString();
+                    baudRate = state.BaudRate;
+                }
+
+                printer.ServerSetDeviceSerialPortSettings(serialPort, baudRate);
+                operation(printer);
             }
-            catch (Exception inner)
+            catch (FiscalPrinterException)
             {
-                throw new FiscalPrinterException("Failed to initialize printer", inner);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new FiscalPrinterException($"Unexpected error while trying to execute {callerMemberName}", ex);
+            }
+            finally
+            {
+                if (printer != null)
+                {
+                    printer.ServerCloseDeviceConnection();
+                }
             }
         }
+
 
         public void Dispose()
         {
-            if (printer != null)
-            {
-                printer.ServerCloseDeviceConnection();
-            }
         }
 
-        public bool IsWorking()
+        public bool IsWorking(FiscalPrinterState state)
         {
-            try
+            bool isWorking = false;
+            Do(state, printer =>
             {
-                var status = printer.ReadStatus();
+                try
+                {
+                    var status = printer.ReadStatus();
 
-                bool hasError =
-                    status.DateTime_not_set
-                    || status.DateTime_wrong
-                    || status.Deregistered
-                    || status.FM_error
-                    || !status.FM_fiscalized
-                    || status.FM_full
-                    || status.Hardware_clock_error
-                    || status.No_GPRS_Modem //??
-                    || (!isDemoDevice && status.No_GPRS_service)
-                    || status.No_mobile_operator
-                    || status.No_SIM_card
-                    || status.Printer_not_ready_no_paper
-                    || status.Printer_not_ready_overheat
-                    || status.Reports_registers_Overflow
-                    || status.SD_card_full
-                    || status.Wrong_SD_card;
+                    bool hasError =
+                        status.DateTime_not_set
+                        || status.DateTime_wrong
+                        || status.Deregistered
+                        || status.FM_error
+                        || !status.FM_fiscalized
+                        || status.FM_full
+                        || status.Hardware_clock_error
+                        || status.No_GPRS_Modem //??
+                        //|| (!isDemoDevice && status.No_GPRS_service)
+                        || status.No_mobile_operator
+                        || status.No_SIM_card
+                        || status.Printer_not_ready_no_paper
+                        || status.Printer_not_ready_overheat
+                        || status.Reports_registers_Overflow
+                        || status.SD_card_full
+                        || status.Wrong_SD_card;
 
-                return !hasError;
-            }
-            catch (Exception /*ex*/)
-            {
-                // TODO: log ex
-                return false;
-            }
+                    isWorking = !hasError;
+                }
+                catch (Exception /*ex*/)
+                {
+                    // TODO: log ex
+                    isWorking = false;
+                }
+            });
+            return isWorking;
         }
 
-        public FiscalDeviceInfo GetDeviceInfo()
+        public FiscalDeviceInfo GetDeviceInfo(FiscalPrinterState state)
         {
-            try
+            FiscalDeviceInfo info = default(FiscalDeviceInfo);
+            Do(state, printer => 
             {
-                FiscalDeviceInfo info;
-
                 var version = printer.ReadVersion();
 
                 info.Model = version.Model;
                 info.Version = version.Version;
-                return info;
-            }
-            catch (Exception ex)
-            {
-                throw new FiscalPrinterException(ex.Message, ex);
-            }
+            });
+            return info;
         }
 
-        public void DepositMoney(decimal sum)
+        public void DepositMoney(FiscalPrinterState state, decimal sum)
         {
             // I,1,______,_,__;{0};{1:0.00};;;;
 
-            try
+            Do(state, printer =>
             {
                 if (sum < 0) sum = -sum;
 
-                var op = GetOperator();
-
                 printer.ReceivedOnAccount_PaidOut(
-                        operNum: op.OperatorNo,
-                        operPass: op.OperatorPassword,
+                        operNum: int.Parse(state.Operator),
+                        operPass: state.OperatorPassword,
                         amount: sum,
                         text: "");
-            }
-            catch (Exception e)
-            {
-                throw new FiscalPrinterException(e.Message, e);
-            }
+            });
         }
 
-        public void WithdrawMoney(decimal sum)
+        public void WithdrawMoney(FiscalPrinterState state, decimal sum)
         {
             // I,1,______,_,__;{0};{1:0.00};;;;
 
-            try
+            Do(state, printer =>
             {
                 if (sum > 0) sum = -sum;
 
-                var op = GetOperator();
-
                 printer.ReceivedOnAccount_PaidOut(
-                        operNum: op.OperatorNo,
-                        operPass: op.OperatorPassword,
+                        operNum: int.Parse(state.Operator),
+                        operPass: state.OperatorPassword,
                         amount: sum,
                         text: "");
-            }
-            catch (Exception e)
-            {
-                throw new FiscalPrinterException(e.Message, e);
-            }
+            });
         }
 
-        public void PrintAndCloseSale(Sale sale)
+        public void PrintAndCloseSale(FiscalPrinterState state, Sale sale)
         {
             /*
              * 
@@ -196,14 +161,11 @@ namespace ErpNet.FP.Tremol.Zfp
              * printerCommands.Append("T,1,______,_,__;");
              */
 
-            try
+            Do(state, printer =>
             {
-                const int operNum = 1;
-                const string operatorPassword = "0";
-
                 printer.OpenReceipt(
-                    operNum: operNum,
-                    operPass: operatorPassword,
+                    operNum: int.Parse(state.Operator),
+                    operPass: state.OperatorPassword,
                     optionReceiptFormat: OptionReceiptFormat.Brief,
                     optionPrintVAT: OptionPrintVAT.Yes,
                     optionFiscalRcpPrintType: OptionFiscalRcpPrintType.Postponed_printing,
@@ -242,24 +204,17 @@ namespace ErpNet.FP.Tremol.Zfp
                 }
 
                 printer.CloseReceipt();
-            }
-            catch (Exception e)
-            {
-                throw new FiscalPrinterException(e.Message, e);
-            }
+            });
+            
         }
 
-        public void PrintDailyReport()
+        public void PrintDailyReport(FiscalPrinterState state)
         {
             // "Z,1,______,_,__;1;;"
-            try
+            Do(state, printer =>
             {
                 printer.PrintDailyReport(OptionZeroing.Zeroing);
-            }
-            catch (Exception ex)
-            {
-                throw new FiscalPrinterException(ex.Message, ex);
-            }
+            });
         }
 
         internal void FillPaymentTypes(PaymentsRes printerPayments)
@@ -299,32 +254,6 @@ namespace ErpNet.FP.Tremol.Zfp
                         break;
                 }
             }
-        }
-
-        internal void ReportStatusError(StatusRes status)
-        {
-            var handler = StatusError;
-            if (handler != null)
-            {
-                handler(this, new ZfpStatusResEventArgs() { Status = status });
-            }
-        }
-
-        internal ZfpOperator GetOperator()
-        {
-            var posOperator = ZfpOperator.Default;
-            var handler = OperatorNeeded;
-            if (handler != null)
-            {
-                var args = new ZfpOperatorEventArgs();
-                handler(this, args);
-
-                if (args.Operator != null)
-                {
-                    posOperator = args.Operator;
-                }
-            }
-            return posOperator;
         }
 
         internal OptionPaymentType PaymentTypeToPrinterPaymentType(PaymentType paymentType)
