@@ -11,12 +11,7 @@ namespace ErpNet.FP.Core
     public class SaleLine
     {
         /// <summary>
-        /// Unique code for the product being sold. Required.
-        /// </summary>
-        public string ProductNumber { get; set; }
-
-        /// <summary>
-        /// Descriptive name for the product being sold. Optional.
+        /// Name for the product being sold
         /// </summary>
         public string ProductName { get; set; }
 
@@ -44,13 +39,11 @@ namespace ErpNet.FP.Core
         /// <summary>
         /// Constructs a new <see cref="SaleLine"/> with prepared parameters
         /// </summary>
-        /// <param name="productNumber">Unique product code. Required.</param>
-        /// <param name="productName">Descriptive name for the product. Required.</param>
+        /// <param name="productName">Unique product code. Required.</param>
         /// <param name="quantity"></param>
         /// <param name="unitPrice"></param>
-        public SaleLine(string productNumber, string productName, decimal quantity, decimal unitPrice)
+        public SaleLine(string productName, decimal quantity, decimal unitPrice)
         {
-            ProductNumber = productNumber;
             ProductName = productName;
             Quantity = quantity;
             UnitPrice = unitPrice;

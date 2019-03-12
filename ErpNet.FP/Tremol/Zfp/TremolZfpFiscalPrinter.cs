@@ -193,8 +193,14 @@ namespace ErpNet.FP.Tremol.Zfp
 
                 foreach (var line in sale.Lines)
                 {
+                    var productName = line.ProductName;
+                    if (productName.Length > 35)
+                    {
+                        productName = productName.Substring(0, 35);
+                    }
+
                     printer.SellPLUwithSpecifiedVAT(
-                        namePLU: GenerateProductName(line),
+                        namePLU: productName,
                         optionVATClass: TaxGroupToVatClass(line.TaxGroup),
                         price: line.UnitPrice,
                         quantity: line.Quantity,
@@ -305,23 +311,23 @@ namespace ErpNet.FP.Tremol.Zfp
             }
         }
 
-        internal static string GenerateProductName(SaleLine line)
-        {
-            const int maxProductNameLength = 35;
+        //internal static string GenerateProductName(SaleLine line)
+        //{
+        //    const int maxProductNameLength = 35;
 
-            var sb = new StringBuilder(line.ProductName.Length + line.ProductNumber.Length + 5);
+        //    var sb = new StringBuilder(line.ProductName.Length + line.ProductNumber.Length + 5);
 
-            sb.Append(line.ProductNumber);
-            sb.Append('|');
-            sb.Append(line.ProductName);
+        //    sb.Append(line.ProductNumber);
+        //    sb.Append('|');
+        //    sb.Append(line.ProductName);
 
-            if (sb.Length > maxProductNameLength)
-            {
-                sb.Remove(maxProductNameLength, sb.Length - maxProductNameLength);
-            }
+        //    if (sb.Length > maxProductNameLength)
+        //    {
+        //        sb.Remove(maxProductNameLength, sb.Length - maxProductNameLength);
+        //    }
 
-            return sb.ToString();
-        }
+        //    return sb.ToString();
+        //}
 
         
     }
