@@ -113,15 +113,23 @@ namespace ErpNet.FP.Tremol.Zfp
 
         public FiscalDeviceInfo GetDeviceInfo(FiscalPrinterState state)
         {
-            FiscalDeviceInfo info = default(FiscalDeviceInfo);
+            FiscalDeviceInfo deviceInfo = new FiscalDeviceInfo();
             Do(state, printer => 
             {
                 var version = printer.ReadVersion();
+                // var stat = printer.ReadDetailedPrinterStatus();
+                // var parameters = printer.ReadParameters();
+                //parameters.POSNum
+                var regInfo = printer.ReadRegistrationInfo();
 
-                info.Model = version.Model;
-                info.Version = version.Version;
+                deviceInfo.Company = "Tremol";
+                deviceInfo.FirmwareVersion = version.Version;
+                deviceInfo.FiscalMemorySerialNumber = regInfo.UIC;
+                deviceInfo.Model = version.Model;
+                deviceInfo.SerialNumber = regInfo.NRARegistrationNumber;
+                deviceInfo.Type = version.OptionDeviceType.ToString();
             });
-            return info;
+            return deviceInfo;
         }
 
         public void DepositMoney(FiscalPrinterState state, decimal sum)
