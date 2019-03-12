@@ -5,8 +5,10 @@ namespace ErpNet.FP.Core
     /// <summary>All the state that is required to connect to a fiscal printer. Should be passed with each operation</summary>
     public class FiscalPrinterState
     {
-        public Type Driver;
-
+        /// <summary>
+        /// Defines driver type for the fiscal printer
+        /// </summary>
+        public FiscalPrinterType Driver;
         /// <summary>Fiscal printer operator. Usually, this is a number in the range [1-4]</summary>
         public string Operator;
         /// <summary>Fiscal printer operator password. For some devices, the default is 1</summary>

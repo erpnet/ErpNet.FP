@@ -22,7 +22,7 @@ namespace ErpNet.FP.Tremol.Zfp
             TremolZFP.FP printer = null;
             try
             {
-                if (GetType() != state.Driver)
+                if (state.Driver != FiscalPrinterType.TremolZfp)
                 {
                     throw new FiscalPrinterDeviceTypeMismatchException($"Expected {GetType()}, got {state.Driver}");
                 }
