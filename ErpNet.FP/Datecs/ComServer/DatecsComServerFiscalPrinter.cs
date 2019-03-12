@@ -15,6 +15,7 @@ namespace ErpNet.FP.Datecs.ComServer
         }
 
         private void Do(
+            FiscalPrinterState state,
             Action<ICFD_BGR> action,
             [CallerMemberName] string actionName = null)
         {
@@ -65,29 +66,35 @@ namespace ErpNet.FP.Datecs.ComServer
         {
         }
 
-        public FiscalDeviceInfo GetDeviceInfo()
+        public FiscalDeviceInfo GetDeviceInfo(FiscalPrinterState state)
         {
-            FiscalDeviceInfo info;
+            FiscalDeviceInfo info = default(FiscalDeviceInfo);
 
-            Do(device =>
+            Do(state, device =>
             {
-                info.Model = device.device_Number_Serial;
-                info.Version = device.device_Model_Name;
+                info.Company = "Datecs";
+                info.FirmwareVersion = device.device_Firmware_Revision;
+                info.FiscalMemorySerialNumber = device.device_Number_FMemory;
+                info.Model = device.device_Model_Name;
+                info.SerialNumber = device.device_Number_Serial;
+                info.Type = device.device_Type.ToString();
             });
+
+            return info;
         }
 
-        public bool IsWorking()
+        public bool IsWorking(FiscalPrinterState state)
         {
             try
             {
                 bool isWorking = false;
-                Do(device =>
+                Do(state, printer =>
                 {
                     isWorking = 
-                        device.can_OpenFiscalReceipt
-                        && device.can_OpenInvoiceReceipt
-                        && device.can_OpenStornoReceipt
-                        && (device.connected_ToDevice || device.connected_ToLAN);
+                        printer.can_OpenFiscalReceipt
+                        && printer.can_OpenInvoiceReceipt
+                        && printer.can_OpenStornoReceipt
+                        && (printer.connected_ToDevice || printer.connected_ToLAN);
                 });
                 return isWorking;
             }
@@ -97,33 +104,36 @@ namespace ErpNet.FP.Datecs.ComServer
             }
         }
 
-        public void DepositMoney(decimal sum)
+        public void DepositMoney(FiscalPrinterState state, decimal sum)
         {
-            Do(device =>
+            Do(state, printer =>
             {
-                
+                throw new NotImplementedException();
             });
         }
 
-        public void WithdrawMoney(decimal sum)
+        public void WithdrawMoney(FiscalPrinterState state, decimal sum)
         {
-            //?
-            //printer.SetServiceMoney()
-            throw new NotImplementedException();
+            Do(state, printer =>
+            {
+                throw new NotImplementedException();
+            });
         }
 
-        public void PrintAndCloseSale(Sale sale)
+        public void PrintAndCloseSale(FiscalPrinterState state, Sale sale)
         {
-            
-            throw new NotImplementedException();
+            Do(state, printer =>
+            {
+                throw new NotImplementedException();
+            });
         }
 
-        public void PrintDailyReport()
+        public void PrintDailyReport(FiscalPrinterState state)
         {
-            
-            printer.DailyReport()
+            Do(state, printer =>
+            {
+                throw new NotImplementedException();
+            });
         }
-
-        
     }
 }

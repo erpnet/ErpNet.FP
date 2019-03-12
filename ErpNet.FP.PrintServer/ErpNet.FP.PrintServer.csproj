@@ -9,15 +9,6 @@
     <!-- the following should work, but it seems $(OutputPath) and $(Target) are resolved later -->
     <!--<DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>-->
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../ErpNet.FP/ErpNet.FP.csproj" />
-  </ItemGroup>
 
   <!-- Nuget 
   https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties
@@ -36,18 +27,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <!--<PackageReference Include="ErpNet.FP.Core" Version="0.1.0" />
-    <PackageReference Include="ErpNet.FP.Tremol" Version="0.1.0" />-->
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="../ErpNet.FP/ErpNet.FP.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErpNet.FP.Print\ErpNet.FP.Print.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

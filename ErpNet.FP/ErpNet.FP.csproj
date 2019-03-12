@@ -13,4 +13,10 @@
     <RepositoryUrl>https://github.com/erpnet/ErpNet.FP</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="FP3530">
+      <HintPath>Datecs\FP3530.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
