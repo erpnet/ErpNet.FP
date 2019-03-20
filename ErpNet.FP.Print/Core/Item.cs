@@ -33,7 +33,7 @@
         /// <value>
         /// The tax group.
         /// </value>
-        public int TaxGroup { get; set; }
+        public TaxGroup TaxGroup { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity.

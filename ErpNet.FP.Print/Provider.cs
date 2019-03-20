@@ -37,7 +37,9 @@ namespace ErpNet.FP
             switch (protocol)
             {
                 case "bg.dy.json.http":
-                    return new Drivers.BgDyJsonHttp(address, options);
+                    return new Drivers.BgDaisy.BgDaisyJsonHttpFiscalPrinter(address, options);
+                case "bg.tr.zfp.http":
+                    return new Drivers.BgTremol.BgTremolZfpHttpFiscalPrinter(address, options)
                 default:
                     throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
             }

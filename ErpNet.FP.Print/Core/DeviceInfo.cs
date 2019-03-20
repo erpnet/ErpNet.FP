@@ -3,13 +3,28 @@
     public class DeviceInfo
     {
         /// <summary>
-        /// Gets or sets the serial number, assigned by the manufacturer.
+        /// Fiscal printer serial number
         /// </summary>
-        /// <value>
-        /// The serial number.
-        /// </value>
-        string SerialNumber { get; set; }
-
-        //...
+        public string SerialNumber;
+        /// <summary>
+        /// Fiscal printer memory serial number
+        /// </summary>
+        public string FiscalMemorySerialNumber;
+        /// <summary>
+        /// Company that produces the printer
+        /// </summary>
+        public string Company;
+        /// <summary>
+        /// Model
+        /// </summary>
+        public string Model;
+        /// <summary>
+        /// Optional. 
+        /// </summary>
+        public string Type;
+        /// <summary>
+        /// Optional. Firmware version.
+        /// </summary>
+        public string FirmwareVersion;
     }
 }
