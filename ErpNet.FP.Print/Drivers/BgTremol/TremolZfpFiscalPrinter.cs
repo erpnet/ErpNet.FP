@@ -185,67 +185,99 @@ namespace ErpNet.FP.Drivers.BgTremol
                     optionFiscalRcpPrintType: OptionFiscalRcpPrintType.Postponed_printing,
                     uniqueReceiptNumber: receipt.UniqueSaleNumber);
 
-                foreach (var item in receipt.Items)
-                {
-                    if (item.IsComment)
-                    {
-                        printer.PrintText(item.Text);
-                    }
-                    else // not a comment
-                    {
-                        var productName = item.Text;
-                        if (productName.Length > 35)
-                        {
-                            productName = productName.Substring(0, 35);
-                        }
-
-                        decimal? discountValue = null;
-                        decimal? discountPercent = null;
-                        if (item.Discount != 0)
-                        {
-                            if (item.IsDiscountPercent)
-                            {
-                                discountPercent = item.Discount;
-                            }
-                            else
-                            {
-                                discountValue = item.Discount;
-                            }
-                        }
-
-                        printer.SellPLUwithSpecifiedVAT(
-                            namePLU: productName,
-                            optionVATClass: TaxGroupToVatClass(item.TaxGroup),
-                            price: item.UnitPrice,
-                            quantity: item.Quantity,
-                            discAddP: discountPercent,
-                            discAddV: discountValue);
-                    } // if line is comment
-                }
-
-                if (receipt.Payments.Count == 1 && receipt.Payments[0].Amount == 0m)
-                {
-                    printer.PayExactSum(PaymentTypeToPrinterPaymentType(receipt.Payments[0].PaymentType));
-                }
-                else
-                {
-                    foreach (var payment in receipt.Payments)
-                    {
-                        printer.Payment(
-                            optionPaymentType: PaymentTypeToPrinterPaymentType(payment.PaymentType),
-                            optionChange: OptionChange.Without_Change,
-                            amount: payment.Amount,
-                            optionChangeType: null);
-                    }
-                }
+                DoPrintReceipt(printer, receipt);
 
                 printer.CloseReceipt();
             });
         }
 
+        internal void DoPrintReceipt(TremolZFP.FP printer, Receipt receipt)
+        {
+            foreach (var item in receipt.Items)
+            {
+                if (item.IsComment)
+                {
+                    printer.PrintText(item.Text);
+                }
+                else // not a comment
+                {
+                    var productName = item.Text;
+                    if (productName.Length > 35)
+                    {
+                        productName = productName.Substring(0, 35);
+                    }
+
+                    decimal? discountValue = null;
+                    decimal? discountPercent = null;
+                    if (item.Discount != 0)
+                    {
+                        if (item.IsDiscountPercent)
+                        {
+                            discountPercent = item.Discount;
+                        }
+                        else
+                        {
+                            discountValue = item.Discount;
+                        }
+                    }
+
+                    printer.SellPLUwithSpecifiedVAT(
+                        namePLU: productName,
+                        optionVATClass: TaxGroupToVatClass(item.TaxGroup),
+                        price: item.UnitPrice,
+                        quantity: item.Quantity,
+                        discAddP: discountPercent,
+                        discAddV: discountValue);
+                } // if line is comment
+            }
+
+            if (receipt.Payments.Count == 1 && receipt.Payments[0].Amount == 0m)
+            {
+                printer.PayExactSum(PaymentTypeToPrinterPaymentType(receipt.Payments[0].PaymentType));
+            }
+            else
+            {
+                foreach (var payment in receipt.Payments)
+                {
+                    printer.Payment(
+                        optionPaymentType: PaymentTypeToPrinterPaymentType(payment.PaymentType),
+                        optionChange: OptionChange.Without_Change,
+                        amount: payment.Amount,
+                        optionChangeType: null);
+                }
+            }
+        }
+
         public PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
         {
-            throw new NotImplementedException();
+            return Do(printer =>
+            {
+                // (decimal operNum, string operPass, OptionReceiptFormat optionReceiptFormat, OptionPrintVAT optionPrintVAT, 
+                // OptionStornoRcpPrintType optionStornoRcpPrintType, OptionStornoReason optionStornoReason, decimal relatedToRcpNum, 
+                // DateTime relatedToRcpDateTime, string fMNum, string relatedToURN)
+
+                var num = decimal.Parse(reversalReceipt.OriginalFiscalMemoryPosition, CultureInfo.InvariantCulture);
+                
+                // returns void??
+                //var info = printer.ReadEJByReceiptNum()
+
+                printer.OpenStornoReceipt(
+                    operNum: options.OperatorNumber,
+                    operPass: options.OperatorPassword,
+                    optionReceiptFormat: OptionReceiptFormat.Brief,
+                    optionPrintVAT: OptionPrintVAT.Yes,
+                    optionStornoRcpPrintType: OptionStornoRcpPrintType.Postponed_Printing,
+                    optionStornoReason: OptionStornoReason.Goods_Claim_or_Goods_return,
+                    relatedToRcpNum: num,
+                    relatedToRcpDateTime: DateTime.Now, // ??
+                    fMNum: "", // ??
+                    relatedToURN: reversalReceipt.UniqueSaleNumber
+                );
+
+                DoPrintReceipt(printer, reversalReceipt);
+
+                printer.CloseReceipt();
+            });
         }
 
         public PrintInfo PrintZeroingReport()
