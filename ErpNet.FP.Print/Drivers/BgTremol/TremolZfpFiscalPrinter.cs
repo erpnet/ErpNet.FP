@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using ErpNet.FP.Core;
 using TremolZFP;
@@ -50,7 +51,7 @@ namespace ErpNet.FP.Drivers.BgTremol
         }
 
         /// <summary>Subce </summary>
-        internal void Do(Action<TremolZFP.FP> operation, [CallerMemberName] string callerMemberName = null)
+        internal PrintInfo Do(Action<TremolZFP.FP> operation, [CallerMemberName] string callerMemberName = null)
         {
             if (!setupWasCalled)
             {
@@ -62,6 +63,11 @@ namespace ErpNet.FP.Drivers.BgTremol
             {
                 printer = GetPrinter();
                 operation(printer);
+                
+                var info = new PrintInfo();
+                var num = printer.ReadLastReceiptNum();
+                info.FiscalMemoryPosition = num.ToString(CultureInfo.InvariantCulture);
+                return info;
             }
             catch (FiscalPrinterException)
             {
@@ -141,8 +147,7 @@ namespace ErpNet.FP.Drivers.BgTremol
 
         public PrintInfo PrintMoneyDeposit(decimal amount)
         {
-            PrintInfo info = new PrintInfo();
-            Do(printer =>
+            return Do(printer =>
             {
                 if (amount < 0) amount = -amount;
 
@@ -151,17 +156,12 @@ namespace ErpNet.FP.Drivers.BgTremol
                     operPass: options.OperatorPassword,
                     amount: amount,
                     text: "");
-                
-                var r = printer.ReadLastReceiptNum();
-                info.FiscalMemoryPosition = r.ToString();
             });
-            return info;
         }
 
         public PrintInfo PrintMoneyWithdraw(decimal amount)
         {
-            PrintInfo info = new PrintInfo();
-            Do(printer =>
+            return Do(printer =>
             {
                 if (amount > 0) amount = -amount;
 
@@ -170,16 +170,77 @@ namespace ErpNet.FP.Drivers.BgTremol
                     operPass: options.OperatorPassword,
                     amount: amount,
                     text: "");
-                
-                var r = printer.ReadLastReceiptNum();
-                info.FiscalMemoryPosition = r.ToString();
             });
-            return info;
         }
 
         public PrintInfo PrintReceipt(Receipt receipt)
         {
-            throw new NotImplementedException();
+            return Do(printer =>
+            {
+                printer.OpenReceipt(
+                    operNum: options.OperatorNumber,
+                    operPass: options.OperatorPassword,
+                    optionReceiptFormat: OptionReceiptFormat.Brief,
+                    optionPrintVAT: OptionPrintVAT.Yes,
+                    optionFiscalRcpPrintType: OptionFiscalRcpPrintType.Postponed_printing,
+                    uniqueReceiptNumber: receipt.UniqueSaleNumber);
+
+                foreach (var item in receipt.Items)
+                {
+                    if (item.IsComment)
+                    {
+                        printer.PrintText(item.Text);
+                    }
+                    else // not a comment
+                    {
+                        var productName = item.Text;
+                        if (productName.Length > 35)
+                        {
+                            productName = productName.Substring(0, 35);
+                        }
+
+                        decimal? discountValue = null;
+                        decimal? discountPercent = null;
+                        if (item.Discount != 0)
+                        {
+                            if (item.IsDiscountPercent)
+                            {
+                                discountPercent = item.Discount;
+                            }
+                            else
+                            {
+                                discountValue = item.Discount;
+                            }
+                        }
+
+                        printer.SellPLUwithSpecifiedVAT(
+                            namePLU: productName,
+                            optionVATClass: TaxGroupToVatClass(item.TaxGroup),
+                            price: item.UnitPrice,
+                            quantity: item.Quantity,
+                            discAddP: discountPercent,
+                            discAddV: discountValue);
+                    } // if line is comment
+                }
+
+                if (receipt.Payments.Count == 1 && receipt.Payments[0].Amount == 0m)
+                {
+                    printer.PayExactSum(PaymentTypeToPrinterPaymentType(receipt.Payments[0].PaymentType));
+                }
+                else
+                {
+                    foreach (var payment in receipt.Payments)
+                    {
+                        printer.Payment(
+                            optionPaymentType: PaymentTypeToPrinterPaymentType(payment.PaymentType),
+                            optionChange: OptionChange.Without_Change,
+                            amount: payment.Amount,
+                            optionChangeType: null);
+                    }
+                }
+
+                printer.CloseReceipt();
+            });
         }
 
         public PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
@@ -189,7 +250,10 @@ namespace ErpNet.FP.Drivers.BgTremol
 
         public PrintInfo PrintZeroingReport()
         {
-            throw new NotImplementedException();
+            return Do(printer =>
+            {
+                printer.PrintDailyReport(OptionZeroing.Zeroing);
+            });
         }
 
         public void SetupPrinter()
