@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using ErpNet.FP.Core;
 
 namespace ErpNet.FP
@@ -13,6 +14,11 @@ namespace ErpNet.FP
         /// </summary>
         /// <returns>The URIs of the locally connected fiscal printers.</returns>
         public static string[] GetLocalDevices() { return null; }
+
+        private static readonly Regex protocolRegex = new Regex(
+            @"^(?<protocol>.+)://(?<address>.+)$",
+            RegexOptions.Compiled
+        );
 
         /// <summary>
         /// <para>
@@ -34,12 +40,21 @@ namespace ErpNet.FP
             string protocol = null; //get bg.dy.json.http or similar protocol
             string address = null; //get the address part
 
+            var match = protocolRegex.Match(deviceUri);
+            if (!match.Success)
+            {
+                throw new FormatException($"The value of {nameof(deviceUri)}, {deviceUri}, cannot be parsed as as protocol://address");
+            }
+
+            protocol = match.Groups["protocol"].Value;
+            address = match.Groups["addresss"].Value;
+
             switch (protocol)
             {
                 case "bg.dy.json.http":
                     return new Drivers.BgDaisy.BgDaisyJsonHttpFiscalPrinter(address, options);
                 case "bg.tr.zfp.http":
-                    return new Drivers.BgTremol.BgTremolZfpHttpFiscalPrinter(address, options)
+                    return new Drivers.BgTremol.BgTremolZfpHttpFiscalPrinter(address, options);
                 default:
                     throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
             }
