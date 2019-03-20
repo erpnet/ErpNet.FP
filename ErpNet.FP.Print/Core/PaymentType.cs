@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Payment type. The printer should be appropriately configured.
