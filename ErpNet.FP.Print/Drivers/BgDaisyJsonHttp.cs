@@ -7,13 +7,13 @@ namespace ErpNet.FP.Drivers
     /// Implements the Bulgarian Daisy Json over http driver.
     /// </summary>
     /// <seealso cref="_ErpNet.FP.IFiscalPrinter" />
-    public class BgDyJsonHttp : IFiscalPrinter
+    public class BgDaisyJsonHttp : IFiscalPrinter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BgDyJsonHttp"/> class.
+        /// Initializes a new instance of the <see cref="BgDaisyJsonHttp"/> class.
         /// </summary>
         /// <param name="httpUrl">The HTTP URL.</param>
-        public BgDyJsonHttp(string httpUrl, PrintOptions options)
+        public BgDaisyJsonHttp(string httpUrl, PrintOptions options)
         {
             //...
 
