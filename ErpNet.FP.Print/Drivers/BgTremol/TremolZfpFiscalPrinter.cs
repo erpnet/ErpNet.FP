@@ -10,324 +10,364 @@ namespace ErpNet.FP.Drivers.BgTremol
     {
         private readonly Dictionary<PaymentType, OptionPaymentType> paymentTypesMap;
 
+
+        // address is /com5/baud
         public BgTremolZfpHttpFiscalPrinter(string address, PrintOptions printOptions)
         {
             paymentTypesMap = new Dictionary<PaymentType, OptionPaymentType>();
         }
 
-        /// <summary>Subce </summary>
-        internal void Do(FiscalPrinterState state, Action<TremolZFP.FP> operation, [CallerMemberName] string callerMemberName = null)
+        public DeviceInfo GetDeviceInfo()
         {
-            TremolZFP.FP printer = null;
-            try
-            {
-                if (state.Driver != FiscalPrinterType.TremolZfp)
-                {
-                    throw new FiscalPrinterDeviceTypeMismatchException($"Expected {GetType()}, got {state.Driver}");
-                }
-
-                string apiAdddress = string.IsNullOrEmpty(state.DriverApiAddress) ? "http://localhost:4444/" : state.DriverApiAddress;
-
-                printer = new TremolZFP.FP() { ServerAddress = apiAdddress };
-
-                // Note(Dilyan): samples suggest that we close before we open
-                printer.ServerCloseDeviceConnection();
-
-                // always attempt auto-discovery
-                if (!printer.ServerFindDevice(out var serialPort, out var baudRate))
-                {
-                    serialPort = state.ComPort.ToString();
-                    baudRate = state.BaudRate;
-                }
-
-                printer.ServerSetDeviceSerialPortSettings(serialPort, baudRate);
-
-                if (paymentTypesMap.Count == 0)
-                {
-                    var paymentTypes = printer.ReadPayments();
-                    FillPaymentTypes(paymentTypes);
-                }
-
-                operation(printer);
-            }
-            catch (FiscalPrinterException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new FiscalPrinterException($"Unexpected error while trying to execute {callerMemberName}", ex);
-            }
-            finally
-            {
-                if (printer != null)
-                {
-                    printer.ServerCloseDeviceConnection();
-                }
-            }
+            throw new NotImplementedException();
         }
 
-
-        public void Dispose()
+        public bool IsReady()
         {
+            throw new NotImplementedException();
         }
 
-        public bool IsWorking(FiscalPrinterState state)
+        public PrintInfo PrintMoneyDeposit(decimal amount)
         {
-            bool isWorking = false;
-            Do(state, printer =>
-            {
-                try
+            throw new NotImplementedException();
+        }
+
+        public PrintInfo PrintMoneyWithdraw(decimal amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PrintInfo PrintReceipt(Receipt receipt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PrintInfo PrintZeroingReport()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetupPrinter()
+        {
+            throw new NotImplementedException();
+        }
+
+        /*
+                /// <summary>Subce </summary>
+                internal void Do(FiscalPrinterState state, Action<TremolZFP.FP> operation, [CallerMemberName] string callerMemberName = null)
                 {
-                    var status = printer.ReadStatus();
-
-                    bool hasError =
-                        status.DateTime_not_set
-                        || status.DateTime_wrong
-                        || status.Deregistered
-                        || status.FM_error
-                        || !status.FM_fiscalized
-                        || status.FM_full
-                        || status.Hardware_clock_error
-                        || status.No_GPRS_Modem //??
-                                                //|| (!isDemoDevice && status.No_GPRS_service)
-                        || status.No_mobile_operator
-                        || status.No_SIM_card
-                        || status.Printer_not_ready_no_paper
-                        || status.Printer_not_ready_overheat
-                        || status.Reports_registers_Overflow
-                        || status.SD_card_full
-                        || status.Wrong_SD_card;
-
-                    isWorking = !hasError;
-                }
-                catch (Exception /*ex*/)
-                {
-                    // TODO: log ex
-                    isWorking = false;
-                }
-            });
-            return isWorking;
-        }
-
-        public FiscalDeviceInfo GetDeviceInfo(FiscalPrinterState state)
-        {
-            FiscalDeviceInfo deviceInfo = new FiscalDeviceInfo();
-            Do(state, printer =>
-            {
-                var version = printer.ReadVersion();
-                // var stat = printer.ReadDetailedPrinterStatus();
-                // var parameters = printer.ReadParameters();
-                //parameters.POSNum
-                var regInfo = printer.ReadRegistrationInfo();
-
-                deviceInfo.Company = "Tremol";
-                deviceInfo.FirmwareVersion = version.Version;
-                deviceInfo.FiscalMemorySerialNumber = regInfo.UIC;
-                deviceInfo.Model = version.Model;
-                deviceInfo.SerialNumber = regInfo.NRARegistrationNumber;
-                deviceInfo.Type = version.OptionDeviceType.ToString();
-            });
-            return deviceInfo;
-        }
-
-        public void DepositMoney(FiscalPrinterState state, decimal sum)
-        {
-            // I,1,______,_,__;{0};{1:0.00};;;;
-
-            Do(state, printer =>
-            {
-                if (sum < 0) sum = -sum;
-
-                printer.ReceivedOnAccount_PaidOut(
-                        operNum: int.Parse(state.Operator),
-                        operPass: state.OperatorPassword,
-                        amount: sum,
-                        text: "");
-            });
-        }
-
-        public void WithdrawMoney(FiscalPrinterState state, decimal sum)
-        {
-            // I,1,______,_,__;{0};{1:0.00};;;;
-
-            Do(state, printer =>
-            {
-                if (sum > 0) sum = -sum;
-
-                printer.ReceivedOnAccount_PaidOut(
-                        operNum: int.Parse(state.Operator),
-                        operPass: state.OperatorPassword,
-                        amount: sum,
-                        text: "");
-            });
-        }
-
-        public void PrintAndCloseSale(FiscalPrinterState state, Sale sale)
-        {
-            /*
-             * 
-             * 
-             * string saleRowFormat = "S,1,______,_,__;{0};{1:0.00};{2:0.000};1;1;{3};0;0;\n";
-             * string paymentRowFormat = "T,1,______,_,__;{0};{1:0.00};;;;\n";
-             * 
-             * SALE LINE
-             * printerCommands.AppendFormat(CultureInfo.InvariantCulture, saleRowFormat, shortProductName, line.UnitPrice, line.Quantity, taxGroupCode);
-             
-             * PAYMENT INFO
-             * printerCommands.AppendFormat(CultureInfo.InvariantCulture, paymentRowFormat, paymentTypeFlag, paymentAmount);
-             * OR
-             * printerCommands.Append("T,1,______,_,__;");
-             */
-
-            Do(state, printer =>
-            {
-                printer.OpenReceipt(
-                    operNum: int.Parse(state.Operator),
-                    operPass: state.OperatorPassword,
-                    optionReceiptFormat: OptionReceiptFormat.Brief,
-                    optionPrintVAT: OptionPrintVAT.Yes,
-                    optionFiscalRcpPrintType: OptionFiscalRcpPrintType.Postponed_printing,
-                    uniqueReceiptNumber: sale.UniqueSaleNumber);
-
-                foreach (var line in sale.Lines)
-                {
-                    var productName = line.ProductName;
-                    if (productName.Length > 35)
+                    TremolZFP.FP printer = null;
+                    try
                     {
-                        productName = productName.Substring(0, 35);
+                        if (state.Driver != FiscalPrinterType.TremolZfp)
+                        {
+                            throw new FiscalPrinterDeviceTypeMismatchException($"Expected {GetType()}, got {state.Driver}");
+                        }
+
+                        string apiAdddress = string.IsNullOrEmpty(state.DriverApiAddress) ? "http://localhost:4444/" : state.DriverApiAddress;
+
+                        printer = new TremolZFP.FP() { ServerAddress = apiAdddress };
+
+                        // Note(Dilyan): samples suggest that we close before we open
+                        printer.ServerCloseDeviceConnection();
+
+                        // always attempt auto-discovery
+                        if (!printer.ServerFindDevice(out var serialPort, out var baudRate))
+                        {
+                            serialPort = state.ComPort.ToString();
+                            baudRate = state.BaudRate;
+                        }
+
+                        printer.ServerSetDeviceSerialPortSettings(serialPort, baudRate);
+
+                        if (paymentTypesMap.Count == 0)
+                        {
+                            var paymentTypes = printer.ReadPayments();
+                            FillPaymentTypes(paymentTypes);
+                        }
+
+                        operation(printer);
                     }
-
-                    printer.SellPLUwithSpecifiedVAT(
-                        namePLU: productName,
-                        optionVATClass: TaxGroupToVatClass(line.TaxGroup),
-                        price: line.UnitPrice,
-                        quantity: line.Quantity,
-                        discAddP: null,
-                        discAddV: null);
-                }
-
-                if (sale.PaymentInfoLines.Count == 1 && sale.PaymentInfoLines[0].Amount == 0m)
-                {
-                    printer.PayExactSum(PaymentTypeToPrinterPaymentType(sale.PaymentInfoLines[0].Type));
-                }
-                else
-                {
-                    foreach (var payment in sale.PaymentInfoLines)
+                    catch (FiscalPrinterException)
                     {
-                        printer.Payment(
-                            optionPaymentType: PaymentTypeToPrinterPaymentType(payment.Type),
-                            optionChange: OptionChange.Without_Change,
-                            amount: payment.Amount,
-                            optionChangeType: null);
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FiscalPrinterException($"Unexpected error while trying to execute {callerMemberName}", ex);
+                    }
+                    finally
+                    {
+                        if (printer != null)
+                        {
+                            printer.ServerCloseDeviceConnection();
+                        }
                     }
                 }
 
-                foreach (var nonFiscalText in sale.NonFiscalLines)
+
+                public void Dispose()
                 {
-                    printer.PrintText(nonFiscalText);
                 }
 
-                printer.CloseReceipt();
-            });
-
-        }
-
-        public void PrintDailyReport(FiscalPrinterState state)
-        {
-            // "Z,1,______,_,__;1;;"
-            Do(state, printer =>
-            {
-                printer.PrintDailyReport(OptionZeroing.Zeroing);
-            });
-        }
-
-        internal void FillPaymentTypes(PaymentsRes printerPayments)
-        {
-            var currentTypes = new Dictionary<OptionPaymentType, string>();
-            currentTypes[OptionPaymentType.Payment_0] = printerPayments.NamePayment0;
-            currentTypes[OptionPaymentType.Payment_1] = printerPayments.NamePayment1;
-            currentTypes[OptionPaymentType.Payment_2] = printerPayments.NamePayment2;
-            currentTypes[OptionPaymentType.Payment_3] = printerPayments.NamePayment3;
-            currentTypes[OptionPaymentType.Payment_4] = printerPayments.NamePayment4;
-            currentTypes[OptionPaymentType.Payment_5] = printerPayments.NamePayment5;
-            currentTypes[OptionPaymentType.Payment_6] = printerPayments.NamePayment6;
-            currentTypes[OptionPaymentType.Payment_7] = printerPayments.NamePayment7;
-            currentTypes[OptionPaymentType.Payment_8] = printerPayments.NamePayment8;
-            currentTypes[OptionPaymentType.Payment_9] = printerPayments.NamePayment9;
-            currentTypes[OptionPaymentType.Payment_10] = printerPayments.NamePayment10;
-            currentTypes[OptionPaymentType.Payment_11] = printerPayments.NamePayment11;
-
-            foreach (var kvp in currentTypes)
-            {
-                switch (kvp.Value.Trim().ToLower())
+                public bool IsWorking(FiscalPrinterState state)
                 {
-                    case "лева":
-                        paymentTypesMap[PaymentType.Cash] = kvp.Key;
-                        break;
+                    bool isWorking = false;
+                    Do(state, printer =>
+                    {
+                        try
+                        {
+                            var status = printer.ReadStatus();
 
-                    case "карта":
-                        paymentTypesMap[PaymentType.ByCard] = kvp.Key;
-                        break;
+                            bool hasError =
+                                status.DateTime_not_set
+                                || status.DateTime_wrong
+                                || status.Deregistered
+                                || status.FM_error
+                                || !status.FM_fiscalized
+                                || status.FM_full
+                                || status.Hardware_clock_error
+                                || status.No_GPRS_Modem //??
+                                                        //|| (!isDemoDevice && status.No_GPRS_service)
+                                || status.No_mobile_operator
+                                || status.No_SIM_card
+                                || status.Printer_not_ready_no_paper
+                                || status.Printer_not_ready_overheat
+                                || status.Reports_registers_Overflow
+                                || status.SD_card_full
+                                || status.Wrong_SD_card;
 
-                    case "талон":
-                        paymentTypesMap[PaymentType.Tokens] = kvp.Key;
-                        break;
-
-                    case "чек":
-                        paymentTypesMap[PaymentType.Check] = kvp.Key;
-                        break;
+                            isWorking = !hasError;
+                        }
+                        catch (Exception)
+                        {
+                            // TODO: log ex
+                            isWorking = false;
+                        }
+                    });
+                    return isWorking;
                 }
-            }
-        }
 
-        internal OptionPaymentType PaymentTypeToPrinterPaymentType(PaymentType paymentType)
-        {
-            if (paymentTypesMap.TryGetValue(paymentType, out var result))
-            {
-                return result;
-            }
-            else
-            {
-                throw new FiscalPrinterException($"Payment type {paymentType} not supported by {nameof(BgTremolZfpHttpFiscalPrinter)}");
-            }
-        }
+                public FiscalDeviceInfo GetDeviceInfo(FiscalPrinterState state)
+                {
+                    FiscalDeviceInfo deviceInfo = new FiscalDeviceInfo();
+                    Do(state, printer =>
+                    {
+                        var version = printer.ReadVersion();
+                        // var stat = printer.ReadDetailedPrinterStatus();
+                        // var parameters = printer.ReadParameters();
+                        //parameters.POSNum
+                        var regInfo = printer.ReadRegistrationInfo();
 
-        internal static OptionVATClass TaxGroupToVatClass(TaxGroup taxGroup)
-        {
-            switch (taxGroup)
-            {
-                case TaxGroup.GroupA:
-                    return OptionVATClass.VAT_Class_0;
-                case TaxGroup.GroupB:
-                    return OptionVATClass.VAT_Class_1;
-                case TaxGroup.GroupC:
-                    return OptionVATClass.VAT_Class_2;
-                case TaxGroup.GroupD:
-                    return OptionVATClass.VAT_Class_3;
+                        deviceInfo.Company = "Tremol";
+                        deviceInfo.FirmwareVersion = version.Version;
+                        deviceInfo.FiscalMemorySerialNumber = regInfo.UIC;
+                        deviceInfo.Model = version.Model;
+                        deviceInfo.SerialNumber = regInfo.NRARegistrationNumber;
+                        deviceInfo.Type = version.OptionDeviceType.ToString();
+                    });
+                    return deviceInfo;
+                }
 
-                default: throw new FiscalPrinterException("Unknown tax group " + taxGroup);
-            }
-        }
+                public void DepositMoney(FiscalPrinterState state, decimal sum)
+                {
+                    // I,1,______,_,__;{0};{1:0.00};;;;
 
-        //internal static string GenerateProductName(SaleLine line)
-        //{
-        //    const int maxProductNameLength = 35;
+                    Do(state, printer =>
+                    {
+                        if (sum < 0) sum = -sum;
 
-        //    var sb = new StringBuilder(line.ProductName.Length + line.ProductNumber.Length + 5);
+                        printer.ReceivedOnAccount_PaidOut(
+                                operNum: int.Parse(state.Operator),
+                                operPass: state.OperatorPassword,
+                                amount: sum,
+                                text: "");
+                    });
+                }
 
-        //    sb.Append(line.ProductNumber);
-        //    sb.Append('|');
-        //    sb.Append(line.ProductName);
+                public void WithdrawMoney(FiscalPrinterState state, decimal sum)
+                {
+                    // I,1,______,_,__;{0};{1:0.00};;;;
 
-        //    if (sb.Length > maxProductNameLength)
-        //    {
-        //        sb.Remove(maxProductNameLength, sb.Length - maxProductNameLength);
-        //    }
+                    Do(state, printer =>
+                    {
+                        if (sum > 0) sum = -sum;
 
-        //    return sb.ToString();
-        //}
+                        printer.ReceivedOnAccount_PaidOut(
+                                operNum: int.Parse(state.Operator),
+                                operPass: state.OperatorPassword,
+                                amount: sum,
+                                text: "");
+                    });
+                }
 
+                public void PrintAndCloseSale(FiscalPrinterState state, Sale sale)
+                {
+                    //  string saleRowFormat = "S,1,______,_,__;{0};{1:0.00};{2:0.000};1;1;{3};0;0;\n";
+                    //  string paymentRowFormat = "T,1,______,_,__;{0};{1:0.00};;;;\n";
+
+                    //  SALE LINE
+                    //  printerCommands.AppendFormat(CultureInfo.InvariantCulture, saleRowFormat, shortProductName, line.UnitPrice, line.Quantity, taxGroupCode);
+
+                    //  PAYMENT INFO
+                    //  printerCommands.AppendFormat(CultureInfo.InvariantCulture, paymentRowFormat, paymentTypeFlag, paymentAmount);
+                    //  OR
+                    //  printerCommands.Append("T,1,______,_,__;");
+
+
+                    Do(state, printer =>
+                    {
+                        printer.OpenReceipt(
+                            operNum: int.Parse(state.Operator),
+                            operPass: state.OperatorPassword,
+                            optionReceiptFormat: OptionReceiptFormat.Brief,
+                            optionPrintVAT: OptionPrintVAT.Yes,
+                            optionFiscalRcpPrintType: OptionFiscalRcpPrintType.Postponed_printing,
+                            uniqueReceiptNumber: sale.UniqueSaleNumber);
+
+                        foreach (var line in sale.Lines)
+                        {
+                            var productName = line.ProductName;
+                            if (productName.Length > 35)
+                            {
+                                productName = productName.Substring(0, 35);
+                            }
+
+                            printer.SellPLUwithSpecifiedVAT(
+                                namePLU: productName,
+                                optionVATClass: TaxGroupToVatClass(line.TaxGroup),
+                                price: line.UnitPrice,
+                                quantity: line.Quantity,
+                                discAddP: null,
+                                discAddV: null);
+                        }
+
+                        if (sale.PaymentInfoLines.Count == 1 && sale.PaymentInfoLines[0].Amount == 0m)
+                        {
+                            printer.PayExactSum(PaymentTypeToPrinterPaymentType(sale.PaymentInfoLines[0].Type));
+                        }
+                        else
+                        {
+                            foreach (var payment in sale.PaymentInfoLines)
+                            {
+                                printer.Payment(
+                                    optionPaymentType: PaymentTypeToPrinterPaymentType(payment.Type),
+                                    optionChange: OptionChange.Without_Change,
+                                    amount: payment.Amount,
+                                    optionChangeType: null);
+                            }
+                        }
+
+                        foreach (var nonFiscalText in sale.NonFiscalLines)
+                        {
+                            printer.PrintText(nonFiscalText);
+                        }
+
+                        printer.CloseReceipt();
+                    });
+
+                }
+
+                public void PrintDailyReport(FiscalPrinterState state)
+                {
+                    // "Z,1,______,_,__;1;;"
+                    Do(state, printer =>
+                    {
+                        printer.PrintDailyReport(OptionZeroing.Zeroing);
+                    });
+                }
+
+                internal void FillPaymentTypes(PaymentsRes printerPayments)
+                {
+                    var currentTypes = new Dictionary<OptionPaymentType, string>();
+                    currentTypes[OptionPaymentType.Payment_0] = printerPayments.NamePayment0;
+                    currentTypes[OptionPaymentType.Payment_1] = printerPayments.NamePayment1;
+                    currentTypes[OptionPaymentType.Payment_2] = printerPayments.NamePayment2;
+                    currentTypes[OptionPaymentType.Payment_3] = printerPayments.NamePayment3;
+                    currentTypes[OptionPaymentType.Payment_4] = printerPayments.NamePayment4;
+                    currentTypes[OptionPaymentType.Payment_5] = printerPayments.NamePayment5;
+                    currentTypes[OptionPaymentType.Payment_6] = printerPayments.NamePayment6;
+                    currentTypes[OptionPaymentType.Payment_7] = printerPayments.NamePayment7;
+                    currentTypes[OptionPaymentType.Payment_8] = printerPayments.NamePayment8;
+                    currentTypes[OptionPaymentType.Payment_9] = printerPayments.NamePayment9;
+                    currentTypes[OptionPaymentType.Payment_10] = printerPayments.NamePayment10;
+                    currentTypes[OptionPaymentType.Payment_11] = printerPayments.NamePayment11;
+
+                    foreach (var kvp in currentTypes)
+                    {
+                        switch (kvp.Value.Trim().ToLower())
+                        {
+                            case "лева":
+                                paymentTypesMap[PaymentType.Cash] = kvp.Key;
+                                break;
+
+                            case "карта":
+                                paymentTypesMap[PaymentType.ByCard] = kvp.Key;
+                                break;
+
+                            case "талон":
+                                paymentTypesMap[PaymentType.Tokens] = kvp.Key;
+                                break;
+
+                            case "чек":
+                                paymentTypesMap[PaymentType.Check] = kvp.Key;
+                                break;
+                        }
+                    }
+                }
+
+                internal OptionPaymentType PaymentTypeToPrinterPaymentType(PaymentType paymentType)
+                {
+                    if (paymentTypesMap.TryGetValue(paymentType, out var result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        throw new FiscalPrinterException($"Payment type {paymentType} not supported by {nameof(BgTremolZfpHttpFiscalPrinter)}");
+                    }
+                }
+
+                internal static OptionVATClass TaxGroupToVatClass(TaxGroup taxGroup)
+                {
+                    switch (taxGroup)
+                    {
+                        case TaxGroup.GroupA:
+                            return OptionVATClass.VAT_Class_0;
+                        case TaxGroup.GroupB:
+                            return OptionVATClass.VAT_Class_1;
+                        case TaxGroup.GroupC:
+                            return OptionVATClass.VAT_Class_2;
+                        case TaxGroup.GroupD:
+                            return OptionVATClass.VAT_Class_3;
+
+                        default: throw new FiscalPrinterException("Unknown tax group " + taxGroup);
+                    }
+                }
+
+                //internal static string GenerateProductName(SaleLine line)
+                //{
+                //    const int maxProductNameLength = 35;
+
+                //    var sb = new StringBuilder(line.ProductName.Length + line.ProductNumber.Length + 5);
+
+                //    sb.Append(line.ProductNumber);
+                //    sb.Append('|');
+                //    sb.Append(line.ProductName);
+
+                //    if (sb.Length > maxProductNameLength)
+                //    {
+                //        sb.Remove(maxProductNameLength, sb.Length - maxProductNameLength);
+                //    }
+
+                //    return sb.ToString();
+                //}
+         */
 
     }
 }
