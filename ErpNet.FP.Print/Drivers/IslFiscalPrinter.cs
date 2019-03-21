@@ -1,7 +1,7 @@
 ﻿using System;
-using ErpNet.FP.Core;
+using ErpNet.FP.Print.Core;
 
-namespace ErpNet.FP.Drivers
+namespace ErpNet.FP.Print.Drivers
 {
     /// <summary>
     /// Base class for fiscal printers, which are based on the ISL (Cisco Inter-Switch Link) protocol.

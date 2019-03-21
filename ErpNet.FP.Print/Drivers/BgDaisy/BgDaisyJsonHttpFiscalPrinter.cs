@@ -13,7 +13,7 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
         /// Initializes a new instance of the <see cref="BgDaisyJsonHttpFiscalPrinter"/> class.
         /// </summary>
         /// <param name="httpUrl">The HTTP URL.</param>
-        public BgDaisyJsonHttpFiscalPrinter(string httpUrl, PrintOptions options)
+        public BgDaisyJsonHttpFiscalPrinter(string httpUrl)
         {
             //...
 

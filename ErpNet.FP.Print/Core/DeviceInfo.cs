@@ -3,6 +3,10 @@
     public class DeviceInfo
     {
         /// <summary>
+        /// The address part of the fiscal printer Uri.
+        /// </summary>
+        public string Address;
+        /// <summary>
         /// Fiscal printer serial number
         /// </summary>
         public string SerialNumber;

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>ErpNet.FP</RootNamespace>
+    <RootNamespace>ErpNet.FP.Print</RootNamespace>
   </PropertyGroup>
 
 </Project>
