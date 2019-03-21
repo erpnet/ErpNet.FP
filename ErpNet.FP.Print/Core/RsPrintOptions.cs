@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Print.Core
 {
     /// <summary>
     /// Print options for RS232

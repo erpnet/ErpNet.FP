@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Print.Core
 {
     /// <summary>
     /// Options for printing.

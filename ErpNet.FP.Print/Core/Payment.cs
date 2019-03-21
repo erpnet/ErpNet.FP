@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Print.Core
 {
     /// <summary>
     /// Represents one payment in a fiscal receipt.

@@ -1,7 +1,7 @@
 ﻿using System;
-using ErpNet.FP.Core;
+using ErpNet.FP.Print.Core;
 
-namespace ErpNet.FP.Drivers.BgDaisy
+namespace ErpNet.FP.Print.Drivers.BgDaisy
 {
     /// <summary>
     /// Implements the Bulgarian Daisy Json over http driver.

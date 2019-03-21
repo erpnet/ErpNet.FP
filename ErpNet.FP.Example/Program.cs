@@ -6,10 +6,10 @@ namespace ErpNet.FP.Example
     {
         static void Main(string[] args)
         {
-            var devices = Provider.GetLocalDevices();
+            var devices = UriProvider.GetLocalDevices();
             if (devices.Length >= 1)
             {
-                var fp = Provider.Connect(devices[0], new PrintOptions());
+                var fp = UriProvider.Connect(devices[0], new PrintOptions());
 
                 var doc = new Receipt()
                 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using ErpNet.FP.Core;
+using ErpNet.FP.Print.Core;
 using TremolZFP;
 
-namespace ErpNet.FP.Drivers.BgTremol
+namespace ErpNet.FP.Print.Drivers.BgTremol
 {
     public class BgTremolZfpHttpFiscalPrinter : IFiscalPrinter
     {
