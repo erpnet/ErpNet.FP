@@ -1,18 +1,18 @@
 ﻿using System;
-using ErpNet.FP.Core;
+using System.Collections.Generic;
 
-namespace ErpNet.FP
+namespace ErpNet.FP.Print.UriProvider
 {
     /// <summary>
     /// General functions for finding and connecting fiscal printers.
     /// </summary>
-    public static class Provider
+    public static class UriProvider
     {
         /// <summary>
-        /// Returns the URIs of the locally connected recognized fiscal printers.
+        /// Returns the URIs (as keys) and device information (as values) of the detected locally connected fiscal printers.
         /// </summary>
         /// <returns>The URIs of the locally connected fiscal printers.</returns>
-        public static string[] GetLocalDevices() { return null; }
+        public static Dictionary<string, DeviceInfo> DetectLocalDevices() { return null; }
 
         /// <summary>
         /// <para>
@@ -39,7 +39,7 @@ namespace ErpNet.FP
                 case "bg.dy.json.http":
                     return new Drivers.BgDaisy.BgDaisyJsonHttpFiscalPrinter(address, options);
                 case "bg.tr.zfp.http":
-                    return new Drivers.BgTremol.BgTremolZfpHttpFiscalPrinter(address, options)
+                    return new Drivers.BgTremol.BgTremolZfpHttpFiscalPrinter(address, options);
                 default:
                     throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
             }
