@@ -22,6 +22,10 @@ namespace ErpNet.FP.Example
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
             var daisyJson = new BgDaisyJsonFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
+
+            // Add ErpNet Json driver, which can be used to forward the commands to:
+            // 1. Another ErpNet print server.
+            // 2. Cloud printing instance.
             var erpNetJson = new ErpNetJsonDriver();
 
             // Add drivers and their compatible transports to the provider.
