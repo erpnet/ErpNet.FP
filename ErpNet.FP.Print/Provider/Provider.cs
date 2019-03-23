@@ -1,69 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using ErpNet.FP.Print.Core;
-using ErpNet.FP.Print.Drivers.BgDaisy;
-using ErpNet.FP.Print.Drivers.BgTremol;
 
 namespace ErpNet.FP.Print.Provider
 {
     /// <summary>
     /// General functions for finding and connecting fiscal printers.
     /// </summary>
-    public static class Provider
+    public class Provider
     {
-        private static List<FiscalPrinterDriver> drivers = null;
+        private Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =
+            new Dictionary<string, (FiscalPrinterDriver driver, Transport transport)>();
 
         /// <summary>
-        /// Gets all printer drivers.
+        /// Adds the specified protocol to the provider.
+        /// A protocol consists of a printer driver and a transport.
         /// </summary>
-        /// <returns>All printer drivers.</returns>
-        public static IEnumerable<FiscalPrinterDriver> GetDrivers()
+        /// <param name="driver">The driver.</param>
+        /// <param name="transport">The transport.</param>
+        public void Add(FiscalPrinterDriver driver, Transport transport)
         {
-            if (drivers == null)
+            var key = driver.DriverName + "." + transport.TransportName;
+            protocols.Add(key, (driver, transport));
+        }
+
+        /// <summary>
+        /// Returns the available fiscal printers.
+        /// </summary>
+        /// <returns>The available fiscal printers.</returns>
+        public IEnumerable<IFiscalPrinter> DetectAvailablePrinters()
+        {
+            // This is naive implementation, which serializes the whole detection process.
+            // It can be optimized with parallelism. 
+            // However, port contention issues must be resolved in a more elaborate implementation.
+
+            var fp = new List<IFiscalPrinter>();
+
+            foreach (var (driver, transport) in protocols.Values)
             {
-                lock (drivers)
+                foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
-                    drivers = new List<FiscalPrinterDriver>();
-                    drivers.Add(new BgDaisyIslFiscalPrinterDriver());
-                    drivers.Add(new BgDaisyJsonHttpFiscalPrinterDriver());
-                    drivers.Add(new BgTremolZfpFiscalPrinterDriver());
+                    var channel = transport.OpenChannel(address);
+                    try
+                    {
+                        var p = driver.Connect(channel);
+                        fp.Add(p);
+                    }
+                    catch { }
                 }
             }
-            return drivers;
+            return fp;
         }
 
-        /// <summary>
-        /// Gets the local ports.
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<string> GetLocalPorts()
-        {
-            return Enumerable.Empty<string>();
-        }
-
-        /// <summary>
-        /// Returns the URIs (as keys) and device information (as values) of the detected locally connected fiscal printers.
-        /// </summary>
-        /// <returns>The URIs of the locally connected fiscal printers.</returns>
-        public static IEnumerable<DeviceInfo> DetectLocalDevices()
-        {
-            foreach (var port in GetLocalPorts())
-            {
-                foreach (var driver in GetDrivers())
-                {
-                    var di = driver.DetectLocalFiscalPrinter(port);
-                    if (di != null)
-                        yield return di;
-                }
-            }
-        }
-
-        private static readonly Regex protocolRegex = new Regex(
-            @"^(?<protocol>.+)://(?<address>.+)$",
-            RegexOptions.Compiled
-        );
+        private static readonly Regex uriPattern = new Regex(
+            @"^(?<protocol>.+)://(?<address>.+)$");
 
         /// <summary>
         /// <para>
@@ -80,26 +71,29 @@ namespace ErpNet.FP.Print.Provider
         /// The fiscal printer object.
         /// </returns>
         /// <exception cref="InvalidOperationException">When the printer is not found or the URI is not correctly formatted.</exception>
-        public static IFiscalPrinter Connect(string deviceUri)
+        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string> options = null)
         {
-            string protocol = null; //get bg.dy.json.http or similar protocol
-            string address = null; //get the address part
-
-            var match = protocolRegex.Match(deviceUri);
+            var match = uriPattern.Match(deviceUri);
             if (!match.Success)
+                throw new FormatException(
+                    $"'{deviceUri}' is not recognized as valid device URI (protocol://address)");
+
+            var protocol = match.Groups["protocol"].Value;
+            var address = match.Groups["address"].Value;
+
+            FiscalPrinterDriver driver;
+            Transport transport;
+            try
             {
-                throw new FormatException($"The value of {nameof(deviceUri)}, {deviceUri}, cannot be parsed as as protocol://address");
+                (driver, transport) = protocols[protocol];
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
             }
 
-            protocol = match.Groups["protocol"].Value;
-            address = match.Groups["addresss"].Value;
-
-            foreach (var driver in GetDrivers())
-            {
-                if (driver.ProtocolName == protocol)
-                    return driver.Connect(address);
-            }
-            throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
+            var channel = transport.OpenChannel(address);
+            return driver.Connect(channel, options);
         }
 
 

@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using ErpNet.FP.Print.Core;
+using ErpNet.FP.Print.Drivers.BgDaisy;
+using ErpNet.FP.Print.Drivers.BgTremol;
 using ErpNet.FP.Print.Provider;
+using ErpNet.FP.Print.Transports;
 
 namespace ErpNet.FP.Example
 {
@@ -8,16 +11,38 @@ namespace ErpNet.FP.Example
     {
         static void Main(string[] args)
         {
-            var devices = Provider.DetectLocalDevices();
-            var d = devices.FirstOrDefault();
-            if (d == null)
+            Provider provider = new Provider();
+            var comTransport = new ComTransport();
+            var btTransport = new BtTransport();
+            var httpTransport = new HttpTransport();
+
+            // Cloud transport with account.
+            var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
+
+            var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
+            var daisyJson = new BgDaisyJsonFiscalPrinterDriver();
+            var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
+            var erpNetJson = new ErpNetJsonDriver();
+
+            // Add drivers and their compatible transports to the provider.
+            provider.Add(daisyIsl, comTransport);
+            provider.Add(daisyIsl, btTransport);
+            provider.Add(daisyJson, httpTransport);
+            provider.Add(tremolZfp, httpTransport);
+            provider.Add(erpNetJson, cloudPrintTransport);
+
+            // Find all printers.
+            var printers = provider.DetectAvailablePrinters();
+            if (!printers.Any())
             {
                 System.Console.WriteLine("No local printers found.");
                 return;
             }
 
-            var fp = Provider.Connect(d.Address);
+            // Now use Uri to connect to specific printer.
+            var fp = provider.Connect("bg.dy.json.http://printer.intranet.local");
 
+            // Print a receipt.
             var doc = new Receipt()
             {
                 UniqueSaleNumber = "00000000-0000-000",

@@ -27,6 +27,8 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
         private readonly BgTremoZfpHttpOptions options;
         private bool setupWasCalled;
 
+        public DeviceInfo DeviceInfo => throw new NotImplementedException();
+
 
         // address is COM1,COM2,COM3.. COM9
         // ip.
@@ -63,7 +65,7 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
             {
                 printer = GetPrinter();
                 operation(printer);
-                
+
                 var info = new PrintInfo();
                 var num = printer.ReadLastReceiptNum();
                 info.FiscalMemoryPosition = num.ToString(CultureInfo.InvariantCulture);
@@ -257,7 +259,7 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
                 // DateTime relatedToRcpDateTime, string fMNum, string relatedToURN)
 
                 var num = decimal.Parse(reversalReceipt.OriginalFiscalMemoryPosition, CultureInfo.InvariantCulture);
-                
+
                 // returns void??
                 //var info = printer.ReadEJByReceiptNum()
 
@@ -291,7 +293,7 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
         public void SetupPrinter()
         {
             if (setupWasCalled) return;
-            
+
             TremolZFP.FP printer = null;
             try
             {
@@ -308,7 +310,7 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
                     printer = null;
                 }
             }
-            
+
             setupWasCalled = true;
         }
 

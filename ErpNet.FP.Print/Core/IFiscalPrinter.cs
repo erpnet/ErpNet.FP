@@ -9,7 +9,7 @@
         /// Gets information about the connected device.
         /// </summary>
         /// <returns>Device information.</returns>
-        DeviceInfo GetDeviceInfo();
+        DeviceInfo DeviceInfo { get; }
 
         /// <summary>
         /// Checks whether the device is currently ready to accept commands.

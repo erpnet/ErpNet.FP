@@ -1,19 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using ErpNet.FP.Print.Core;
 
 namespace ErpNet.FP.Print.Drivers.BgDaisy
 {
     public class BgDaisyIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string ProtocolName => "bg.dy.isl";
+        public override string DriverName => "bg.dy.isl";
 
-        public override IFiscalPrinter Connect(string address)
-        {
-            //return new BgDaisyIslFiscalPrinter(address);
-            throw new NotImplementedException();
-        }
-
-        public override DeviceInfo DetectLocalFiscalPrinter(string portName)
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         {
             throw new NotImplementedException();
         }

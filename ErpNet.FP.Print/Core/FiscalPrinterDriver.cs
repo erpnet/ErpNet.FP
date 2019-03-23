@@ -1,4 +1,7 @@
-﻿namespace ErpNet.FP.Print.Core
+﻿using System;
+using System.Collections.Generic;
+
+namespace ErpNet.FP.Print.Core
 {
     /// <summary>
     /// Represents a driver for a fiscal printer
@@ -6,27 +9,25 @@
     public abstract class FiscalPrinterDriver
     {
         /// <summary>
-        /// Gets the name of the protocol, used when creating device Uri.
-        /// Example: "bg.dy.json.http".
+        /// Gets the name of the printer driver.
+        /// Example: "bg.dy.json".
         /// </summary>
         /// <value>
-        /// The name of the protocol.
+        /// The name of the printer driver.
         /// </value>
-        public abstract string ProtocolName { get; }
+        public abstract string DriverName { get; }
 
         /// <summary>
-        /// Detects if there is compatible fiscal printer on the specified local COM port.
+        /// Returns a new fiscal printer, connected to the specified <see cref="IChannel" />.
+        /// Throws exception if the connection is not successful.
         /// </summary>
-        /// <param name="portName">Name of the local COM port.</param>
-        /// <returns>Device information if there is compatible fiscal printer.</returns>
-        public abstract DeviceInfo DetectLocalFiscalPrinter(string portName);
-
-        /// <summary>
-        /// Returns a new fiscal printer, connected to the specified address.
-        /// Throws error if not successful.
-        /// </summary>
-        /// <param name="address">The address part of the device Uri (without the protocol part).</param>
-        /// <returns>New fiscal printer if the operation is successful. Throws error if not successful.</returns>
-        public abstract IFiscalPrinter Connect(string address);
+        /// <param name="channel">The transport channel, which should be used to connect the printer.</param>
+        /// <param name="options">The options to pass to the driver.</param>
+        /// <returns>
+        /// New fiscal printer instance.
+        /// </returns>
+        public abstract IFiscalPrinter Connect(
+            IChannel channel,
+            IDictionary<string, string> options = null);
     }
 }
