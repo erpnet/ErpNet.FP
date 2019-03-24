@@ -1,48 +1,17 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using System.Collections.Generic;
+using ErpNet.FP.Print.Core;
 
 namespace ErpNet.FP.Print.Drivers.BgDaisy
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Drivers.IslFiscalPrinter" />
-    public class BgDaisyIslFiscalPrinter : IFiscalPrinter
+    /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
+    public class BgDaisyIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public DeviceInfo DeviceInfo => throw new System.NotImplementedException();
-
-        public bool IsReady()
-        {
-            throw new System.NotImplementedException();
+        public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
+        : base(channel, options) {
         }
 
-        public PrintInfo PrintMoneyDeposit(decimal amount)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public PrintInfo PrintMoneyWithdraw(decimal amount)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public PrintInfo PrintReceipt(Receipt receipt)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public PrintInfo PrintZeroingReport()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetupPrinter()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

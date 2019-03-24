@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\ErpNet.FP.Print\ErpNet.FP.Print.csproj" />
+    <ProjectReference Include="..\ErpNet.FP.Print\ErpNet.FP.Print.csproj"/>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="4.6.0-preview3.19128.7"/>
+  </ItemGroup>
 </Project>

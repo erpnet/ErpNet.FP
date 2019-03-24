@@ -41,13 +41,24 @@ namespace ErpNet.FP.Print.Provider
             {
                 foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
-                    var channel = transport.OpenChannel(address);
-                    try
-                    {
-                        var p = driver.Connect(channel);
-                        fp.Add(p);
+                    try {
+                        var channel = transport.OpenChannel(address);
+                        try
+                        {
+                            var p = driver.Connect(channel);
+                            fp.Add(p);
+                        }
+                        catch(Exception e) {                            
+                            // Cannot connect to opened channel
+                            // Console.WriteLine($"*** Cannot connect to opened channel {address}");
+                            // Console.WriteLine($"Error: {e.Message}");
+                            Console.WriteLine(e.StackTrace);
+                        }
+                    } 
+                    catch(Exception e) { 
+                        // Cannot open channel
+                        // Console.WriteLine($"*** Cannot open channel {address}. Error: {e.Message}");
                     }
-                    catch { }
                 }
             }
             return fp;

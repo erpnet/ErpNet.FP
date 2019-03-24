@@ -1,8 +1,10 @@
-﻿using System;
+﻿using System.Threading;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using ErpNet.FP.Print.Core;
+using System.Threading.Tasks;
 
 namespace ErpNet.FP.Example {
 	/// <summary>
@@ -12,7 +14,8 @@ namespace ErpNet.FP.Example {
 	public class ComTransport : Transport {
 		public override string TransportName => "com";
 
-		public override IChannel OpenChannel (string address) => new Channel (address, 115200, 600);
+		public override IChannel OpenChannel (string address) 
+		=> new Channel (address);
 
 		/// <summary>
 		/// Returns all serial com port addresses, which can have connected fiscal printers. 
@@ -22,14 +25,15 @@ namespace ErpNet.FP.Example {
 		/// All available addresses and descriptions.
 		/// </value>
 		public override IEnumerable < (string address, string description) > GetAvailableAddresses () {
-			return from address in SerialPort.GetPortNames () select (address, address);
+			// For description of com ports we do not have anything else than the port name / port path
+			return from address in SerialPort.GetPortNames() select (address, address);
 		}
 
 		public class Channel : IChannel {
 			private SerialPort _serialPort;
 
-			public Channel (string portName, int baudRate, int timeout) {
-				_serialPort = new SerialPort ();
+			public Channel (string portName, int baudRate = 115200, int timeout = 500) {
+				_serialPort = new SerialPort();
 
 				// Allow the user to set the appropriate properties.
 				_serialPort.PortName = portName;
@@ -50,11 +54,13 @@ namespace ErpNet.FP.Example {
 			/// Reads data from the com port.
 			/// </summary>
 			/// <returns>The data which was read.</returns>
-			public Byte[] Read () {
-				var dataSize = _serialPort.BytesToRead;
-				byte[] data = new byte[dataSize];
-				_serialPort.Read (data, 0, dataSize);
-				return data;
+			public byte[] Read () {
+				var buffer = new byte[_serialPort.ReadBufferSize];
+				var task = _serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+				task.Wait(_serialPort.ReadTimeout);
+				var result = new byte[task.Result];
+				Array.Copy(buffer, result, task.Result);
+				return result;
 			}
 
 			/// <summary>
@@ -62,7 +68,18 @@ namespace ErpNet.FP.Example {
 			/// </summary>
 			/// <param name="data">The data to write.</param>
 			public void Write (Byte[] data) {
-				_serialPort.Write (data, 0, data.Length);
+				_serialPort.DiscardInBuffer();
+				var bytesToWrite = data.Length;
+				while (bytesToWrite>0) {
+					var writeSize = Math.Min(bytesToWrite, _serialPort.WriteBufferSize);
+					var task = _serialPort.BaseStream.WriteAsync(
+						data, 
+						data.Length-bytesToWrite, 
+						writeSize
+					);
+					task.Wait(_serialPort.WriteTimeout);
+					bytesToWrite -= writeSize;
+				}
 			}
 		}
 

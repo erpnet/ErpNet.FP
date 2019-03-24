@@ -42,6 +42,9 @@ namespace ErpNet.FP.Example
                 System.Console.WriteLine("No local printers found.");
                 return;
             }
+            System.Console.WriteLine(printers);
+
+            return;
 
             // Now use Uri to connect to specific printer.
             var fp = provider.Connect("bg.dy.json.http://printer.intranet.local");

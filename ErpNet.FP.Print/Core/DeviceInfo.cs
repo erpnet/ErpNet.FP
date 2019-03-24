@@ -23,7 +23,7 @@
         /// </summary>
         public string Model;
         /// <summary>
-        /// Optional. 
+        /// Optional. Type of the device.
         /// </summary>
         public string Type;
         /// <summary>
