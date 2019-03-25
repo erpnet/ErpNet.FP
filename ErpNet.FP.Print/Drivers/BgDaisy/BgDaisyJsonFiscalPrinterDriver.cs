@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ErpNet.FP.Print.Core;
 using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
 
 namespace ErpNet.FP.Print.Drivers.BgDaisy
 {

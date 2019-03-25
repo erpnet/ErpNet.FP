@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ErpNet.FP.Print.Core;
 using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
 
 namespace ErpNet.FP.Print.Drivers.BgDaisy
 {
@@ -8,13 +7,15 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
     {
         public override string DriverName => "bg.dy.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null) {
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
+        {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
             fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(fiscalPrinter.ReadRawDeviceInfo());
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo) {
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
+        {
             var commaFields = rawDeviceInfo.Split(',');            
             if (commaFields.Length != 6) {
                 throw new InvalidDeviceInfoException("rawDeviceInfo must contain 6 comma-separated items");

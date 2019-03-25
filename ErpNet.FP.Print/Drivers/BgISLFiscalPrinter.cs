@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using ErpNet.FP.Print.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ErpNet.FP.Print.Drivers
 {
@@ -12,25 +12,35 @@ namespace ErpNet.FP.Print.Drivers
     public class BgIslFiscalPrinter : BgFiscalPrinter
     {
         protected byte SequenceNumber = 0;
+        protected const byte
+            MarkerSpace         = 0x20,
+            MarkerSyn           = 0x16,
+            MarkerNak           = 0x15, 
+            MarkerPreamble      = 0x01,
+            MarkerPostamble     = 0x05,
+            MarkerSeparator     = 0x04,
+            MarkerTerminator    = 0x03;
         protected const byte 
-            MarkerSpace = 0x20,
-            MarkerSyn = 0x16,
-            MarkerNak = 0x15, 
-            MarkerPreamble = 0x01,
-            MarkerPostamble = 0x05,
-            MarkerSeparator = 0x04,
-            MarkerTerminator = 0x03;
-        protected const byte 
-            DigitZero = 0x30,
-            DigitOne = 0x31;
-        protected const byte 
-            CommandGetDeviceInfo = 0x5a;
+            DigitZero           = 0x30,
+            DigitOne            = 0x31;
+        protected const byte
+            CommandGetStatus            = 0x4a,
+            CommandGetDeviceInfo        = 0x5a,
+            CommandMoneyTransfer        = 0x46,
+            CommandOpenFiscalReceipt    = 0x30,
+            CommandCloseFiscalReceipt   = 0x38,
+            CommandFiscalReceiptTotal   = 0x35,
+            CommandFiscalReceiptComment = 0x36,
+            CommandFiscalReceiptSale    = 0x31,
+            CommandCutThePaper          = 0x2d,
+            CommandPrintDailyReport     = 0x45;
         protected const byte MaxSequenceNumber = 0xFF - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 20;
 
         public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
-        : base (channel, options) {
+        : base (channel, options)
+        {
         }
 
         public override bool IsReady()
@@ -45,7 +55,12 @@ namespace ErpNet.FP.Print.Drivers
 
         public override PrintInfo PrintMoneyWithdraw(decimal amount)
         {
-            throw new System.NotImplementedException();
+            if (amount < 0m)
+            {
+                throw new ArgumentOutOfRangeException("amount must be positive number");
+;           }
+            //Console.WriteLine("PrintMoneyWithdraw: {0}", Request(CommandMoneyTransfer, amount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintReceipt(Receipt receipt)
@@ -61,7 +76,9 @@ namespace ErpNet.FP.Print.Drivers
 
         public override PrintInfo PrintZeroingReport()
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("PrintZeroingReport: {0}", Request(CommandPrintDailyReport, ""));
+            // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+            return new PrintInfo();
         }
 
         public override void SetupPrinter()
@@ -69,7 +86,8 @@ namespace ErpNet.FP.Print.Drivers
             // Nothing to be configured for now.
         }
 
-        protected virtual byte[] ComputeBCC(byte[] fragment) {
+        protected virtual byte[] ComputeBCC(byte[] fragment)
+        {
             UInt16 bccSum = 0;
             foreach(byte b in fragment) {
                 bccSum += b;
@@ -82,7 +100,8 @@ namespace ErpNet.FP.Print.Drivers
             };
         }
 
-        protected virtual byte[] BuildHostPacket(byte command, byte[] data) {
+        protected virtual byte[] BuildHostPacket(byte command, byte[] data)
+        {
             var dataLength = data.Length;
             var packet = new List<byte>();
             packet.Add(MarkerPreamble);
@@ -96,7 +115,8 @@ namespace ErpNet.FP.Print.Drivers
             return packet.ToArray();
         }
 
-        protected byte[] RawRequest(byte command, byte[] data) {
+        protected byte[] RawRequest(byte command, byte[] data)
+        {
             SequenceNumber++;
             if (SequenceNumber > MaxSequenceNumber) {
                 SequenceNumber = 0;
@@ -150,7 +170,8 @@ namespace ErpNet.FP.Print.Drivers
             return null;
         }
 
-        protected string ParseResponse(byte[] rawResponse) {
+        protected string ParseResponse(byte[] rawResponse)
+        {
             var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
             for(var i = 0u; i < rawResponse.Length; i++) {
                 var b = rawResponse[i];
@@ -182,7 +203,8 @@ namespace ErpNet.FP.Print.Drivers
             return null;
         }
 
-        protected string Request(byte command, string data) {
+        protected string Request(byte command, string data)
+        {
             return ParseResponse(RawRequest(command, System.Text.Encoding.ASCII.GetBytes(data)));
         }
 

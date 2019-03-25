@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
+﻿using ErpNet.FP.Print.Core;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Print.Drivers.BgEltrade
 {
@@ -10,7 +10,8 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
     public class BgEltradeIslFiscalPrinter : BgIslFiscalPrinter
     {
         public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
-        : base(channel, options) {
+        : base(channel, options)
+        {
         }
 
     }

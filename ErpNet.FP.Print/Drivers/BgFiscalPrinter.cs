@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using ErpNet.FP.Print.Core;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Print.Drivers
 {
@@ -16,7 +16,8 @@ namespace ErpNet.FP.Print.Drivers
         protected IChannel Channel;  
         protected IDictionary<string, string> Options;  
 
-        public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) {
+        public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        {
             Options = options;
             Channel = channel;            
         }

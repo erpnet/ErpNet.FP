@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ErpNet.FP.Print.Core;
 using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
 
 namespace ErpNet.FP.Print.Drivers.BgEltrade
 {
@@ -8,13 +7,15 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
     {
         public override string DriverName => "bg.ed.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null) {
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
+        {
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, options);
             fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(fiscalPrinter.ReadRawDeviceInfo());
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo) {
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
+        {
             var commaFields = rawDeviceInfo.Split(',');            
             if (commaFields.Length != 7) {
                 throw new InvalidDeviceInfoException("rawDeviceInfo must contain 7 comma-separated items");

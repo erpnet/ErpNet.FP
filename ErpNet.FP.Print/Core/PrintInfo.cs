@@ -11,6 +11,8 @@
         /// <value>
         /// The fiscal memory position.
         /// </value>
-        public string FiscalMemoryPosition { get; set; }
+        public string FiscalMemoryPosition { get; }
+        public string[] Statuses { get;  }
+        public string[] Errors { get;  }
     }
 }

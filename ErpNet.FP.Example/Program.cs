@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ErpNet.FP.Print.Core;
+﻿using ErpNet.FP.Print.Core;
 using ErpNet.FP.Print.Drivers.BgDaisy;
 using ErpNet.FP.Print.Drivers.BgDatecs;
 using ErpNet.FP.Print.Drivers.BgEltrade;
 using ErpNet.FP.Print.Drivers.BgTremol;
 using ErpNet.FP.Print.Provider;
 using ErpNet.FP.Print.Transports;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ErpNet.FP.Example
 {
@@ -100,7 +100,7 @@ namespace ErpNet.FP.Example
                 }
             };
 
-            var result = fp.PrintReceipt(doc);
+            var result = fp.PrintZeroingReport();
             System.Console.WriteLine(result.FiscalMemoryPosition);
         }
     }

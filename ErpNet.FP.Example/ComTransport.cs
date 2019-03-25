@@ -42,7 +42,7 @@ namespace ErpNet.FP.Example
 
 			public string Descriptor => _serialPort.PortName;
 
-            public Channel(string portName, int baudRate = 115200, int timeout = 500) {
+            public Channel(string portName, int baudRate = 115200, int timeout = 1000) {
                 _serialPort = new SerialPort
                 {
                     // Allow the user to set the appropriate properties.
@@ -74,7 +74,7 @@ namespace ErpNet.FP.Example
                     Array.Copy(buffer, result, task.Result);
                     return result;
                 } else {
-                    throw new TimeoutException("read timeout while reading from com port");
+                    throw new TimeoutException("timeout occured while reading from com port");
                 }
 			}
 
@@ -95,7 +95,7 @@ namespace ErpNet.FP.Example
 					if (task.Wait(_serialPort.WriteTimeout)) { 
 					    bytesToWrite -= writeSize;
                     } else {
-                        throw new TimeoutException("read timeout while writing to com port");
+                        throw new TimeoutException("timeout occured while writing to com port");
                     }
 				}
 			}

@@ -3,7 +3,8 @@ using System;
 namespace ErpNet.FP.Print.Drivers
 {
     public static class Helpers {
-        public static T[] Slice<T>(this T[] arr, uint indexFrom, uint indexTo) {
+        public static T[] Slice<T>(this T[] arr, uint indexFrom, uint indexTo)
+        {
             if (indexFrom > indexTo) {
                 throw new ArgumentOutOfRangeException("indexFrom is bigger than indexTo!");
             }
