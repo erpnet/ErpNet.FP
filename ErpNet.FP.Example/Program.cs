@@ -101,8 +101,8 @@ namespace ErpNet.FP.Example
                 }
             };
 
-            var result = fp.PrintZeroingReport();
-            System.Console.WriteLine(result.FiscalMemoryPosition);
+            //var result = fp.PrintZeroingReport();
+            //System.Console.WriteLine(result.FiscalMemoryPosition);
         }
     }
 }

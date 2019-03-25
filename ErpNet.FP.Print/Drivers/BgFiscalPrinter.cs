@@ -13,13 +13,13 @@ namespace ErpNet.FP.Print.Drivers
 
         public DeviceInfo FiscalPrinterInfo;
 
-        protected IChannel Channel;  
-        protected IDictionary<string, string> Options;  
+        protected IChannel Channel;
+        protected IDictionary<string, string> Options;
 
         public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         {
             Options = options;
-            Channel = channel;            
+            Channel = channel;
         }
 
         public virtual bool IsReady()
@@ -54,7 +54,12 @@ namespace ErpNet.FP.Print.Drivers
 
         public virtual void SetupPrinter()
         {
-            // Nothing to be configured for now.
+            throw new System.NotImplementedException();
+        }
+
+        protected virtual DeviceStatus ParseStatus(byte[] status)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

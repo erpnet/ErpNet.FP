@@ -7,19 +7,24 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
     {
         public override string DriverName => "bg.dt.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null) {
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
+        {
             var fiscalPrinter = new BgDatecsIslFiscalPrinter(channel, options);
-            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(fiscalPrinter.ReadRawDeviceInfo());
+            var (rawDeviceInfo, _) = fiscalPrinter.ReadRawDeviceInfo();
+            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo) {
-            var commaFields = rawDeviceInfo.Split(',');            
-            if (commaFields.Length != 6) {
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
+        {
+            var commaFields = rawDeviceInfo.Split(',');
+            if (commaFields.Length != 6)
+            {
                 throw new InvalidDeviceInfoException("rawDeviceInfo must contain 6 comma-separated items");
             }
             var serialNumber = commaFields[4];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith("DT")) {
+            if (serialNumber.Length != 8 || !serialNumber.StartsWith("DT"))
+            {
                 throw new InvalidDeviceInfoException("serial number must begin with DT and be with length 8 characters");
             }
             var info = new DeviceInfo();

@@ -104,7 +104,6 @@ namespace ErpNet.FP.Print.Drivers
 
         protected virtual byte[] BuildHostPacket(byte command, byte[] data)
         {
-            var dataLength = data.Length;
             var packet = new List<byte>();
             packet.Add(MarkerPreamble);
             packet.Add((byte)(MarkerSpace + 4 + (byte)data.Length));
@@ -181,7 +180,7 @@ namespace ErpNet.FP.Print.Drivers
             return null;
         }
 
-        protected string ParseResponse(byte[] rawResponse)
+        protected (string, DeviceStatus) ParseResponse(byte[] rawResponse)
         {
             var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
             for (var i = 0u; i < rawResponse.Length; i++)
@@ -211,19 +210,18 @@ namespace ErpNet.FP.Print.Drivers
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    // TODO: status parsing
-                    return System.Text.Encoding.UTF8.GetString(data);
+                    return (System.Text.Encoding.UTF8.GetString(data), ParseStatus(status));
                 }
             }
-            return null;
+            throw new InvalidResponseException("the response is invalid");
         }
 
-        protected string Request(byte command, string data)
+        protected (string, DeviceStatus) Request(byte command, string data)
         {
             return ParseResponse(RawRequest(command, System.Text.Encoding.ASCII.GetBytes(data)));
         }
 
-        public string ReadRawDeviceInfo()
+        public (string, DeviceStatus) ReadRawDeviceInfo()
         {
             return Request(CommandGetDeviceInfo, "1");
         }

@@ -9,8 +9,15 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public class BgDatecsIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgDatecsIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
-        : base(channel, options) {
+        public BgDatecsIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        : base(channel, options)
+        {
+        }
+
+        protected override DeviceStatus ParseStatus(byte[] status)
+        {
+            // TODO: Device status parser
+            return new DeviceStatus();
         }
 
     }

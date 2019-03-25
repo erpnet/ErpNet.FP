@@ -43,18 +43,15 @@ namespace ErpNet.FP.Print.Provider
                 {
                     try
                     {
-                        Console.WriteLine($"Opening channel {address}");
                         var channel = transport.OpenChannel(address);
                         try
                         {
                             var p = driver.Connect(channel);
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
-                        catch (Exception e)
+                        catch
                         {
-                            // Cannot connect to opened channel
-                            Console.WriteLine(e.Message);
-                            Console.WriteLine(e.StackTrace);
+                            // Cannot connect to opened channel, possible incompatibility
                         }
                     }
                     catch

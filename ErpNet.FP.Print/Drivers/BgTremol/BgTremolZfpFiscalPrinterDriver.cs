@@ -8,7 +8,7 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
     {
         public override string DriverName => "bg.tr.zfp";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null) 
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         => new BgTremolZfpFiscalPrinter(channel, options);
     }
 }

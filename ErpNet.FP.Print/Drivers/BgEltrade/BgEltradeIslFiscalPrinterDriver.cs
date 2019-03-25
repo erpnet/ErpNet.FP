@@ -10,18 +10,21 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         {
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, options);
-            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(fiscalPrinter.ReadRawDeviceInfo());
+            var (rawDeviceInfo, _) = fiscalPrinter.ReadRawDeviceInfo();
+            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
         }
 
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
         {
-            var commaFields = rawDeviceInfo.Split(',');            
-            if (commaFields.Length != 7) {
+            var commaFields = rawDeviceInfo.Split(',');
+            if (commaFields.Length != 7)
+            {
                 throw new InvalidDeviceInfoException("rawDeviceInfo must contain 7 comma-separated items");
             }
             var serialNumber = commaFields[5];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith("ED")) {
+            if (serialNumber.Length != 8 || !serialNumber.StartsWith("ED"))
+            {
                 throw new InvalidDeviceInfoException("serial number must begin with DY and be with length 8 characted");
             }
             var info = new DeviceInfo();
