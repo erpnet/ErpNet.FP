@@ -27,6 +27,7 @@ namespace ErpNet.FP.Print.Drivers
             CommandGetDeviceInfo = 0x5a;
         protected const byte MaxSequenceNumber = 0xFF - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
+        protected const byte MaxReadRetries = 20;
 
         public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
         : base (channel, options) {
@@ -49,7 +50,8 @@ namespace ErpNet.FP.Print.Drivers
 
         public override PrintInfo PrintReceipt(Receipt receipt)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Print Receipt");
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
@@ -73,10 +75,10 @@ namespace ErpNet.FP.Print.Drivers
                 bccSum += b;
             }
             return new byte[]{
-                (byte)(((byte)(bccSum >> 0x0c) & 0x0f) + DigitZero), 
-                (byte)(((byte)(bccSum >> 0x08) & 0x0f) + DigitZero), 
-                (byte)(((byte)(bccSum >> 0x04) & 0x0f) + DigitZero), 
-                (byte)(((byte)(bccSum >> 0x00) & 0x0f) + DigitZero)
+                (byte)((bccSum >> 12 & 0x0f) + DigitZero), 
+                (byte)((bccSum >> 8 & 0x0f) + DigitZero), 
+                (byte)((bccSum >> 4 & 0x0f) + DigitZero), 
+                (byte)((bccSum >> 0 & 0x0f) + DigitZero)
             };
         }
 
@@ -97,7 +99,7 @@ namespace ErpNet.FP.Print.Drivers
         protected byte[] RawRequest(byte command, byte[] data) {
             SequenceNumber++;
             if (SequenceNumber > MaxSequenceNumber) {
-                SequenceNumber = 0x0;
+                SequenceNumber = 0;
             }
             var request = BuildHostPacket(command, data);
             for (var w = 0; w < MaxWriteRetries; w++) {
@@ -105,7 +107,7 @@ namespace ErpNet.FP.Print.Drivers
                 Channel.Write(request);
                 // Read response
                 var currentFrame = new List<byte>();
-                for(;;) {
+                for(var r = 0; r < MaxReadRetries; r++) {
                     var buffer = Channel.Read();
                     var readFrames = new List<List<byte>>();
                     foreach(var b in buffer) {

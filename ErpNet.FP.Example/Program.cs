@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ErpNet.FP.Print.Core;
 using ErpNet.FP.Print.Drivers.BgDaisy;
+using ErpNet.FP.Print.Drivers.BgDatecs;
+using ErpNet.FP.Print.Drivers.BgEltrade;
 using ErpNet.FP.Print.Drivers.BgTremol;
 using ErpNet.FP.Print.Provider;
 using ErpNet.FP.Print.Transports;
@@ -22,6 +24,8 @@ namespace ErpNet.FP.Example
             var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
 
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
+            var datecsIsl = new BgDatecsIslFiscalPrinterDriver();
+            var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
             var daisyJson = new BgDaisyJsonFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
 
@@ -32,6 +36,8 @@ namespace ErpNet.FP.Example
 
             // Add drivers and their compatible transports to the provider.
             provider.Add(daisyIsl, comTransport);
+            provider.Add(datecsIsl, comTransport);
+            provider.Add(eltradeIsl, comTransport);
             provider.Add(daisyIsl, btTransport);
             provider.Add(daisyJson, httpTransport);
             provider.Add(tremolZfp, httpTransport);
@@ -73,6 +79,7 @@ namespace ErpNet.FP.Example
                         Text = "Допълнителен коментар към сиренето...",
                         IsComment  = true
                     },
+
                     new Item()
                     {
                         Text = "Кашкавал",

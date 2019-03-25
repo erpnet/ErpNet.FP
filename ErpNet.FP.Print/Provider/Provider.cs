@@ -42,6 +42,7 @@ namespace ErpNet.FP.Print.Provider
                 foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
                     try {
+                        Console.WriteLine($"Opening channel {address}");
                         var channel = transport.OpenChannel(address);
                         try
                         {

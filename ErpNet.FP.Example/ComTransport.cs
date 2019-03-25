@@ -1,17 +1,16 @@
-﻿using System.Threading;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using System.Linq;
+using System.IO.Ports;
 using ErpNet.FP.Print.Core;
-using System.Threading.Tasks;
 
-namespace ErpNet.FP.Example {
-	/// <summary>
-	/// Serial COM port transport.
-	/// </summary>
-	/// <seealso cref="ErpNet.FP.Print.Core.Transport" />
-	public class ComTransport : Transport {
+namespace ErpNet.FP.Example
+{
+    /// <summary>
+    /// Serial COM port transport.
+    /// </summary>
+    /// <seealso cref="ErpNet.FP.Print.Core.Transport" />
+    public class ComTransport : Transport {
 		public override string TransportName => "com";
 
 		private IDictionary<string, ComTransport.Channel> openedChannels =
@@ -34,61 +33,56 @@ namespace ErpNet.FP.Example {
 		/// All available addresses and descriptions.
 		/// </value>
 		public override IEnumerable < (string address, string description) > GetAvailableAddresses () {
-			// For description of com ports we do not have anything else than the port name / port path
+			// For description of com ports we do not have anything else than the port name / path
 			return from address in SerialPort.GetPortNames() select (address, address);
 		}
 
-		public class Channel : IChannel {
+        public class Channel : IChannel {
 			private SerialPort _serialPort;
 
 			public string Descriptor => _serialPort.PortName;
 
-			public Channel (string portName, int baudRate = 115200, int timeout = 500) {
-				_serialPort = new SerialPort();
+            public Channel(string portName, int baudRate = 115200, int timeout = 500) {
+                _serialPort = new SerialPort
+                {
+                    // Allow the user to set the appropriate properties.
+                    PortName = portName,
+                    BaudRate = baudRate,
 
-				// Allow the user to set the appropriate properties.
-				_serialPort.PortName = portName;
-				_serialPort.BaudRate = baudRate;
+                    // Set the read/write timeouts
+                    ReadTimeout = timeout,
+                    WriteTimeout = timeout
+                };
 
-				// Set the read/write timeouts
-				_serialPort.ReadTimeout = timeout;
-				_serialPort.WriteTimeout = timeout;
-
-				_serialPort.Open ();
-			}
-
-			public void Dispose(bool disposing) {
-				if (disposing) {
-					_serialPort.Close ();
-				}
+				_serialPort.Open();
 			}
 
 			public void Dispose()
 			{
-				// Dispose of unmanaged resources.
-				Dispose(true);
-				// Suppress finalization.
-				GC.SuppressFinalize(this);
+				_serialPort.Close();
 			}
 
 			/// <summary>
 			/// Reads data from the com port.
 			/// </summary>
 			/// <returns>The data which was read.</returns>
-			public byte[] Read () {
+			public byte[] Read() {
 				var buffer = new byte[_serialPort.ReadBufferSize];
-				var task = _serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
-				task.Wait(_serialPort.ReadTimeout);
-				var result = new byte[task.Result];
-				Array.Copy(buffer, result, task.Result);
-				return result;
+                var task = _serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+                if (task.Wait(_serialPort.ReadTimeout)) {
+                    var result = new byte[task.Result];
+                    Array.Copy(buffer, result, task.Result);
+                    return result;
+                } else {
+                    throw new TimeoutException("read timeout while reading from com port");
+                }
 			}
 
 			/// <summary>
 			/// Writes the specified data to the com port.
 			/// </summary>
 			/// <param name="data">The data to write.</param>
-			public void Write (Byte[] data) {
+			public void Write(Byte[] data) {
 				_serialPort.DiscardInBuffer();
 				var bytesToWrite = data.Length;
 				while (bytesToWrite>0) {
@@ -98,8 +92,11 @@ namespace ErpNet.FP.Example {
 						data.Length-bytesToWrite, 
 						writeSize
 					);
-					task.Wait(_serialPort.WriteTimeout);
-					bytesToWrite -= writeSize;
+					if (task.Wait(_serialPort.WriteTimeout)) { 
+					    bytesToWrite -= writeSize;
+                    } else {
+                        throw new TimeoutException("read timeout while writing to com port");
+                    }
 				}
 			}
 		}
