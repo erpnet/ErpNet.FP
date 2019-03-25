@@ -9,10 +9,10 @@ namespace ErpNet.FP.Print.Drivers
     /// <seealso cref="ErpNet.FP.Print.Drivers.BgFiscalPrinter" />
     public class BgZfpFiscalPrinter : BgFiscalPrinter
     {
-        public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
-        : base (channel, options)
+        public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        : base(channel, options)
         {
-        }   
+        }
 
         public override bool IsReady()
         {

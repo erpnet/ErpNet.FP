@@ -51,7 +51,8 @@ namespace ErpNet.FP.Example
                 return;
             }
             Console.WriteLine($"Found {printers.Count()} printer(s):");
-            foreach(KeyValuePair<string, IFiscalPrinter> printer in printers) {
+            foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
+            {
                 var info = printer.Value.DeviceInfo;
                 Console.Write($"{info.Company} {info.Model}, ");
                 Console.Write($"S/N: {info.SerialNumber}, FM S/N: {info.FiscalMemorySerialNumber}, ");
@@ -97,7 +98,7 @@ namespace ErpNet.FP.Example
                         Amount = 30,
                         PaymentType = PaymentType.Cash
                     }
-                } 
+                }
             };
 
             var result = fp.PrintZeroingReport();
