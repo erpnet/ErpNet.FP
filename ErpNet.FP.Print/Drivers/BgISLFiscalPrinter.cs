@@ -73,7 +73,7 @@ namespace ErpNet.FP.Print.Drivers
                 bccSum += b;
             }
             return new byte[]{
-                (byte)(((byte)(bccSum >> 0x0b) & 0x0f) + DigitZero), 
+                (byte)(((byte)(bccSum >> 0x0c) & 0x0f) + DigitZero), 
                 (byte)(((byte)(bccSum >> 0x08) & 0x0f) + DigitZero), 
                 (byte)(((byte)(bccSum >> 0x04) & 0x0f) + DigitZero), 
                 (byte)(((byte)(bccSum >> 0x00) & 0x0f) + DigitZero)
@@ -104,39 +104,35 @@ namespace ErpNet.FP.Print.Drivers
                 // Write packet
                 Channel.Write(request);
                 // Read response
-                var currentFragment = new List<byte>();
+                var currentFrame = new List<byte>();
                 for(;;) {
                     var buffer = Channel.Read();
-                    var readFragments = new List<List<byte>>();
+                    var readFrames = new List<List<byte>>();
                     foreach(var b in buffer) {
-                        Console.Write($"{b:X} ");
-                        currentFragment.Add(b);
+                        currentFrame.Add(b);
                         // Split buffer by following separators
                         if (b == MarkerNak || b == MarkerSyn || b == MarkerTerminator) {
-                            readFragments.Add(currentFragment);
-                            currentFragment = new List<byte>();
+                            readFrames.Add(currentFrame);
+                            currentFrame = new List<byte>();
                         }
                     }
-                    Console.WriteLine();
                     var (wait, repeat) = (false, false);
-                    foreach(var fragment in readFragments) {
-                        Console.Write("Fragment: ");
-                        Console.WriteLine(System.Text.Encoding.UTF8.GetString(fragment.ToArray()));
-                        switch (fragment[0]) {
+                    foreach(var frame in readFrames) {
+                        switch (frame[0]) {
                         case MarkerNak:
-                            // Only last non-packed fragment matters if there are many readed
+                            // Only last non-packed frame matters if there are many readed
                             // So change the state accordingly
                             (wait, repeat) = (false, true);
                             break;
                         case MarkerSyn:
-                            // Only last non-packed fragment matters if there are many readed
+                            // Only last non-packed frame matters if there are many readed
                             // So change the state accordingly
                             (wait, repeat) = (true, false);
                             break;
                         case MarkerPreamble:
                             // By the protocol, it is allowed only one packed response per request.
-                            // So return first occurence of packed fragment as response.
-                            return fragment.ToArray();
+                            // So return first occurence of packed frame as response.
+                            return frame.ToArray();
                         }
                     }
                     if (wait) {
@@ -152,7 +148,7 @@ namespace ErpNet.FP.Print.Drivers
             return null;
         }
 
-        protected byte[] ParseResponse(byte[] rawResponse) {
+        protected string ParseResponse(byte[] rawResponse) {
             var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
             for(var i = 0u; i < rawResponse.Length; i++) {
                 var b = rawResponse[i];
@@ -171,26 +167,25 @@ namespace ErpNet.FP.Print.Drivers
                     break;
                 }
             }
-            Console.WriteLine($"{preamblePos} {separatorPos} {postamblePos} {terminatorPos}");
             if (preamblePos + 4 < separatorPos && separatorPos + 6 < postamblePos && postamblePos + 4 < terminatorPos) {
                 var data = rawResponse.Slice(preamblePos+4, separatorPos);
                 var status = rawResponse.Slice(separatorPos+1, postamblePos);
                 var bcc = rawResponse.Slice(postamblePos+1, terminatorPos);
-                if (bcc.SequenceEqual(ComputeBCC(rawResponse.Slice(preamblePos+1, postamblePos+1)))) {
+                var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos+1, postamblePos+1));
+                if (bcc.SequenceEqual(computedBcc)) {
                     // TODO: status parsing
-                    Console.WriteLine("Response({0:X})=%s", status, data);
-                    return data;
+                    return System.Text.Encoding.UTF8.GetString(data);
                 }
             }
             return null;
         }
 
-        protected byte[] Request(byte command, byte[] data) {
-            return ParseResponse(RawRequest(command, data));
+        protected string Request(byte command, string data) {
+            return ParseResponse(RawRequest(command, System.Text.Encoding.ASCII.GetBytes(data)));
         }
 
         public string ReadRawDeviceInfo() {
-            return System.Text.Encoding.UTF8.GetString(Request(CommandGetDeviceInfo, new byte[]{DigitOne}));
+            return Request(CommandGetDeviceInfo, "1");
         }
     }
 } 

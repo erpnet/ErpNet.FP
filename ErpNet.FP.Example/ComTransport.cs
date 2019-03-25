@@ -14,8 +14,17 @@ namespace ErpNet.FP.Example {
 	public class ComTransport : Transport {
 		public override string TransportName => "com";
 
-		public override IChannel OpenChannel (string address) 
-		=> new Channel (address);
+		private IDictionary<string, ComTransport.Channel> openedChannels =
+            new Dictionary<string, ComTransport.Channel>();
+
+		public override IChannel OpenChannel (string address) {
+			if (openedChannels.ContainsKey(address)) {
+				return openedChannels[address];
+			}
+			var channel = new Channel(address);
+			openedChannels.Add(address, channel);
+			return channel;
+		}
 
 		/// <summary>
 		/// Returns all serial com port addresses, which can have connected fiscal printers. 
@@ -32,6 +41,8 @@ namespace ErpNet.FP.Example {
 		public class Channel : IChannel {
 			private SerialPort _serialPort;
 
+			public string Descriptor => _serialPort.PortName;
+
 			public Channel (string portName, int baudRate = 115200, int timeout = 500) {
 				_serialPort = new SerialPort();
 
@@ -46,8 +57,18 @@ namespace ErpNet.FP.Example {
 				_serialPort.Open ();
 			}
 
-			~Channel () {
-				_serialPort.Close ();
+			public void Dispose(bool disposing) {
+				if (disposing) {
+					_serialPort.Close ();
+				}
+			}
+
+			public void Dispose()
+			{
+				// Dispose of unmanaged resources.
+				Dispose(true);
+				// Suppress finalization.
+				GC.SuppressFinalize(this);
 			}
 
 			/// <summary>

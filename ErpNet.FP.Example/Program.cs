@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ErpNet.FP.Print.Core;
 using ErpNet.FP.Print.Drivers.BgDaisy;
 using ErpNet.FP.Print.Drivers.BgTremol;
@@ -39,15 +41,19 @@ namespace ErpNet.FP.Example
             var printers = provider.DetectAvailablePrinters();
             if (!printers.Any())
             {
-                System.Console.WriteLine("No local printers found.");
+                Console.WriteLine("No local printers found.");
                 return;
             }
-            System.Console.WriteLine(printers);
-
-            return;
+            Console.WriteLine($"Found {printers.Count()} printer(s):");
+            foreach(KeyValuePair<string, IFiscalPrinter> printer in printers) {
+                var info = printer.Value.DeviceInfo;
+                Console.Write($"{info.Company} {info.Model}, ");
+                Console.Write($"S/N: {info.SerialNumber}, FM S/N: {info.FiscalMemorySerialNumber}, ");
+                Console.WriteLine($"URI: {printer.Key}");
+            }
 
             // Now use Uri to connect to specific printer.
-            var fp = provider.Connect("bg.dy.json.http://printer.intranet.local");
+            var fp = provider.Connect(printers.First().Key);
 
             // Print a receipt.
             var doc = new Receipt()

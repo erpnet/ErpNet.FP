@@ -29,13 +29,13 @@ namespace ErpNet.FP.Print.Provider
         /// Returns the available fiscal printers.
         /// </summary>
         /// <returns>The available fiscal printers.</returns>
-        public IEnumerable<IFiscalPrinter> DetectAvailablePrinters()
+        public IDictionary<string, IFiscalPrinter> DetectAvailablePrinters()
         {
             // This is naive implementation, which serializes the whole detection process.
             // It can be optimized with parallelism. 
             // However, port contention issues must be resolved in a more elaborate implementation.
 
-            var fp = new List<IFiscalPrinter>();
+            var fp = new Dictionary<string, IFiscalPrinter>();
 
             foreach (var (driver, transport) in protocols.Values)
             {
@@ -46,18 +46,16 @@ namespace ErpNet.FP.Print.Provider
                         try
                         {
                             var p = driver.Connect(channel);
-                            fp.Add(p);
+                            fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
                         catch(Exception e) {                            
                             // Cannot connect to opened channel
-                            // Console.WriteLine($"*** Cannot connect to opened channel {address}");
-                            // Console.WriteLine($"Error: {e.Message}");
+                            Console.WriteLine(e.Message);
                             Console.WriteLine(e.StackTrace);
                         }
                     } 
-                    catch(Exception e) { 
+                    catch { 
                         // Cannot open channel
-                        // Console.WriteLine($"*** Cannot open channel {address}. Error: {e.Message}");
                     }
                 }
             }
