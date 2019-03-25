@@ -16,8 +16,10 @@ namespace ErpNet.FP.Example
 		private IDictionary<string, ComTransport.Channel> openedChannels =
             new Dictionary<string, ComTransport.Channel>();
 
-		public override IChannel OpenChannel (string address) {
-			if (openedChannels.ContainsKey(address)) {
+		public override IChannel OpenChannel (string address)
+        {
+			if (openedChannels.ContainsKey(address))
+            {
 				return openedChannels[address];
 			}
 			var channel = new Channel(address);
@@ -32,18 +34,21 @@ namespace ErpNet.FP.Example
 		/// <value>
 		/// All available addresses and descriptions.
 		/// </value>
-		public override IEnumerable < (string address, string description) > GetAvailableAddresses () {
+		public override IEnumerable < (string address, string description) > GetAvailableAddresses ()
+        {
 			// For description of com ports we do not have anything else than the port name / path
 			return from address in SerialPort.GetPortNames() select (address, address);
 		}
 
-        public class Channel : IChannel {
-			private SerialPort _serialPort;
+        public class Channel : IChannel
+        {
+			private SerialPort serialPort;
 
-			public string Descriptor => _serialPort.PortName;
+			public string Descriptor => serialPort.PortName;
 
-            public Channel(string portName, int baudRate = 115200, int timeout = 1000) {
-                _serialPort = new SerialPort
+            public Channel(string portName, int baudRate = 115200, int timeout = 1000)
+            {
+                serialPort = new SerialPort
                 {
                     // Allow the user to set the appropriate properties.
                     PortName = portName,
@@ -54,22 +59,23 @@ namespace ErpNet.FP.Example
                     WriteTimeout = timeout
                 };
 
-				_serialPort.Open();
+				serialPort.Open();
 			}
 
 			public void Dispose()
 			{
-				_serialPort.Close();
+				serialPort.Close();
 			}
 
 			/// <summary>
 			/// Reads data from the com port.
 			/// </summary>
 			/// <returns>The data which was read.</returns>
-			public byte[] Read() {
-				var buffer = new byte[_serialPort.ReadBufferSize];
-                var task = _serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
-                if (task.Wait(_serialPort.ReadTimeout)) {
+			public byte[] Read()
+            {
+				var buffer = new byte[serialPort.ReadBufferSize];
+                var task = serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+                if (task.Wait(serialPort.ReadTimeout)) {
                     var result = new byte[task.Result];
                     Array.Copy(buffer, result, task.Result);
                     return result;
@@ -82,17 +88,18 @@ namespace ErpNet.FP.Example
 			/// Writes the specified data to the com port.
 			/// </summary>
 			/// <param name="data">The data to write.</param>
-			public void Write(Byte[] data) {
-				_serialPort.DiscardInBuffer();
+			public void Write(Byte[] data)
+            {
+				serialPort.DiscardInBuffer();
 				var bytesToWrite = data.Length;
 				while (bytesToWrite>0) {
-					var writeSize = Math.Min(bytesToWrite, _serialPort.WriteBufferSize);
-					var task = _serialPort.BaseStream.WriteAsync(
+					var writeSize = Math.Min(bytesToWrite, serialPort.WriteBufferSize);
+					var task = serialPort.BaseStream.WriteAsync(
 						data, 
 						data.Length-bytesToWrite, 
 						writeSize
 					);
-					if (task.Wait(_serialPort.WriteTimeout)) { 
+					if (task.Wait(serialPort.WriteTimeout)) { 
 					    bytesToWrite -= writeSize;
                     } else {
                         throw new TimeoutException("timeout occured while writing to com port");

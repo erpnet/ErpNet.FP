@@ -97,7 +97,7 @@ namespace ErpNet.FP.Example
                         Amount = 30,
                         PaymentType = PaymentType.Cash
                     }
-                }
+                } 
             };
 
             var result = fp.PrintZeroingReport();
