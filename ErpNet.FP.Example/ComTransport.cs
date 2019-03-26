@@ -14,18 +14,31 @@ namespace ErpNet.FP.Example
     {
         public override string TransportName => "com";
 
-        private IDictionary<string, ComTransport.Channel> openedChannels =
+        private readonly IDictionary<string, ComTransport.Channel> openedChannels =
             new Dictionary<string, ComTransport.Channel>();
 
         public override IChannel OpenChannel(string address)
         {
             if (openedChannels.ContainsKey(address))
             {
-                return openedChannels[address];
+                var channel = openedChannels[address];
+                if (channel == null)
+                {
+                    throw new TimeoutException("disabled due to timeout");
+                }
+                return channel;
             }
-            var channel = new Channel(address);
-            openedChannels.Add(address, channel);
-            return channel;
+            try
+            {
+                var channel = new Channel(address);
+                openedChannels.Add(address, channel);
+                return channel;
+            }
+            catch (TimeoutException e)
+            {
+                openedChannels.Add(address, null);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -38,12 +51,13 @@ namespace ErpNet.FP.Example
         public override IEnumerable<(string address, string description)> GetAvailableAddresses()
         {
             // For description of com ports we do not have anything else than the port name / path
+            // So we will return port name as description too.
             return from address in SerialPort.GetPortNames() select (address, address);
         }
 
         public class Channel : IChannel
         {
-            private SerialPort serialPort;
+            private readonly SerialPort serialPort;
 
             public string Descriptor => serialPort.PortName;
 
@@ -84,7 +98,7 @@ namespace ErpNet.FP.Example
                 }
                 else
                 {
-                    throw new TimeoutException("timeout occured while reading from com port");
+                    throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
                 }
             }
 
@@ -110,7 +124,7 @@ namespace ErpNet.FP.Example
                     }
                     else
                     {
-                        throw new TimeoutException("timeout occured while writing to com port");
+                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'");
                     }
                 }
             }

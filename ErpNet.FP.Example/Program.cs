@@ -6,6 +6,7 @@ using ErpNet.FP.Print.Drivers.BgTremol;
 using ErpNet.FP.Print.Provider;
 using ErpNet.FP.Print.Transports;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,12 +61,23 @@ namespace ErpNet.FP.Example
             }
 
             // Now use Uri to connect to specific printer.
-            var fp = provider.Connect(printers.First().Key);
+            var fp = provider.Connect(printers.First().Key, new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "1"
+            });
+
+            // Connecting with different credentials
+            var fpadm = provider.Connect(printers.First().Key, new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "20",
+                ["Operator.Password"] = "9999"
+            });
 
             // Print a receipt.
             var doc = new Receipt()
             {
-                UniqueSaleNumber = "00000000-0000-000",
+                UniqueSaleNumber = "DT517985-DD01-0000001",
                 Items = new Item[]
                 {
                     new Item()
@@ -101,8 +113,10 @@ namespace ErpNet.FP.Example
                 }
             };
 
-            //var result = fp.PrintZeroingReport();
-            //System.Console.WriteLine(result.FiscalMemoryPosition);
+            fp.PrintMoneyDeposit(123.4m);
+            fp.PrintMoneyWithdraw(43.21m);
+            var result = fp.PrintReceipt(doc);
+            System.Console.WriteLine(result.FiscalMemoryPosition);
         }
     }
 }

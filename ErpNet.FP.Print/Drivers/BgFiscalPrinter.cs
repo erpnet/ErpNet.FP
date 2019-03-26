@@ -10,19 +10,58 @@ namespace ErpNet.FP.Print.Drivers
     /// <seealso cref="ErpNet.FP.IFiscalPrinter" />
     public class BgFiscalPrinter : IFiscalPrinter
     {
-        public DeviceInfo DeviceInfo => FiscalPrinterInfo;
+        public DeviceInfo DeviceInfo => Info;
 
-        public DeviceInfo FiscalPrinterInfo;
+        protected IDictionary<string, string> Options { get; }
+        protected IChannel Channel { get; }
 
-        protected Encoding PrinterEncoding = Encoding.GetEncoding("windows-1251");
+        public DeviceInfo Info;
 
-        protected IChannel Channel;
-        protected IDictionary<string, string> Options;
+        protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
         public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         {
             Options = options;
             Channel = channel;
+        }
+
+        public string GetTaxGroupText(TaxGroup taxGroup)
+        {
+
+            switch (taxGroup)
+            {
+                case TaxGroup.GroupA:
+                    return "À";
+                case TaxGroup.GroupB:
+                    return "Á";
+                case TaxGroup.GroupC:
+                    return "Â";
+                case TaxGroup.GroupD:
+                    return "Ã";
+                default:
+                    return "Á";
+            }
+        }
+
+        public string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "P";
+                case PaymentType.BankTransfer:
+                    return "N";
+                case PaymentType.DebitCard:
+                    return "C";
+                case PaymentType.NationalHealthInsuranceFund:
+                    return "D";
+                case PaymentType.Voucher:
+                    return "I";
+                case PaymentType.Coupon:
+                    return "J";
+                default:
+                    return "P";
+            }
         }
 
         public virtual bool IsReady()
@@ -65,7 +104,7 @@ namespace ErpNet.FP.Print.Drivers
             throw new System.NotImplementedException();
         }
 
-        protected virtual string EncodeTextWithPrinterEncoding(string text)
+        protected virtual string WithPrinterEncoding(string text)
         {
             return PrinterEncoding.GetString(
                 Encoding.Convert(Encoding.Default, PrinterEncoding, Encoding.Default.GetBytes(text)));

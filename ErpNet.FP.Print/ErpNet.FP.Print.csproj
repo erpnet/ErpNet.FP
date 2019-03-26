@@ -5,4 +5,8 @@
     <RootNamespace>ErpNet.FP.Print</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
+  </ItemGroup>
+
 </Project>

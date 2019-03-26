@@ -1,6 +1,8 @@
 using ErpNet.FP.Print.Core;
 using System;
+using System.Text;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace ErpNet.FP.Print.Drivers
@@ -29,6 +31,7 @@ namespace ErpNet.FP.Print.Drivers
             CommandMoneyTransfer = 0x46,
             CommandOpenFiscalReceipt = 0x30,
             CommandCloseFiscalReceipt = 0x38,
+            CommandFiscalReceiptSum = 0x33,
             CommandFiscalReceiptTotal = 0x35,
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
@@ -36,7 +39,7 @@ namespace ErpNet.FP.Print.Drivers
             CommandPrintDailyReport = 0x45;
         protected const byte MaxSequenceNumber = 0xFF - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
-        protected const byte MaxReadRetries = 20;
+        protected const byte MaxReadRetries = 200;
 
         public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         : base(channel, options)
@@ -45,28 +48,95 @@ namespace ErpNet.FP.Print.Drivers
 
         public override bool IsReady()
         {
-            throw new System.NotImplementedException();
+            // TODO: status report and error handling
+
+            var (response, _) = Request(CommandGetStatus);
+            Console.WriteLine("IsReady: {0}", response);
+            return true;
         }
 
         public override PrintInfo PrintMoneyDeposit(decimal amount)
         {
-            throw new System.NotImplementedException();
+            // TODO: status report and error handling
+
+            var (response, _) = Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+            Console.WriteLine("PrintMoneyWithdraw: {0}", response);
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintMoneyWithdraw(decimal amount)
         {
+            // TODO: status report and error handling
+
             if (amount < 0m)
             {
-                throw new ArgumentOutOfRangeException("amount must be positive number");
+                throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
                 ;
             }
-            //Console.WriteLine("PrintMoneyWithdraw: {0}", Request(CommandMoneyTransfer, amount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            var (response, _) = Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+            Console.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
         }
 
         public override PrintInfo PrintReceipt(Receipt receipt)
         {
-            Console.WriteLine("Print Receipt");
+            // TODO: status report and error handling
+
+            var header = string.Format(
+                $"{Options["Operator.ID"]},{Options["Operator.Password"].WithMaxLength(Info.OperatorPasswordMaxLength)},{receipt.UniqueSaleNumber}");
+            Request(CommandOpenFiscalReceipt, header);
+            foreach (var item in receipt.Items)
+            {
+                if (item.IsComment)
+                {
+                    Request(CommandFiscalReceiptComment, item.Text.WithMaxLength(Info.CommentTextMaxLength));
+                }
+                else
+                {
+                    var itemData = new StringBuilder()
+                    .Append(item.Text.WithMaxLength(Info.ItemTextMaxLength))
+                    .Append('\t').Append(GetTaxGroupText(item.TaxGroup))
+                    .Append(item.UnitPrice.ToString("F2", CultureInfo.InvariantCulture));
+                    if (item.Quantity != 0)
+                    {
+                        itemData.Append('*').Append(item.Quantity.ToString(CultureInfo.InvariantCulture));
+                    }
+                    if (item.Discount != 0)
+                    {
+                        if (item.IsDiscountPercent)
+                        {
+                            itemData.Append(',');
+                        }
+                        else
+                        {
+                            itemData.Append('$');
+                        }
+                        itemData.Append(item.Discount.ToString("F2", CultureInfo.InvariantCulture));
+                    }
+                    Request(CommandFiscalReceiptSale, itemData.ToString());
+                }
+            }
+            if (receipt.Payments.Count == 0)
+            {
+                Request(CommandFiscalReceiptTotal);
+            }
+            else
+            {
+                //Request(CommandFiscalReceiptSum, "00");
+                foreach (var payment in receipt.Payments)
+                {
+                    var paymentData = new StringBuilder()
+                        .Append("Test\t")
+                        .Append(GetPaymentTypeText(payment.PaymentType))
+                        .Append(payment.Amount.ToString("F2", CultureInfo.InvariantCulture));
+                    Request(CommandFiscalReceiptTotal, paymentData.ToString());
+                }
+            }
+
+            Request(CommandCloseFiscalReceipt);
+
+            Request(CommandCutThePaper);
+
             return new PrintInfo();
         }
 
@@ -77,14 +147,12 @@ namespace ErpNet.FP.Print.Drivers
 
         public override PrintInfo PrintZeroingReport()
         {
-            Console.WriteLine("PrintZeroingReport: {0}", Request(CommandPrintDailyReport, ""));
+            // TODO: status report and error handling
+
+            var (response, _) = Request(CommandPrintDailyReport);
+            Console.WriteLine("PrintZeroingReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return new PrintInfo();
-        }
-
-        public override void SetupPrinter()
-        {
-            // Nothing to be configured for now.
         }
 
         protected virtual byte[] ComputeBCC(byte[] fragment)
@@ -106,10 +174,13 @@ namespace ErpNet.FP.Print.Drivers
         {
             var packet = new List<byte>();
             packet.Add(MarkerPreamble);
-            packet.Add((byte)(MarkerSpace + 4 + (byte)data.Length));
+            packet.Add((byte)(MarkerSpace + 4 + (data != null ? data.Length : 0)));
             packet.Add((byte)(MarkerSpace + SequenceNumber));
             packet.Add(command);
-            packet.AddRange(data);
+            if (data != null)
+            {
+                packet.AddRange(data);
+            }
             packet.Add(MarkerPostamble);
             packet.AddRange(ComputeBCC(packet.Skip(1).ToArray()));
             packet.Add(MarkerTerminator);
@@ -124,6 +195,14 @@ namespace ErpNet.FP.Print.Drivers
                 SequenceNumber = 0;
             }
             var request = BuildHostPacket(command, data);
+            /*
+            Console.WriteLine("Request:");
+            foreach (var b in request)
+            {
+                Console.Write($"{b:X} ");
+            }
+            Console.WriteLine();
+            */
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write packet
@@ -133,6 +212,14 @@ namespace ErpNet.FP.Print.Drivers
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
+                    /*
+                    Console.WriteLine("Response:");
+                    foreach (var b in buffer)
+                    {
+                        Console.Write($"{b:X} ");
+                    }
+                    Console.WriteLine();
+                    */
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
                     {
@@ -182,6 +269,10 @@ namespace ErpNet.FP.Print.Drivers
 
         protected (string, DeviceStatus) ParseResponse(byte[] rawResponse)
         {
+            if (rawResponse == null)
+            {
+                throw new InvalidResponseException("no response");
+            }
             var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
             for (var i = 0u; i < rawResponse.Length; i++)
             {
@@ -202,7 +293,7 @@ namespace ErpNet.FP.Print.Drivers
                         break;
                 }
             }
-            if (preamblePos + 4 < separatorPos && separatorPos + 6 < postamblePos && postamblePos + 4 < terminatorPos)
+            if (preamblePos + 4 <= separatorPos && separatorPos + 6 < postamblePos && postamblePos + 4 < terminatorPos)
             {
                 var data = rawResponse.Slice(preamblePos + 4, separatorPos);
                 var status = rawResponse.Slice(separatorPos + 1, postamblePos);
@@ -210,7 +301,25 @@ namespace ErpNet.FP.Print.Drivers
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    return (System.Text.Encoding.UTF8.GetString(data), ParseStatus(status));
+                    // For testing purposes only (view status bits)
+                    Console.WriteLine("Status:");
+                    int i = 0;
+                    foreach (var b in status)
+                    {
+                        var s = Convert.ToString(b, 2);
+                        // Ignore j=0 because bit 7 is reserved
+                        for (var j = 1; j < s.Length; j++)
+                        {
+                            if (s[j] == '1')
+                            {
+                                Console.Write($"{i}.{7 - j} ");
+                            }
+                        }
+                        i++;
+                    }
+                    Console.WriteLine();
+
+                    return (Encoding.UTF8.GetString(data), ParseStatus(status));
                 }
             }
             throw new InvalidResponseException("the response is invalid");
@@ -218,12 +327,20 @@ namespace ErpNet.FP.Print.Drivers
 
         protected (string, DeviceStatus) Request(byte command, string data)
         {
-            return ParseResponse(RawRequest(command, System.Text.Encoding.ASCII.GetBytes(data)));
+            Console.WriteLine($"Request({command:X}): '{data}'");
+            return ParseResponse(RawRequest(command, PrinterEncoding.GetBytes(data)));
         }
 
-        public (string, DeviceStatus) ReadRawDeviceInfo()
+        protected (string, DeviceStatus) Request(byte command)
+        {
+            Console.WriteLine($"Request({command:X})");
+            return ParseResponse(RawRequest(command, null));
+        }
+
+        public (string, DeviceStatus) GetRawDeviceInfo()
         {
             return Request(CommandGetDeviceInfo, "1");
         }
+
     }
 }

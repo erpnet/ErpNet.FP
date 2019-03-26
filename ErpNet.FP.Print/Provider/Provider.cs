@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ErpNet.FP.Print.Core;
+using ErpNet.FP.Print.Drivers;
 
 namespace ErpNet.FP.Print.Provider
 {
@@ -49,9 +50,19 @@ namespace ErpNet.FP.Print.Provider
                             var p = driver.Connect(channel);
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
-                        catch
+                        catch (InvalidDeviceInfoException)
+                        {
+                            // Autodetect probe not passed for this channel.
+                        }
+                        catch (TimeoutException)
+                        {
+                            // Timeout occured while connecting.
+                        }
+                        catch (Exception e)
                         {
                             // Cannot connect to opened channel, possible incompatibility
+                            Console.WriteLine($"*** {e.Message}");
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                     catch
@@ -69,6 +80,7 @@ namespace ErpNet.FP.Print.Provider
         /// <summary>
         /// <para>
         /// Connects to the fiscal printer with the specified device URI.
+        /// 
         /// The Uri is in format "protocol://address". For example:
         /// </para>
         /// <para>

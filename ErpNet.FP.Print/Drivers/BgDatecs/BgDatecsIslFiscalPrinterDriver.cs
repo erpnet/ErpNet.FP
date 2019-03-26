@@ -5,13 +5,14 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
 {
     public class BgDatecsIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string DriverName => "bg.dt.isl";
+        public override string SerialNumberPrefix => "DT";
+        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         {
             var fiscalPrinter = new BgDatecsIslFiscalPrinter(channel, options);
-            var (rawDeviceInfo, _) = fiscalPrinter.ReadRawDeviceInfo();
-            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(rawDeviceInfo);
+            var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
         }
 
@@ -20,19 +21,24 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 6)
             {
-                throw new InvalidDeviceInfoException("rawDeviceInfo must contain 6 comma-separated items");
+                throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 6 comma-separated items for '{DriverName}'");
             }
             var serialNumber = commaFields[4];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith("DT"))
+            if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
             {
-                throw new InvalidDeviceInfoException("serial number must begin with DT and be with length 8 characters");
+                throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
-            var info = new DeviceInfo();
-            info.SerialNumber = serialNumber;
-            info.FiscalMemorySerialNumber = commaFields[5];
-            info.Model = commaFields[0];
-            info.FirmwareVersion = commaFields[1];
-            info.Company = "Datecs";
+            var info = new DeviceInfo
+            {
+                SerialNumber = serialNumber,
+                FiscalMemorySerialNumber = commaFields[5],
+                Model = commaFields[0],
+                FirmwareVersion = commaFields[1],
+                Company = "Datecs",
+                CommentTextMaxLength = 42, // Set by Datecs protocol
+                ItemTextMaxLength = 22, // Set by Datecs protocol
+                OperatorPasswordMaxLength = 8 // Set by Datecs protocol
+            };
             return info;
         }
     }

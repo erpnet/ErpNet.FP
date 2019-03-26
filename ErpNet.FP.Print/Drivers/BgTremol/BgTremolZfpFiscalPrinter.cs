@@ -9,9 +9,10 @@ namespace ErpNet.FP.Print.Drivers.BgTremol
     /// <seealso cref="ErpNet.FP.Drivers.BgZfpFiscalPrinter" />
     public class BgTremolZfpFiscalPrinter : BgZfpFiscalPrinter
     {
-        public BgTremolZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null) 
-        : base(channel, options) {
-            FiscalPrinterInfo.Company = "Tremol";
+        public BgTremolZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        : base(channel, options)
+        {
+
         }
 
     }

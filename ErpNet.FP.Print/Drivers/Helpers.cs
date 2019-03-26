@@ -17,5 +17,15 @@ namespace ErpNet.FP.Print.Drivers
 
             return result;
         }
+
+        public static string WithMaxLength(this string text, int maxLength)
+        {
+            if (text.Length <= maxLength)
+            {
+                return text;
+            }
+
+            return text.Substring(0, maxLength);
+        }
     }
 }

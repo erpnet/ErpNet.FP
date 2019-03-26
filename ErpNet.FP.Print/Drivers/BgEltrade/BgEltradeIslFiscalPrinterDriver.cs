@@ -5,13 +5,14 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
 {
     public class BgEltradeIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string DriverName => "bg.ed.isl";
+        public override string SerialNumberPrefix => "ED";
+        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         {
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, options);
-            var (rawDeviceInfo, _) = fiscalPrinter.ReadRawDeviceInfo();
-            fiscalPrinter.FiscalPrinterInfo = ParseDeviceInfo(rawDeviceInfo);
+            var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
         }
 
@@ -20,19 +21,24 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 7)
             {
-                throw new InvalidDeviceInfoException("rawDeviceInfo must contain 7 comma-separated items");
+                throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 7 comma-separated items for '{DriverName}'");
             }
             var serialNumber = commaFields[5];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith("ED"))
+            if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
             {
-                throw new InvalidDeviceInfoException("serial number must begin with DY and be with length 8 characted");
+                throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
-            var info = new DeviceInfo();
-            info.SerialNumber = serialNumber;
-            info.FiscalMemorySerialNumber = commaFields[6];
-            info.Model = commaFields[0];
-            info.FirmwareVersion = commaFields[2];
-            info.Company = "Eltrade";
+            var info = new DeviceInfo
+            {
+                SerialNumber = serialNumber,
+                FiscalMemorySerialNumber = commaFields[6],
+                Model = commaFields[0],
+                FirmwareVersion = commaFields[2],
+                Company = "Eltrade",
+                CommentTextMaxLength = 46, // Set by Eltrade protocol
+                ItemTextMaxLength = 30, // Set by Eltrade protocol
+                OperatorPasswordMaxLength = 8 // Set by Eltrade protocol
+            };
             return info;
         }
     }

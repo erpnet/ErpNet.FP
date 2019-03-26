@@ -30,5 +30,17 @@
         /// Optional. Firmware version.
         /// </summary>
         public string FirmwareVersion;
+        // <summary>
+        /// Maximum symbols for operator names, item names, department names allowed.
+        /// </summary>
+        public int ItemTextMaxLength;
+        /// <summary>
+        /// Maximum symbols for payment names allowed.
+        /// </summary>
+        public int CommentTextMaxLength;
+        /// <summary>
+        /// Maximal operator password length allowed;
+        /// </summary>
+        public int OperatorPasswordMaxLength;
     }
 }

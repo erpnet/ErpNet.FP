@@ -9,6 +9,9 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public class BgDaisyIslFiscalPrinter : BgIslFiscalPrinter
     {
+        protected const byte
+            DaisyCommandGetDeviceConstants = 0x80;
+
         public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         : base(channel, options)
         {
@@ -18,6 +21,12 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
         {
             // TODO: Device status parser
             return new DeviceStatus();
+        }
+
+        public (string, DeviceStatus) GetRawDeviceConstants()
+
+        {
+            return Request(DaisyCommandGetDeviceConstants);
         }
 
     }
