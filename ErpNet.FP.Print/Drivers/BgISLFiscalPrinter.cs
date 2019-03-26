@@ -82,9 +82,12 @@ namespace ErpNet.FP.Print.Drivers
         {
             // TODO: status report and error handling
 
+            // Receipt header
             var header = string.Format(
                 $"{Options["Operator.ID"]},{Options["Operator.Password"].WithMaxLength(Info.OperatorPasswordMaxLength)},{receipt.UniqueSaleNumber}");
             Request(CommandOpenFiscalReceipt, header);
+
+            // Receipt items
             foreach (var item in receipt.Items)
             {
                 if (item.IsComment)
@@ -116,7 +119,9 @@ namespace ErpNet.FP.Print.Drivers
                     Request(CommandFiscalReceiptSale, itemData.ToString());
                 }
             }
-            if (receipt.Payments.Count == 0)
+
+            // Receipt payments
+            if (receipt.Payments == null || receipt.Payments.Count == 0)
             {
                 Request(CommandFiscalReceiptTotal);
             }
@@ -126,12 +131,13 @@ namespace ErpNet.FP.Print.Drivers
                 foreach (var payment in receipt.Payments)
                 {
                     var paymentData = new StringBuilder()
-                        .Append("Test\t")
+                        .Append('\t')
                         .Append(GetPaymentTypeText(payment.PaymentType))
                         .Append(payment.Amount.ToString("F2", CultureInfo.InvariantCulture));
                     Request(CommandFiscalReceiptTotal, paymentData.ToString());
                 }
             }
+
 
             Request(CommandCloseFiscalReceipt);
 

@@ -107,7 +107,7 @@ namespace ErpNet.FP.Example
                 {
                     new Payment()
                     {
-                        Amount = 30,
+                        Amount = 34,
                         PaymentType = PaymentType.Cash
                     }
                 }
