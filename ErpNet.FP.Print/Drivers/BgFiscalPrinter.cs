@@ -1,10 +1,11 @@
 using ErpNet.FP.Print.Core;
+using System.Text;
 using System.Collections.Generic;
 
 namespace ErpNet.FP.Print.Drivers
 {
     /// <summary>
-    /// Fiscal printer using the Zfp implementation.
+    /// Fiscal printer base class for Bg printers.
     /// </summary>
     /// <seealso cref="ErpNet.FP.IFiscalPrinter" />
     public class BgFiscalPrinter : IFiscalPrinter
@@ -12,6 +13,8 @@ namespace ErpNet.FP.Print.Drivers
         public DeviceInfo DeviceInfo => FiscalPrinterInfo;
 
         public DeviceInfo FiscalPrinterInfo;
+
+        protected Encoding PrinterEncoding = Encoding.GetEncoding("windows-1251");
 
         protected IChannel Channel;
         protected IDictionary<string, string> Options;
@@ -60,6 +63,12 @@ namespace ErpNet.FP.Print.Drivers
         protected virtual DeviceStatus ParseStatus(byte[] status)
         {
             throw new System.NotImplementedException();
+        }
+
+        protected virtual string EncodeTextWithPrinterEncoding(string text)
+        {
+            return PrinterEncoding.GetString(
+                Encoding.Convert(Encoding.Default, PrinterEncoding, Encoding.Default.GetBytes(text)));
         }
     }
 }
