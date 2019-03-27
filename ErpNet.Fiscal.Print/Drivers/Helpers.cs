@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ErpNet.Fiscal.Print.Drivers
 {
@@ -26,6 +27,28 @@ namespace ErpNet.Fiscal.Print.Drivers
             }
 
             return text.Substring(0, maxLength);
+        }
+
+        public static IEnumerable<string> WrapAtLength(this string text, int maxLength)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
+            if (maxLength < 1)
+                throw new ArgumentException("'maxLength' must be greater than 0.");
+
+            var rows = Math.Ceiling((double)text.Length / maxLength);
+            if (rows < 2) return new string[] { text };
+
+            var listOfStrings = new List<string>();
+
+            for (int i = 0; i < rows; i++)
+            {
+                var index = i * maxLength;
+                var length = Math.Min(maxLength, text.Length - index);
+                listOfStrings.Add(text.Substring(index, length));
+            }
+
+            return listOfStrings;
         }
     }
 }

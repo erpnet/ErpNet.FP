@@ -20,6 +20,16 @@ namespace ErpNet.Fiscal.Print.Drivers
         protected const byte MaxSequenceNumber = 0xFF - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
+
+        protected virtual byte[] UInt16To4Bytes(UInt16 word)
+        {
+            return new byte[]{
+                (byte)((word >> 12 & 0x0f) + 0x30),
+                (byte)((word >> 8 & 0x0f) + 0x30),
+                (byte)((word >> 4 & 0x0f) + 0x30),
+                (byte)((word >> 0 & 0x0f) + 0x30)
+            };
+        }
         protected virtual byte[] ComputeBCC(byte[] fragment)
         {
             UInt16 bccSum = 0;
@@ -27,12 +37,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             {
                 bccSum += b;
             }
-            return new byte[]{
-                (byte)((bccSum >> 12 & 0x0f) + 0x30),
-                (byte)((bccSum >> 8 & 0x0f) + 0x30),
-                (byte)((bccSum >> 4 & 0x0f) + 0x30),
-                (byte)((bccSum >> 0 & 0x0f) + 0x30)
-            };
+            return UInt16To4Bytes(bccSum);
         }
 
         protected virtual byte[] BuildHostFrame(byte command, byte[] data)
@@ -60,7 +65,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             return frame.ToArray();
         }
 
-        protected byte[] RawRequest(byte command, byte[] data)
+        protected virtual byte[] RawRequest(byte command, byte[] data)
         {
             FrameSequenceNumber++;
             if (FrameSequenceNumber > MaxSequenceNumber)
@@ -71,7 +76,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
-                System.Diagnostics.Debug.Write("Sent: ");
+                System.Diagnostics.Debug.Write(">>>");
                 foreach (var b in request)
                 {
                     System.Diagnostics.Debug.Write($"{b:X} ");
@@ -84,7 +89,7 @@ namespace ErpNet.Fiscal.Print.Drivers
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
-                    System.Diagnostics.Debug.Write("Received: ");
+                    System.Diagnostics.Debug.Write("<<<");
                     foreach (var b in buffer)
                     {
                         System.Diagnostics.Debug.Write($"{b:X} ");
@@ -137,7 +142,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             return null;
         }
 
-        protected (string, DeviceStatus) ParseResponse(byte[] rawResponse)
+        protected virtual (string, DeviceStatus) ParseResponse(byte[] rawResponse)
         {
             if (rawResponse == null)
             {
@@ -190,7 +195,10 @@ namespace ErpNet.Fiscal.Print.Drivers
                     }
                     System.Diagnostics.Debug.WriteLine("");
 
-                    return (Encoding.UTF8.GetString(data), ParseStatus(status));
+                    var response = Encoding.UTF8.GetString(data);
+                    System.Diagnostics.Debug.WriteLine($"Response: {response}");
+
+                    return (response, ParseStatus(status));
                 }
             }
             throw new InvalidResponseException("the response is invalid");

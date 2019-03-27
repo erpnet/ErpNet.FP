@@ -44,10 +44,10 @@ namespace ErpNet.Fiscal.Print.Provider
                 {
                     try
                     {
+                        System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
                         var channel = transport.OpenChannel(address);
                         try
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
+                        {                            
                             var p = driver.Connect(channel);                            
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
@@ -62,8 +62,8 @@ namespace ErpNet.Fiscal.Print.Provider
                         catch (Exception e)
                         {
                             // Cannot connect to opened channel, possible incompatibility
-                            Console.WriteLine($"*** {e.Message}");
-                            Console.WriteLine(e.StackTrace);
+                            //Console.WriteLine($"*** {e.Message}");
+                            //Console.WriteLine(e.StackTrace);
                         }
                     }
                     catch

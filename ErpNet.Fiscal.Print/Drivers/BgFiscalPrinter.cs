@@ -25,7 +25,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             Channel = channel;
         }
 
-        public string GetTaxGroupText(TaxGroup taxGroup)
+        public virtual string GetTaxGroupText(TaxGroup taxGroup)
         {
 
             switch (taxGroup)
@@ -43,7 +43,7 @@ namespace ErpNet.Fiscal.Print.Drivers
             }
         }
 
-        public string GetPaymentTypeText(PaymentType paymentType)
+        public virtual string GetPaymentTypeText(PaymentType paymentType)
         {
             switch (paymentType)
             {
