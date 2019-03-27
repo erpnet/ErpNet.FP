@@ -6,5 +6,6 @@ namespace ErpNet.FP.Print.Core
 {
     public class DeviceStatus
     {
+
     }
 }

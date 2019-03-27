@@ -31,7 +31,7 @@ namespace ErpNet.FP.Print.Drivers
             CommandMoneyTransfer = 0x46,
             CommandOpenFiscalReceipt = 0x30,
             CommandCloseFiscalReceipt = 0x38,
-            CommandFiscalReceiptSum = 0x33,
+            CommandAbortFiscalReceipt = 0x82,
             CommandFiscalReceiptTotal = 0x35,
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
@@ -55,11 +55,16 @@ namespace ErpNet.FP.Print.Drivers
             return true;
         }
 
+        public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
+        {
+            return Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+        }
+
         public override PrintInfo PrintMoneyDeposit(decimal amount)
         {
             // TODO: status report and error handling
 
-            var (response, _) = Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+            var (response, _) = MoneyTransfer(amount);
             Console.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
         }
@@ -71,11 +76,82 @@ namespace ErpNet.FP.Print.Drivers
             if (amount < 0m)
             {
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
-                ;
             }
-            var (response, _) = Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+            var (response, _) = MoneyTransfer(amount);
             Console.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
+        }
+
+        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        {
+            var header = string.Join(",",
+                new string[] {
+                    operatorID,
+                    operatorPassword.WithMaxLength(Info.OperatorPasswordMaxLength),
+                    uniqueSaleNumber
+                });
+            return Request(CommandOpenFiscalReceipt, header);
+        }
+
+        public virtual (string, DeviceStatus) AddItem(
+            string itemText,
+            decimal unitPrice,
+            TaxGroup taxGroup = TaxGroup.GroupB,
+            decimal quantity = 0,
+            decimal discount = 0,
+            bool isDiscountPercent = true)
+        {
+            var itemData = new StringBuilder()
+                .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
+                .Append('\t').Append(GetTaxGroupText(taxGroup))
+                .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
+            if (quantity != 0)
+            {
+                itemData
+                    .Append('*')
+                    .Append(quantity.ToString(CultureInfo.InvariantCulture));
+            }
+            if (discount != 0)
+            {
+                itemData
+                    .Append(isDiscountPercent ? ',' : '$')
+                    .Append(discount.ToString("F2", CultureInfo.InvariantCulture));
+            }
+            return Request(CommandFiscalReceiptSale, itemData.ToString());
+        }
+
+        public virtual (string, DeviceStatus) AddComment(string text)
+        {
+            return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength));
+        }
+
+        public virtual (string, DeviceStatus) CloseReceipt()
+        {
+            return Request(CommandCloseFiscalReceipt);
+        }
+
+        public virtual (string, DeviceStatus) AbortReceipt()
+        {
+            return Request(CommandAbortFiscalReceipt);
+        }
+
+        public virtual (string, DeviceStatus) CutThePaper()
+        {
+            return Request(CommandCutThePaper);
+        }
+
+        public virtual (string, DeviceStatus) FullPayment()
+        {
+            return Request(CommandFiscalReceiptTotal);
+        }
+
+        public virtual (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType = PaymentType.Cash)
+        {
+            var paymentData = new StringBuilder()
+                .Append('\t')
+                .Append(GetPaymentTypeText(paymentType))
+                .Append(amount.ToString("F2", CultureInfo.InvariantCulture));
+            return Request(CommandFiscalReceiptTotal, paymentData.ToString());
         }
 
         public override PrintInfo PrintReceipt(Receipt receipt)
@@ -83,65 +159,37 @@ namespace ErpNet.FP.Print.Drivers
             // TODO: status report and error handling
 
             // Receipt header
-            var header = string.Format(
-                $"{Options["Operator.ID"]},{Options["Operator.Password"].WithMaxLength(Info.OperatorPasswordMaxLength)},{receipt.UniqueSaleNumber}");
-            Request(CommandOpenFiscalReceipt, header);
+            OpenReceipt(receipt.UniqueSaleNumber, Options["Operator.ID"], Options["Operator.Password"]);
 
             // Receipt items
             foreach (var item in receipt.Items)
             {
                 if (item.IsComment)
                 {
-                    Request(CommandFiscalReceiptComment, item.Text.WithMaxLength(Info.CommentTextMaxLength));
+                    AddComment(item.Text);
                 }
                 else
                 {
-                    var itemData = new StringBuilder()
-                    .Append(item.Text.WithMaxLength(Info.ItemTextMaxLength))
-                    .Append('\t').Append(GetTaxGroupText(item.TaxGroup))
-                    .Append(item.UnitPrice.ToString("F2", CultureInfo.InvariantCulture));
-                    if (item.Quantity != 0)
-                    {
-                        itemData.Append('*').Append(item.Quantity.ToString(CultureInfo.InvariantCulture));
-                    }
-                    if (item.Discount != 0)
-                    {
-                        if (item.IsDiscountPercent)
-                        {
-                            itemData.Append(',');
-                        }
-                        else
-                        {
-                            itemData.Append('$');
-                        }
-                        itemData.Append(item.Discount.ToString("F2", CultureInfo.InvariantCulture));
-                    }
-                    Request(CommandFiscalReceiptSale, itemData.ToString());
+                    AddItem(item.Text, item.UnitPrice, item.TaxGroup, item.Quantity, item.Discount, item.IsDiscountPercent);
                 }
             }
 
             // Receipt payments
             if (receipt.Payments == null || receipt.Payments.Count == 0)
             {
-                Request(CommandFiscalReceiptTotal);
+                FullPayment();
             }
             else
             {
-                //Request(CommandFiscalReceiptSum, "00");
                 foreach (var payment in receipt.Payments)
                 {
-                    var paymentData = new StringBuilder()
-                        .Append('\t')
-                        .Append(GetPaymentTypeText(payment.PaymentType))
-                        .Append(payment.Amount.ToString("F2", CultureInfo.InvariantCulture));
-                    Request(CommandFiscalReceiptTotal, paymentData.ToString());
+                    AddPayment(payment.Amount, payment.PaymentType);
                 }
             }
 
             // Receipt finalization
-            Request(CommandCloseFiscalReceipt);
-
-            Request(CommandCutThePaper);
+            CloseReceipt();
+            CutThePaper();
 
             return new PrintInfo();
         }
@@ -151,11 +199,16 @@ namespace ErpNet.FP.Print.Drivers
             throw new System.NotImplementedException();
         }
 
+        public virtual (string, DeviceStatus) PrintDailyReport()
+        {
+            return Request(CommandPrintDailyReport);
+        }
+
         public override PrintInfo PrintZeroingReport()
         {
             // TODO: status report and error handling
 
-            var (response, _) = Request(CommandPrintDailyReport);
+            var (response, _) = PrintDailyReport();
             Console.WriteLine("PrintZeroingReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return new PrintInfo();
@@ -300,8 +353,9 @@ namespace ErpNet.FP.Print.Drivers
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    // For debugging purposes only (to view status bits)
-                    Console.WriteLine("Status:");
+                    // For debugging purposes only (to view status bits)    
+                    var deviceID = (Info == null ? "" : Info.SerialNumber);
+                    Console.WriteLine($"Status of device {deviceID}");
                     for (var i = 0; i < status.Length; i++)
                     {
                         byte mask = 0b10000000;

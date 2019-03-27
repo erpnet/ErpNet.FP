@@ -41,5 +41,6 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
             };
             return info;
         }
+
     }
 }

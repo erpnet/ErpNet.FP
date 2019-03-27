@@ -61,14 +61,16 @@ namespace ErpNet.FP.Example
             }
 
             // Now use Uri to connect to specific printer.
-            var fp = provider.Connect(printers.First().Key, new Dictionary<string, string>
+            //var uri = "bg.ed.isl.com://COM5";
+            var uri = printers.First().Key;
+            var fp = provider.Connect(uri, new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
                 ["Operator.Password"] = "1"
             });
 
             // Connecting with different credentials
-            var fpadm = provider.Connect(printers.First().Key, new Dictionary<string, string>
+            var fpadm = provider.Connect(uri, new Dictionary<string, string>
             {
                 ["Operator.ID"] = "20",
                 ["Operator.Password"] = "9999"
@@ -117,6 +119,7 @@ namespace ErpNet.FP.Example
             fp.PrintMoneyWithdraw(43.21m);
             var result = fp.PrintReceipt(doc);
             System.Console.WriteLine(result.FiscalMemoryPosition);
+            fp.PrintZeroingReport();
         }
     }
 }

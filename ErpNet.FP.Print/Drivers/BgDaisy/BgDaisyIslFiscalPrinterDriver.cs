@@ -14,12 +14,22 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
         {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
-            fiscalPrinter.Info = ParseDeviceInfoAndConstants(rawDeviceInfo, rawDeviceConstants);
+            try
+            {
+                // Probing
+                ParseDeviceInfo(rawDeviceInfo);
+                // If there is no InvalidDeviceInfoException get the device info and constants
+                var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, rawDeviceConstants);
+            }
+            catch (InvalidDeviceInfoException e)
+            {
+                throw e;
+            }
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfoAndConstants(string rawDeviceInfo, string rawDeviceConstants)
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, string rawDeviceConstants = null)
         {
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 6)
@@ -35,6 +45,12 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
             if (spaceFields.Length != 4)
             {
                 throw new InvalidDeviceInfoException($"first member of comma separated list must contain 4 whitespace-separated values for '{DriverName}'");
+            }
+            // If probing only
+            if (rawDeviceConstants == null)
+            {
+                // Return empty DeviceInfo
+                return new DeviceInfo();
             }
             var commaConstants = rawDeviceConstants.Split(',');
             if (commaConstants.Length != 26)
@@ -53,6 +69,5 @@ namespace ErpNet.FP.Print.Drivers.BgDaisy
                 OperatorPasswordMaxLength = 6 // Set by Daisy protocol
             };
         }
-
     }
 }
