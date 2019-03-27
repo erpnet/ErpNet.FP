@@ -1,12 +1,12 @@
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     /// <summary>
     /// Fiscal printer using the Zfp implementation.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Print.Drivers.BgFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.Print.Drivers.BgFiscalPrinter" />
     public class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)

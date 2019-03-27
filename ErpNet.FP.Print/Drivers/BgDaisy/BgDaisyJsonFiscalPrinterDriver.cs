@@ -1,7 +1,7 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgDaisy
+namespace ErpNet.Fiscal.Print.Drivers.BgDaisy
 {
     public class BgDaisyJsonFiscalPrinterDriver : FiscalPrinterDriver
     {

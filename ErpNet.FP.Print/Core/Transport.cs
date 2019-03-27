@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ErpNet.FP.Print.Core
+namespace ErpNet.Fiscal.Print.Core
 {
     /// <summary>
     /// Represents the physical transport protocol like serial COM, Bluetooth, http, etc.

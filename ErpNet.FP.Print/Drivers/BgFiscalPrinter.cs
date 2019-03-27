@@ -1,13 +1,13 @@
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 using System.Text;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     /// <summary>
     /// Fiscal printer base class for Bg printers.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.IFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.IFiscalPrinter" />
     public class BgFiscalPrinter : IFiscalPrinter
     {
         public DeviceInfo DeviceInfo => Info;

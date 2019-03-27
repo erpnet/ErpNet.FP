@@ -1,16 +1,15 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgEltrade
+namespace ErpNet.Fiscal.Print.Drivers.BgEltrade
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Eltrade Bulgaria.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.Drivers.BgIslFiscalPrinter" />
     public class BgEltradeIslFiscalPrinter : BgIslFiscalPrinter
     {
         protected const byte
-            EltradeCommandAbortFiscalReceipt = 0x3c,
             EltradeCommandOpenFiscalReceipt = 0x90;
 
         public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
@@ -21,11 +20,6 @@ namespace ErpNet.FP.Print.Drivers.BgEltrade
         {
             // TODO: Device status parser
             return new DeviceStatus();
-        }
-
-        public override (string, DeviceStatus) AbortReceipt()
-        {
-            return Request(EltradeCommandAbortFiscalReceipt);
         }
 
         public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)

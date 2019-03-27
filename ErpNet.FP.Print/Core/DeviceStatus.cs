@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ErpNet.FP.Print.Core
+namespace ErpNet.Fiscal.Print.Core
 {
     public class DeviceStatus
     {

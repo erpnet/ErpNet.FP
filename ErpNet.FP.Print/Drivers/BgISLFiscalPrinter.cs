@@ -1,13 +1,13 @@
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.BgFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.BgFiscalPrinter" />
     public partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
 
@@ -21,7 +21,7 @@ namespace ErpNet.FP.Print.Drivers
             // TODO: status report and error handling
 
             var (response, _) = Request(CommandGetStatus);
-            Console.WriteLine("IsReady: {0}", response);
+            System.Diagnostics.Debug.WriteLine("IsReady: {0}", response);
             return true;
         }
 
@@ -30,7 +30,7 @@ namespace ErpNet.FP.Print.Drivers
             // TODO: status report and error handling
 
             var (response, _) = MoneyTransfer(amount);
-            Console.WriteLine("PrintMoneyWithdraw: {0}", response);
+            System.Diagnostics.Debug.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
         }
 
@@ -43,7 +43,7 @@ namespace ErpNet.FP.Print.Drivers
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
             }
             var (response, _) = MoneyTransfer(-amount);
-            Console.WriteLine("PrintMoneyWithdraw: {0}", response);
+            System.Diagnostics.Debug.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
         }
 
@@ -82,7 +82,6 @@ namespace ErpNet.FP.Print.Drivers
 
             // Receipt finalization
             CloseReceipt();
-            CutThePaper();
 
             return new PrintInfo();
         }
@@ -97,7 +96,7 @@ namespace ErpNet.FP.Print.Drivers
             // TODO: status report and error handling
 
             var (response, _) = PrintDailyReport();
-            Console.WriteLine("PrintZeroingReport: {0}", response);
+            System.Diagnostics.Debug.WriteLine("PrintZeroingReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return new PrintInfo();
         }

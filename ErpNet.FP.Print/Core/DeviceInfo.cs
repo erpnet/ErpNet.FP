@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Print.Core
+﻿namespace ErpNet.Fiscal.Print.Core
 {
     public class DeviceInfo
     {

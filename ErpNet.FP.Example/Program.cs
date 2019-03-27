@@ -1,16 +1,16 @@
-﻿using ErpNet.FP.Print.Core;
-using ErpNet.FP.Print.Drivers.BgDaisy;
-using ErpNet.FP.Print.Drivers.BgDatecs;
-using ErpNet.FP.Print.Drivers.BgEltrade;
-using ErpNet.FP.Print.Drivers.BgTremol;
-using ErpNet.FP.Print.Provider;
-using ErpNet.FP.Print.Transports;
+﻿using ErpNet.Fiscal.Print.Core;
+using ErpNet.Fiscal.Print.Drivers.BgDaisy;
+using ErpNet.Fiscal.Print.Drivers.BgDatecs;
+using ErpNet.Fiscal.Print.Drivers.BgEltrade;
+using ErpNet.Fiscal.Print.Drivers.BgTremol;
+using ErpNet.Fiscal.Print.Provider;
+using ErpNet.Fiscal.Print.Transports;
 using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ErpNet.FP.Example
+namespace ErpNet.Fiscal.PrintExample
 {
     class Program
     {
@@ -65,7 +65,7 @@ namespace ErpNet.FP.Example
             }
 
             // Now use Uri to connect to specific printer.
-            //var uri = "bg.ed.isl.com://COM5";
+            //var uri = "bg.dt.x.isl.com://COM9";
             var uri = printers.First().Key;
             var fp = provider.Connect(uri, new Dictionary<string, string>
             {
@@ -83,7 +83,7 @@ namespace ErpNet.FP.Example
             // Print a receipt.
             var doc = new Receipt()
             {
-                UniqueSaleNumber = "DT517985-DD01-0000001",
+                UniqueSaleNumber = "DT279013-DD01-0000001",
                 Items = new Item[]
                 {
                     new Item()
@@ -122,7 +122,7 @@ namespace ErpNet.FP.Example
             //fp.PrintMoneyDeposit(123.4m);
             //fp.PrintMoneyWithdraw(43.21m);
             var result = fp.PrintReceipt(doc);
-            System.Console.WriteLine(result.FiscalMemoryPosition);
+            Console.WriteLine(result.FiscalMemoryPosition);
             //fp.PrintZeroingReport();
         }
     }

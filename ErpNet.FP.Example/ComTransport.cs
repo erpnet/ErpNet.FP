@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO.Ports;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Example
+namespace ErpNet.Fiscal.PrintExample
 {
     /// <summary>
     /// Serial COM port transport.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Print.Core.Transport" />
+    /// <seealso cref="ErpNet.Fiscal.Print.Core.Transport" />
     public class ComTransport : Transport
     {
         public override string TransportName => "com";

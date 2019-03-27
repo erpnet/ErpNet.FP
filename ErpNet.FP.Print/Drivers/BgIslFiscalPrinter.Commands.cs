@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 using System.Globalization;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     public partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
@@ -12,11 +12,10 @@ namespace ErpNet.FP.Print.Drivers
             CommandMoneyTransfer = 0x46,
             CommandOpenFiscalReceipt = 0x30,
             CommandCloseFiscalReceipt = 0x38,
-            CommandAbortFiscalReceipt = 0x82,
+            CommandAbortFiscalReceipt = 0x3c,
             CommandFiscalReceiptTotal = 0x35,
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
-            CommandCutThePaper = 0x2d,
             CommandPrintDailyReport = 0x45;
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
@@ -77,11 +76,6 @@ namespace ErpNet.FP.Print.Drivers
             return Request(CommandAbortFiscalReceipt);
         }
 
-        public virtual (string, DeviceStatus) CutThePaper()
-        {
-            return Request(CommandCutThePaper);
-        }
-
         public virtual (string, DeviceStatus) FullPayment()
         {
             return Request(CommandFiscalReceiptTotal);
@@ -101,7 +95,7 @@ namespace ErpNet.FP.Print.Drivers
             return Request(CommandPrintDailyReport);
         }
 
-        public (string, DeviceStatus) GetRawDeviceInfo()
+        public virtual (string, DeviceStatus) GetRawDeviceInfo()
         {
             return Request(CommandGetDeviceInfo, "1");
         }

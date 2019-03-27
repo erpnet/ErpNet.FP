@@ -1,12 +1,12 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgDatecs
+namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Datecs Bulgaria.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.Drivers.BgIslFiscalPrinter" />
     public class BgDatecsCIslFiscalPrinter : BgIslFiscalPrinter
     {
         public BgDatecsCIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)

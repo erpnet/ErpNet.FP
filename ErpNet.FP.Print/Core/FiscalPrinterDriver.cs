@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Core
+namespace ErpNet.Fiscal.Print.Core
 {
     /// <summary>
     /// Represents a driver for a fiscal printer

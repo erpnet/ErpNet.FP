@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using ErpNet.FP.Print.Core;
-using ErpNet.FP.Print.Drivers;
+using ErpNet.Fiscal.Print.Core;
+using ErpNet.Fiscal.Print.Drivers;
 
-namespace ErpNet.FP.Print.Provider
+namespace ErpNet.Fiscal.Print.Provider
 {
     /// <summary>
     /// General functions for finding and connecting fiscal printers.
@@ -47,7 +47,8 @@ namespace ErpNet.FP.Print.Provider
                         var channel = transport.OpenChannel(address);
                         try
                         {
-                            var p = driver.Connect(channel);
+                            System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
+                            var p = driver.Connect(channel);                            
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
                         catch (InvalidDeviceInfoException)

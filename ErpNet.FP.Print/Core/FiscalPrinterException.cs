@@ -1,6 +1,6 @@
 using System;
 
-namespace ErpNet.FP.Print.Core
+namespace ErpNet.Fiscal.Print.Core
 {
     [Serializable]
     public class FiscalPrinterException : Exception

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Example
+namespace ErpNet.Fiscal.PrintExample
 {
     /// <summary>
     /// Driver, which uses the ErpNet Json fiscal printing format.

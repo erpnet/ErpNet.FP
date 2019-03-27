@@ -1,7 +1,7 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgDatecs
+namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
 {
     public class BgDatecsCIslFiscalPrinterDriver : FiscalPrinterDriver
     {

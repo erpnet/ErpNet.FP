@@ -1,7 +1,7 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgDatecs
+namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
 {
     public class BgDatecsXIslFiscalPrinterDriver : FiscalPrinterDriver
     {
@@ -29,9 +29,9 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
                 throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
             var modelName = commaFields[0];
-            if (!modelName.StartsWith("X"))
+            if (!modelName.EndsWith("X"))
             {
-                throw new InvalidDeviceInfoException($"model name must begin with X for '{DriverName}'");
+                throw new InvalidDeviceInfoException($"model name must end with X for '{DriverName}'");
             }
             var info = new DeviceInfo
             {

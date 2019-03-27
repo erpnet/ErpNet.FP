@@ -1,7 +1,7 @@
 ﻿using System;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Print.Transports
+namespace ErpNet.Fiscal.Print.Transports
 {
     public class HttpTransport : Transport
     {

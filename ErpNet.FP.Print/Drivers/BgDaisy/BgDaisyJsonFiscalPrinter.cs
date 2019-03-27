@@ -1,13 +1,13 @@
-﻿using ErpNet.FP.Print.Core;
+﻿using ErpNet.Fiscal.Print.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Print.Drivers.BgDaisy
+namespace ErpNet.Fiscal.Print.Drivers.BgDaisy
 {
     /// <summary>
     /// Implements the Bulgarian Daisy Json driver.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.IFiscalPrinter" />
+    /// <seealso cref="ErpNet.Fiscal.IFiscalPrinter" />
     public class BgDaisyJsonFiscalPrinter : IFiscalPrinter
     {
         /// <summary>

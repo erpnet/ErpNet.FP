@@ -1,7 +1,7 @@
 ﻿using System;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Example
+namespace ErpNet.Fiscal.PrintExample
 {
     /// <summary>
     /// (Example of) Transport, which connects with ErpNet.FP.CloudPrint instances.

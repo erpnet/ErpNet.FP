@@ -1,6 +1,6 @@
 using System;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     [Serializable]
     public class InvalidResponseException : Exception

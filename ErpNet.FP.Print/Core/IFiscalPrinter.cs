@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Print.Core
+﻿namespace ErpNet.Fiscal.Print.Core
 {
     /// <summary>
     /// Represents the capabilities of a connected fiscal printer.

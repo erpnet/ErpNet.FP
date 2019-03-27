@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Print.Drivers.BgTremol
+namespace ErpNet.Fiscal.Print.Drivers.BgTremol
 {
     public class BgTremolZfpFiscalPrinterDriver : FiscalPrinterDriver
     {

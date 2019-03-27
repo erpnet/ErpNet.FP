@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using ErpNet.FP.Print.Core;
+using ErpNet.Fiscal.Print.Core;
 
-namespace ErpNet.FP.Print.Drivers
+namespace ErpNet.Fiscal.Print.Drivers
 {
     public partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
@@ -71,6 +71,12 @@ namespace ErpNet.FP.Print.Drivers
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
+                System.Diagnostics.Debug.Write("Sent: ");
+                foreach (var b in request)
+                {
+                    System.Diagnostics.Debug.Write($"{b:X} ");
+                }
+                System.Diagnostics.Debug.WriteLine("");
                 Channel.Write(request);
 
                 // Read response frames
@@ -78,6 +84,12 @@ namespace ErpNet.FP.Print.Drivers
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
+                    System.Diagnostics.Debug.Write("Received: ");
+                    foreach (var b in buffer)
+                    {
+                        System.Diagnostics.Debug.Write($"{b:X} ");
+                    }
+                    System.Diagnostics.Debug.WriteLine("");
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
                     {
@@ -161,7 +173,7 @@ namespace ErpNet.FP.Print.Drivers
                 {
                     // For debugging purposes only (to view status bits)    
                     var deviceID = (Info == null ? "" : Info.SerialNumber);
-                    Console.WriteLine($"Status of device {deviceID}");
+                    System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
                     for (var i = 0; i < status.Length; i++)
                     {
                         byte mask = 0b10000000;
@@ -172,11 +184,11 @@ namespace ErpNet.FP.Print.Drivers
                             mask >>= 1;
                             if ((mask & b) == mask)
                             {
-                                Console.Write($"{i}.{7 - j} ");
+                                System.Diagnostics.Debug.Write($"{i}.{7 - j} ");
                             }
                         }
                     }
-                    Console.WriteLine();
+                    System.Diagnostics.Debug.WriteLine("");
 
                     return (Encoding.UTF8.GetString(data), ParseStatus(status));
                 }
@@ -186,13 +198,13 @@ namespace ErpNet.FP.Print.Drivers
 
         protected (string, DeviceStatus) Request(byte command, string data)
         {
-            Console.WriteLine($"Request({command:X}): '{data}'");
+            System.Diagnostics.Debug.WriteLine($"Request({command:X}): '{data}'");
             return ParseResponse(RawRequest(command, PrinterEncoding.GetBytes(data)));
         }
 
         protected (string, DeviceStatus) Request(byte command)
         {
-            Console.WriteLine($"Request({command:X})");
+            System.Diagnostics.Debug.WriteLine($"Request({command:X})");
             return ParseResponse(RawRequest(command, null));
         }
     }
