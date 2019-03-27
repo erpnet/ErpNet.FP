@@ -7,6 +7,6 @@
     <PackageReference Include="System.IO.Ports" Version="4.6.0-preview3.19128.7" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ErpNet.FP.Print\ErpNet.Fiscal.Print.csproj" />
+    <ProjectReference Include="..\ErpNet.Fiscal.Print\ErpNet.Fiscal.Print.csproj" />
   </ItemGroup>
 </Project>
