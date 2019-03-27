@@ -138,7 +138,7 @@ namespace ErpNet.FP.Print.Drivers
                 }
             }
 
-
+            // Receipt finalization
             Request(CommandCloseFiscalReceipt);
 
             Request(CommandCutThePaper);
@@ -176,21 +176,29 @@ namespace ErpNet.FP.Print.Drivers
             };
         }
 
-        protected virtual byte[] BuildHostPacket(byte command, byte[] data)
+        protected virtual byte[] BuildHostFrame(byte command, byte[] data)
         {
-            var packet = new List<byte>();
-            packet.Add(MarkerPreamble);
-            packet.Add((byte)(MarkerSpace + 4 + (data != null ? data.Length : 0)));
-            packet.Add((byte)(MarkerSpace + SequenceNumber));
-            packet.Add(command);
+            // Frame header
+            var frame = new List<byte>
+            {
+                MarkerPreamble,
+                (byte)(MarkerSpace + 4 + (data != null ? data.Length : 0)),
+                (byte)(MarkerSpace + SequenceNumber),
+                command
+            };
+
+            // Frame data
             if (data != null)
             {
-                packet.AddRange(data);
+                frame.AddRange(data);
             }
-            packet.Add(MarkerPostamble);
-            packet.AddRange(ComputeBCC(packet.Skip(1).ToArray()));
-            packet.Add(MarkerTerminator);
-            return packet.ToArray();
+
+            // Frame footer
+            frame.Add(MarkerPostamble);
+            frame.AddRange(ComputeBCC(frame.Skip(1).ToArray()));
+            frame.Add(MarkerTerminator);
+
+            return frame.ToArray();
         }
 
         protected byte[] RawRequest(byte command, byte[] data)
@@ -200,32 +208,17 @@ namespace ErpNet.FP.Print.Drivers
             {
                 SequenceNumber = 0;
             }
-            var request = BuildHostPacket(command, data);
-            /*
-            Console.WriteLine("Request:");
-            foreach (var b in request)
-            {
-                Console.Write($"{b:X} ");
-            }
-            Console.WriteLine();
-            */
+            var request = BuildHostFrame(command, data);
             for (var w = 0; w < MaxWriteRetries; w++)
             {
-                // Write packet
+                // Write request frame
                 Channel.Write(request);
-                // Read response
+
+                // Read response frames
                 var currentFrame = new List<byte>();
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
-                    /*
-                    Console.WriteLine("Response:");
-                    foreach (var b in buffer)
-                    {
-                        Console.Write($"{b:X} ");
-                    }
-                    Console.WriteLine();
-                    */
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
                     {
@@ -253,7 +246,7 @@ namespace ErpNet.FP.Print.Drivers
                                 (wait, repeat) = (true, false);
                                 break;
                             case MarkerPreamble:
-                                // By the protocol, it is allowed only one packed response per request.
+                                // By the protocol, it is allowed only one packed frame response per request.
                                 // So return first occurence of packed frame as response.
                                 return frame.ToArray();
                         }
@@ -307,21 +300,21 @@ namespace ErpNet.FP.Print.Drivers
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    // For testing purposes only (view status bits)
+                    // For debugging purposes only (to view status bits)
                     Console.WriteLine("Status:");
-                    int i = 0;
-                    foreach (var b in status)
+                    for (var i = 0; i < status.Length; i++)
                     {
-                        var s = Convert.ToString(b, 2);
-                        // Ignore j=0 because bit 7 is reserved
-                        for (var j = 1; j < s.Length; j++)
+                        byte mask = 0b10000000;
+                        byte b = status[i];
+                        // Ignore j==0 because bit 7 is always reserved and 1
+                        for (var j = 1; j < 8; j++)
                         {
-                            if (s[j] == '1')
+                            mask >>= 1;
+                            if ((mask & b) == mask)
                             {
                                 Console.Write($"{i}.{7 - j} ");
                             }
                         }
-                        i++;
                     }
                     Console.WriteLine();
 
