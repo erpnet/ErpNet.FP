@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace ErpNet.FP.Print.Drivers.BgDatecs
 {
-    public class BgDatecsIslFiscalPrinterDriver : FiscalPrinterDriver
+    public class BgDatecsPIslFiscalPrinterDriver : FiscalPrinterDriver
     {
         public override string SerialNumberPrefix => "DT";
-        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
+        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.p.isl";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)
         {
-            var fiscalPrinter = new BgDatecsIslFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgDatecsPIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
@@ -28,11 +28,16 @@ namespace ErpNet.FP.Print.Drivers.BgDatecs
             {
                 throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
+            var modelName = commaFields[0];
+            if (!modelName.StartsWith("FP"))
+            {
+                throw new InvalidDeviceInfoException($"model name must begin with FP for '{DriverName}'");
+            }            
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,
                 FiscalMemorySerialNumber = commaFields[5],
-                Model = commaFields[0],
+                Model = modelName,
                 FirmwareVersion = commaFields[1],
                 Company = "Datecs",
                 CommentTextMaxLength = 42, // Set by Datecs protocol

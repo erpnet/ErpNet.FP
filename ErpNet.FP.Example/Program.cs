@@ -25,7 +25,9 @@ namespace ErpNet.FP.Example
             var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
 
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
-            var datecsIsl = new BgDatecsIslFiscalPrinterDriver();
+            var datecsPIsl = new BgDatecsPIslFiscalPrinterDriver();
+            var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
+            var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
             var daisyJson = new BgDaisyJsonFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
@@ -36,13 +38,15 @@ namespace ErpNet.FP.Example
             var erpNetJson = new ErpNetJsonDriver();
 
             // Add drivers and their compatible transports to the provider.
-            provider.Add(daisyIsl, comTransport);
-            provider.Add(datecsIsl, comTransport);
-            provider.Add(eltradeIsl, comTransport);
-            provider.Add(daisyIsl, btTransport);
-            provider.Add(daisyJson, httpTransport);
-            provider.Add(tremolZfp, httpTransport);
-            provider.Add(erpNetJson, cloudPrintTransport);
+            provider.Register(daisyIsl, comTransport);
+            provider.Register(datecsPIsl, comTransport);
+            provider.Register(datecsCIsl, comTransport);
+            provider.Register(datecsXIsl, comTransport);
+            provider.Register(eltradeIsl, comTransport);
+            provider.Register(daisyIsl, btTransport);
+            provider.Register(daisyJson, httpTransport);
+            provider.Register(tremolZfp, httpTransport);
+            provider.Register(erpNetJson, cloudPrintTransport);
 
             // Find all printers.
             var printers = provider.DetectAvailablePrinters();
@@ -115,11 +119,11 @@ namespace ErpNet.FP.Example
                 }
             };
 
-            fp.PrintMoneyDeposit(123.4m);
-            fp.PrintMoneyWithdraw(43.21m);
+            //fp.PrintMoneyDeposit(123.4m);
+            //fp.PrintMoneyWithdraw(43.21m);
             var result = fp.PrintReceipt(doc);
             System.Console.WriteLine(result.FiscalMemoryPosition);
-            fp.PrintZeroingReport();
+            //fp.PrintZeroingReport();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ErpNet.FP.Print.Provider
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="transport">The transport.</param>
-        public void Add(FiscalPrinterDriver driver, Transport transport)
+        public void Register(FiscalPrinterDriver driver, Transport transport)
         {
             var key = driver.DriverName + "." + transport.TransportName;
             protocols.Add(key, (driver, transport));

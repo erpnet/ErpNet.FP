@@ -42,7 +42,7 @@ namespace ErpNet.FP.Print.Drivers
             {
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
             }
-            var (response, _) = MoneyTransfer(amount);
+            var (response, _) = MoneyTransfer(-amount);
             Console.WriteLine("PrintMoneyWithdraw: {0}", response);
             return new PrintInfo();
         }
