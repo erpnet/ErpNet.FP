@@ -21,16 +21,15 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         {
-            Options = options ?? new Dictionary<string, string>();
+            Options = new Dictionary<string, string>()
+                .MergeWith(GetDefaultOptions())
+                .MergeWith(options);
             Channel = channel;
         }
 
-        public void MergeOptionsWith(IDictionary<string, string> newOptions)
+        public virtual IDictionary<string, string> GetDefaultOptions()
         {
-            foreach (KeyValuePair<string, string> newOption in newOptions)
-            {
-                Options[newOption.Key] = newOption.Value;
-            }
+            return null;
         }
 
         public virtual string GetTaxGroupText(TaxGroup taxGroup)

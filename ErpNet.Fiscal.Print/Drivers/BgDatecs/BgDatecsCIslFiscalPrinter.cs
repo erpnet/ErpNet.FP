@@ -14,6 +14,18 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
         {
         }
 
+        public override IDictionary<string, string> GetDefaultOptions()
+        {
+            return new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "1",
+
+                ["Administrator.ID"] = "20",
+                ["Administrator.Password"] = "9999"
+            };
+        }
+
         public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
         {
             var header = string.Join(",",

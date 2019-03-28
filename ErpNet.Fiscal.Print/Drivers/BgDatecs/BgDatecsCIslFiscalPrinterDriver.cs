@@ -32,7 +32,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
             if (!modelName.StartsWith("D"))
             {
                 throw new InvalidDeviceInfoException($"model name must begin with D for '{DriverName}'");
-            }            
+            }
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,

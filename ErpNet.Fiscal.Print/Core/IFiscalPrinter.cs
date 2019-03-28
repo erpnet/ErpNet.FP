@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.Fiscal.Print.Core
+﻿namespace ErpNet.Fiscal.Print.Core
 {
     /// <summary>
     /// Represents the capabilities of a connected fiscal printer.
@@ -50,15 +48,5 @@ namespace ErpNet.Fiscal.Print.Core
         /// Prints a zeroing report.
         /// </summary>
         PrintInfo PrintZeroingReport();
-
-        /// <summary>
-        /// Setups the printer with the required settings for the driver.
-        /// </summary>
-        void SetupPrinter();
-        /// <summary>
-        /// Merge current options with given options
-        /// </summary>
-        /// <param name="options"></param>
-        void MergeOptionsWith(IDictionary<string, string> newOptions);
     }
 }

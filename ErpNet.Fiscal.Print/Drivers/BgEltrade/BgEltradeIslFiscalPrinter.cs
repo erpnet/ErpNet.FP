@@ -16,6 +16,19 @@ namespace ErpNet.Fiscal.Print.Drivers.BgEltrade
         : base(channel, options)
         {
         }
+
+        public override IDictionary<string, string> GetDefaultOptions()
+        {
+            return new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "1",
+
+                ["Administrator.ID"] = "20",
+                ["Administrator.Password"] = "9999"
+            };
+        }
+
         protected override DeviceStatus ParseStatus(byte[] status)
         {
             // TODO: Device status parser

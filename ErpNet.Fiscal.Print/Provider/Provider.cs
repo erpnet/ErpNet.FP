@@ -20,10 +20,11 @@ namespace ErpNet.Fiscal.Print.Provider
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="transport">The transport.</param>
-        public void Register(FiscalPrinterDriver driver, Transport transport)
+        public Provider Register(FiscalPrinterDriver driver, Transport transport)
         {
             var key = driver.DriverName + "." + transport.TransportName;
             protocols.Add(key, (driver, transport));
+            return this;
         }
 
         /// <summary>
@@ -47,8 +48,8 @@ namespace ErpNet.Fiscal.Print.Provider
                         System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
                         var channel = transport.OpenChannel(address);
                         try
-                        {                            
-                            var p = driver.Connect(channel);                            
+                        {
+                            var p = driver.Connect(channel);
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
                         catch (InvalidDeviceInfoException)

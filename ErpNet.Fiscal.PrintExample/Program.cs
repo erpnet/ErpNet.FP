@@ -15,14 +15,14 @@ namespace ErpNet.Fiscal.PrintExample
     {
         static void Main(string[] args)
         {
-            TestSpecificPrinter();
-            //TestAutoDetect();
+            //TestSpecificPrinter();
+            TestAutoDetect();
             //TestByUri();
         }
 
-        static Provider GetProviderOfAllTransportsAndDrivers()
+        static Provider GetProviderOfSupportedTransportsAndDrivers()
         {
-            Provider provider = new Provider();
+            // Transports
             var comTransport = new ComTransport();
             var btTransport = new BtTransport();
             var httpTransport = new HttpTransport();
@@ -30,6 +30,7 @@ namespace ErpNet.Fiscal.PrintExample
             // Cloud transport with account.
             var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
 
+            // Drivers
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
             var datecsPIsl = new BgDatecsPIslFiscalPrinterDriver();
             var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
@@ -44,31 +45,32 @@ namespace ErpNet.Fiscal.PrintExample
             var erpNetJson = new ErpNetJsonDriver();
 
             // Add drivers and their compatible transports to the provider.
-            provider.Register(daisyIsl, comTransport);
-            provider.Register(datecsPIsl, comTransport);
-            provider.Register(datecsCIsl, comTransport);
-            provider.Register(datecsXIsl, comTransport);
-            provider.Register(eltradeIsl, comTransport);
-            provider.Register(daisyIsl, btTransport);
-            provider.Register(daisyJson, httpTransport);
-            provider.Register(tremolZfp, httpTransport);
-            provider.Register(erpNetJson, cloudPrintTransport);
+            var provider = new Provider()
+                .Register(daisyIsl, comTransport)
+                .Register(datecsPIsl, comTransport)
+                .Register(datecsCIsl, comTransport)
+                .Register(datecsXIsl, comTransport)
+                .Register(eltradeIsl, comTransport)
+                .Register(daisyIsl, btTransport)
+                .Register(daisyJson, httpTransport)
+                .Register(tremolZfp, httpTransport)
+                .Register(erpNetJson, cloudPrintTransport);
 
             return provider;
         }
 
         static void TestSpecificPrinter()
         {
-            Provider provider = new Provider();
-            var comTransport = new ComTransport();
-            var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
-            provider.Register(datecsCIsl, comTransport);
-            // Datecs DP-25, S/N: DT517985, FM S/N: 02517985 
-            var datecsC = provider.Connect("bg.dt.c.isl.com://COM13", new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "1"
-            });
+            // One liner to connect to specific fiscal device, with specific options
+            var datecsC = new Provider()
+                .Register(new BgDatecsCIslFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.dt.c.isl.com://COM13", new Dictionary<string, string>
+                {
+                    ["Operator.ID"] = "1",
+                    ["Operator.Password"] = "1",
+                    ["Administrator.ID"] = "20",
+                    ["Administrator.Password"] = "9999"
+                });
             ShowFiscalPrinterInfo(datecsC);
             TestAllMethods(datecsC);
         }
@@ -76,7 +78,7 @@ namespace ErpNet.Fiscal.PrintExample
         static void TestAutoDetect()
         {
             // Find all printers.
-            var printers = GetProviderOfAllTransportsAndDrivers().DetectAvailablePrinters();
+            var printers = GetProviderOfSupportedTransportsAndDrivers().DetectAvailablePrinters();
             if (!printers.Any())
             {
                 Console.WriteLine("No local printers found.");
@@ -87,63 +89,33 @@ namespace ErpNet.Fiscal.PrintExample
             {
                 Console.Write($"URI: {printer.Key} - ");
                 ShowFiscalPrinterInfo(printer.Value);
+                TestAllMethods(printers.First().Value);
             }
-
-            // Now use Uri to connect to specific printer.
-            //var uri = "bg.dt.x.isl.com://COM9";
-            var fp = printers.First().Value;
-            fp.MergeOptionsWith(new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "0000"
-            });
-
-            TestAllMethods(fp);
         }
 
         static void TestByUri()
         {
-            Provider provider = GetProviderOfAllTransportsAndDrivers();
+            var provider = GetProviderOfSupportedTransportsAndDrivers();
 
             // Daisy CompactM, S/ N: DY448967, FM S/ N: 36607003
-            var daisy = provider.Connect("bg.dy.isl.com://COM5", new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "1"
-            });
-            TestAllMethods(daisy);
+            TestAllMethods(provider.Connect("bg.dy.isl.com://COM5"));
 
             // Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
-            var datecsP = provider.Connect("bg.dt.p.isl.com://COM18", new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "0000"
-            });
-            TestAllMethods(datecsP);
+            TestAllMethods(provider.Connect("bg.dt.p.isl.com://COM18"));
 
             // Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
-            var datecsX = provider.Connect("bg.dt.x.isl.com://COM7", new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "0000"
-            });
-            TestAllMethods(datecsX);
+            TestAllMethods(provider.Connect("bg.dt.x.isl.com://COM7"));
 
             // Datecs DP-25, S/N: DT517985, FM S/N: 02525860
-            var datecsC = provider.Connect("bg.dt.c.isl.com://COM13", new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "1"
-            });
-            TestAllMethods(datecsC);
+            TestAllMethods(provider.Connect("bg.dt.c.isl.com://COM13"));
 
             // Eltrade A1, S/N: ED311662, FM S/N: 44311662
-            var eltrade = provider.Connect("bg.ed.isl.com://COM19", new Dictionary<string, string>
+            // With example with setting options while connecting
+            TestAllMethods(provider.Connect("bg.ed.isl.com://COM19", new Dictionary<string, string>
             {
-                ["Operator.ID"] = "1",
-                ["Operator.Password"] = "1"
-            });
-            TestAllMethods(eltrade);
+                ["Operator.Password"] = "1",
+                ["Administrator.Password"] = "9999"
+            }));
         }
 
         static void TestAllMethods(IFiscalPrinter fp)

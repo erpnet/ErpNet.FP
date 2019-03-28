@@ -18,6 +18,18 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
         {
         }
 
+        public override IDictionary<string, string> GetDefaultOptions()
+        {
+            return new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "0000",
+
+                ["Administrator.ID"] = "20",
+                ["Administrator.Password"] = "9999"
+            };
+        }
+
         protected override DeviceStatus ParseStatus(byte[] status)
         {
             // TODO: Device status parser
@@ -38,7 +50,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
                 }));
         }
 
-        
+
         public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
         {
             // Protocol: {OpCode}<SEP>{OpPwd}<SEP>{NSale}<SEP>{TillNmb}<SEP>{Invoice}<SEP>
@@ -107,7 +119,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
                 GetTaxGroupText(taxGroup),
                 unitPrice.ToString("F2", CultureInfo.InvariantCulture),
                 quantity.ToString(CultureInfo.InvariantCulture),
-                discount == 0 ? "0" : (isDiscountPercent ? (discount>=0 ? "1" : "2") : (discount >= 0 ? "3" : "4")),
+                discount == 0 ? "0" : (isDiscountPercent ? (discount >= 0 ? "1" : "2") : (discount >= 0 ? "3" : "4")),
                 discount.ToString("F2", CultureInfo.InvariantCulture),
                 "0",
                 "");
@@ -116,7 +128,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
 
         public override (string, DeviceStatus) AddComment(string text)
         {
-            return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength)+"\t");
+            return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength) + "\t");
         }
         public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType = PaymentType.Cash)
         {

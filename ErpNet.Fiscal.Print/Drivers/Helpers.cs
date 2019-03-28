@@ -50,5 +50,17 @@ namespace ErpNet.Fiscal.Print.Drivers
 
             return listOfStrings;
         }
+
+        public static IDictionary<string, string> MergeWith(this IDictionary<string, string> options, IDictionary<string, string> newOptions)
+        {
+            if (newOptions != null)
+            {
+                foreach (KeyValuePair<string, string> newOption in newOptions)
+                {
+                    options[newOption.Key] = newOption.Value;
+                }
+            }
+            return options;
+        }
     }
 }
