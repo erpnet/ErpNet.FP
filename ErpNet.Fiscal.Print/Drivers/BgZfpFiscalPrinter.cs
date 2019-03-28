@@ -7,7 +7,7 @@ namespace ErpNet.Fiscal.Print.Drivers
     /// Fiscal printer using the Zfp implementation.
     /// </summary>
     /// <seealso cref="ErpNet.Fiscal.Print.Drivers.BgFiscalPrinter" />
-    public class BgZfpFiscalPrinter : BgFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         : base(channel, options)

@@ -15,8 +15,9 @@ namespace ErpNet.Fiscal.PrintExample
     {
         static void Main(string[] args)
         {
+            TestTremolPrinter();
             //TestSpecificPrinter();
-            TestAutoDetect();
+            //TestAutoDetect();
             //TestByUri();
         }
 
@@ -73,6 +74,22 @@ namespace ErpNet.Fiscal.PrintExample
                 });
             ShowFiscalPrinterInfo(datecsC);
             TestAllMethods(datecsC);
+        }
+
+        static void TestTremolPrinter()
+        {
+            // One liner to connect to specific fiscal device, with specific options
+            var tremol = new Provider()
+                .Register(new BgTremolZfpFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.tr.zfp.com://COM3", new Dictionary<string, string>
+                {
+                    ["Operator.ID"] = "1",
+                    ["Operator.Password"] = "1",
+                    ["Administrator.ID"] = "20",
+                    ["Administrator.Password"] = "9999"
+                });
+            ShowFiscalPrinterInfo(tremol);
+            //TestAllMethods(tremol);
         }
 
         static void TestAutoDetect()

@@ -6,38 +6,35 @@ using ErpNet.Fiscal.Print.Core;
 
 namespace ErpNet.Fiscal.Print.Drivers
 {
-    public partial class BgIslFiscalPrinter : BgFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected byte FrameSequenceNumber = 0;
         protected const byte
             MarkerSpace = 0x20,
-            MarkerSyn = 0x16,
-            MarkerNak = 0x15,
-            MarkerPreamble = 0x01,
-            MarkerPostamble = 0x05,
-            MarkerSeparator = 0x04,
-            MarkerTerminator = 0x03;
-        protected const byte MaxSequenceNumber = 0x7F - MarkerSpace;
+            MarkerNACK = 0x15,
+            MarkerRETRY = 0x0e,
+            MarkerSTX = 0x02,
+            MarkerACK = 0x06,
+            MarkerETX = 0x0A;
+        protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
 
-        protected virtual byte[] UInt16To4Bytes(UInt16 word)
+        protected virtual byte[] ByteTo2Bytes(UInt16 word)
         {
             return new byte[]{
-                (byte)((word >> 12 & 0x0f) + 0x30),
-                (byte)((word >> 8 & 0x0f) + 0x30),
                 (byte)((word >> 4 & 0x0f) + 0x30),
                 (byte)((word >> 0 & 0x0f) + 0x30)
             };
         }
-        protected virtual byte[] ComputeBCC(byte[] fragment)
+        protected virtual byte[] ComputeCS(byte[] fragment)
         {
-            UInt16 bccSum = 0;
+            byte bccSum = 0;
             foreach (byte b in fragment)
             {
-                bccSum += b;
+                bccSum ^= b;
             }
-            return UInt16To4Bytes(bccSum);
+            return ByteTo2Bytes(bccSum);
         }
 
         protected virtual byte[] BuildHostFrame(byte command, byte[] data)
@@ -45,8 +42,8 @@ namespace ErpNet.Fiscal.Print.Drivers
             // Frame header
             var frame = new List<byte>
             {
-                MarkerPreamble,
-                (byte)(MarkerSpace + 4 + (data != null ? data.Length : 0)),
+                MarkerSTX,
+                (byte)(MarkerSpace + 3 + (data != null ? data.Length : 0)),
                 (byte)(MarkerSpace + FrameSequenceNumber),
                 command
             };
@@ -58,9 +55,8 @@ namespace ErpNet.Fiscal.Print.Drivers
             }
 
             // Frame footer
-            frame.Add(MarkerPostamble);
-            frame.AddRange(ComputeBCC(frame.Skip(1).ToArray()));
-            frame.Add(MarkerTerminator);
+            frame.AddRange(ComputeCS(frame.Skip(1).ToArray()));
+            frame.Add(MarkerETX);
 
             return frame.ToArray();
         }
@@ -100,7 +96,7 @@ namespace ErpNet.Fiscal.Print.Drivers
                     {
                         currentFrame.Add(b);
                         // Split buffer by following separators
-                        if (b == MarkerNak || b == MarkerSyn || b == MarkerTerminator)
+                        if (b == MarkerNACK || b == MarkerRETRY || b == MarkerETX)
                         {
                             readFrames.Add(currentFrame);
                             currentFrame = new List<byte>();
@@ -111,17 +107,17 @@ namespace ErpNet.Fiscal.Print.Drivers
                     {
                         switch (frame[0])
                         {
-                            case MarkerNak:
+                            case MarkerNACK:
                                 // Only last non-packed frame matters if there are many readed
                                 // So change the state accordingly
                                 (wait, repeat) = (false, true);
                                 break;
-                            case MarkerSyn:
+                            case MarkerRETRY:
                                 // Only last non-packed frame matters if there are many readed
                                 // So change the state accordingly
                                 (wait, repeat) = (true, false);
                                 break;
-                            case MarkerPreamble:
+                            case MarkerSTX:
                                 // By the protocol, it is allowed only one packed frame response per request.
                                 // So return first occurence of packed frame as response.
                                 return frame.ToArray();
@@ -148,57 +144,19 @@ namespace ErpNet.Fiscal.Print.Drivers
             {
                 throw new InvalidResponseException("no response");
             }
-            var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
-            for (var i = 0u; i < rawResponse.Length; i++)
+            var (startPos, endPos) = (0u, (uint)rawResponse.Length - 1u);
+            var checkSumPos = endPos - 2u;
+            var (dataStartPos, dataEndPos) = (startPos + 4u, checkSumPos - 1u);
+            if (rawResponse[startPos] == MarkerSTX && rawResponse[endPos] == MarkerETX)
             {
-                var b = rawResponse[i];
-                switch (b)
+                var data = rawResponse.Slice(dataStartPos, dataEndPos);
+                var cs = rawResponse.Slice(checkSumPos, checkSumPos + 1u);
+                var computedCS = ComputeCS(rawResponse.Slice(startPos + 1u, dataEndPos));
+                if (cs.SequenceEqual(computedCS))
                 {
-                    case MarkerPreamble:
-                        preamblePos = i;
-                        break;
-                    case MarkerSeparator:
-                        separatorPos = i;
-                        break;
-                    case MarkerPostamble:
-                        postamblePos = i;
-                        break;
-                    case MarkerTerminator:
-                        terminatorPos = i;
-                        break;
-                }
-            }
-            if (preamblePos + 4 <= separatorPos && separatorPos + 6 < postamblePos && postamblePos + 4 < terminatorPos)
-            {
-                var data = rawResponse.Slice(preamblePos + 4, separatorPos);
-                var status = rawResponse.Slice(separatorPos + 1, postamblePos);
-                var bcc = rawResponse.Slice(postamblePos + 1, terminatorPos);
-                var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
-                if (bcc.SequenceEqual(computedBcc))
-                {
-                    // For debugging purposes only (to view status bits)    
-                    var deviceID = (Info == null ? "" : Info.SerialNumber);
-                    System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
-                    for (var i = 0; i < status.Length; i++)
-                    {
-                        byte mask = 0b10000000;
-                        byte b = status[i];
-                        // Ignore j==0 because bit 7 is always reserved and 1
-                        for (var j = 1; j < 8; j++)
-                        {
-                            mask >>= 1;
-                            if ((mask & b) == mask)
-                            {
-                                System.Diagnostics.Debug.Write($"{i}.{7 - j} ");
-                            }
-                        }
-                    }
-                    System.Diagnostics.Debug.WriteLine("");
-
                     var response = Encoding.UTF8.GetString(data);
                     System.Diagnostics.Debug.WriteLine($"Response: {response}");
-
-                    return (response, ParseStatus(status));
+                    return (response, null);
                 }
             }
             throw new InvalidResponseException("the response is invalid");
