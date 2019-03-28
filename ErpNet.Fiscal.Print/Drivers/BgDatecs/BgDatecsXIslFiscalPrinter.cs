@@ -109,18 +109,37 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
             string itemText,
             decimal unitPrice,
             TaxGroup taxGroup = TaxGroup.GroupB,
-            decimal quantity = 0,
-            decimal discount = 0,
-            bool isDiscountPercent = true)
+            decimal quantity = 0m,
+            decimal priceModifierValue = 0m,
+            PriceModifierType priceModifierType = PriceModifierType.None)
         {
+            string PriceModifierTypeToProtocolValue()
+            {
+                switch (priceModifierType)
+                {
+                    case PriceModifierType.None:
+                        return "0";
+                    case PriceModifierType.DiscountPercent:
+                        return "2";
+                    case PriceModifierType.DiscountAmount:
+                        return "4";
+                    case PriceModifierType.SurchargePercent:
+                        return "1";
+                    case PriceModifierType.SurchargeAmount:
+                        return "3";
+                    default:
+                        return "";
+                }
+            }
+
             // Protocol: {PluName}<SEP>{TaxCd}<SEP>{Price}<SEP>{Quantity}<SEP>{DiscountType}<SEP>{DiscountValue}<SEP>{Department}<SEP>
             var itemData = string.Join("\t",
                 itemText.WithMaxLength(Info.ItemTextMaxLength),
                 GetTaxGroupText(taxGroup),
                 unitPrice.ToString("F2", CultureInfo.InvariantCulture),
                 quantity.ToString(CultureInfo.InvariantCulture),
-                discount == 0 ? "0" : (isDiscountPercent ? (discount >= 0 ? "1" : "2") : (discount >= 0 ? "3" : "4")),
-                discount.ToString("F2", CultureInfo.InvariantCulture),
+                PriceModifierTypeToProtocolValue(),
+                priceModifierValue.ToString("F2", CultureInfo.InvariantCulture),
                 "0",
                 "");
             return Request(CommandFiscalReceiptSale, itemData);

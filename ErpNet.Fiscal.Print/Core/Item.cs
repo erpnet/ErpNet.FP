@@ -12,7 +12,7 @@
         /// <value>
         /// The text.
         /// </value>
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
 
         /// <summary>
         /// Gets or sets a value indicating whether this line is comment.
@@ -25,15 +25,15 @@
         /// <value>
         ///   <c>true</c> if this line is comment; otherwise, <c>false</c>.
         /// </value>
-        public bool IsComment { get; set; }
+        public bool IsComment { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the tax group. The first tax group is 1.
+        /// Gets or sets the tax group. 
         /// </summary>
         /// <value>
         /// The tax group.
         /// </value>
-        public TaxGroup TaxGroup { get; set; }
+        public TaxGroup TaxGroup { get; set; } = TaxGroup.GroupB;
 
         /// <summary>
         /// Gets or sets the quantity.
@@ -41,7 +41,7 @@
         /// <value>
         /// The quantity.
         /// </value>
-        public decimal Quantity { get; set; }
+        public decimal Quantity { get; set; } = 0m;
 
         /// <summary>
         /// Gets or sets the unit price.
@@ -49,22 +49,23 @@
         /// <value>
         /// The unit price.
         /// </value>
-        public decimal UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; } = 0m;
 
         /// <summary>
-        /// Gets or sets the discount.
+        /// Gets or sets the discounts, surcharges.
         /// </summary>
         /// <value>
-        /// The discount.
+        /// The Price Modifier Value.
         /// </value>
-        public decimal Discount { get; set; }
+        public decimal PriceModifierValue { get; set; } = 0m;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the discount is specified as percent or absolute value.
+        /// Get or sets the PriceModifierType, None is default
         /// </summary>
         /// <value>
-        ///   <c>true</c> if the discount is specified as percent; <c>false</c> if it is absolute value.
+        /// The Price Modifier Type
         /// </value>
-        public bool IsDiscountPercent { get; set; }
+        /// <seealso cref="ErpNet.Fiscal.Print.Core.PriceModifierType"/>
+        public PriceModifierType PriceModifierType { get; set; } = PriceModifierType.None;
     }
 }

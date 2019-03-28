@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using ErpNet.Fiscal.Print.Core;
 using System.Globalization;
+using System;
 
 namespace ErpNet.Fiscal.Print.Drivers
 {
@@ -39,8 +40,8 @@ namespace ErpNet.Fiscal.Print.Drivers
             decimal unitPrice,
             TaxGroup taxGroup = TaxGroup.GroupB,
             decimal quantity = 0,
-            decimal discount = 0,
-            bool isDiscountPercent = true)
+            decimal priceModifierValue = 0,
+            PriceModifierType priceModifierType = PriceModifierType.None)
         {
             var itemData = new StringBuilder()
                 .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
@@ -52,11 +53,19 @@ namespace ErpNet.Fiscal.Print.Drivers
                     .Append('*')
                     .Append(quantity.ToString(CultureInfo.InvariantCulture));
             }
-            if (discount != 0)
+            if (priceModifierType != PriceModifierType.None)
             {
                 itemData
-                    .Append(isDiscountPercent ? ',' : '$')
-                    .Append(discount.ToString("F2", CultureInfo.InvariantCulture));
+                    .Append(
+                        priceModifierType == PriceModifierType.DiscountPercent 
+                        ||
+                        priceModifierType == PriceModifierType.SurchargePercent 
+                        ? ',' : '$')
+                    .Append((
+                        priceModifierType == PriceModifierType.DiscountPercent
+                        ||
+                        priceModifierType == PriceModifierType.DiscountAmount
+                        ? -priceModifierValue : priceModifierValue).ToString("F2", CultureInfo.InvariantCulture));
             }
             return Request(CommandFiscalReceiptSale, itemData.ToString());
         }

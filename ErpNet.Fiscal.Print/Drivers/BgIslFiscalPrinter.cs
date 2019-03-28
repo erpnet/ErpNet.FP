@@ -63,7 +63,22 @@ namespace ErpNet.Fiscal.Print.Drivers
                 }
                 else
                 {
-                    AddItem(item.Text, item.UnitPrice, item.TaxGroup, item.Quantity, item.Discount, item.IsDiscountPercent);
+                    if (item.PriceModifierValue < 0m)
+                    {
+                        throw new ArgumentOutOfRangeException("priceModifierValue amount must be positive number");
+                    }
+                    if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
+                    {
+                        throw new ArgumentOutOfRangeException("priceModifierValue must be 0 if priceModifierType is None");
+                    }
+                    AddItem(
+                        item.Text,
+                        item.UnitPrice,
+                        item.TaxGroup,
+                        item.Quantity,
+                        item.PriceModifierValue,
+                        item.PriceModifierType
+                    );
                 }
             }
 

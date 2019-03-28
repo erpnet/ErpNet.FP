@@ -161,8 +161,8 @@ namespace ErpNet.Fiscal.PrintExample
                         Text = "Кашкавал",
                         Quantity = 2,
                         UnitPrice = 10,
-                        Discount = -10,
-                        IsDiscountPercent = true,
+                        PriceModifierValue = 10,
+                        PriceModifierType = PriceModifierType.DiscountPercent,
                         TaxGroup = TaxGroup.GroupB
                     }
                 },
