@@ -43,10 +43,5 @@ namespace ErpNet.Fiscal.Print.Drivers
         {
             throw new System.NotImplementedException();
         }
-
-        public override void SetupPrinter()
-        {
-            // Nothing to be configured for now.
-        }
     }
 }

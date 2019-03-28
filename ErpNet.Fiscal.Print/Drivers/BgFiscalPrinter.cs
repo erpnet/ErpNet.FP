@@ -101,11 +101,6 @@ namespace ErpNet.Fiscal.Print.Drivers
             throw new System.NotImplementedException();
         }
 
-        public virtual void SetupPrinter()
-        {
-            throw new System.NotImplementedException();
-        }
-
         protected virtual DeviceStatus ParseStatus(byte[] status)
         {
             throw new System.NotImplementedException();

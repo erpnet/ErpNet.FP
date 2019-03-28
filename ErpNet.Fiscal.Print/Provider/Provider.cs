@@ -63,8 +63,8 @@ namespace ErpNet.Fiscal.Print.Provider
                         catch (Exception e)
                         {
                             // Cannot connect to opened channel, possible incompatibility
-                            //Console.WriteLine($"*** {e.Message}");
-                            //Console.WriteLine(e.StackTrace);
+                            Console.WriteLine($"*** {e.Message}");
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                     catch
