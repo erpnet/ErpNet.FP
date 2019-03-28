@@ -14,6 +14,18 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDatecs
         {
         }
 
+        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        {
+            var header = string.Join(",",
+                new string[] {
+                    operatorID,
+                    operatorPassword.WithMaxLength(Info.OperatorPasswordMaxLength),
+                    uniqueSaleNumber,
+                    "1"
+                });
+            return Request(CommandOpenFiscalReceipt, header);
+        }
+
         protected override DeviceStatus ParseStatus(byte[] status)
         {
             // TODO: Device status parser

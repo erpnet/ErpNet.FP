@@ -19,6 +19,11 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDaisy
 
         }
 
+        public void MergeOptionsWith(IDictionary<string, string> newOptions)
+        {
+            throw new NotImplementedException();
+        }
+
         public DeviceInfo DeviceInfo => throw new NotImplementedException();
 
         public bool IsReady()

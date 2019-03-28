@@ -15,6 +15,13 @@ namespace ErpNet.Fiscal.PrintExample
     {
         static void Main(string[] args)
         {
+            TestSpecificPrinter();
+            //TestAutoDetect();
+            //TestByUri();
+        }
+
+        static Provider GetProviderOfAllTransportsAndDrivers()
+        {
             Provider provider = new Provider();
             var comTransport = new ComTransport();
             var btTransport = new BtTransport();
@@ -47,9 +54,29 @@ namespace ErpNet.Fiscal.PrintExample
             provider.Register(tremolZfp, httpTransport);
             provider.Register(erpNetJson, cloudPrintTransport);
 
-            /*
+            return provider;
+        }
+
+        static void TestSpecificPrinter()
+        {
+            Provider provider = new Provider();
+            var comTransport = new ComTransport();
+            var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
+            provider.Register(datecsCIsl, comTransport);
+            // Datecs DP-25, S/N: DT517985, FM S/N: 02517985 
+            var datecsC = provider.Connect("bg.dt.c.isl.com://COM13", new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "1"
+            });
+            ShowFiscalPrinterInfo(datecsC);
+            TestAllMethods(datecsC);
+        }
+
+        static void TestAutoDetect()
+        {
             // Find all printers.
-            var printers = provider.DetectAvailablePrinters();
+            var printers = GetProviderOfAllTransportsAndDrivers().DetectAvailablePrinters();
             if (!printers.Any())
             {
                 Console.WriteLine("No local printers found.");
@@ -58,32 +85,27 @@ namespace ErpNet.Fiscal.PrintExample
             Console.WriteLine($"Found {printers.Count()} printer(s):");
             foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
             {
-                var info = printer.Value.DeviceInfo;
-                Console.Write($"{info.Company} {info.Model}, ");
-                Console.Write($"S/N: {info.SerialNumber}, FM S/N: {info.FiscalMemorySerialNumber}, ");
-                Console.WriteLine($"URI: {printer.Key}");
+                Console.Write($"URI: {printer.Key} - ");
+                ShowFiscalPrinterInfo(printer.Value);
             }
 
             // Now use Uri to connect to specific printer.
             //var uri = "bg.dt.x.isl.com://COM9";
-            var uri = printers.First().Key;
-            var fp = provider.Connect(uri, new Dictionary<string, string>
+            var fp = printers.First().Value;
+            fp.MergeOptionsWith(new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
                 ["Operator.Password"] = "0000"
             });
 
-            // Connecting with different credentials
-            var fpadm = provider.Connect(uri, new Dictionary<string, string>
-            {
-                ["Operator.ID"] = "20",
-                ["Operator.Password"] = "9999"
-            });
-            */
+            TestAllMethods(fp);
+        }
 
-            
+        static void TestByUri()
+        {
+            Provider provider = GetProviderOfAllTransportsAndDrivers();
 
-            // Daisy CompactM, S/ N: DY448967, FM S/ N: 36607003, URI: bg.dy.isl.com://COM5
+            // Daisy CompactM, S/ N: DY448967, FM S/ N: 36607003
             var daisy = provider.Connect("bg.dy.isl.com://COM5", new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
@@ -91,7 +113,7 @@ namespace ErpNet.Fiscal.PrintExample
             });
             TestAllMethods(daisy);
 
-            // Datecs FP-2000, S / N: DT279013, FM S/ N: 02279013, URI: bg.dt.p.isl.com://COM18
+            // Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
             var datecsP = provider.Connect("bg.dt.p.isl.com://COM18", new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
@@ -99,7 +121,7 @@ namespace ErpNet.Fiscal.PrintExample
             });
             TestAllMethods(datecsP);
 
-            // Datecs FP-700X, S / N: DT525860, FM S/ N: 02525860, URI: bg.dt.x.isl.com://COM7
+            // Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
             var datecsX = provider.Connect("bg.dt.x.isl.com://COM7", new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
@@ -107,14 +129,21 @@ namespace ErpNet.Fiscal.PrintExample
             });
             TestAllMethods(datecsX);
 
-            // Eltrade A1, S/ N: ED311662, FM S/ N: 44311662, URI: bg.ed.isl.com://COM19
+            // Datecs DP-25, S/N: DT517985, FM S/N: 02525860
+            var datecsC = provider.Connect("bg.dt.c.isl.com://COM13", new Dictionary<string, string>
+            {
+                ["Operator.ID"] = "1",
+                ["Operator.Password"] = "1"
+            });
+            TestAllMethods(datecsC);
+
+            // Eltrade A1, S/N: ED311662, FM S/N: 44311662
             var eltrade = provider.Connect("bg.ed.isl.com://COM19", new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
                 ["Operator.Password"] = "1"
             });
             TestAllMethods(eltrade);
-
         }
 
         static void TestAllMethods(IFiscalPrinter fp)
@@ -158,11 +187,18 @@ namespace ErpNet.Fiscal.PrintExample
                 }
             };
 
-            fp.PrintMoneyDeposit(123.4m);
-            fp.PrintMoneyWithdraw(43.21m);
+            //fp.PrintMoneyDeposit(123.4m);
+            //fp.PrintMoneyWithdraw(43.21m);
             var result = fp.PrintReceipt(doc);
             Console.WriteLine(result.FiscalMemoryPosition);
-            fp.PrintZeroingReport();
+            //fp.PrintZeroingReport();
+        }
+
+        static void ShowFiscalPrinterInfo(IFiscalPrinter printer)
+        {
+            var info = printer.DeviceInfo;
+            Console.WriteLine(
+                $"{info.Company} {info.Model}, S/N: { info.SerialNumber}, FM S/N: { info.FiscalMemorySerialNumber}");
         }
     }
 }
