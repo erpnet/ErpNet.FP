@@ -61,7 +61,7 @@ namespace ErpNet.Fiscal.PrintExample
 
             public string Descriptor => serialPort.PortName;
 
-            public Channel(string portName, int baudRate = 115200, int timeout = 1000)
+            public Channel(string portName, int baudRate = 115200, int timeout = 600)
             {
                 serialPort = new SerialPort
                 {
