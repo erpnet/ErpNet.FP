@@ -84,17 +84,21 @@ namespace ErpNet.Fiscal.Print.Drivers
                 System.Diagnostics.Debug.WriteLine("");
                 Channel.Write(request);
 
-                // Read response frames
+                // Read response frames.
                 var currentFrame = new List<byte>();
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
+                    
+                    // For debugging purposes only.
                     System.Diagnostics.Debug.Write("<<<");
                     foreach (var b in buffer)
                     {
                         System.Diagnostics.Debug.Write($"{b:X} ");
                     }
                     System.Diagnostics.Debug.WriteLine("");
+
+                    // Parse frames
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
                     {

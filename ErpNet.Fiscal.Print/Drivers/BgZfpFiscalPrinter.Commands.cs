@@ -8,6 +8,7 @@ namespace ErpNet.Fiscal.Print.Drivers
     {
         protected const byte
             CommandReadFDNumbers = 0x60,
+            CommandVersion = 0x21,
             CommandGSCommand = 0x1d;
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
@@ -65,9 +66,9 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()
         {
-            var (response, _) = Request(CommandReadFDNumbers);
-            var (responseM, _) = Request(CommandGSCommand, "M");
-            return (string.Format($"{response};{responseM}"), new DeviceStatus());
+            var (responseFD, _) = Request(CommandReadFDNumbers);
+            var (responseV, deviceStatus) = Request(CommandVersion);
+            return (responseV + responseFD, deviceStatus);
         }
     }
 }

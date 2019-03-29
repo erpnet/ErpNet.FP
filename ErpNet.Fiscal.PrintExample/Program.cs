@@ -15,9 +15,9 @@ namespace ErpNet.Fiscal.PrintExample
     {
         static void Main(string[] args)
         {
-            TestTremolPrinter();
+            //TestTremolPrinter();
             //TestSpecificPrinter();
-            //TestAutoDetect();
+            TestAutoDetect();
             //TestByUri();
         }
 
@@ -47,14 +47,14 @@ namespace ErpNet.Fiscal.PrintExample
 
             // Add drivers and their compatible transports to the provider.
             var provider = new Provider()
-                .Register(daisyIsl, comTransport)
-                .Register(datecsPIsl, comTransport)
-                .Register(datecsCIsl, comTransport)
-                .Register(datecsXIsl, comTransport)
-                .Register(eltradeIsl, comTransport)
-                .Register(daisyIsl, btTransport)
-                .Register(daisyJson, httpTransport)
-                .Register(tremolZfp, httpTransport)
+                //.Register(daisyIsl, comTransport)
+                //.Register(datecsPIsl, comTransport)
+                //.Register(datecsCIsl, comTransport)
+                //.Register(datecsXIsl, comTransport)
+                //.Register(eltradeIsl, comTransport)
+                .Register(tremolZfp, comTransport)
+                //.Register(daisyIsl, btTransport)
+                //.Register(daisyJson, httpTransport)
                 .Register(erpNetJson, cloudPrintTransport);
 
             return provider;
@@ -81,7 +81,7 @@ namespace ErpNet.Fiscal.PrintExample
             // One liner to connect to specific fiscal device, with specific options
             var tremol = new Provider()
                 .Register(new BgTremolZfpFiscalPrinterDriver(), new ComTransport())
-                .Connect("bg.tr.zfp.com://COM3", new Dictionary<string, string>
+                .Connect("bg.tr.zfp.com://COM21", new Dictionary<string, string>
                 {
                     ["Operator.ID"] = "1",
                     ["Operator.Password"] = "1",
@@ -178,8 +178,8 @@ namespace ErpNet.Fiscal.PrintExample
 
             //fp.PrintMoneyDeposit(123.4m);
             //fp.PrintMoneyWithdraw(43.21m);
-            var result = fp.PrintReceipt(doc);
-            Console.WriteLine(result.FiscalMemoryPosition);
+            //var result = fp.PrintReceipt(doc);
+            //Console.WriteLine(result.FiscalMemoryPosition);
             //fp.PrintZeroingReport();
         }
 
