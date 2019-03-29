@@ -7,16 +7,8 @@ namespace ErpNet.Fiscal.Print.Drivers
     public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected const byte
-            CommandGetStatus = 0x4a,
-            CommandGetDeviceInfo = 0x5a,
-            CommandMoneyTransfer = 0x46,
-            CommandOpenFiscalReceipt = 0x30,
-            CommandCloseFiscalReceipt = 0x38,
-            CommandAbortFiscalReceipt = 0x3c,
-            CommandFiscalReceiptTotal = 0x35,
-            CommandFiscalReceiptComment = 0x36,
-            CommandFiscalReceiptSale = 0x31,
-            CommandPrintDailyReport = 0x45;
+            CommandReadFDNumbers = 0x60,
+            CommandGSCommand = 0x1d;
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
@@ -59,7 +51,9 @@ namespace ErpNet.Fiscal.Print.Drivers
             return ("", null);
         }
 
-        public virtual (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType = PaymentType.Cash)
+        public virtual (string, DeviceStatus) AddPayment(
+            decimal amount, 
+            PaymentType paymentType = PaymentType.Cash)
         {
             return ("", null);
         }
@@ -71,7 +65,9 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()
         {
-            return Request(0x22);
+            var (response, _) = Request(CommandReadFDNumbers);
+            var (responseM, _) = Request(CommandGSCommand, "M");
+            return (string.Format($"{response};{responseM}"), new DeviceStatus());
         }
     }
 }

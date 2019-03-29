@@ -117,8 +117,12 @@ namespace ErpNet.Fiscal.Print.Drivers
                                 // So change the state accordingly
                                 (wait, repeat) = (true, false);
                                 break;
+                            case MarkerACK:
+                                // By the protocol, it is allowed only one ack frame response per request.
+                                // So if there is no error, we will wait for data frame
+                                return frame.ToArray();
                             case MarkerSTX:
-                                // By the protocol, it is allowed only one packed frame response per request.
+                                // By the protocol, it is allowed only one data frame response per request.
                                 // So return first occurence of packed frame as response.
                                 return frame.ToArray();
                         }
@@ -144,22 +148,80 @@ namespace ErpNet.Fiscal.Print.Drivers
             {
                 throw new InvalidResponseException("no response");
             }
-            var (startPos, endPos) = (0u, (uint)rawResponse.Length - 1u);
-            var checkSumPos = endPos - 2u;
-            var (dataStartPos, dataEndPos) = (startPos + 4u, checkSumPos - 1u);
-            if (rawResponse[startPos] == MarkerSTX && rawResponse[endPos] == MarkerETX)
+            var ackMode = true;
+            var (dataStartPos, dataEndPos) = (0u, 0u);
+            for (var i = 0u; i < rawResponse.Length; i++)
             {
-                var data = rawResponse.Slice(dataStartPos, dataEndPos);
-                var cs = rawResponse.Slice(checkSumPos, checkSumPos + 1u);
-                var computedCS = ComputeCS(rawResponse.Slice(startPos + 1u, dataEndPos));
+                var b = rawResponse[i];
+                switch (b)
+                {
+                    case MarkerACK:
+                        dataStartPos = i;
+                        ackMode = true;
+                        break;
+                    case MarkerSTX:
+                        dataStartPos = i;
+                        ackMode = false;
+                        break;
+                    case MarkerETX:
+                        dataEndPos = i;
+                        break;
+                }
+            }
+            
+            if (ackMode)
+            {
+                // Parse ack frame
+                var checkSumPos = dataEndPos - 2u;
+                var (msgStartPos, msgEndPos) = (dataStartPos + 2u, checkSumPos);
+                var data = rawResponse.Slice(msgStartPos, msgEndPos);
+                var cs = rawResponse.Slice(checkSumPos, dataEndPos);
+                var computedCS = ComputeCS(rawResponse.Slice(dataStartPos + 1u, msgEndPos));
+                if (cs.SequenceEqual(computedCS))
+                {
+                    return ("", ParseStatus(data));
+                }
+            }
+            else
+            {
+                // Parse data frame
+                var checkSumPos = dataEndPos - 2u;
+                var (msgStartPos, msgEndPos) = (dataStartPos + 4u, checkSumPos);
+                var data = rawResponse.Slice(msgStartPos, msgEndPos);
+                var cs = rawResponse.Slice(checkSumPos, dataEndPos);
+                var computedCS = ComputeCS(rawResponse.Slice(dataStartPos + 1u, msgEndPos));
                 if (cs.SequenceEqual(computedCS))
                 {
                     var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Debug.WriteLine($"Response: {response}");
-                    return (response, null);
+                    System.Diagnostics.Debug.WriteLine($"Response({data.Length}): {response}");
+                    return (response, ParseStatus(null));
                 }
-            }
+            } 
+
             throw new InvalidResponseException("the response is invalid");
+        }
+
+        protected override DeviceStatus ParseStatus(byte[] status)
+        {
+            // For debugging purposes only (to view status bits)    
+            var deviceID = (Info == null ? "" : Info.SerialNumber);
+            System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
+            if (status == null)
+            {
+                System.Diagnostics.Debug.WriteLine("No status");
+            }
+            else
+            {
+                foreach(var b in status)
+                {
+                    System.Diagnostics.Debug.Write($"{b:X} ");
+                }
+                System.Diagnostics.Debug.WriteLine("");
+            }
+            
+
+            // TODO: fill the device status
+            return new DeviceStatus();
         }
 
         protected (string, DeviceStatus) Request(byte command, string data)
