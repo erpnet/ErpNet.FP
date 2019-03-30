@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3</TargetFramework>
+    <AssemblyName>ErpNet.FP.CoreExample</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="4.6.0-preview3.19128.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
+  </ItemGroup>
+</Project>

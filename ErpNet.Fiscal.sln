@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Publishing.md = Publishing.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.Fiscal.Print", "ErpNet.Fiscal.Print\ErpNet.Fiscal.Print.csproj", "{E6273892-F5B1-485E-A4BE-3934214B40BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Core", "ErpNet.FP.Core\ErpNet.FP.Core.csproj", "{E6273892-F5B1-485E-A4BE-3934214B40BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.Fiscal.PrintExample", "ErpNet.Fiscal.PrintExample\ErpNet.Fiscal.PrintExample.csproj", "{5E926769-02D6-4224-A5F6-B9B604D5E4C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.CoreExample", "ErpNet.FP.CoreExample\ErpNet.FP.CoreExample.csproj", "{5E926769-02D6-4224-A5F6-B9B604D5E4C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
