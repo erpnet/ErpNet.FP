@@ -13,6 +13,27 @@ namespace ErpNet.FP.Core.Drivers
         public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         : base(channel, options) {}
 
+        public override string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "0";
+                case PaymentType.BankTransfer:
+                    return "1";
+                case PaymentType.DebitCard:
+                    return "2";
+                case PaymentType.NationalHealthInsuranceFund:
+                    return "3";
+                case PaymentType.Voucher:
+                    return "4";
+                case PaymentType.Coupon:
+                    return "5";
+                default:
+                    return "0";
+            }
+        }
+
         public override bool IsReady()
         {
             throw new System.NotImplementedException();
@@ -42,7 +63,54 @@ namespace ErpNet.FP.Core.Drivers
 
         public override PrintInfo PrintReceipt(Receipt receipt)
         {
-            throw new System.NotImplementedException();
+            // TODO: status report and error handling
+
+            // Receipt header
+            OpenReceipt(receipt.UniqueSaleNumber, Options["Operator.ID"], Options["Operator.Password"]);
+
+            // Receipt items
+            foreach (var item in receipt.Items)
+            {
+                if (item.IsComment)
+                {
+                    AddComment(item.Text);
+                }
+                else
+                {
+                    if (item.PriceModifierValue < 0m)
+                    {
+                        throw new ArgumentOutOfRangeException("priceModifierValue amount must be positive number");
+                    }
+                    if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
+                    {
+                        throw new ArgumentOutOfRangeException("priceModifierValue must be 0 if priceModifierType is None");
+                    }
+                    AddItem(
+                        item.Text,
+                        item.UnitPrice,
+                        item.TaxGroup,
+                        item.Quantity,
+                        item.PriceModifierValue,
+                        item.PriceModifierType
+                    );
+                }
+            }
+
+            // Receipt payments
+            if (receipt.Payments == null || receipt.Payments.Count == 0)
+            {
+                FullPaymentAndCloseReceipt();
+            }
+            else
+            {
+                foreach (var payment in receipt.Payments)
+                {
+                    AddPayment(payment.Amount, payment.PaymentType);
+                }
+                CloseReceipt();
+            }            
+
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintReversalReceipt(Receipt reversalReceipt)

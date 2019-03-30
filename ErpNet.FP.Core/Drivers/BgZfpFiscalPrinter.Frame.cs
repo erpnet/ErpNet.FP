@@ -22,7 +22,6 @@ namespace ErpNet.FP.Core.Drivers
         protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
-        protected const uint MaxPingRetries = 1000;
 
         protected virtual byte[] ByteTo2Bytes(UInt16 word)
         {
@@ -67,16 +66,41 @@ namespace ErpNet.FP.Core.Drivers
 
         protected void WaitForDeviceToBeReady()
         {
-            for (var r = 0; r < MaxPingRetries; r++)
+            System.Diagnostics.Debug.Write(">>> Ping ");
+            for (;;)
             {
-                Channel.Write(new byte[] { SpecialCommandPing });
-                var buffer = Channel.Read();
-                if (buffer[0] == PingAnswerDeviceReady)
+                byte[] buffer = null;
+                for (var w = 0; w < MaxWriteRetries; w++) {
+                    System.Diagnostics.Debug.Write($">>> {SpecialCommandPing:X} <<< ");
+                    Channel.Write(new byte[] { SpecialCommandPing });
+                    try
+                    {
+                        buffer = Channel.Read();
+                        break;
+                    }
+                    catch (TimeoutException)
+                    {
+                        // When the device is too busy and cannot even answer ping
+                        // It could be read timeout, so we will ping again, until
+                        // MaxWriteRetries is exausted.
+                        System.Diagnostics.Debug.WriteLine("Timeout, try again!");
+                        System.Diagnostics.Debug.Write(">>> Ping ");
+                        continue;
+                    }
+                }
+                if (buffer == null || buffer.Length == 0)
                 {
+                    throw new TimeoutException("ping timeout");
+                }
+                var b = buffer[0];                
+                System.Diagnostics.Debug.Write($"{b:X} ");
+                if (b == PingAnswerDeviceReady)
+                {
+                    System.Diagnostics.Debug.WriteLine("Ready!");
                     return;
                 }
             }
-            throw new PingRetriesCountExhausted();
+            throw new TimeoutException("ping timeout");
         }
 
         protected virtual byte[] RawRequest(byte command, byte[] data)

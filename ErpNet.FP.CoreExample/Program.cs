@@ -170,7 +170,7 @@ namespace ErpNet.FP.CoreExample
                 {
                     new Payment()
                     {
-                        Amount = 34,
+                        Amount = 30, 
                         PaymentType = PaymentType.Cash
                     }
                 }
@@ -178,9 +178,9 @@ namespace ErpNet.FP.CoreExample
 
             fp.PrintMoneyDeposit(123.4m);
             fp.PrintMoneyWithdraw(43.21m);
-            //var result = fp.PrintReceipt(doc);
-            //Console.WriteLine(result.FiscalMemoryPosition);
-            //fp.PrintZeroingReport();
+            var result = fp.PrintReceipt(doc);
+            Console.WriteLine(result.FiscalMemoryPosition);
+            fp.PrintZeroingReport();
         }
 
         static void ShowFiscalPrinterInfo(IFiscalPrinter printer)

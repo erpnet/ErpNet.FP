@@ -39,9 +39,9 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 Model = fields[3].Replace("TREMOL ", ""), // Clear TREMOL from model name, to avoid redundancy
                 FirmwareVersion = fields[4],
                 Company = "Tremol",
-                CommentTextMaxLength = 46, // Set by Eltrade protocol
-                ItemTextMaxLength = 30, // Set by Eltrade protocol
-                OperatorPasswordMaxLength = 6 // Set by Eltrade protocol
+                CommentTextMaxLength = 30, 
+                ItemTextMaxLength = 32, 
+                OperatorPasswordMaxLength = 6 
             };
             return info;
         }
