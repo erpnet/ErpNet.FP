@@ -12,9 +12,7 @@ namespace ErpNet.Fiscal.Print.Drivers
     {
 
         public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options)
-        {
-        }
+        : base(channel, options) {}
 
         public override bool IsReady()
         {

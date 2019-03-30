@@ -9,11 +9,19 @@ namespace ErpNet.Fiscal.Print.Drivers
         protected const byte
             CommandReadFDNumbers = 0x60,
             CommandVersion = 0x21,
+            CommandPrintDailyFiscalReport = 0x7c,
+            CommandNoFiscalRAorPOAmount = 0x3b,
             CommandGSCommand = 0x1d;
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
-            return ("", null);
+            return Request(CommandNoFiscalRAorPOAmount, string.Join(";", new string[]
+            {
+                Options["Operator.ID"],
+                Options["Operator.Password"],
+                "0", // Protocol: Reserved 
+                amount.ToString("F2", CultureInfo.InvariantCulture)
+            }));
         }
 
         public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
@@ -61,7 +69,7 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public virtual (string, DeviceStatus) PrintDailyReport()
         {
-            return ("", null);
+            return Request(CommandPrintDailyFiscalReport, "Z");
         }
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()

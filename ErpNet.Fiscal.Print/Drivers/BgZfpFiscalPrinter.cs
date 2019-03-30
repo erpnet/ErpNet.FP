@@ -1,4 +1,5 @@
 using ErpNet.Fiscal.Print.Core;
+using System;
 using System.Collections.Generic;
 
 namespace ErpNet.Fiscal.Print.Drivers
@@ -10,9 +11,7 @@ namespace ErpNet.Fiscal.Print.Drivers
     public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options)
-        {
-        }
+        : base(channel, options) {}
 
         public override bool IsReady()
         {
@@ -21,12 +20,24 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public override PrintInfo PrintMoneyDeposit(decimal amount)
         {
-            throw new System.NotImplementedException();
+            // TODO: status report and error handling
+
+            var (response, _) = MoneyTransfer(amount);
+            System.Diagnostics.Debug.WriteLine($"PrintMoneyWithdraw: {response}");
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintMoneyWithdraw(decimal amount)
         {
-            throw new System.NotImplementedException();
+            // TODO: status report and error handling
+
+            if (amount < 0m)
+            {
+                throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
+            }
+            var (response, _) = MoneyTransfer(-amount);
+            System.Diagnostics.Debug.WriteLine($"PrintMoneyWithdraw: {response}");
+            return new PrintInfo();
         }
 
         public override PrintInfo PrintReceipt(Receipt receipt)
@@ -41,7 +52,9 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         public override PrintInfo PrintZeroingReport()
         {
-            throw new System.NotImplementedException();
+            var (response, _) = PrintDailyReport();
+            System.Diagnostics.Debug.WriteLine($"PrintDailyReport: {response}");
+            return new PrintInfo();
         }
     }
 }

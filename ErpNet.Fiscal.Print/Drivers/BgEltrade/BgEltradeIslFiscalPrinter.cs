@@ -13,9 +13,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgEltrade
             EltradeCommandOpenFiscalReceipt = 0x90;
 
         public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options)
-        {
-        }
+        : base(channel, options) { }
 
         public override IDictionary<string, string> GetDefaultOptions()
         {

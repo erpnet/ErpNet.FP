@@ -16,9 +16,13 @@ namespace ErpNet.Fiscal.Print.Drivers
             MarkerSTX = 0x02,
             MarkerACK = 0x06,
             MarkerETX = 0x0A;
+        protected const byte
+            PingAnswerDeviceReady = 0x40,
+            SpecialCommandPing = 0x09;
         protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
+        protected const uint MaxPingRetries = 1000;
 
         protected virtual byte[] ByteTo2Bytes(UInt16 word)
         {
@@ -61,6 +65,20 @@ namespace ErpNet.Fiscal.Print.Drivers
             return frame.ToArray();
         }
 
+        protected void WaitForDeviceToBeReady()
+        {
+            for (var r = 0; r < MaxPingRetries; r++)
+            {
+                Channel.Write(new byte[] { SpecialCommandPing });
+                var buffer = Channel.Read();
+                if (buffer[0] == PingAnswerDeviceReady)
+                {
+                    return;
+                }
+            }
+            throw new PingRetriesCountExhausted();
+        }
+
         protected virtual byte[] RawRequest(byte command, byte[] data)
         {
             FrameSequenceNumber++;
@@ -68,6 +86,9 @@ namespace ErpNet.Fiscal.Print.Drivers
             {
                 FrameSequenceNumber = 0;
             }
+            // Wait for device to be ready
+            // It will generate exception if there is read timeout
+            WaitForDeviceToBeReady();
             var request = BuildHostFrame(command, data);
             for (var w = 0; w < MaxWriteRetries; w++)
             {

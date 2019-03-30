@@ -8,7 +8,7 @@ namespace ErpNet.Fiscal.Print.Drivers
     /// Fiscal printer base class for Bg printers.
     /// </summary>
     /// <seealso cref="ErpNet.Fiscal.IFiscalPrinter" />
-    public class BgFiscalPrinter : IFiscalPrinter
+    public abstract class BgFiscalPrinter : IFiscalPrinter
     {
         public DeviceInfo DeviceInfo => Info;
 
@@ -19,7 +19,7 @@ namespace ErpNet.Fiscal.Print.Drivers
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
-        public BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        protected BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         {
             Options = new Dictionary<string, string>()
                 .MergeWith(GetDefaultOptions())
@@ -71,40 +71,19 @@ namespace ErpNet.Fiscal.Print.Drivers
             }
         }
 
-        public virtual bool IsReady()
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract bool IsReady();
 
-        public virtual PrintInfo PrintMoneyDeposit(decimal amount)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract PrintInfo PrintMoneyDeposit(decimal amount);
 
-        public virtual PrintInfo PrintMoneyWithdraw(decimal amount)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract PrintInfo PrintMoneyWithdraw(decimal amount);
 
-        public virtual PrintInfo PrintReceipt(Receipt receipt)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract PrintInfo PrintReceipt(Receipt receipt);
 
-        public virtual PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract PrintInfo PrintReversalReceipt(Receipt reversalReceipt);
 
-        public virtual PrintInfo PrintZeroingReport()
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract PrintInfo PrintZeroingReport();
 
-        protected virtual DeviceStatus ParseStatus(byte[] status)
-        {
-            throw new System.NotImplementedException();
-        }
+        protected abstract DeviceStatus ParseStatus(byte[] status);
 
         protected virtual string WithPrinterEncoding(string text)
         {

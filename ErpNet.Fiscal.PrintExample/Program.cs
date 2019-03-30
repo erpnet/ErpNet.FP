@@ -89,7 +89,7 @@ namespace ErpNet.Fiscal.PrintExample
                     ["Administrator.Password"] = "9999"
                 });
             ShowFiscalPrinterInfo(tremol);
-            //TestAllMethods(tremol);
+            TestAllMethods(tremol);
         }
 
         static void TestAutoDetect()
@@ -176,8 +176,8 @@ namespace ErpNet.Fiscal.PrintExample
                 }
             };
 
-            //fp.PrintMoneyDeposit(123.4m);
-            //fp.PrintMoneyWithdraw(43.21m);
+            fp.PrintMoneyDeposit(123.4m);
+            fp.PrintMoneyWithdraw(43.21m);
             //var result = fp.PrintReceipt(doc);
             //Console.WriteLine(result.FiscalMemoryPosition);
             //fp.PrintZeroingReport();

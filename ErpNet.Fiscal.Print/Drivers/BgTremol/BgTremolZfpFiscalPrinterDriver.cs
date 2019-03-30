@@ -36,7 +36,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgTremol
             {
                 SerialNumber = serialNumber,
                 FiscalMemorySerialNumber = fields[6],
-                Model = fields[3],
+                Model = fields[3].Replace("TREMOL ", ""), // Clear TREMOL from model name, to avoid redundancy
                 FirmwareVersion = fields[4],
                 Company = "Tremol",
                 CommentTextMaxLength = 46, // Set by Eltrade protocol

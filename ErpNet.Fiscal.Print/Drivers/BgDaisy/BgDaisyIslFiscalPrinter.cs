@@ -14,9 +14,7 @@ namespace ErpNet.Fiscal.Print.Drivers.BgDaisy
             DaisyCommandAbortFiscalReceipt = 0x82;
 
         public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options)
-        {
-        }
+        : base(channel, options) { }
 
         public override IDictionary<string, string> GetDefaultOptions()
         {
