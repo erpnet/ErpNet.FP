@@ -25,32 +25,32 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
 
         public DeviceInfo DeviceInfo => throw new NotImplementedException();
 
-        public bool IsReady()
+        public DeviceStatus CheckStatus()
         {
             throw new NotImplementedException();
         }
 
-        public PrintInfo PrintMoneyDeposit(decimal amount)
+        public DeviceStatus PrintMoneyDeposit(decimal amount)
         {
             throw new NotImplementedException();
         }
 
-        public PrintInfo PrintMoneyWithdraw(decimal amount)
+        public DeviceStatus PrintMoneyWithdraw(decimal amount)
         {
             throw new NotImplementedException();
         }
 
-        public PrintInfo PrintReceipt(Receipt receipt)
+        public (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
             throw new NotImplementedException();
         }
 
-        public PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
+        public DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)
         {
             throw new NotImplementedException();
         }
 
-        public PrintInfo PrintZeroingReport()
+        public DeviceStatus PrintZeroingReport()
         {
             throw new NotImplementedException();
         }

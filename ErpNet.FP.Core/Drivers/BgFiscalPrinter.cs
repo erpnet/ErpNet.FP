@@ -71,17 +71,17 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public abstract bool IsReady();
+        public abstract DeviceStatus CheckStatus();
 
-        public abstract PrintInfo PrintMoneyDeposit(decimal amount);
+        public abstract DeviceStatus PrintMoneyDeposit(decimal amount);
 
-        public abstract PrintInfo PrintMoneyWithdraw(decimal amount);
+        public abstract DeviceStatus PrintMoneyWithdraw(decimal amount);
 
-        public abstract PrintInfo PrintReceipt(Receipt receipt);
+        public abstract (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt);
 
-        public abstract PrintInfo PrintReversalReceipt(Receipt reversalReceipt);
+        public abstract DeviceStatus PrintReversalReceipt(Receipt reversalReceipt);
 
-        public abstract PrintInfo PrintZeroingReport();
+        public abstract DeviceStatus PrintZeroingReport();
 
         protected abstract DeviceStatus ParseStatus(byte[] status);
 

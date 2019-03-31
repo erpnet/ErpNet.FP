@@ -14,41 +14,33 @@ namespace ErpNet.FP.Core.Drivers
         public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
         : base(channel, options) {}
 
-        public override bool IsReady()
+        public override DeviceStatus CheckStatus()
         {
-            // TODO: status report and error handling
-
-            var (response, _) = Request(CommandGetStatus);
-            System.Diagnostics.Debug.WriteLine("IsReady: {0}", response);
-            return true;
+            var (response, status) = Request(CommandGetStatus);
+            System.Diagnostics.Debug.WriteLine("CheckStatus: {0}", response);
+            return status;
         }
 
-        public override PrintInfo PrintMoneyDeposit(decimal amount)
+        public override DeviceStatus PrintMoneyDeposit(decimal amount)
         {
-            // TODO: status report and error handling
-
-            var (response, _) = MoneyTransfer(amount);
-            System.Diagnostics.Debug.WriteLine("PrintMoneyWithdraw: {0}", response);
-            return new PrintInfo();
+            var (response, status) = MoneyTransfer(amount);
+            System.Diagnostics.Debug.WriteLine("PrintMoneyDeposit: {0}", response);
+            return status;
         }
 
-        public override PrintInfo PrintMoneyWithdraw(decimal amount)
+        public override DeviceStatus PrintMoneyWithdraw(decimal amount)
         {
-            // TODO: status report and error handling
-
             if (amount < 0m)
             {
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
             }
-            var (response, _) = MoneyTransfer(-amount);
+            var (response, status) = MoneyTransfer(-amount);
             System.Diagnostics.Debug.WriteLine("PrintMoneyWithdraw: {0}", response);
-            return new PrintInfo();
+            return status;
         }
 
-        public override PrintInfo PrintReceipt(Receipt receipt)
+        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
-            // TODO: status report and error handling
-
             // Receipt header
             OpenReceipt(receipt.UniqueSaleNumber, Options["Operator.ID"], Options["Operator.Password"]);
 
@@ -96,22 +88,20 @@ namespace ErpNet.FP.Core.Drivers
             // Receipt finalization
             CloseReceipt();
 
-            return new PrintInfo();
+            return (new ReceiptInfo(), new DeviceStatus());
         }
 
-        public override PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
+        public override DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)
         {
             throw new System.NotImplementedException();
         }
 
-        public override PrintInfo PrintZeroingReport()
+        public override DeviceStatus PrintZeroingReport()
         {
-            // TODO: status report and error handling
-
-            var (response, _) = PrintDailyReport();
+            var (response, status) = PrintDailyReport();
             System.Diagnostics.Debug.WriteLine("PrintZeroingReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
-            return new PrintInfo();
+            return status;
         }
     }
 }

@@ -176,11 +176,27 @@ namespace ErpNet.FP.CoreExample
                 }
             };
 
-            fp.PrintMoneyDeposit(123.4m);
-            fp.PrintMoneyWithdraw(43.21m);
-            var result = fp.PrintReceipt(doc);
+            // Minimal Receipt
+            var minDoc = new Receipt()
+            {
+                UniqueSaleNumber = "DT279013-DD01-0000002",
+                Items = new Item[]
+                {
+                    new Item()
+                    {
+                        Text = "Ф-ра 0000012345/12.03.2019",
+                        UnitPrice = 234.56m
+                    }
+                }
+            };
+
+            //fp.PrintMoneyDeposit(123.4m);
+            //fp.PrintMoneyWithdraw(43.21m);
+            var (result, status) = fp.PrintReceipt(doc);
             Console.WriteLine(result.FiscalMemoryPosition);
-            fp.PrintZeroingReport();
+            (result, status) = fp.PrintReceipt(minDoc);
+            Console.WriteLine(result.FiscalMemoryPosition);
+            //fp.PrintZeroingReport();
         }
 
         static void ShowFiscalPrinterInfo(IFiscalPrinter printer)

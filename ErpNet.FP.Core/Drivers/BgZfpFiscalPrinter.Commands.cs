@@ -9,6 +9,7 @@ namespace ErpNet.FP.Core.Drivers
     {
         protected const byte
             CommandReadFDNumbers = 0x60,
+            CommandGetStatus = 0x20,
             CommandVersion = 0x21,
             CommandPrintDailyFiscalReport = 0x7c,
             CommandNoFiscalRAorPOAmount = 0x3b,

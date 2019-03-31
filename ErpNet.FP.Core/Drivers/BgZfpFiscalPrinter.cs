@@ -34,37 +34,33 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public override bool IsReady()
+        public override DeviceStatus CheckStatus()
         {
-            throw new System.NotImplementedException();
+            var (response, status) = Request(CommandGetStatus);
+            System.Diagnostics.Debug.WriteLine("CheckStatus: {0}", response);
+            return status;
         }
 
-        public override PrintInfo PrintMoneyDeposit(decimal amount)
+        public override DeviceStatus PrintMoneyDeposit(decimal amount)
         {
-            // TODO: status report and error handling
-
-            var (response, _) = MoneyTransfer(amount);
-            System.Diagnostics.Debug.WriteLine($"PrintMoneyWithdraw: {response}");
-            return new PrintInfo();
+            var (response, status) = MoneyTransfer(amount);
+            System.Diagnostics.Debug.WriteLine($"PrintMoneyDeposit: {response}");
+            return status;
         }
 
-        public override PrintInfo PrintMoneyWithdraw(decimal amount)
+        public override DeviceStatus PrintMoneyWithdraw(decimal amount)
         {
-            // TODO: status report and error handling
-
             if (amount < 0m)
             {
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
             }
-            var (response, _) = MoneyTransfer(-amount);
+            var (response, status) = MoneyTransfer(-amount);
             System.Diagnostics.Debug.WriteLine($"PrintMoneyWithdraw: {response}");
-            return new PrintInfo();
+            return status;
         }
 
-        public override PrintInfo PrintReceipt(Receipt receipt)
+        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
-            // TODO: status report and error handling
-
             // Receipt header
             OpenReceipt(receipt.UniqueSaleNumber, Options["Operator.ID"], Options["Operator.Password"]);
 
@@ -110,19 +106,19 @@ namespace ErpNet.FP.Core.Drivers
                 CloseReceipt();
             }            
 
-            return new PrintInfo();
+            return (new ReceiptInfo(), new DeviceStatus());
         }
 
-        public override PrintInfo PrintReversalReceipt(Receipt reversalReceipt)
+        public override DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)
         {
             throw new System.NotImplementedException();
         }
 
-        public override PrintInfo PrintZeroingReport()
+        public override DeviceStatus PrintZeroingReport()
         {
-            var (response, _) = PrintDailyReport();
+            var (response, status) = PrintDailyReport();
             System.Diagnostics.Debug.WriteLine($"PrintDailyReport: {response}");
-            return new PrintInfo();
+            return status;
         }
     }
 }

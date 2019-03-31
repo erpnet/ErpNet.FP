@@ -3,7 +3,7 @@
     /// <summary>
     /// Information returned after printing.
     /// </summary>
-    public class PrintInfo
+    public class ReceiptInfo
     {
         /// <summary>
         /// Gets or sets the fiscal memory position.
@@ -12,8 +12,6 @@
         /// The fiscal memory position.
         /// </value>
         public string FiscalMemoryPosition { get; }
-        public string[] Statuses { get; }
-        public string[] Warnings { get; }
-        public string[] Errors { get; }
+        
     }
 }
