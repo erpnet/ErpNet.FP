@@ -129,7 +129,7 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandPayment, string.Join(";", new string[] {
                 GetPaymentTypeText(paymentType),
                 "1", // Procotol: Without change
-                amount.ToString("F2", CultureInfo.InvariantCulture)+"*"                
+                amount.ToString("F2", CultureInfo.InvariantCulture)+"*"
             }));
         }
 
