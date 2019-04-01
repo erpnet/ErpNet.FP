@@ -15,10 +15,10 @@ namespace ErpNet.FP.CoreExample
     {
         static void Main(string[] args)
         {
-            TestTremolPrinter();
+            //TestTremolPrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
-            //TestByUri();
+            TestByUri();
         }
 
         static Provider GetProviderOfSupportedTransportsAndDrivers()
@@ -106,29 +106,41 @@ namespace ErpNet.FP.CoreExample
             {
                 Console.Write($"URI: {printer.Key} - ");
                 ShowFiscalPrinterInfo(printer.Value);
-                TestAllMethods(printers.First().Value);
+                //TestAllMethods(printers.First().Value);
             }
         }
 
         static void TestByUri()
         {
+            /*
+            URI: bg.dy.isl.com://COM5 - Daisy CompactM, S/N: DY448967, FM S/N: 36607003
+            URI: bg.dt.p.isl.com://COM6 - Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
+            URI: bg.dt.c.isl.com://COM7 - Datecs DP-25, S/N: DT517985, FM S/N: 02517985
+            URI: bg.dt.x.isl.com://COM8 - Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
+            URI: bg.ed.isl.com://COM11 - Eltrade A1, S/N: ED311662, FM S/N: 44311662
+            URI: bg.zk.zfp.com://COM3 - Tremol M20, S/N: ZK126720, FM S/N: 50163145
+             */
+
             var provider = GetProviderOfSupportedTransportsAndDrivers();
 
-            // Daisy CompactM, S/ N: DY448967, FM S/ N: 36607003
+            // Daisy CompactM, S/N: DY448967, FM S/N: 36607003
             TestAllMethods(provider.Connect("bg.dy.isl.com://COM5"));
 
             // Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
-            TestAllMethods(provider.Connect("bg.dt.p.isl.com://COM18"));
+            TestAllMethods(provider.Connect("bg.dt.p.isl.com://COM6"));
+
+            // Datecs Datecs DP-25, S/N: DT517985, FM S/N: 02517985
+            TestAllMethods(provider.Connect("bg.dt.c.isl.com://COM7"));
 
             // Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
-            TestAllMethods(provider.Connect("bg.dt.x.isl.com://COM7"));
+            TestAllMethods(provider.Connect("bg.dt.x.isl.com://COM8"));
 
-            // Datecs DP-25, S/N: DT517985, FM S/N: 02525860
-            TestAllMethods(provider.Connect("bg.dt.c.isl.com://COM13"));
+            // Tremol M20, S/N: ZK126720, FM S/N: 50163145
+            TestAllMethods(provider.Connect("bg.zk.zfp.com://COM3"));
 
             // Eltrade A1, S/N: ED311662, FM S/N: 44311662
             // With example with setting options while connecting
-            TestAllMethods(provider.Connect("bg.ed.isl.com://COM19", new Dictionary<string, string>
+            TestAllMethods(provider.Connect("bg.ed.isl.com://COM11", new Dictionary<string, string>
             {
                 ["Operator.Password"] = "1",
                 ["Administrator.Password"] = "9999"
@@ -190,13 +202,13 @@ namespace ErpNet.FP.CoreExample
                 }
             };
 
-            //fp.PrintMoneyDeposit(123.4m);
-            //fp.PrintMoneyWithdraw(43.21m);
+            fp.PrintMoneyDeposit(123.4m);
+            fp.PrintMoneyWithdraw(43.21m);
             var (result, status) = fp.PrintReceipt(doc);
             Console.WriteLine(result.FiscalMemoryPosition);
             (result, status) = fp.PrintReceipt(minDoc);
             Console.WriteLine(result.FiscalMemoryPosition);
-            //fp.PrintZeroingReport();
+            fp.PrintZeroingReport();
         }
 
         static void ShowFiscalPrinterInfo(IFiscalPrinter printer)

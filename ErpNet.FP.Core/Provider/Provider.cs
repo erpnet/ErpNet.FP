@@ -52,9 +52,13 @@ namespace ErpNet.FP.Core.Provider
                             var p = driver.Connect(channel);
                             fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
                         }
+                        catch(InvalidResponseException)
+                        {
+                            // Autodetect probe not passed for this channel. No response.
+                        }
                         catch (InvalidDeviceInfoException)
                         {
-                            // Autodetect probe not passed for this channel.
+                            // Autodetect probe not passed for this channel. Invalid device.
                         }
                         catch (TimeoutException)
                         {
