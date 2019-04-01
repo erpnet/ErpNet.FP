@@ -16,9 +16,10 @@ namespace ErpNet.FP.CoreExample
         static void Main(string[] args)
         {
             //TestTremolPrinter();
+            TestEltradePrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
-            TestByUri();
+            //TestByUri();
         }
 
         static Provider GetProviderOfSupportedTransportsAndDrivers()
@@ -74,6 +75,15 @@ namespace ErpNet.FP.CoreExample
                 });
             ShowFiscalPrinterInfo(datecsC);
             TestAllMethods(datecsC);
+        }
+
+        static void TestEltradePrinter()
+        {
+            var eltrade = new Provider()
+                .Register(new BgDatecsCIslFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.ed.isl.com://COM11");
+            ShowFiscalPrinterInfo(eltrade);
+            TestAllMethods(eltrade);
         }
 
         static void TestTremolPrinter()
