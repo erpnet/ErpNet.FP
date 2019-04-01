@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         // Begins at 0x30, ends at 0x3f
         // All strings are errors
         protected static readonly string[] FiscalDeviceErrors = {
-            "", // No error
+            null, // No error
             "Out of paper, printer failure",
             "Registers overflow",
             "Clock failure or incorrect date & time",
@@ -33,7 +33,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         // Begins at 0x30, ends at 0x38
         // All strings are errors
         protected static readonly string[] CommandErrors = {
-            "", // No error
+            null, // No error
             "Invalid command",
             "Illegal command",
             "Z daily report is not zero",
@@ -45,9 +45,6 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         };
 
         // 7 Bytes x 8 bits
-        // Prefix '*' means Error
-        // Prefix '!' means Warning
-        // Without these prefixes the string means Status
         protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
@@ -90,7 +87,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("Printer: automatic cutting", DeviceStatusBitsStringType.Status),
             ("External display: transparent display", DeviceStatusBitsStringType.Status),
             ("Speed is 9600", DeviceStatusBitsStringType.Status),
-            ("", DeviceStatusBitsStringType.Reserved),
+            (null, DeviceStatusBitsStringType.Reserved),
             ("Drawer: automatic opening", DeviceStatusBitsStringType.Status),
             ("Customer logo included in the receipt", DeviceStatusBitsStringType.Status),
             (null, DeviceStatusBitsStringType.Reserved),
@@ -118,13 +115,15 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         protected virtual DeviceStatus ParseCommandStatus(byte[] status)
         {
             var deviceStatus = new DeviceStatus();
+            // Byte 0
             var fiscalDeviceError = FiscalDeviceErrors[status[0] - 0x30];
-            if (fiscalDeviceError.Length != 0)
+            if (fiscalDeviceError != null)
             {
-                deviceStatus.Errors.Add(FiscalDeviceErrors[status[0] - 0x30]);
+                deviceStatus.Errors.Add(fiscalDeviceError);
             }
-            var commandError = CommandErrors[status[0] - 0x30];
-            if (commandError.Length != 0)
+            // Byte 1
+            var commandError = CommandErrors[status[1] - 0x30];
+            if (commandError != null)
             {
                 deviceStatus.Errors.Add(commandError);
             }
@@ -134,14 +133,13 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         protected virtual DeviceStatus ParseDeviceStatus(byte[] status)
         {
             var deviceStatus = new DeviceStatus();
-            var errors = new List<string>();
             for (var i = 0; i < status.Length; i++)
             {
                 byte mask = 0b10000000;
                 byte b = status[i];
                 for (var j = 0; j < 8; j++)
                 {
-                    if ((mask & b) == mask)
+                    if ((mask & b) != 0)
                     {
                         var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
                         switch (statusBitStringType)
@@ -169,13 +167,12 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         {
             if (status != null)
             {
-                if (status.Length == 2) // ACK Status is 2 bytes
+                switch (status.Length)
                 {
-                    return ParseCommandStatus(status);
-                }
-                else if (status.Length == 7) // Device Status is 7 bytes
-                {
-                    return ParseDeviceStatus(status);
+                    case 2: // ACK Status is 2 bytes
+                        return ParseCommandStatus(status);
+                    case 7: // Device Status is 7 bytes
+                        return ParseDeviceStatus(status);
                 }
             }
 
