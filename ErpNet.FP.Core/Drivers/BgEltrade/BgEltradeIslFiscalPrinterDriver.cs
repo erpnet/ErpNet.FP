@@ -5,7 +5,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
     public class BgEltradeIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string SerialNumberPrefix => "ED";
+        protected readonly string SerialNumberPrefix = "ED";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)

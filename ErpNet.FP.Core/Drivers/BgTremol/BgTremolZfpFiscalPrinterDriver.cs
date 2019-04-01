@@ -7,7 +7,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
     public class BgTremolZfpFiscalPrinterDriver : FiscalPrinterDriver
     {
 
-        public override string SerialNumberPrefix => "ZK";
+        protected readonly string SerialNumberPrefix = "ZK";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.zfp";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)

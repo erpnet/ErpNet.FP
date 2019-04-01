@@ -18,11 +18,6 @@ namespace ErpNet.FP.Core
         public abstract string DriverName { get; }
 
         /// <summary>
-        /// Gets the serial number prefix for the printer using this driver
-        /// </summary>
-        public virtual string SerialNumberPrefix { get; }
-
-        /// <summary>
         /// Returns a new fiscal printer, connected to the specified <see cref="IChannel" />.
         /// Throws exception if the connection is not successful.
         /// </summary>

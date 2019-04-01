@@ -5,7 +5,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
     public class BgDatecsPIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string SerialNumberPrefix => "DT";
+        protected readonly string SerialNumberPrefix = "DT";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.p.isl";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> options = null)

@@ -5,7 +5,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     public class BgDaisyJsonFiscalPrinterDriver : FiscalPrinterDriver
     {
-        public override string SerialNumberPrefix => "DY";
+        protected readonly string SerialNumberPrefix = "DY";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.json";
 
         public override IFiscalPrinter Connect(
