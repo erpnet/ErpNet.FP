@@ -38,37 +38,51 @@ namespace ErpNet.FP.Core.Provider
             // However, port contention issues must be resolved in a more elaborate implementation.
 
             var fp = new Dictionary<string, IFiscalPrinter>();
+            var transportDrivers = new Dictionary<Transport, List<FiscalPrinterDriver>>();
 
             foreach (var (driver, transport) in protocols.Values)
             {
+                if (!transportDrivers.ContainsKey(transport)) {
+                    transportDrivers[transport] = new List<FiscalPrinterDriver>();
+                }
+                transportDrivers[transport].Add(driver);
+            }
+            foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers) {
+                var transport = td.Key;
+                var drivers = td.Value;
                 foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
                     try
                     {
-                        System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
                         var channel = transport.OpenChannel(address);
-                        try
+                        // TODO: Asynchronous probing all drivers for this channel
+                        foreach (var driver in drivers)
                         {
-                            var p = driver.Connect(channel);
-                            fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
-                        }
-                        catch(InvalidResponseException)
-                        {
-                            // Autodetect probe not passed for this channel. No response.
-                        }
-                        catch (InvalidDeviceInfoException)
-                        {
-                            // Autodetect probe not passed for this channel. Invalid device.
-                        }
-                        catch (TimeoutException)
-                        {
-                            // Timeout occured while connecting.
-                        }
-                        catch (Exception e)
-                        {
-                            // Cannot connect to opened channel, possible incompatibility
-                            Console.WriteLine($"*** {e.Message}");
-                            Console.WriteLine(e.StackTrace);
+                            try
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
+                                var p = driver.Connect(channel);
+                                fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
+                            }
+                            catch (InvalidResponseException)
+                            {
+                                // Autodetect probe not passed for this channel. No response.
+                            }
+                            catch (InvalidDeviceInfoException)
+                            {
+                                // Autodetect probe not passed for this channel. Invalid device.
+                            }
+                            catch (TimeoutException)
+                            {
+                                // Timeout occured while connecting. Skip this transport address.
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                // Cannot connect to opened channel, possible incompatibility
+                                Console.WriteLine($"*** {e.Message}");
+                                Console.WriteLine(e.StackTrace);
+                            }
                         }
                     }
                     catch
