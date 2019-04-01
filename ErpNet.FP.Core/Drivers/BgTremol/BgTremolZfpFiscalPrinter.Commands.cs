@@ -139,10 +139,8 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             {
                 byte mask = 0b10000000;
                 byte b = status[i];
-                // Ignore j==0 because bit 7 is always reserved and 1
-                for (var j = 1; j < 8; j++)
+                for (var j = 0; j < 8; j++)
                 {
-                    mask >>= 1;
                     if ((mask & b) == mask)
                     {
                         var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
@@ -161,6 +159,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                                 break;
                         }
                     }
+                    mask >>= 1;
                 }
             }
             return deviceStatus;
