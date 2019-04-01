@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected const byte
             CommandReadFDNumbers = 0x60,
@@ -25,8 +25,13 @@ namespace ErpNet.FP.Core.Drivers
             // Protocol: 36 symbols for article's name. 34 symbols are printed on paper.
             // Attention: ItemText should be padded right with spaces until reaches mandatory 
             // length of 36 symbols. Otherwise we will have syntax error!
-            ItemTextMandatoryLength = 36; 
+            ItemTextMandatoryLength = 36;
 
+        public virtual (string, DeviceStatus) GetStatus()
+        {
+            var (deviceStatus, _ /* ignore commandStatus */) = ParseResponseAsByteArray(RawRequest(CommandGetStatus, null));
+            return ("", ParseStatus(deviceStatus));
+        }
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
@@ -68,13 +73,14 @@ namespace ErpNet.FP.Core.Drivers
                 .Append(GetTaxGroupText(taxGroup))
                 .Append(';')
                 .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
-            if (quantity != 0) { 
+            if (quantity != 0)
+            {
                 itemData
                     .Append('*')
                     .Append(quantity.ToString(CultureInfo.InvariantCulture));
             }
             switch (priceModifierType)
-            {              
+            {
                 case PriceModifierType.DiscountPercent:
                     itemData
                         .Append(',')
@@ -122,7 +128,7 @@ namespace ErpNet.FP.Core.Drivers
         }
 
         public virtual (string, DeviceStatus) AddPayment(
-            decimal amount, 
+            decimal amount,
             PaymentType paymentType = PaymentType.Cash)
         {
             // Protocol: input: <PaymentType [1..2]> <;> <OptionChange [1]> <;> <Amount[1..10]> {<;><OptionChangeType[1]>}

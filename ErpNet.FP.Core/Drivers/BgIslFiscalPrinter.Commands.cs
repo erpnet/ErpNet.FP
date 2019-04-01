@@ -5,7 +5,7 @@ using System;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public partial class BgIslFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
         protected const byte
             CommandGetStatus = 0x4a,
@@ -18,6 +18,11 @@ namespace ErpNet.FP.Core.Drivers
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
             CommandPrintDailyReport = 0x45;
+
+        public virtual (string, DeviceStatus) GetStatus()
+        {
+            return Request(CommandGetStatus);
+        }
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
@@ -57,9 +62,9 @@ namespace ErpNet.FP.Core.Drivers
             {
                 itemData
                     .Append(
-                        priceModifierType == PriceModifierType.DiscountPercent 
+                        priceModifierType == PriceModifierType.DiscountPercent
                         ||
-                        priceModifierType == PriceModifierType.SurchargePercent 
+                        priceModifierType == PriceModifierType.SurchargePercent
                         ? ',' : '$')
                     .Append((
                         priceModifierType == PriceModifierType.DiscountPercent

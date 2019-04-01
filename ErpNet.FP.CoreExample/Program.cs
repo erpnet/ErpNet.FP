@@ -15,8 +15,8 @@ namespace ErpNet.FP.CoreExample
     {
         static void Main(string[] args)
         {
-            //TestTremolPrinter();
-            TestEltradePrinter();
+            TestTremolPrinter();
+            //TestEltradePrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
             //TestByUri();
@@ -91,13 +91,7 @@ namespace ErpNet.FP.CoreExample
             // One liner to connect to specific fiscal device, with specific options
             var tremol = new Provider()
                 .Register(new BgTremolZfpFiscalPrinterDriver(), new ComTransport())
-                .Connect("bg.zk.zfp.com://COM21", new Dictionary<string, string>
-                {
-                    ["Operator.ID"] = "1",
-                    ["Operator.Password"] = "1",
-                    ["Administrator.ID"] = "20",
-                    ["Administrator.Password"] = "9999"
-                });
+                .Connect("bg.zk.zfp.com://COM3");
             ShowFiscalPrinterInfo(tremol);
             TestAllMethods(tremol);
         }
@@ -192,7 +186,7 @@ namespace ErpNet.FP.CoreExample
                 {
                     new Payment()
                     {
-                        Amount = 30, 
+                        Amount = 30,
                         PaymentType = PaymentType.Cash
                     }
                 }
@@ -212,13 +206,31 @@ namespace ErpNet.FP.CoreExample
                 }
             };
 
-            fp.PrintMoneyDeposit(123.4m);
-            fp.PrintMoneyWithdraw(43.21m);
-            var (result, status) = fp.PrintReceipt(doc);
-            Console.WriteLine(result.FiscalMemoryPosition);
-            (result, status) = fp.PrintReceipt(minDoc);
-            Console.WriteLine(result.FiscalMemoryPosition);
-            fp.PrintZeroingReport();
+            //fp.PrintMoneyDeposit(123.4m);
+            //fp.PrintMoneyWithdraw(43.21m);
+            var deviceStatus = fp.CheckStatus();
+            ShowStatus(deviceStatus);
+            //var (result, commandStatus) = fp.PrintReceipt(doc);
+            //ShowStatus(commandStatus);
+            //Console.WriteLine(result.FiscalMemoryPosition);
+            //(result, commandStatus) = fp.PrintReceipt(minDoc);
+            //ShowStatus(status);
+            //Console.WriteLine(result.FiscalMemoryPosition);
+            //fp.PrintZeroingReport();
+        }
+
+        static void ShowStatus(DeviceStatus status)
+        {
+            if (status.Ok)
+            {
+                Console.WriteLine("Status: Ok!");
+            }
+            else
+            {
+                Console.WriteLine("Errors: {0}", string.Join(", ", status.Errors));
+                Console.WriteLine("Warnings: {0}", string.Join(", ", status.Warnings));
+                Console.WriteLine("Statuses: {0}", string.Join(", ", status.Statuses));
+            }
         }
 
         static void ShowFiscalPrinterInfo(IFiscalPrinter printer)

@@ -6,7 +6,7 @@ using ErpNet.FP.Core;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public partial class BgIslFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
         protected byte FrameSequenceNumber = 0;
         protected const byte
@@ -89,7 +89,7 @@ namespace ErpNet.FP.Core.Drivers
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
                     var buffer = Channel.Read();
-                    
+
                     // For debugging purposes only.
                     System.Diagnostics.Debug.Write("<<<");
                     foreach (var b in buffer)

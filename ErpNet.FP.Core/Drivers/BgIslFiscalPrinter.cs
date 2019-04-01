@@ -8,16 +8,14 @@ namespace ErpNet.FP.Core.Drivers
     /// Fiscal printer using the ISL implementation.
     /// </summary>
     /// <seealso cref="ErpNet.FP.BgFiscalPrinter" />
-    public partial class BgIslFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
-
-        public BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options) {}
+        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        : base(channel, options) { }
 
         public override DeviceStatus CheckStatus()
         {
-            var (response, status) = Request(CommandGetStatus);
-            System.Diagnostics.Debug.WriteLine("CheckStatus: {0}", response);
+            var (_, status) = GetStatus();
             return status;
         }
 

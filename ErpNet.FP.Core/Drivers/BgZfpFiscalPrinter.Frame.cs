@@ -6,7 +6,7 @@ using ErpNet.FP.Core;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected byte FrameSequenceNumber = 0;
         protected const byte
@@ -67,10 +67,11 @@ namespace ErpNet.FP.Core.Drivers
         protected void WaitForDeviceToBeReady()
         {
             System.Diagnostics.Debug.Write(">>> Ping ");
-            for (;;)
+            for (; ; )
             {
                 byte[] buffer = null;
-                for (var w = 0; w < MaxWriteRetries; w++) {
+                for (var w = 0; w < MaxWriteRetries; w++)
+                {
                     System.Diagnostics.Debug.Write($">>> {SpecialCommandPing:X} <<< ");
                     Channel.Write(new byte[] { SpecialCommandPing });
                     try
@@ -92,7 +93,7 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     throw new TimeoutException("ping timeout");
                 }
-                var b = buffer[0];                
+                var b = buffer[0];
                 System.Diagnostics.Debug.Write($"{b:X} ");
                 if (b == PingAnswerDeviceReady)
                 {
@@ -192,6 +193,16 @@ namespace ErpNet.FP.Core.Drivers
 
         protected virtual (string, DeviceStatus) ParseResponse(byte[] rawResponse)
         {
+            var (response, status) = ParseResponseAsByteArray(rawResponse);
+            if (response == null)
+            {
+                return ("", status);
+            }
+            return (Encoding.UTF8.GetString(response), status);
+        }
+
+        protected virtual (byte[], DeviceStatus) ParseResponseAsByteArray(byte[] rawResponse)
+        {
             if (rawResponse == null)
             {
                 throw new InvalidResponseException("no response");
@@ -216,7 +227,7 @@ namespace ErpNet.FP.Core.Drivers
                         break;
                 }
             }
-            
+
             if (ackMode)
             {
                 // Parse ack frame
@@ -227,7 +238,7 @@ namespace ErpNet.FP.Core.Drivers
                 var computedCS = ComputeCS(rawResponse.Slice(dataStartPos + 1u, msgEndPos));
                 if (cs.SequenceEqual(computedCS))
                 {
-                    return ("", ParseStatus(data));
+                    return (null, ParseStatus(data));
                 }
             }
             else
@@ -240,36 +251,11 @@ namespace ErpNet.FP.Core.Drivers
                 var computedCS = ComputeCS(rawResponse.Slice(dataStartPos + 1u, msgEndPos));
                 if (cs.SequenceEqual(computedCS))
                 {
-                    var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Debug.WriteLine($"Response({data.Length}): {response}");
-                    return (response, ParseStatus(null));
+                    return (data, ParseStatus(null));
                 }
-            } 
+            }
 
             throw new InvalidResponseException("the response is invalid");
-        }
-
-        protected override DeviceStatus ParseStatus(byte[] status)
-        {
-            // For debugging purposes only (to view status bits)    
-            var deviceID = (Info == null ? "" : Info.SerialNumber);
-            System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
-            if (status == null)
-            {
-                System.Diagnostics.Debug.WriteLine("No status");
-            }
-            else
-            {
-                foreach(var b in status)
-                {
-                    System.Diagnostics.Debug.Write($"{b:X} ");
-                }
-                System.Diagnostics.Debug.WriteLine("");
-            }
-            
-
-            // TODO: fill the device status
-            return new DeviceStatus();
         }
 
         protected (string, DeviceStatus) Request(byte command, string data)

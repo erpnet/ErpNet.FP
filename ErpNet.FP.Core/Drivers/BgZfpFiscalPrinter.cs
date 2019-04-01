@@ -8,10 +8,10 @@ namespace ErpNet.FP.Core.Drivers
     /// Fiscal printer using the Zfp implementation.
     /// </summary>
     /// <seealso cref="ErpNet.FP.Core.Drivers.BgFiscalPrinter" />
-    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
-        public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options) {}
+        protected BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        : base(channel, options) { }
 
         public override string GetPaymentTypeText(PaymentType paymentType)
         {
@@ -36,8 +36,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus CheckStatus()
         {
-            var (response, status) = Request(CommandGetStatus);
-            System.Diagnostics.Debug.WriteLine("CheckStatus: {0}", response);
+            var (_, status) = GetStatus();
             return status;
         }
 
@@ -104,7 +103,7 @@ namespace ErpNet.FP.Core.Drivers
                     AddPayment(payment.Amount, payment.PaymentType);
                 }
                 CloseReceipt();
-            }            
+            }
 
             return (new ReceiptInfo(), new DeviceStatus());
         }

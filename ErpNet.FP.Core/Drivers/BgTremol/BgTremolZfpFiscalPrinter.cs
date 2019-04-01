@@ -9,14 +9,14 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
     public partial class BgTremolZfpFiscalPrinter : BgZfpFiscalPrinter
     {
         public BgTremolZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
-        : base(channel, options) {}
+        : base(channel, options) { }
 
         public override IDictionary<string, string> GetDefaultOptions()
         {
             return new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
-                ["Operator.Password"] = "1",
+                ["Operator.Password"] = "0000",
 
                 ["Administrator.ID"] = "20",
                 ["Administrator.Password"] = "9999"

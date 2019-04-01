@@ -6,8 +6,10 @@ namespace ErpNet.FP.Core
 {
     public class DeviceStatus
     {
-        public string[] Statuses { get; }
-        public string[] Warnings { get; }
-        public string[] Errors { get; }
+        public ICollection<string> Statuses { get; } = new List<string>();
+        public ICollection<string> Warnings { get; } = new List<string>();
+        public ICollection<string> Errors { get; } = new List<string>();
+
+        public bool Ok => Errors.Count == 0;
     }
 }
