@@ -28,6 +28,6 @@ namespace ErpNet.FP.Core
         /// </returns>
         public abstract IFiscalPrinter Connect(
             IChannel channel,
-            IDictionary<string, string> options = null);
+            IDictionary<string, string> ?options = null);
     }
 }

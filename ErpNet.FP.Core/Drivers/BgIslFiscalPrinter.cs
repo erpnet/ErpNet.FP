@@ -10,7 +10,7 @@ namespace ErpNet.FP.Core.Drivers
     /// <seealso cref="ErpNet.FP.BgFiscalPrinter" />
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
-        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
         : base(channel, options) { }
 
         public override DeviceStatus CheckStatus()
@@ -39,6 +39,11 @@ namespace ErpNet.FP.Core.Drivers
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
+            if (receipt.Items == null || receipt.Items.Count == 0)
+            {
+                throw new ArgumentNullException("receipt.Items must be not null or empty");
+            }
+
             // Receipt header
             OpenReceipt(receipt.UniqueSaleNumber);
 

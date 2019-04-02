@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3</TargetFramework>
     <AssemblyName>ErpNet.FP.CoreExample</AssemblyName>
     <LangVersion>8.0</LangVersion>
+    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="4.6.0-preview3.19128.7" />

@@ -10,7 +10,7 @@ namespace ErpNet.FP.Core.Drivers
     /// <seealso cref="ErpNet.FP.Core.Drivers.BgFiscalPrinter" />
     public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
-        protected BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        protected BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
         public override string GetPaymentTypeText(PaymentType paymentType)
@@ -60,6 +60,11 @@ namespace ErpNet.FP.Core.Drivers
 
         protected virtual DeviceStatus PrintReceiptBody(Receipt receipt)
         {
+            if (receipt.Items == null || receipt.Items.Count == 0)
+            {
+                throw new ArgumentNullException("receipt.Items must be not null or empty");
+            }
+
             DeviceStatus deviceStatus;
 
             uint itemNumber = 0;
@@ -180,7 +185,18 @@ namespace ErpNet.FP.Core.Drivers
                 return deviceStatus;
             }
 
-            return PrintReceiptBody(reversalReceipt);
+            try
+            {
+                return PrintReceiptBody(reversalReceipt);
+            }
+            catch(ArgumentNullException e)
+            {
+                AbortReceipt();
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                deviceStatus.Errors.Add(e.Message);
+                return deviceStatus;
+            }
         }
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
@@ -195,9 +211,20 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-            deviceStatus = PrintReceiptBody(receipt);
-            if (!deviceStatus.Ok)
+            try
             {
+                deviceStatus = PrintReceiptBody(receipt);
+                if (!deviceStatus.Ok)
+                {
+                    return (receiptInfo, deviceStatus);
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                AbortReceipt();
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                deviceStatus.Errors.Add(e.Message);
                 return (receiptInfo, deviceStatus);
             }
 

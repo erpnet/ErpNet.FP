@@ -15,11 +15,11 @@ namespace ErpNet.FP.Core.Drivers
         protected IDictionary<string, string> Options { get; }
         protected IChannel Channel { get; }
 
-        public DeviceInfo Info;
+        public DeviceInfo Info = new DeviceInfo();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
-        protected BgFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        protected BgFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
         {
             Options = new Dictionary<string, string>()
                 .MergeWith(GetDefaultOptions())
@@ -27,7 +27,7 @@ namespace ErpNet.FP.Core.Drivers
             Channel = channel;
         }
 
-        public virtual IDictionary<string, string> GetDefaultOptions()
+        public virtual IDictionary<string, string>? GetDefaultOptions()
         {
             return null;
         }
@@ -96,7 +96,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatus PrintZeroingReport();
 
-        protected abstract DeviceStatus ParseStatus(byte[] status);
+        protected abstract DeviceStatus ParseStatus(byte[]? status);
 
         protected virtual string WithPrinterEncoding(string text)
         {

@@ -40,7 +40,7 @@ namespace ErpNet.FP.Core.Drivers
             return ByteTo2Bytes(bccSum);
         }
 
-        protected virtual byte[] BuildHostFrame(byte command, byte[] data)
+        protected virtual byte[] BuildHostFrame(byte command, byte[]? data)
         {
             // Frame header
             var frame = new List<byte>
@@ -69,7 +69,7 @@ namespace ErpNet.FP.Core.Drivers
             System.Diagnostics.Debug.Write(">>> Ping ");
             for (; ; )
             {
-                byte[] buffer = null;
+                byte[]? buffer = null;
                 for (var w = 0; w < MaxWriteRetries; w++)
                 {
                     System.Diagnostics.Debug.Write($">>> {SpecialCommandPing:X} <<< ");
@@ -104,7 +104,7 @@ namespace ErpNet.FP.Core.Drivers
             throw new TimeoutException("ping timeout");
         }
 
-        protected virtual byte[] RawRequest(byte command, byte[] data)
+        protected virtual byte[]? RawRequest(byte command, byte[]? data)
         {
             FrameSequenceNumber++;
             if (FrameSequenceNumber > MaxSequenceNumber)
@@ -191,7 +191,7 @@ namespace ErpNet.FP.Core.Drivers
             return null;
         }
 
-        protected virtual (string, DeviceStatus) ParseResponse(byte[] rawResponse)
+        protected virtual (string, DeviceStatus) ParseResponse(byte[]? rawResponse)
         {
             var (response, status) = ParseResponseAsByteArray(rawResponse);
             if (response == null)
@@ -201,7 +201,7 @@ namespace ErpNet.FP.Core.Drivers
             return (Encoding.UTF8.GetString(response), status);
         }
 
-        protected virtual (byte[], DeviceStatus) ParseResponseAsByteArray(byte[] rawResponse)
+        protected virtual (byte[]?, DeviceStatus) ParseResponseAsByteArray(byte[]? rawResponse)
         {
             if (rawResponse == null)
             {

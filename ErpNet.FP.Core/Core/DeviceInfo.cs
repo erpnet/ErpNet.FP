@@ -5,31 +5,31 @@
         /// <summary>
         /// The address part of the fiscal printer Uri.
         /// </summary>
-        public string Address;
+        public string Address = string.Empty;
         /// <summary>
         /// Fiscal printer serial number
         /// </summary>
-        public string SerialNumber;
+        public string SerialNumber = string.Empty;
         /// <summary>
         /// Fiscal printer memory serial number
         /// </summary>
-        public string FiscalMemorySerialNumber;
+        public string FiscalMemorySerialNumber = string.Empty;
         /// <summary>
         /// Company that produces the printer
         /// </summary>
-        public string Company;
+        public string Company = string.Empty;
         /// <summary>
         /// Model
         /// </summary>
-        public string Model;
+        public string Model = string.Empty;
         /// <summary>
         /// Optional. Type of the device.
         /// </summary>
-        public string Type;
+        public string Type = string.Empty;
         /// <summary>
         /// Optional. Firmware version.
         /// </summary>
-        public string FirmwareVersion;
+        public string FirmwareVersion = string.Empty;
         // <summary>
         /// Maximum symbols for operator names, item names, department names allowed.
         /// </summary>

@@ -8,10 +8,10 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDaisyIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
         : base(channel, options) { }
 
-        public override IDictionary<string, string> GetDefaultOptions()
+        public override IDictionary<string, string>? GetDefaultOptions()
         {
             return new Dictionary<string, string>
             {

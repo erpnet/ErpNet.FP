@@ -30,7 +30,7 @@ namespace ErpNet.FP.CoreExample
             var httpTransport = new HttpTransport();
 
             // Cloud transport with account.
-            var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
+            // var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
 
             // Drivers
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
@@ -38,13 +38,12 @@ namespace ErpNet.FP.CoreExample
             var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
             var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
-            var daisyJson = new BgDaisyJsonFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
 
             // Add ErpNet Json driver, which can be used to forward the commands to:
             // 1. Another ErpNet print server.
             // 2. Cloud printing instance.
-            var erpNetJson = new ErpNetJsonDriver();
+            // var erpNetJson = new ErpNetJsonDriver();
 
             // Add drivers and their compatible transports to the provider.
             var provider = new Provider()
@@ -54,9 +53,7 @@ namespace ErpNet.FP.CoreExample
                 .Register(datecsXIsl, comTransport)
                 .Register(eltradeIsl, comTransport)
                 .Register(tremolZfp, comTransport)
-                .Register(daisyIsl, btTransport)
-                .Register(daisyJson, httpTransport)
-                .Register(erpNetJson, cloudPrintTransport);
+                .Register(daisyIsl, btTransport);
 
             return provider;
         }

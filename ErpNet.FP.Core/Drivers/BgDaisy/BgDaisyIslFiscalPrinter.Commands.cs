@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             DaisyCommandGetDeviceConstants = 0x80,
             DaisyCommandAbortFiscalReceipt = 0x82;
 
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
             // TODO: Device status parser
             return new DeviceStatus();

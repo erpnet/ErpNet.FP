@@ -51,7 +51,7 @@ namespace ErpNet.FP.Core.Drivers
             return listOfStrings;
         }
 
-        public static IDictionary<string, string> MergeWith(this IDictionary<string, string> options, IDictionary<string, string> newOptions)
+        public static IDictionary<string, string> MergeWith(this IDictionary<string, string> options, IDictionary<string, string> ?newOptions)
         {
             if (newOptions != null)
             {

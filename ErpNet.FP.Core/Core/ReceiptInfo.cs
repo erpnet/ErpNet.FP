@@ -8,7 +8,7 @@
         /// <summary>
         /// The receipt number.
         /// </summary>
-        public string ReceiptNumber;
+        public string ReceiptNumber = string.Empty;
         /// <summary>
         /// The receipt date and time.
         /// </summary>
@@ -16,6 +16,6 @@
         /// <summary>
         /// The device fiscal memory serial number.
         /// </summary>
-        public string FiscalMemorySerialNumber;
+        public string FiscalMemorySerialNumber = string.Empty;
     }
 }

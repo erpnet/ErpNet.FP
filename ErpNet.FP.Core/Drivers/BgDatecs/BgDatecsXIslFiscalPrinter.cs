@@ -13,10 +13,10 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDatecsXIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgDatecsXIslFiscalPrinter(IChannel channel, IDictionary<string, string> options = null)
+        public BgDatecsXIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
         : base(channel, options) { }
 
-        public override IDictionary<string, string> GetDefaultOptions()
+        public override IDictionary<string, string>? GetDefaultOptions()
         {
             return new Dictionary<string, string>
             {

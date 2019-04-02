@@ -14,8 +14,8 @@ namespace ErpNet.FP.CoreExample
     {
         public override string TransportName => "com";
 
-        private readonly IDictionary<string, ComTransport.Channel> openedChannels =
-            new Dictionary<string, ComTransport.Channel>();
+        private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
+            new Dictionary<string, ComTransport.Channel?>();
 
         public override IChannel OpenChannel(string address)
         {

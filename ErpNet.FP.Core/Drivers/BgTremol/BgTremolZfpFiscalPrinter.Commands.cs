@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         // Begins at 0x30, ends at 0x3f
         // All strings are errors
         protected static readonly string[] FiscalDeviceErrors = {
-            null, // No error
+            string.Empty, // No error
             "Out of paper, printer failure",
             "Registers overflow",
             "Clock failure or incorrect date & time",
@@ -33,7 +33,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         // Begins at 0x30, ends at 0x38
         // All strings are errors
         protected static readonly string[] CommandErrors = {
-            null, // No error
+            string.Empty, // No error
             "Invalid command",
             "Illegal command",
             "Z daily report is not zero",
@@ -55,7 +55,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("DateTime wrong", DeviceStatusBitsStringType.Error),
             ("RAM reset", DeviceStatusBitsStringType.Error),
             ("Hardware clock error", DeviceStatusBitsStringType.Error),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("Printer not ready - no paper", DeviceStatusBitsStringType.Error),
             ("Reports registers Overflow", DeviceStatusBitsStringType.Error),
@@ -64,7 +64,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("Article report is not zeroed", DeviceStatusBitsStringType.Warning),
             ("Operator report is not zeroed", DeviceStatusBitsStringType.Warning),
             ("Duplicate printed", DeviceStatusBitsStringType.Status),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("Opened Non-fiscal Receipt", DeviceStatusBitsStringType.Status),
             ("Opened Fiscal Receipt", DeviceStatusBitsStringType.Status),
@@ -73,7 +73,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("Opened Invoice Fiscal Receipt", DeviceStatusBitsStringType.Status),
             ("SD card near full", DeviceStatusBitsStringType.Warning),
             ("SD card full", DeviceStatusBitsStringType.Error),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("No FM module", DeviceStatusBitsStringType.Error),
             ("FM error", DeviceStatusBitsStringType.Error),
@@ -82,25 +82,25 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("Decimal point(1=fract, 0=whole)", DeviceStatusBitsStringType.Status),
             ("FM fiscalized", DeviceStatusBitsStringType.Status),
             ("FM produced", DeviceStatusBitsStringType.Status),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("Printer: automatic cutting", DeviceStatusBitsStringType.Status),
             ("External display: transparent display", DeviceStatusBitsStringType.Status),
             ("Speed is 9600", DeviceStatusBitsStringType.Status),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
             ("Drawer: automatic opening", DeviceStatusBitsStringType.Status),
             ("Customer logo included in the receipt", DeviceStatusBitsStringType.Status),
-            (null, DeviceStatusBitsStringType.Reserved),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("Wrong SIM card", DeviceStatusBitsStringType.Error),
             ("Blocking 3 days without mobile operator", DeviceStatusBitsStringType.Error),
             ("No task from NRA", DeviceStatusBitsStringType.Error),
-            (null, DeviceStatusBitsStringType.Reserved),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
             ("Wrong SD card", DeviceStatusBitsStringType.Error),
             ("Deregistered", DeviceStatusBitsStringType.Error),
-            (null, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             ("No SIM card", DeviceStatusBitsStringType.Error),
             ("No GPRS Modem", DeviceStatusBitsStringType.Error),
@@ -108,8 +108,8 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             ("No GPRS service", DeviceStatusBitsStringType.Error),
             ("Near end of paper", DeviceStatusBitsStringType.Warning),
             ("Unsent data for 24 hours", DeviceStatusBitsStringType.Warning),
-            (null, DeviceStatusBitsStringType.Reserved),
-            (null, DeviceStatusBitsStringType.Reserved)
+            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, DeviceStatusBitsStringType.Reserved)
         };
 
         protected virtual DeviceStatus ParseCommandStatus(byte[] status)
@@ -163,7 +163,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             return deviceStatus;
         }
 
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
             if (status != null)
             {

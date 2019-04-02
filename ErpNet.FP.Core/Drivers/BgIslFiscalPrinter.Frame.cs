@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using ErpNet.FP.Core;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -40,7 +39,7 @@ namespace ErpNet.FP.Core.Drivers
             return UInt16To4Bytes(bccSum);
         }
 
-        protected virtual byte[] BuildHostFrame(byte command, byte[] data)
+        protected virtual byte[] BuildHostFrame(byte command, byte[]? data)
         {
             // Frame header
             var frame = new List<byte>
@@ -65,7 +64,7 @@ namespace ErpNet.FP.Core.Drivers
             return frame.ToArray();
         }
 
-        protected virtual byte[] RawRequest(byte command, byte[] data)
+        protected virtual byte[]? RawRequest(byte command, byte[]? data)
         {
             FrameSequenceNumber++;
             if (FrameSequenceNumber > MaxSequenceNumber)
@@ -146,7 +145,7 @@ namespace ErpNet.FP.Core.Drivers
             return null;
         }
 
-        protected virtual (string, DeviceStatus) ParseResponse(byte[] rawResponse)
+        protected virtual (string, DeviceStatus) ParseResponse(byte[]? rawResponse)
         {
             if (rawResponse == null)
             {
@@ -189,8 +188,12 @@ namespace ErpNet.FP.Core.Drivers
             throw new InvalidResponseException("the response is invalid");
         }
 
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
+            if (status == null)
+            {
+                return new DeviceStatus();
+            }
             // For debugging purposes only (to view status bits)    
             var deviceID = (Info == null ? "" : Info.SerialNumber);
             System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");

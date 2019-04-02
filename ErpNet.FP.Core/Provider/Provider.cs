@@ -90,7 +90,6 @@ namespace ErpNet.FP.Core.Provider
                     catch
                     {
                         // Cannot open channel
-                        break; // Skip this address
                     }
                 }
             }
@@ -116,7 +115,7 @@ namespace ErpNet.FP.Core.Provider
         /// The fiscal printer object.
         /// </returns>
         /// <exception cref="InvalidOperationException">When the printer is not found or the URI is not correctly formatted.</exception>
-        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string> options = null)
+        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string> ?options = null)
         {
             var match = uriPattern.Match(deviceUri);
             if (!match.Success)
