@@ -18,7 +18,6 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             return fiscalPrinter;
         }
 
-        
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
         {
             // Example: 1;784;04-02-2019 08:00;TREMOL M20; Ver. 1.01 TRA20 C.S. 2541;ZK126720;50163145
@@ -37,11 +36,11 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 SerialNumber = serialNumber,
                 FiscalMemorySerialNumber = fields[6],
                 Model = fields[3].Replace("TREMOL ", ""), // Clear TREMOL from model name, to avoid redundancy
-                FirmwareVersion = fields[4],
+                FirmwareVersion = fields[4].Trim(),
                 Company = "Tremol",
-                CommentTextMaxLength = 30, 
-                ItemTextMaxLength = 32, 
-                OperatorPasswordMaxLength = 6 
+                CommentTextMaxLength = 30,
+                ItemTextMaxLength = 32,
+                OperatorPasswordMaxLength = 6
             };
             return info;
         }

@@ -210,12 +210,13 @@ namespace ErpNet.FP.CoreExample
             //fp.PrintMoneyWithdraw(43.21m);
             var deviceStatus = fp.CheckStatus();
             ShowStatus(deviceStatus);
-            //var (result, commandStatus) = fp.PrintReceipt(doc);
-            //ShowStatus(commandStatus);
-            //Console.WriteLine(result.FiscalMemoryPosition);
+            var (result, commandStatus) = fp.PrintReceipt(doc);
+            ShowStatus(commandStatus);
+            Console.Write($"Receipt Number: {result.ReceiptNumber}, Date: {result.ReceiptDate}, ");
+            Console.WriteLine($"Time: {result.ReceiptTime}, FM S/N: {result.FiscalMemorySerialNumber}");
             //(result, commandStatus) = fp.PrintReceipt(minDoc);
             //ShowStatus(status);
-            //Console.WriteLine(result.FiscalMemoryPosition);
+            //Console.WriteLine(result.ReceiptNumber);
             //fp.PrintZeroingReport();
         }
 

@@ -60,15 +60,30 @@ namespace ErpNet.FP.Core.Drivers
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
+            var receiptInfo = new ReceiptInfo();
             // Receipt header
-            OpenReceipt(receipt.UniqueSaleNumber);
+            var (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
+                return (receiptInfo, deviceStatus);
+            }
 
+            uint itemNumber = 0;
             // Receipt items
             foreach (var item in receipt.Items)
             {
+                itemNumber++;
                 if (item.IsComment)
                 {
-                    AddComment(item.Text);
+                    (_, deviceStatus) = AddComment(item.Text);
+                    if (!deviceStatus.Ok)
+                    {
+                        AbortReceipt();
+                        deviceStatus.Statuses.Add($"Error occurred in the comment of Item {itemNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
                 }
                 else
                 {
@@ -80,7 +95,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         throw new ArgumentOutOfRangeException("priceModifierValue must be 0 if priceModifierType is None");
                     }
-                    AddItem(
+                    (_, deviceStatus) = AddItem(
                         item.Text,
                         item.UnitPrice,
                         item.TaxGroup,
@@ -88,24 +103,65 @@ namespace ErpNet.FP.Core.Drivers
                         item.PriceModifierValue,
                         item.PriceModifierType
                     );
+                    if (!deviceStatus.Ok)
+                    {
+                        AbortReceipt();
+                        deviceStatus.Statuses.Add($"Error occurred in Item {itemNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
                 }
             }
 
             // Receipt payments
             if (receipt.Payments == null || receipt.Payments.Count == 0)
             {
-                FullPaymentAndCloseReceipt();
+                (_, deviceStatus) = FullPaymentAndCloseReceipt();
+                if (!deviceStatus.Ok)
+                {
+                    AbortReceipt();
+                    deviceStatus.Statuses.Add($"Error occurred while making full payment in cash and closing the receipt");
+                    return (receiptInfo, deviceStatus);
+                }
             }
             else
             {
+                uint paymentNumber = 0;
                 foreach (var payment in receipt.Payments)
                 {
-                    AddPayment(payment.Amount, payment.PaymentType);
+                    paymentNumber++;
+                    (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
+                    if (!deviceStatus.Ok)
+                    {
+                        AbortReceipt();
+                        deviceStatus.Statuses.Add($"Error occurred in Payment {paymentNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
                 }
-                CloseReceipt();
+                (_, deviceStatus) = CloseReceipt();
+                if (!deviceStatus.Ok)
+                {
+                    (_, deviceStatus) = AbortReceipt();
+                    deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
+                    return (receiptInfo, deviceStatus);
+                }
             }
 
-            return (new ReceiptInfo(), new DeviceStatus());
+            // QR Code Data Format: <FM Number>*<Receipt Number>*<Receipt Date>*<Receipt Hour>*<Receipt Amount>
+            string qrCodeData;
+            (qrCodeData, deviceStatus) = GetLastReceiptQRCodeData();
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occurred while reading the receipt number.");
+                return (receiptInfo, deviceStatus);
+            }
+
+            var qrCodeFields = qrCodeData.Split('*');
+            receiptInfo.FiscalMemorySerialNumber = qrCodeFields[0];
+            receiptInfo.ReceiptNumber = qrCodeFields[1];
+            receiptInfo.ReceiptDate = qrCodeFields[2];
+            receiptInfo.ReceiptTime = qrCodeFields[3];
+
+            return (receiptInfo, deviceStatus);
         }
 
         public override DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)

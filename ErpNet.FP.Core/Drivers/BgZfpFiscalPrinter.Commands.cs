@@ -20,6 +20,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandSellCorrection = 0x31,
             CommandFreeText = 0x37,
             CommandPayment = 0x35,
+            CommandReadLastReceiptQRCodeData = 0x72,
             CommandGSCommand = 0x1d;
         protected const byte
             // Protocol: 36 symbols for article's name. 34 symbols are printed on paper.
@@ -31,6 +32,11 @@ namespace ErpNet.FP.Core.Drivers
         {
             var (deviceStatus, _ /* ignore commandStatus */) = ParseResponseAsByteArray(RawRequest(CommandGetStatus, null));
             return ("", ParseStatus(deviceStatus));
+        }
+
+        public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()
+        {
+            return Request(CommandReadLastReceiptQRCodeData, "B");
         }
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)

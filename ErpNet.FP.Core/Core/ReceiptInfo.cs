@@ -6,12 +6,20 @@
     public class ReceiptInfo
     {
         /// <summary>
-        /// Gets the fiscal memory position.
+        /// The receipt number.
         /// </summary>
-        /// <value>
-        /// The fiscal memory position.
-        /// </value>
-        public string FiscalMemoryPosition { get; }
-        
+        public string ReceiptNumber;
+        /// <summary>
+        /// The receipt date.
+        /// </summary>
+        public string ReceiptDate;
+        /// <summary>
+        /// The receipt time.
+        /// </summary>
+        public string ReceiptTime;
+        /// <summary>
+        /// The device fiscal memory serial number.
+        /// </summary>
+        public string FiscalMemorySerialNumber;
     }
 }

@@ -42,12 +42,14 @@ namespace ErpNet.FP.Core.Provider
 
             foreach (var (driver, transport) in protocols.Values)
             {
-                if (!transportDrivers.ContainsKey(transport)) {
+                if (!transportDrivers.ContainsKey(transport))
+                {
                     transportDrivers[transport] = new List<FiscalPrinterDriver>();
                 }
                 transportDrivers[transport].Add(driver);
             }
-            foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers) {
+            foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers)
+            {
                 var transport = td.Key;
                 var drivers = td.Value;
                 foreach (var (address, _) in transport.GetAvailableAddresses())
@@ -88,6 +90,7 @@ namespace ErpNet.FP.Core.Provider
                     catch
                     {
                         // Cannot open channel
+                        break; // Skip this address
                     }
                 }
             }
