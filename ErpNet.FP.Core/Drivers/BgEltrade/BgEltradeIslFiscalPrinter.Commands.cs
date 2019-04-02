@@ -18,15 +18,14 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             return new DeviceStatus();
         }
 
-        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             var header = string.Join(",",
                 new string[] {
-                    operatorID,
+                    Options.ValueOrDefault("Operator.Name", "Operator"),
                     uniqueSaleNumber
                 });
-            return Request(EltradeCommandOpenFiscalReceipt, header);
+            return Request(CommandOpenFiscalReceipt, header);
         }
-
     }
 }

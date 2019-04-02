@@ -29,12 +29,12 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
         }
 
-        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             var header = string.Join(",",
                 new string[] {
-                    operatorID,
-                    operatorPassword.WithMaxLength(Info.OperatorPasswordMaxLength),
+                    Options.ValueOrDefault("Operator.ID", "1"),
+                    Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength),
                     uniqueSaleNumber
                 });
             return Request(CommandOpenFiscalReceipt, header);

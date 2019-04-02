@@ -40,7 +40,7 @@ namespace ErpNet.FP.Core.Drivers
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
             // Receipt header
-            OpenReceipt(receipt.UniqueSaleNumber, Options["Operator.ID"], Options["Operator.Password"]);
+            OpenReceipt(receipt.UniqueSaleNumber);
 
             // Receipt items
             foreach (var item in receipt.Items)

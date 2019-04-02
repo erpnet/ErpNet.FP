@@ -62,5 +62,14 @@ namespace ErpNet.FP.Core.Drivers
             }
             return options;
         }
+
+        public static string ValueOrDefault(this IDictionary<string, string> options, string key, string defaultValue)
+        {
+            if (options.ContainsKey(key))
+            {
+                return options[key];
+            }
+            return defaultValue;
+        }
     }
 }

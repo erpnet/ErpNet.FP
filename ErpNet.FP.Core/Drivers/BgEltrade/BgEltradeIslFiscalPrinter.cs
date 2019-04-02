@@ -17,6 +17,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             return new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
+                ["Operator.Name"] = "Operator",
                 ["Operator.Password"] = "1",
 
                 ["Administrator.ID"] = "20",

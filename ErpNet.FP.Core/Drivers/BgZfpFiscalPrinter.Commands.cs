@@ -37,20 +37,20 @@ namespace ErpNet.FP.Core.Drivers
         {
             return Request(CommandNoFiscalRAorPOAmount, string.Join(";", new string[]
             {
-                Options["Operator.ID"],
-                Options["Operator.Password"],
+                Options.ValueOrDefault("Operator.ID", "1"),
+                Options.ValueOrDefault("Operator.Password", "0000"),
                 "0", // Protocol: Reserved 
                 amount.ToString("F2", CultureInfo.InvariantCulture)
             }));
         }
 
-        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             // Protocol: <OperNum[1..2]> <;> <OperPass[6]> <;> <ReceiptFormat[1]> <;> 
             //           <PrintVAT[1]> <;> <FiscalRcpPrintType[1]> {<’$’> <UniqueReceiptNumber[24]>}
             return Request(CommandOpenReceipt, string.Join(";", new string[] {
-                Options["Operator.ID"],
-                Options["Operator.Password"],
+                Options.ValueOrDefault("Operator.ID", "1"),
+                Options.ValueOrDefault("Operator.Password", "0000"),
                 "1", // Protocol: Detailed
                 "1", // Protocol: Include VAT
                 "4$"+uniqueSaleNumber, // Protocol: Buffered printing (faster), delimiter '$' before USN

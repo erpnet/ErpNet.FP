@@ -9,12 +9,12 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDatecsCIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber, string operatorID, string operatorPassword)
+        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             var header = string.Join(",",
                 new string[] {
-                    operatorID,
-                    operatorPassword.WithMaxLength(Info.OperatorPasswordMaxLength),
+                    Options.ValueOrDefault("Operator.ID", "1"),
+                    Options.ValueOrDefault("Operator.Password", "1").WithMaxLength(Info.OperatorPasswordMaxLength),
                     uniqueSaleNumber,
                     "1"
                 });

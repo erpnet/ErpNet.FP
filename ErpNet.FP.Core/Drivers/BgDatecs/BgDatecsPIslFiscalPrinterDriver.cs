@@ -29,10 +29,10 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
             var modelName = commaFields[0];
-            if (!modelName.StartsWith("FP"))
+            if (!modelName.StartsWith("FP") && !modelName.StartsWith("FMP") && !modelName.StartsWith("SK"))
             {
-                throw new InvalidDeviceInfoException($"model name must begin with FP for '{DriverName}'");
-            }            
+                throw new InvalidDeviceInfoException($"model name must begin with FP, FMP or SK for '{DriverName}'");
+            }
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,
