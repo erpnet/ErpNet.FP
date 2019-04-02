@@ -89,7 +89,7 @@ namespace ErpNet.FP.Core.Drivers
             return (new ReceiptInfo(), new DeviceStatus());
         }
 
-        public override DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)
+        public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
             throw new System.NotImplementedException();
         }

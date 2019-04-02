@@ -71,6 +71,19 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
+        public virtual string GetReversalReasonText(ReversalReason reversalReason)
+        {
+            switch (reversalReason)
+            {
+                case ReversalReason.OperatorError:
+                    return "0";
+                case ReversalReason.GoodsClaimOrGoodsReturn:
+                    return "1";
+                default:
+                    return "0";
+            }
+        }
+
         public abstract DeviceStatus CheckStatus();
 
         public abstract DeviceStatus PrintMoneyDeposit(decimal amount);
@@ -79,7 +92,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt);
 
-        public abstract DeviceStatus PrintReversalReceipt(Receipt reversalReceipt);
+        public abstract DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
         public abstract DeviceStatus PrintZeroingReport();
 

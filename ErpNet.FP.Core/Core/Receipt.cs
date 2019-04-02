@@ -22,14 +22,5 @@ namespace ErpNet.FP.Core
         /// The total amount should match the total amount of the line items.
         /// </summary>
         public IList<Payment> Payments { get; set; }
-
-        /// <summary>
-        /// Gets or sets the original fiscal memory position.
-        /// Used only for reversal receipts.
-        /// </summary>
-        /// <value>
-        /// The original fiscal memory position.
-        /// </value>
-        public string OriginalFiscalMemoryPosition { get; set; }
     }
 }

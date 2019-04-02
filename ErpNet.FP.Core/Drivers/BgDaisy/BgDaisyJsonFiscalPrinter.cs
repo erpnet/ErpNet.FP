@@ -45,7 +45,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             throw new NotImplementedException();
         }
 
-        public DeviceStatus PrintReversalReceipt(Receipt reversalReceipt)
+        public DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
             throw new NotImplementedException();
         }

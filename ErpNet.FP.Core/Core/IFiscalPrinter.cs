@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="reversalReceipt">The reversal receipt.</param>
         /// <returns></returns>
-        DeviceStatus PrintReversalReceipt(Receipt reversalReceipt);
+        DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
         /// <summary>
         /// Prints a deposit money note.

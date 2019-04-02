@@ -63,6 +63,32 @@ namespace ErpNet.FP.Core.Drivers
             }));
         }
 
+        public virtual (string, DeviceStatus) OpenReversalReceipt(
+            ReversalReason reversalReason,
+            string receiptNumber,
+            string receiptDate,
+            string receiptTime,
+            string fiscalMemorySerialNumber,
+            string uniqueSaleNumber)
+        {
+            // Protocol: <OperNum[1..2]> <;> <OperPass[6]> <;> <ReceiptFormat[1]> <;>
+            //            < PrintVAT[1] > <;> < StornoRcpPrintType[1] > <;> < StornoReason[1] > <;>
+            //            < RelatedToRcpNum[1..6] > <;> < RelatedToRcpDateTime ”DD-MM-YY HH:MM:SS”> <;>
+            //            < FMNum[8] > {<;> < RelatedToURN[24] >}            
+            return Request(CommandOpenReceipt, string.Join(";", new string[] {
+                Options.ValueOrDefault("Operator.ID", "1"),
+                Options.ValueOrDefault("Operator.Password", "0000"),
+                "1", // Protocol: Detailed
+                "1", // Protocol: Include VAT
+                "D", // Protocol: Buffered printing
+                GetReversalReasonText(reversalReason),
+                receiptNumber,
+                string.Format($"{receiptDate} {receiptTime}"),
+                fiscalMemorySerialNumber,
+                uniqueSaleNumber
+            }));
+        }
+
         public virtual (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,

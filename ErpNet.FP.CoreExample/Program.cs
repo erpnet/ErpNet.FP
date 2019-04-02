@@ -212,11 +212,20 @@ namespace ErpNet.FP.CoreExample
             ShowStatus(deviceStatus);
             var (result, commandStatus) = fp.PrintReceipt(doc);
             ShowStatus(commandStatus);
+
             Console.Write($"Receipt Number: {result.ReceiptNumber}, Date: {result.ReceiptDate}, ");
             Console.WriteLine($"Time: {result.ReceiptTime}, FM S/N: {result.FiscalMemorySerialNumber}");
-            //(result, commandStatus) = fp.PrintReceipt(minDoc);
-            //ShowStatus(status);
-            //Console.WriteLine(result.ReceiptNumber);
+
+            var reverseDoc = new ReversalReceipt
+            {
+                ReceiptNumber = result.ReceiptNumber,
+                ReceiptDate = result.ReceiptDate,
+                ReceiptTime = result.ReceiptTime,
+                FiscalMemorySerialNumber = result.FiscalMemorySerialNumber
+            }.CloneReceipt(doc);
+            commandStatus = fp.PrintReversalReceipt(reverseDoc);
+            ShowStatus(commandStatus);
+
             //fp.PrintZeroingReport();
         }
 
