@@ -6,6 +6,9 @@
     public enum ReversalReason
     {
         OperatorError,
-        GoodsClaimOrGoodsReturn
+        /// <summary>
+        /// Goods claim or goods return
+        /// </summary>
+        GoodsReturn
     }
 }

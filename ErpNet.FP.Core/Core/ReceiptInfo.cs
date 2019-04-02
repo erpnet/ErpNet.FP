@@ -10,13 +10,9 @@
         /// </summary>
         public string ReceiptNumber;
         /// <summary>
-        /// The receipt date.
+        /// The receipt date and time.
         /// </summary>
-        public string ReceiptDate;
-        /// <summary>
-        /// The receipt time.
-        /// </summary>
-        public string ReceiptTime;
+        public System.DateTime ReceiptDateTime;
         /// <summary>
         /// The device fiscal memory serial number.
         /// </summary>

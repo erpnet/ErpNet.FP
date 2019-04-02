@@ -77,7 +77,7 @@ namespace ErpNet.FP.Core.Drivers
             {
                 case ReversalReason.OperatorError:
                     return "0";
-                case ReversalReason.GoodsClaimOrGoodsReturn:
+                case ReversalReason.GoodsReturn:
                     return "1";
                 default:
                     return "0";

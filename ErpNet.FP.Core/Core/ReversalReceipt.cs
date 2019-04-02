@@ -8,11 +8,10 @@ namespace ErpNet.FP.Core
     public class ReversalReceipt : Receipt
     {
         public string ReceiptNumber { get; set; }
-        public string ReceiptDate { get; set; }
-        public string ReceiptTime { get; set; }
+        public System.DateTime ReceiptDateTime { get; set; }
         public string FiscalMemorySerialNumber { get; set; }
 
-        public ReversalReason ReversalReason { get; set; } = ReversalReason.OperatorError;
+        public ReversalReason Reason { get; set; } = ReversalReason.OperatorError;
 
         public ReversalReceipt CloneReceipt(Receipt receipt)
         {

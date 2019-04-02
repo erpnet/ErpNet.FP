@@ -156,8 +156,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 FiscalMemorySerialNumber = qrCodeFields[0],
                 ReceiptNumber = qrCodeFields[1],
-                ReceiptDate = qrCodeFields[2],
-                ReceiptTime = qrCodeFields[3]
+                ReceiptDateTime = DateTime.ParseExact(string.Format(
+                    $"{qrCodeFields[2]} {qrCodeFields[3]}"),
+                    "yyyy-MM-dd HH:mm:ss",
+                    System.Globalization.CultureInfo.InvariantCulture)
             }, deviceStatus);
         }
 
@@ -166,10 +168,9 @@ namespace ErpNet.FP.Core.Drivers
             var receiptInfo = new ReceiptInfo();
             // Receipt header
             var (_, deviceStatus) = OpenReversalReceipt(
-                reversalReceipt.ReversalReason,
+                reversalReceipt.Reason,
                 reversalReceipt.ReceiptNumber,
-                reversalReceipt.ReceiptDate,
-                reversalReceipt.ReceiptTime,
+                reversalReceipt.ReceiptDateTime,
                 reversalReceipt.FiscalMemorySerialNumber,
                 reversalReceipt.UniqueSaleNumber);
             if (!deviceStatus.Ok)
