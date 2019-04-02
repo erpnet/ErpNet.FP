@@ -21,7 +21,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandOpenFiscalReceipt, header);
         }
 
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
             // TODO: Device status parser
             return new DeviceStatus();

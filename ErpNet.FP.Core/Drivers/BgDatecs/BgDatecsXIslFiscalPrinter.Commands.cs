@@ -14,7 +14,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     public partial class BgDatecsXIslFiscalPrinter : BgIslFiscalPrinter
     {
         
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
             // TODO: Device status parser
             return new DeviceStatus();

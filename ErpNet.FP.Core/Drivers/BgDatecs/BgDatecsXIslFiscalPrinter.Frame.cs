@@ -14,7 +14,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     public partial class BgDatecsXIslFiscalPrinter : BgIslFiscalPrinter
     {
 
-        protected override byte[] BuildHostFrame(byte command, byte[] data)
+        protected override byte[] BuildHostFrame(byte command, byte[]? data)
         {
             // Frame header
             var frame = new List<byte>();
@@ -37,7 +37,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return frame.ToArray();
         }
 
-        protected override (string, DeviceStatus) ParseResponse(byte[] rawResponse)
+        protected override (string, DeviceStatus) ParseResponse(byte[]? rawResponse)
         {
             if (rawResponse == null)
             {

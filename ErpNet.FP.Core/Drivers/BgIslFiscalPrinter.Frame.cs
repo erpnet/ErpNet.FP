@@ -152,7 +152,7 @@ namespace ErpNet.FP.Core.Drivers
                 throw new InvalidResponseException("no response");
             }
             var (preamblePos, separatorPos, postamblePos, terminatorPos) = (0u, 0u, 0u, 0u);
-            for (var i = 0u; i < rawResponse.Length; i++)
+            for (uint i = 0u; i < rawResponse.Length; i++)
             {
                 var b = rawResponse[i];
                 switch (b)

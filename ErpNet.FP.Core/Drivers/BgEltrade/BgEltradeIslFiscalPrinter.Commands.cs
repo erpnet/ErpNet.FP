@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected const byte
             EltradeCommandOpenFiscalReceipt = 0x90;
 
-        protected override DeviceStatus ParseStatus(byte[] status)
+        protected override DeviceStatus ParseStatus(byte[]? status)
         {
             // TODO: Device status parser
             return new DeviceStatus();
