@@ -115,5 +115,20 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandFiscalReceiptTotal, paymentData);
         }
 
+
+        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
+        {
+            var header = string.Join("\t",
+                new string[] {
+                    Options.ValueOrDefault("Operator.ID", "1"),
+                    Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength),
+                    uniqueSaleNumber,
+                    "1",
+                    "",
+                    ""
+                });
+            return Request(CommandOpenFiscalReceipt, header);
+        }
+
     }
 }

@@ -98,8 +98,7 @@ namespace ErpNet.FP.Core.Drivers
                         item.TaxGroup,
                         item.Quantity,
                         item.PriceModifierValue,
-                        item.PriceModifierType
-                    );
+                        item.PriceModifierType);
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();

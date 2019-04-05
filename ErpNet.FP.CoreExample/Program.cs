@@ -15,8 +15,10 @@ namespace ErpNet.FP.CoreExample
     {
         static void Main(string[] args)
         {
-            TestTremolPrinter();
+            //TestTremolPrinter();
             //TestEltradePrinter();
+            //TestDatecsXPrinter();
+            TestDaisyPrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
             //TestByUri();
@@ -74,13 +76,31 @@ namespace ErpNet.FP.CoreExample
             TestAllMethods(datecsC);
         }
 
+        static void TestDaisyPrinter()
+        {
+            var eltrade = new Provider()
+                .Register(new BgDaisyIslFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.dy.isl.com://COM12");
+            ShowFiscalPrinterInfo(eltrade);
+            TestAllMethods(eltrade);
+        }
+
         static void TestEltradePrinter()
         {
             var eltrade = new Provider()
-                .Register(new BgDatecsCIslFiscalPrinterDriver(), new ComTransport())
-                .Connect("bg.ed.isl.com://COM11");
+                .Register(new BgEltradeIslFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.ed.isl.com://COM14");
             ShowFiscalPrinterInfo(eltrade);
             TestAllMethods(eltrade);
+        }
+
+        static void TestDatecsXPrinter()
+        {
+            var datecsX = new Provider()
+                .Register(new BgDatecsXIslFiscalPrinterDriver(), new ComTransport())
+                .Connect("bg.dt.x.isl.com://COM8");
+            ShowFiscalPrinterInfo(datecsX);
+            TestAllMethods(datecsX);
         }
 
         static void TestTremolPrinter()
@@ -107,45 +127,51 @@ namespace ErpNet.FP.CoreExample
             {
                 Console.Write($"URI: {printer.Key} - ");
                 ShowFiscalPrinterInfo(printer.Value);
-                //TestAllMethods(printers.First().Value);
+                /*
+                try
+                {
+                    TestAllMethods(printers.First().Value);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+                */
             }
         }
 
         static void TestByUri()
         {
             /*
-            URI: bg.dy.isl.com://COM5 - Daisy CompactM, S/N: DY448967, FM S/N: 36607003
-            URI: bg.dt.p.isl.com://COM6 - Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
+            URI: bg.dy.isl.com://COM12 - Daisy CompactM, S/N: DY448967, FM S/N: 36607003
             URI: bg.dt.c.isl.com://COM7 - Datecs DP-25, S/N: DT517985, FM S/N: 02517985
+            URI: bg.dt.p.isl.com://COM6 - Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
+            URI: bg.dy.isl.com://COM5 - Daisy CompactM, S/N: DY448967, FM S/N: 36607003
             URI: bg.dt.x.isl.com://COM8 - Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
-            URI: bg.ed.isl.com://COM11 - Eltrade A1, S/N: ED311662, FM S/N: 44311662
+            URI: bg.ed.isl.com://COM4 - Eltrade A1, S/N: ED311662, FM S/N: 44311662
             URI: bg.zk.zfp.com://COM3 - Tremol M20, S/N: ZK126720, FM S/N: 50163145
              */
 
             var provider = GetProviderOfSupportedTransportsAndDrivers();
 
             // Daisy CompactM, S/N: DY448967, FM S/N: 36607003
-            TestAllMethods(provider.Connect("bg.dy.isl.com://COM5"));
+            //TestAllMethods(provider.Connect("bg.dy.isl.com://COM12"));
 
             // Datecs FP-2000, S/N: DT279013, FM S/N: 02279013
-            TestAllMethods(provider.Connect("bg.dt.p.isl.com://COM6"));
+            //TestAllMethods(provider.Connect("bg.dt.p.isl.com://COM6"));
 
             // Datecs Datecs DP-25, S/N: DT517985, FM S/N: 02517985
-            TestAllMethods(provider.Connect("bg.dt.c.isl.com://COM7"));
+            //TestAllMethods(provider.Connect("bg.dt.c.isl.com://COM7"));
 
             // Datecs FP-700X, S/N: DT525860, FM S/N: 02525860
             TestAllMethods(provider.Connect("bg.dt.x.isl.com://COM8"));
 
             // Tremol M20, S/N: ZK126720, FM S/N: 50163145
-            TestAllMethods(provider.Connect("bg.zk.zfp.com://COM3"));
+            //TestAllMethods(provider.Connect("bg.zk.zfp.com://COM3"));
 
             // Eltrade A1, S/N: ED311662, FM S/N: 44311662
             // With example with setting options while connecting
-            TestAllMethods(provider.Connect("bg.ed.isl.com://COM11", new Dictionary<string, string>
-            {
-                ["Operator.Password"] = "1",
-                ["Administrator.Password"] = "9999"
-            }));
+            //TestAllMethods(provider.Connect("bg.ed.isl.com://COM4"));
         }
 
         static void TestAllMethods(IFiscalPrinter fp)
@@ -177,6 +203,13 @@ namespace ErpNet.FP.CoreExample
                         PriceModifierValue = 10,
                         PriceModifierType = PriceModifierType.DiscountPercent,
                         TaxGroup = TaxGroup.GroupB
+                    },
+                    new Item()
+                    {
+                        Text = "Нулев",
+                        Quantity = 1,
+                        UnitPrice = 0,
+                        TaxGroup = TaxGroup.GroupB
                     }
                 },
                 Payments = new Payment[]
@@ -205,14 +238,15 @@ namespace ErpNet.FP.CoreExample
 
             //fp.PrintMoneyDeposit(123.4m);
             //fp.PrintMoneyWithdraw(43.21m);
-            var deviceStatus = fp.CheckStatus();
-            ShowStatus(deviceStatus);
+            //var deviceStatus = fp.CheckStatus();
+            //ShowStatus(deviceStatus);
             var (result, commandStatus) = fp.PrintReceipt(doc);
             ShowStatus(commandStatus);
 
-            Console.Write($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, ");
-            Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
+            //Console.Write($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, ");
+            //Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
 
+            /*
             var reverseDoc = new ReversalReceipt
             {
                 Reason = ReversalReason.OperatorError,
@@ -222,6 +256,7 @@ namespace ErpNet.FP.CoreExample
             }.CloneReceipt(doc);
             commandStatus = fp.PrintReversalReceipt(reverseDoc);
             ShowStatus(commandStatus);
+            */
 
             //fp.PrintZeroingReport();
         }

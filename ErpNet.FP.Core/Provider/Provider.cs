@@ -77,7 +77,6 @@ namespace ErpNet.FP.Core.Provider
                             catch (TimeoutException)
                             {
                                 // Timeout occured while connecting. Skip this transport address.
-                                break;
                             }
                             catch (Exception e)
                             {
