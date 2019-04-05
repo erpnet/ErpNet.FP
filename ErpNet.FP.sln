@@ -13,7 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Core", "ErpNet.FP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.CoreExample", "ErpNet.FP.CoreExample\ErpNet.FP.CoreExample.csproj", "{5E926769-02D6-4224-A5F6-B9B604D5E4C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Win", "ErpNet.FP.Win\ErpNet.FP.Win.csproj", "{B5F01CB3-158F-4639-B47C-023CBA625952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Win", "ErpNet.FP.Win\ErpNet.FP.Win.csproj", "{B5F01CB3-158F-4639-B47C-023CBA625952}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E6273892-F5B1-485E-A4BE-3934214B40BA} = {E6273892-F5B1-485E-A4BE-3934214B40BA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
