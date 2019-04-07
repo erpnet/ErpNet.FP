@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\deki\\go\\src\\github\.com\\erpnet\\ErpNet\.FP\\ErpNet\.FP\.Win\\obj\\Release\\netcoreapp3\.0\\win-x86\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>
