@@ -9,10 +9,9 @@ namespace ErpNet.FP.Win.Controllers
     {
         // GET json api definition
         [HttpGet()]
-        public ActionResult<string> JsonAPI()
+        public ActionResult ApiDocumentation()
         {
-            // TODO: gets the json api definition of Printers Controller
-            return string.Empty;
+            return RedirectPermanent("https://documenter.getpostman.com/view/6751288/S1EJYMg5");
         }
     }
 }

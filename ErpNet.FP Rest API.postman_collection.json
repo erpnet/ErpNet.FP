@@ -38,7 +38,205 @@
 				},
 				"description": "Gets the printers list"
 			},
-			"response": []
+			"response": [
+				{
+					"name": "{{defaulthost}}/fp/printers",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:26:49 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"dy448967\": {\n        \"uri\": \"bg.dy.isl.com://COM5\",\n        \"serialNumber\": \"DY448967\",\n        \"fiscalMemorySerialNumber\": \"36607003\",\n        \"company\": \"Daisy\",\n        \"model\": \"CompactM\",\n        \"firmwareVersion\": \"ONL-4.01BG\",\n        \"itemTextMaxLength\": 20,\n        \"commentTextMaxLength\": 28,\n        \"operatorPasswordMaxLength\": 6\n    },\n    \"dy448967_1\": {\n        \"uri\": \"bg.dy.isl.com://COM3\",\n        \"serialNumber\": \"DY448967\",\n        \"fiscalMemorySerialNumber\": \"36607003\",\n        \"company\": \"Daisy\",\n        \"model\": \"CompactM\",\n        \"firmwareVersion\": \"ONL-4.01BG\",\n        \"itemTextMaxLength\": 20,\n        \"commentTextMaxLength\": 28,\n        \"operatorPasswordMaxLength\": 6\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get printer status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/printers/dy448967_1/status",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"printers",
+						"dy448967_1",
+						"status"
+					]
+				},
+				"description": "Gets the status of printer "
+			},
+			"response": [
+				{
+					"name": "Get printer status",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/status",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:28:04 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statuses\": [\n        \"No external display\",\n        \"Printing allowed\",\n        \"Device S/N and FM S/N are set\",\n        \"VAT groups are set\"\n    ],\n    \"warnings\": [],\n    \"errors\": [],\n    \"ok\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get printer info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/printers/dy448967_1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"printers",
+						"dy448967_1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get printer info",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:38:42 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"uri\": \"bg.dy.isl.com://COM3\",\n    \"serialNumber\": \"DY448967\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n    \"company\": \"Daisy\",\n    \"model\": \"CompactM\",\n    \"firmwareVersion\": \"ONL-4.01BG\",\n    \"itemTextMaxLength\": 20,\n    \"commentTextMaxLength\": 28,\n    \"operatorPasswordMaxLength\": 6\n}"
+				}
+			]
 		},
 		{
 			"name": "Print deposit money receipt",
@@ -70,33 +268,62 @@
 					]
 				}
 			},
-			"response": []
-		},
-		{
-			"name": "Get printer status",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "https://localhost:5001/printers/dy448967_1/status",
-					"protocol": "https",
-					"host": [
-						"localhost"
+			"response": [
+				{
+					"name": "Print deposit money receipt",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\":123\n}"
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printdeposit",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printdeposit"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:27:39 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
 					],
-					"port": "5001",
-					"path": [
-						"printers",
-						"dy448967_1",
-						"status"
-					]
-				},
-				"description": "Gets the status of printer "
-			},
-			"response": []
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "Print withdraw money receipt",
@@ -128,7 +355,62 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Print withdraw money receipt",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\":123\n}"
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printwithdraw",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printwithdraw"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:27:55 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "Print zeroing report",
@@ -160,7 +442,43 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Print zeroing report",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printzeroingreport",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printzeroingreport"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "Prints fiscal receipt",
@@ -192,7 +510,62 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Prints fiscal receipt",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printreceipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printreceipt"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:28:22 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    },\n    \"info\": {\n        \"receiptNumber\": \"0000204\",\n        \"receiptDateTime\": \"2019-04-07T19:28:00\",\n        \"fiscalMemorySerialNumber\": \"36607003\"\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "Prints reversal receipt",
@@ -208,7 +581,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000197\",\n    \"receiptDateTime\": \"2019-04-07T18:06:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : [\n\t\t{\n\t\t\t\"text\": \"сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12\n\t\t}\n\t]\n}"
+					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000204\",\n    \"receiptDateTime\": \"2019-04-07T19:28:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
 				},
 				"url": {
 					"raw": "https://localhost:5001/printers/dy448967_1/printreversalreceipt",
@@ -224,12 +597,102 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Prints reversal receipt",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000204\",\n    \"receiptDateTime\": \"2019-04-07T19:28:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printreversalreceipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printreversalreceipt"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 07 Apr 2019 16:31:07 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+				},
+				{
+					"name": "Prints reversal receipt",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000199\",\n    \"receiptDateTime\": \"2019-04-07T19:07:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
+						},
+						"url": {
+							"raw": "https://localhost:5001/printers/dy448967_1/printreversalreceipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"printers",
+								"dy448967_1",
+								"printreversalreceipt"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+				}
+			]
 		}
 	],
 	"variable": [
 		{
-			"id": "41ee5097-99d6-4533-9dc8-2674ddcc9a0e",
+			"id": "9214b8a4-c80f-489e-9ac1-587ee4834b19",
 			"key": "defaulthost",
 			"value": "localhost:5001",
 			"type": "string"
