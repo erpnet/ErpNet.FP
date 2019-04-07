@@ -3,10 +3,6 @@
     public class DeviceInfo
     {
         /// <summary>
-        /// The address part of the fiscal printer Uri.
-        /// </summary>
-        public string Address = string.Empty;
-        /// <summary>
         /// Fiscal printer serial number
         /// </summary>
         public string SerialNumber = string.Empty;
@@ -22,10 +18,6 @@
         /// Model
         /// </summary>
         public string Model = string.Empty;
-        /// <summary>
-        /// Optional. Type of the device.
-        /// </summary>
-        public string Type = string.Empty;
         /// <summary>
         /// Optional. Firmware version.
         /// </summary>

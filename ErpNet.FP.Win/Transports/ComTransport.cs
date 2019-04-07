@@ -4,11 +4,12 @@ using System.Linq;
 using System.IO.Ports;
 using ErpNet.FP.Core;
 
-namespace ErpNet.FP.CoreExample
+namespace ErpNet.FP.Win.Transports
 {
     /// <summary>
     /// Serial COM port transport.
     /// </summary>
+    /// <seealso cref="ErpNet.FP.Core.Transport" />
     public class ComTransport : Transport
     {
         public override string TransportName => "com";
@@ -107,6 +108,11 @@ namespace ErpNet.FP.CoreExample
             /// <param name="data">The data to write.</param>
             public void Write(Byte[] data)
             {
+                if (!serialPort.IsOpen)
+                {
+                    // Reopen if it is closed by OS, or device is in sleep mode
+                    serialPort.Open();
+                }
                 serialPort.DiscardInBuffer();
                 var bytesToWrite = data.Length;
                 while (bytesToWrite > 0)
@@ -123,7 +129,7 @@ namespace ErpNet.FP.CoreExample
                     }
                     else
                     {
-                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'");
+                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'"); 
                     }
                 }
             }
