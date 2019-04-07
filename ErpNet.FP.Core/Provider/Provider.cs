@@ -63,7 +63,9 @@ namespace ErpNet.FP.Core.Provider
                             {
                                 System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
                                 var p = driver.Connect(channel);
-                                fp.Add(string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}"), p);
+                                var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
+                                p.DeviceInfo.Uri = uri;
+                                fp.Add(uri, p);
                             }
                             catch (InvalidResponseException)
                             {
@@ -135,7 +137,10 @@ namespace ErpNet.FP.Core.Provider
             }
 
             var channel = transport.OpenChannel(address);
-            return driver.Connect(channel, options);
+            var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
+            var p = driver.Connect(channel, options);
+            p.DeviceInfo.Uri = uri;
+            return p;
         }
 
 

@@ -3,6 +3,10 @@
     public class DeviceInfo
     {
         /// <summary>
+        /// Fiscal printer Uri 
+        /// </summary>
+        public string Uri = string.Empty;
+        /// <summary>
         /// Fiscal printer serial number
         /// </summary>
         public string SerialNumber = string.Empty;

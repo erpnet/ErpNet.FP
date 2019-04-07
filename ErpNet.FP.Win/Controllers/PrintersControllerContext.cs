@@ -43,7 +43,15 @@ namespace ErpNet.FP.Win.Controllers
             foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
             {
                 // We use serial number of local connected fiscal printers as Printer ID
-                var printerID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
+                var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
+                
+                var printerID = baseID;
+                int duplicateNumber = 0;
+                while (PrintersInfo.ContainsKey(printerID))
+                {
+                    duplicateNumber++;
+                    printerID = $"{baseID}_{duplicateNumber}";
+                }
                 PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
                 Printers.Add(printerID, printer.Value);
             }
