@@ -169,7 +169,6 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
-            var receiptInfo = new ReceiptInfo();
             // Receipt header
             var (_, deviceStatus) = OpenReversalReceipt(
                 reversalReceipt.Reason,

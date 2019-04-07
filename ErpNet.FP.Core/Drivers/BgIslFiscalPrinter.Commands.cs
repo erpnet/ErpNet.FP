@@ -20,6 +20,19 @@ namespace ErpNet.FP.Core.Drivers
             CommandPrintDailyReport = 0x45,
             CommandReadLastReceiptQRCodeData = 0x74;
 
+        public override string GetReversalReasonText(ReversalReason reversalReason)
+        {
+            switch (reversalReason)
+            {
+                case ReversalReason.OperatorError:
+                    return "1";
+                case ReversalReason.GoodsReturn:
+                    return "0";
+                default:
+                    return "1";
+            }
+        }
+
         public virtual (string, DeviceStatus) GetStatus()
         {
             return Request(CommandGetStatus);
@@ -39,6 +52,33 @@ namespace ErpNet.FP.Core.Drivers
                     uniqueSaleNumber
                 });
             return Request(CommandOpenFiscalReceipt, header);
+        }
+
+        public virtual (string, DeviceStatus) OpenReversalReceipt(
+            ReversalReason reason,
+            string receiptNumber,
+            System.DateTime receiptDateTime,
+            string fiscalMemorySerialNumber,
+            string uniqueSaleNumber)
+        {
+            // Protocol: {ClerkNum},{Password},{UnicSaleNum}[{Tab}{Refund}{Reason},{DocLink},{DocLinkDT}{Tab}{FiskMem}
+            var headerData = new StringBuilder()
+                .Append(Options.ValueOrDefault("Administrator.ID", "20"))
+                .Append(',')
+                .Append(Options.ValueOrDefault("Administrator.Password", "9999").WithMaxLength(Info.OperatorPasswordMaxLength))
+                .Append(',')
+                .Append(uniqueSaleNumber)
+                .Append('\t')
+                .Append('R')
+                .Append(GetReversalReasonText(reason))
+                .Append(',')
+                .Append(receiptNumber)
+                .Append(',')
+                .Append(receiptDateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture))
+                .Append('\t')
+                .Append(fiscalMemorySerialNumber);
+
+            return Request(CommandOpenFiscalReceipt, headerData.ToString());
         }
 
         public virtual (string, DeviceStatus) AddItem(

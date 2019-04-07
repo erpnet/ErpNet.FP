@@ -37,23 +37,14 @@ namespace ErpNet.FP.Core.Drivers
             return status;
         }
 
-        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
+        public virtual DeviceStatus PrintReceiptBody(Receipt receipt)
         {
             if (receipt.Items == null || receipt.Items.Count == 0)
             {
                 throw new ArgumentNullException("receipt.Items must be not null or empty");
             }
 
-            var receiptInfo = new ReceiptInfo();
-
-            // Receipt header
-            var (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
-                return (receiptInfo, deviceStatus);
-            }
+            DeviceStatus deviceStatus;
 
             uint itemNumber = 0;
             // Receipt items
@@ -67,7 +58,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         AbortReceipt();
                         deviceStatus.Statuses.Add($"Error occurred in Item {itemNumber}");
-                        return (receiptInfo, deviceStatus);
+                        return deviceStatus;
                     }
                 }
                 else
@@ -91,7 +82,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         AbortReceipt();
                         deviceStatus.Statuses.Add($"Error occurred in Item {itemNumber}");
-                        return (receiptInfo, deviceStatus);
+                        return deviceStatus;
                     }
                 }
             }
@@ -104,7 +95,7 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     AbortReceipt();
                     deviceStatus.Statuses.Add($"Error occurred while making full payment in cash and closing the receipt");
-                    return (receiptInfo, deviceStatus);
+                    return deviceStatus;
                 }
             }
             else
@@ -118,7 +109,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         AbortReceipt();
                         deviceStatus.Statuses.Add($"Error occurred in Payment {paymentNumber}");
-                        return (receiptInfo, deviceStatus);
+                        return deviceStatus;
                     }
                 }
             }
@@ -129,10 +120,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 (_, deviceStatus) = AbortReceipt();
                 deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
-                return (receiptInfo, deviceStatus);
+                return deviceStatus;
             }
 
-            return GetLastReceiptInfo();
+            return deviceStatus;
         }
 
         protected virtual (ReceiptInfo, DeviceStatus) GetLastReceiptInfo()
@@ -169,7 +160,64 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
-            throw new System.NotImplementedException();
+            // Receipt header
+            var (_, deviceStatus) = OpenReversalReceipt(
+                reversalReceipt.Reason,
+                reversalReceipt.ReceiptNumber,
+                reversalReceipt.ReceiptDateTime,
+                reversalReceipt.FiscalMemorySerialNumber,
+                reversalReceipt.UniqueSaleNumber);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while opening new fiscal reversal receipt");
+                return deviceStatus;
+            }
+
+            try
+            {
+                return PrintReceiptBody(reversalReceipt);
+            }
+            catch (ArgumentNullException e)
+            {
+                AbortReceipt();
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                deviceStatus.Errors.Add(e.Message);
+                return deviceStatus;
+            }
+        }
+
+        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
+        {
+            var receiptInfo = new ReceiptInfo();
+            // Receipt header
+            var (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
+                return (receiptInfo, deviceStatus);
+            }
+
+            try
+            {
+                deviceStatus = PrintReceiptBody(receipt);
+                if (!deviceStatus.Ok)
+                {
+                    return (receiptInfo, deviceStatus);
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                AbortReceipt();
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                deviceStatus.Errors.Add(e.Message);
+                return (receiptInfo, deviceStatus);
+            }
+
+            return GetLastReceiptInfo();
         }
 
         public override DeviceStatus PrintZeroingReport()

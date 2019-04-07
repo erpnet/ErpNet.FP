@@ -72,7 +72,7 @@ namespace ErpNet.FP.Core.Drivers
         {
             // Protocol: <OperNum[1..2]> <;> <OperPass[6]> <;> <ReceiptFormat[1]> <;>
             //            < PrintVAT[1] > <;> < StornoRcpPrintType[1] > <;> < StornoReason[1] > <;>
-            //            < RelatedToRcpNum[1..6] > <;> < RelatedToRcpDateTime ”DD-MM-YY HH:MM”> <;>
+            //            < RelatedToRcpNum[1..6] > <;> < RelatedToRcpDateTime ”DD-MM-YY HH:MM[:SS]”> <;>
             //            < FMNum[8] > {<;> < RelatedToURN[24] >}            
             return Request(CommandOpenReceipt, string.Join(";", new string[] {
                 Options.ValueOrDefault("Operator.ID", "1"),
@@ -82,7 +82,7 @@ namespace ErpNet.FP.Core.Drivers
                 "D", // Protocol: Buffered printing
                 GetReversalReasonText(reason),
                 receiptNumber,
-                receiptDateTime.ToString("dd-MM-yy HH:mm", CultureInfo.InvariantCulture),
+                receiptDateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture),
                 fiscalMemorySerialNumber,
                 uniqueSaleNumber
             }));
