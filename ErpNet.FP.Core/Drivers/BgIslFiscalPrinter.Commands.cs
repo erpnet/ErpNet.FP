@@ -17,7 +17,8 @@ namespace ErpNet.FP.Core.Drivers
             CommandFiscalReceiptTotal = 0x35,
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
-            CommandPrintDailyReport = 0x45;
+            CommandPrintDailyReport = 0x45,
+            CommandReadLastReceiptQRCodeData = 0x74;
 
         public virtual (string, DeviceStatus) GetStatus()
         {
@@ -107,6 +108,11 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) PrintDailyReport()
         {
             return Request(CommandPrintDailyReport);
+        }
+
+        public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()
+        {
+            return Request(CommandReadLastReceiptQRCodeData);
         }
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()

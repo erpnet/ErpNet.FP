@@ -86,5 +86,16 @@ namespace ErpNet.FP.Win.Controllers
             }
             return new PrintResult { Status = context.Printers[id].PrintMoneyDeposit(deposit.Amount) };
         }
+
+        // POST printers/{id}/printzeroingreport
+        [HttpPost("{id}/printzeroingreport")]
+        public ActionResult<PrintResult> PrintZeroingReport(string id)
+        {
+            if (!context.Printers.ContainsKey(id))
+            {
+                return NotFound();
+            }
+            return new PrintResult { Status = context.Printers[id].PrintZeroingReport() };
+        }
     }
 }

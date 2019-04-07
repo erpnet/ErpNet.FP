@@ -8,18 +8,18 @@
         /// <summary>
         /// First programmable group
         /// </summary>
-        GroupA,
+        GroupA = 1,
         /// <summary>
         /// Second programmable group
         /// </summary>
-        GroupB,
-        /// <summary>
+        GroupB = 2,
+        /// <summary>hh
         /// Third programmable group
         /// </summary>
-        GroupC,
+        GroupC = 3,
         /// <summary>
         /// Fourth programmable group
         /// </summary>
-        GroupD
+        GroupD = 4
     }
 }

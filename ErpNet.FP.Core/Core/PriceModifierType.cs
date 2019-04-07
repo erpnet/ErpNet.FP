@@ -8,26 +8,26 @@
         /// <summary>
         /// There is no Price Modifier, so Price Modifier Value must be 0.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// The Price Modifier Value represents the discount in percents.
         /// </summary>
-        DiscountPercent,
+        DiscountPercent = 1,
 
         /// <summary>
         /// The Price Modifier Value represents the discount amount.
         /// </summary>
-        DiscountAmount,
+        DiscountAmount = 2,
 
         /// <summary>
         /// The Price Modifier Value represents the surcharge in percents.
         /// </summary>
-        SurchargePercent,
+        SurchargePercent = 3,
 
         /// <summary>
         /// The Price Modifier Value represents the surcharge amount.
         /// </summary>
-        SurchargeAmount
+        SurchargeAmount = 4
     }
 }

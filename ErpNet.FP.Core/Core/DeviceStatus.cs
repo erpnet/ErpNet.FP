@@ -12,4 +12,5 @@ namespace ErpNet.FP.Core
 
         public bool Ok => Errors.Count == 0;
     }
+
 }
