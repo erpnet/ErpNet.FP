@@ -2,6 +2,7 @@
 using ErpNet.FP.Win.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using ErpNet.FP.Win.Contexts;
 
 namespace ErpNet.FP.Win.Controllers
 {
@@ -10,7 +11,12 @@ namespace ErpNet.FP.Win.Controllers
     [ApiController]
     public class PrintersController : ControllerBase
     {
-        private static readonly PrintersControllerContext context = new PrintersControllerContext();
+        private readonly IPrintersControllerContext context;
+
+        public PrintersController(IPrintersControllerContext context)
+        {
+            this.context = context;
+        }
 
         // GET printers
         [HttpGet()]

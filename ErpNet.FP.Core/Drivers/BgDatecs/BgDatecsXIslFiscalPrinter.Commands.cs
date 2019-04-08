@@ -20,6 +20,31 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return new DeviceStatus();
         }
 
+        public override string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "0";
+                case PaymentType.Check:
+                    return "1";
+                case PaymentType.Coupon:
+                    return "2";
+                case PaymentType.Voucher:
+                    return "3";
+                case PaymentType.Card:
+                    return "7";
+                case PaymentType.Bank:
+                    return "8";
+                case PaymentType.Reserved1:
+                    return "9";
+                case PaymentType.Reserved2:
+                    return "10";
+                default:
+                    return "0";
+            }
+        }
+
         public override string GetTaxGroupText(TaxGroup taxGroup)
         {
 
@@ -35,27 +60,6 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     return "4";
                 default:
                     return "2";
-            }
-        }
-
-        public override string GetPaymentTypeText(PaymentType paymentType)
-        {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "0";
-                case PaymentType.BankTransfer:
-                    return "1";
-                case PaymentType.DebitCard:
-                    return "2";
-                case PaymentType.NationalHealthInsuranceFund:
-                    return "3";
-                case PaymentType.Voucher:
-                    return "4";
-                case PaymentType.Coupon:
-                    return "5";
-                default:
-                    return "0";
             }
         }
 

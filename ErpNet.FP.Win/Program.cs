@@ -16,5 +16,6 @@ namespace ErpNet.FP.Win
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
     }
 }

@@ -19,16 +19,20 @@ namespace ErpNet.FP.Core.Drivers
             {
                 case PaymentType.Cash:
                     return "0";
-                case PaymentType.BankTransfer:
+                case PaymentType.Check:
                     return "1";
-                case PaymentType.DebitCard:
-                    return "2";
-                case PaymentType.NationalHealthInsuranceFund:
-                    return "3";
-                case PaymentType.Voucher:
-                    return "4";
                 case PaymentType.Coupon:
-                    return "5";
+                    return "2";
+                case PaymentType.Voucher:
+                    return "3";
+                case PaymentType.Card:
+                    return "7";
+                case PaymentType.Bank:
+                    return "8";
+                case PaymentType.Reserved1:
+                    return "9";
+                case PaymentType.Reserved2:
+                    return "10";
                 default:
                     return "0";
             }

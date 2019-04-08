@@ -19,7 +19,7 @@
     },
     "ErpNet.FP.Win": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "printers",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

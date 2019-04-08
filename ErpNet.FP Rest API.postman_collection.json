@@ -525,10 +525,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}"
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Нулев\",\n\t\t\t\"unitPrice\": 0\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printreceipt",
+							"raw": "https://localhost:5001/printers/zk126720/printreceipt",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -536,7 +536,7 @@
 							"port": "5001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"zk126720",
 								"printreceipt"
 							]
 						}
@@ -547,7 +547,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:28:22 GMT"
+							"value": "Mon, 08 Apr 2019 14:48:55 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -563,7 +563,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    },\n    \"info\": {\n        \"receiptNumber\": \"0000204\",\n        \"receiptDateTime\": \"2019-04-07T19:28:00\",\n        \"fiscalMemorySerialNumber\": \"36607003\"\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"Error occurred while reading last receipt QR code data\"\n        ],\n        \"warnings\": [],\n        \"errors\": [\n            \"Illegal command\"\n        ],\n        \"ok\": false\n    },\n    \"info\": {\n        \"receiptNumber\": \"\",\n        \"receiptDateTime\": \"0001-01-01T00:00:00\",\n        \"fiscalMemorySerialNumber\": \"\"\n    }\n}"
 				}
 			]
 		},
@@ -612,10 +612,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000204\",\n    \"receiptDateTime\": \"2019-04-07T19:28:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000101\",\n    \"receiptDateTime\": \"2019-04-08T16:50:00\",\n    \"fiscalMemorySerialNumber\": \"50663145\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Нулев\",\n\t\t\t\"unitPrice\": 0\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printreversalreceipt",
+							"raw": "https://localhost:5001/printers/zk126720/printreversalreceipt",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -623,7 +623,7 @@
 							"port": "5001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"zk126720",
 								"printreversalreceipt"
 							]
 						}
@@ -634,7 +634,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:31:07 GMT"
+							"value": "Mon, 08 Apr 2019 14:50:47 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -650,49 +650,14 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
-				},
-				{
-					"name": "Prints reversal receipt",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000199\",\n    \"receiptDateTime\": \"2019-04-07T19:07:00\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": 1,\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
-						},
-						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printreversalreceipt",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "5001",
-							"path": [
-								"printers",
-								"dy448967_1",
-								"printreversalreceipt"
-							]
-						}
-					},
-					"_postman_previewlanguage": "json",
-					"header": null,
-					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
 				}
 			]
 		}
 	],
 	"variable": [
 		{
-			"id": "9214b8a4-c80f-489e-9ac1-587ee4834b19",
+			"id": "d63ed068-f8b4-4cf1-87e1-d55921e58168",
 			"key": "defaulthost",
 			"value": "localhost:5001",
 			"type": "string"

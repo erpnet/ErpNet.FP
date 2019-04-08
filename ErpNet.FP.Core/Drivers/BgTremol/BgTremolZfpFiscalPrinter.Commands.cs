@@ -117,13 +117,13 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             var deviceStatus = new DeviceStatus();
             // Byte 0
             var fiscalDeviceError = FiscalDeviceErrors[status[0] - 0x30];
-            if (fiscalDeviceError != null)
+            if (fiscalDeviceError.Length > 0)
             {
                 deviceStatus.Errors.Add(fiscalDeviceError);
             }
             // Byte 1
             var commandError = CommandErrors[status[1] - 0x30];
-            if (commandError != null)
+            if (commandError.Length > 0)
             {
                 deviceStatus.Errors.Add(commandError);
             }
