@@ -63,3 +63,4 @@ License
 
 [Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
 [LICENSE.txt]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
+[ErpNet.FP.Win.zip]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/ErpNet.FP.Win.zip>
