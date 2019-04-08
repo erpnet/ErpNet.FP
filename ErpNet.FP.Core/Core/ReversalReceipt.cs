@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ErpNet.FP.Core
 {
@@ -11,6 +13,7 @@ namespace ErpNet.FP.Core
         public System.DateTime ReceiptDateTime { get; set; }
         public string FiscalMemorySerialNumber { get; set; } = string.Empty;
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public ReversalReason Reason { get; set; } = ReversalReason.OperatorError;
 
         public ReversalReceipt CloneReceipt(Receipt receipt)

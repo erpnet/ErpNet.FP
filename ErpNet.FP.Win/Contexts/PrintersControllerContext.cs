@@ -7,9 +7,16 @@ using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Win.Transports;
 using System.Collections.Generic;
 
-namespace ErpNet.FP.Win.Controllers
+namespace ErpNet.FP.Win.Contexts
 {
-    public class PrintersControllerContext
+    public interface IPrintersControllerContext
+    {
+        Dictionary<string, DeviceInfo> PrintersInfo { get; }
+
+        Dictionary<string, IFiscalPrinter> Printers { get; }
+    }
+
+    public class PrintersControllerContext : IPrintersControllerContext
     {
 
         public Provider Provider { get; } = new Provider();
@@ -39,6 +46,7 @@ namespace ErpNet.FP.Win.Controllers
                 .Register(eltradeIsl, comTransport)
                 .Register(tremolZfp, comTransport);
 
+            System.Console.WriteLine("Detecting available printers...");
             var printers = Provider.DetectAvailablePrinters();
             foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
             {
@@ -55,6 +63,7 @@ namespace ErpNet.FP.Win.Controllers
                 PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
                 Printers.Add(printerID, printer.Value);
             }
+            System.Console.WriteLine("Detecting done.");
         }
     }
 }

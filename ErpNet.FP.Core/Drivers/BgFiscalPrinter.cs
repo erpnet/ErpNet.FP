@@ -56,11 +56,11 @@ namespace ErpNet.FP.Core.Drivers
             {
                 case PaymentType.Cash:
                     return "P";
-                case PaymentType.BankTransfer:
+                case PaymentType.Bank:
                     return "N";
-                case PaymentType.DebitCard:
+                case PaymentType.Card:
                     return "C";
-                case PaymentType.NationalHealthInsuranceFund:
+                case PaymentType.Reserved1:
                     return "D";
                 case PaymentType.Voucher:
                     return "I";

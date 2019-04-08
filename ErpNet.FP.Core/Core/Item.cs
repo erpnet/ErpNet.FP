@@ -1,4 +1,7 @@
-﻿namespace ErpNet.FP.Core
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Represents one line in a receipt. 
@@ -66,6 +69,7 @@
         /// The Price Modifier Type
         /// </value>
         /// <seealso cref="ErpNet.FP.Core.PriceModifierType"/>
+        [JsonConverter(typeof(StringEnumConverter))]
         public PriceModifierType PriceModifierType { get; set; } = PriceModifierType.None;
     }
 }

@@ -1,14 +1,18 @@
-﻿namespace ErpNet.FP.Core
+﻿using System.Runtime.Serialization;
+
+namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Reversal Reason
     /// </summary>
     public enum ReversalReason
     {
-        OperatorError,
+        [EnumMember(Value = "operator-error")]
+        OperatorError = 1,
         /// <summary>
         /// Goods claim or goods return
         /// </summary>
-        GoodsReturn
+        [EnumMember(Value = "goods-return")]
+        GoodsReturn = 2
     }
 }

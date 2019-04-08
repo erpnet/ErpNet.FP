@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ErpNet.FP.Win.Contexts;
 
 namespace ErpNet.FP.Win
 {
@@ -18,9 +19,10 @@ namespace ErpNet.FP.Win
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var printersControllerContextSingleton = new PrintersControllerContext();
+            services.AddSingleton<IPrintersControllerContext>(printersControllerContextSingleton);
             services.AddMvc()
                 .AddNewtonsoftJson();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

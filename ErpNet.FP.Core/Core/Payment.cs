@@ -1,4 +1,7 @@
-﻿namespace ErpNet.FP.Core
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Represents one payment in a fiscal receipt.
@@ -12,6 +15,7 @@
         /// <value>
         /// The type of the payment.
         /// </value>
+        [JsonConverter(typeof(StringEnumConverter))]
         public PaymentType PaymentType { get; set; }
 
         /// <summary>
