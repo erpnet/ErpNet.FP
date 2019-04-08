@@ -55,11 +55,11 @@ However, versions for most major platforms are planned:
 
 # Examples 
 
-[postman demo] Postman collection of examples
+[Postman collection] of examples
 
 License
 ----
-"Simplified BSD License" or "FreeBSD License", see [License] LICENSE.txt
+"Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
 
-[postman demo]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
-[License]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
+[Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
+[LICENSE.txt]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
