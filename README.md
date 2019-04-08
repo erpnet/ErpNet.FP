@@ -53,9 +53,9 @@ However, versions for most major platforms are planned:
 - ErpNet.FP.Android
 - ErpNet.FP.iOS
 
-# Examples 
+### Examples of requests using Http Server
 
-[Postman collection] of examples
+- [Postman collection] of examples
 
 License
 ----
