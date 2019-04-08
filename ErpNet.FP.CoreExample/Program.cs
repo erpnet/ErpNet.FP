@@ -247,7 +247,9 @@ namespace ErpNet.FP.CoreExample
             //Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
 
             /*
-            var reverseDoc = new ReversalReceipt
+            var 
+            
+            Doc = new ReversalReceipt
             {
                 Reason = ReversalReason.OperatorError,
                 ReceiptNumber = result.ReceiptNumber,

@@ -12,7 +12,9 @@ namespace ErpNet.FP.Core
         /// <summary>
         /// Goods claim or goods return
         /// </summary>
-        [EnumMember(Value = "goods-return")]
-        GoodsReturn = 2
+        [EnumMember(Value = "refund")]
+        Refund = 2,
+        [EnumMember(Value = "taxbase-reduction")]
+        TaxBaseReduction = 3
     }
 }

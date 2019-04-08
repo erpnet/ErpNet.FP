@@ -26,8 +26,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 case ReversalReason.OperatorError:
                     return "1";
-                case ReversalReason.GoodsReturn:
+                case ReversalReason.Refund:
                     return "0";
+                case ReversalReason.TaxBaseReduction:
+                    return "2";
                 default:
                     return "1";
             }
