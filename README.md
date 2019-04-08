@@ -55,7 +55,7 @@ However, versions for most major platforms are planned:
 
 # Examples 
 
-[postman demo] Postman examples
+[postman demo] Postman collection of examples
 
 License
 ----
