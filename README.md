@@ -57,6 +57,10 @@ However, versions for most major platforms are planned:
 
 - [Postman collection] of examples
 
+### Downloading Http Server
+
+- You can download [ErpNet.FP.Win.zip] to try it.
+
 License
 ----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
