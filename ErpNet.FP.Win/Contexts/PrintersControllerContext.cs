@@ -81,8 +81,9 @@ namespace ErpNet.FP.Win.Contexts
                     }
                     PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
                     Printers.Add(printerID, printer.Value);
+                    System.Console.WriteLine($"Found {printerID}: {printer.Value.DeviceInfo.Uri}");
                 }
-                System.Console.WriteLine("Detecting done.");
+                System.Console.WriteLine($"Detecting done. Found {Printers.Count} printer(s).");
             }
             if (config != null)
             {
