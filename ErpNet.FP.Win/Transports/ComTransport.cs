@@ -1,15 +1,14 @@
-﻿using System;
+﻿using ErpNet.FP.Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO.Ports;
-using ErpNet.FP.Core;
+using System.Linq;
 
 namespace ErpNet.FP.Win.Transports
 {
     /// <summary>
     /// Serial COM port transport.
     /// </summary>
-    /// <seealso cref="ErpNet.FP.Core.Transport" />
     public class ComTransport : Transport
     {
         public override string TransportName => "com";
@@ -96,21 +95,17 @@ namespace ErpNet.FP.Win.Transports
                     Array.Copy(buffer, result, task.Result);
                     return result;
                 }
-                else
-                {
-                    throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
-                }
+                throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
             }
 
             /// <summary>
             /// Writes the specified data to the com port.
             /// </summary>
             /// <param name="data">The data to write.</param>
-            public void Write(Byte[] data)
+            public void Write(byte[] data)
             {
                 if (!serialPort.IsOpen)
                 {
-                    // Reopen if it is closed by OS, or device is in sleep mode
                     serialPort.Open();
                 }
                 serialPort.DiscardInBuffer();
@@ -129,7 +124,7 @@ namespace ErpNet.FP.Win.Transports
                     }
                     else
                     {
-                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'"); 
+                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'");
                     }
                 }
             }

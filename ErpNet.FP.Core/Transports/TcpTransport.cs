@@ -83,13 +83,13 @@ namespace ErpNet.FP.Core.Transports
             /// <returns>The data which was read.</returns>
             public byte[] Read()
             {
-                if (netStream.CanRead)
+                var buffer = new byte[tcpClient.ReceiveBufferSize];
+                var task = netStream.ReadAsync(buffer, 0, buffer.Length);
+                if (task.Wait(netStream.ReadTimeout))
                 {
-                    byte[] data = new byte[tcpClient.ReceiveBufferSize];
-
-                    // This method blocks until at least one byte is read.
-                    netStream.Read(data, 0, (int)tcpClient.ReceiveBufferSize);
-                    return data;
+                    var result = new byte[task.Result];
+                    Array.Copy(buffer, result, task.Result);
+                    return result;
                 }
                 throw new TimeoutException($"timeout occured while reading from tcp connection {HostName}:{Port}");
             }
@@ -98,17 +98,30 @@ namespace ErpNet.FP.Core.Transports
             /// Writes the specified data to the tcp connection.
             /// </summary>
             /// <param name="data">The data to write.</param>
-            public void Write(Byte[] data)
+            public void Write(byte[] data)
             {
-                if (netStream.CanWrite)
+                if (!tcpClient.Connected)
                 {
-                    // This method blocks until data.Length bytes are written.
-                    netStream.Write(data, 0, data.Length);
-                    return;
+                    tcpClient.Connect(HostName, Port);
                 }
-                tcpClient.Close();
-                netStream.Close();
-                throw new TimeoutException($"timeout occured while writing to tcp connection {HostName}:{Port}");
+                var bytesToWrite = data.Length;
+                while (bytesToWrite > 0)
+                {
+                    var writeSize = Math.Min(bytesToWrite, tcpClient.SendBufferSize);
+                    var task = netStream.WriteAsync(
+                        data,
+                        data.Length - bytesToWrite,
+                        writeSize
+                    );
+                    if (task.Wait(netStream.WriteTimeout))
+                    {
+                        bytesToWrite -= writeSize;
+                    }
+                    else
+                    {
+                        throw new TimeoutException($"timeout occured while writing to com port '{HostName}:{Port}'");
+                    }
+                }
             }
         }
 
