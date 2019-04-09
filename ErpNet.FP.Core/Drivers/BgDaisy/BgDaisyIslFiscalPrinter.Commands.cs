@@ -18,13 +18,11 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         }
 
         public (string, DeviceStatus) GetRawDeviceConstants()
-
         {
             return Request(DaisyCommandGetDeviceConstants);
         }
 
         // 6 Bytes x 8 bits
-        protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
             ("Syntax error", DeviceStatusBitsStringType.Error),

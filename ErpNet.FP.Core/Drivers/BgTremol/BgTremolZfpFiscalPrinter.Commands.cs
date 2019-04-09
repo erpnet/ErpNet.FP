@@ -45,7 +45,6 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         };
 
         // 7 Bytes x 8 bits
-        protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
             ("FM Read only", DeviceStatusBitsStringType.Error),

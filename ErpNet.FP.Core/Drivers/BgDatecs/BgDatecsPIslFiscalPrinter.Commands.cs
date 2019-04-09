@@ -21,7 +21,6 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         }
 
         // 6 Bytes x 8 bits
-        protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
             ("Syntax error in the received data", DeviceStatusBitsStringType.Error),
@@ -96,12 +95,12 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 if (i == 3)
                 {
                     var switchData = new List<string>();
-                    // Skip bit 7, reserved
-                    for (var j = 1; j < 8; j++)
+                    // Skip bit 7
+                    for (var j = 0; j < 7; j++)
                     {
-                        mask >>= 1;
                         var switchState = ((mask & b) != 0) ? "ON" : "OFF";
                         switchData.Add($"SW{7 - j}={switchState}");
+                        mask >>= 1;
                     }
                     deviceStatus.Statuses.Add(string.Join(", ", switchData));
                 }
