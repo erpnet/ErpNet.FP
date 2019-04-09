@@ -11,13 +11,14 @@ namespace ErpNet.FP.Core.Drivers
     public abstract class BgFiscalPrinter : IFiscalPrinter
     {
         public DeviceInfo DeviceInfo => Info;
-
         protected IDictionary<string, string> Options { get; }
         protected IChannel Channel { get; }
 
         public DeviceInfo Info = new DeviceInfo();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
+
+        protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected BgFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
         {

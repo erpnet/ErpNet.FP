@@ -178,7 +178,6 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
             return Request(DatecsXCommandOpenStornoDocument, headerData.ToString());
         }
-
         
 
         public override (string, DeviceStatus) PrintDailyReport()
@@ -187,7 +186,6 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         }
 
         // 8 Bytes x 8 bits
-        protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
             ("Syntax error", DeviceStatusBitsStringType.Error),
