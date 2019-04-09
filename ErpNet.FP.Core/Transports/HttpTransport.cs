@@ -1,5 +1,4 @@
 ﻿using System;
-using ErpNet.FP.Core;
 
 namespace ErpNet.FP.Core.Transports
 {

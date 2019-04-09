@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 
 namespace ErpNet.FP.Core
 {

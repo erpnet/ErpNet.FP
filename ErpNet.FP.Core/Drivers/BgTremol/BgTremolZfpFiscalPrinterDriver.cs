@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using ErpNet.FP.Core;
 
 namespace ErpNet.FP.Core.Drivers.BgTremol
 {

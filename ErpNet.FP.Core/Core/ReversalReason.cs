@@ -9,9 +9,6 @@ namespace ErpNet.FP.Core
     {
         [EnumMember(Value = "operator-error")]
         OperatorError = 1,
-        /// <summary>
-        /// Goods claim or goods return
-        /// </summary>
         [EnumMember(Value = "refund")]
         Refund = 2,
         [EnumMember(Value = "taxbase-reduction")]

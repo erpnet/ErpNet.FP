@@ -1,5 +1,5 @@
-﻿using System;
-using ErpNet.FP.Core;
+﻿using ErpNet.FP.Core;
+using System;
 
 namespace ErpNet.FP.CoreExample
 {
