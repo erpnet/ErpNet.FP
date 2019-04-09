@@ -85,7 +85,6 @@ namespace ErpNet.FP.Core.Transports
             {
                 if (netStream.CanRead)
                 {
-                    // Reads NetworkStream into a byte buffer.
                     byte[] data = new byte[tcpClient.ReceiveBufferSize];
 
                     // This method blocks until at least one byte is read.
@@ -103,15 +102,12 @@ namespace ErpNet.FP.Core.Transports
             {
                 if (netStream.CanWrite)
                 {
+                    // This method blocks until data.Length bytes are written.
                     netStream.Write(data, 0, data.Length);
-                }
-                else
-                {
-                    tcpClient.Close();
-                    // Closing the tcpClient instance does not close the network stream.
-                    netStream.Close();
                     return;
                 }
+                tcpClient.Close();
+                netStream.Close();
                 throw new TimeoutException($"timeout occured while writing to tcp connection {HostName}:{Port}");
             }
         }
