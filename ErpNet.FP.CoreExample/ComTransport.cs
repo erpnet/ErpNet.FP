@@ -95,18 +95,19 @@ namespace ErpNet.FP.CoreExample
                     Array.Copy(buffer, result, task.Result);
                     return result;
                 }
-                else
-                {
-                    throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
-                }
+                throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
             }
 
             /// <summary>
             /// Writes the specified data to the com port.
             /// </summary>
             /// <param name="data">The data to write.</param>
-            public void Write(Byte[] data)
+            public void Write(byte[] data)
             {
+                if (!serialPort.IsOpen)
+                {
+                    serialPort.Open();
+                }
                 serialPort.DiscardInBuffer();
                 var bytesToWrite = data.Length;
                 while (bytesToWrite > 0)
