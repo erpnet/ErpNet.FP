@@ -5,6 +5,7 @@ using ErpNet.FP.Core.Drivers.BgEltrade;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Win.Transports;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace ErpNet.FP.Win.Contexts
@@ -26,6 +27,22 @@ namespace ErpNet.FP.Win.Contexts
 
         public PrintersControllerContext()
         {
+            bool autoDetect = true;
+
+            IConfigurationRoot? config = null;
+            try
+            {
+                config = new ConfigurationBuilder()
+                     .AddJsonFile("config.json")
+                     .Build();
+
+                autoDetect = (config["autodetect"] != "false");
+            }
+            catch
+            {
+                // We do not have a config.json
+            }
+
             // Transports
             var comTransport = new ComTransport();
 
@@ -46,24 +63,55 @@ namespace ErpNet.FP.Win.Contexts
                 .Register(eltradeIsl, comTransport)
                 .Register(tremolZfp, comTransport);
 
-            System.Console.WriteLine("Detecting available printers...");
-            var printers = Provider.DetectAvailablePrinters();
-            foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
+            if (autoDetect)
             {
-                // We use serial number of local connected fiscal printers as Printer ID
-                var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
-                
-                var printerID = baseID;
-                int duplicateNumber = 0;
-                while (PrintersInfo.ContainsKey(printerID))
+                System.Console.WriteLine("Detecting available printers...");
+                var printers = Provider.DetectAvailablePrinters();
+                foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                 {
-                    duplicateNumber++;
-                    printerID = $"{baseID}_{duplicateNumber}";
+                    // We use serial number of local connected fiscal printers as Printer ID
+                    var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
+
+                    var printerID = baseID;
+                    int duplicateNumber = 0;
+                    while (PrintersInfo.ContainsKey(printerID))
+                    {
+                        duplicateNumber++;
+                        printerID = $"{baseID}_{duplicateNumber}";
+                    }
+                    PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
+                    Printers.Add(printerID, printer.Value);
                 }
-                PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
-                Printers.Add(printerID, printer.Value);
+                System.Console.WriteLine("Detecting done.");
             }
-            System.Console.WriteLine("Detecting done.");
+            if (config != null)
+            {
+                /* TODO: deserialize printers
+                var configuredPrinters = config["printers"];
+                foreach (var configuredPrinter in configuredPrinters)
+                {
+                    try
+                    {
+                        var printer = Provider.Connect(configuredPrinter["uri"]);
+                        var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
+
+                        var printerID = baseID;
+                        int duplicateNumber = 0;
+                        while (PrintersInfo.ContainsKey(printerID))
+                        {
+                            duplicateNumber++;
+                            printerID = $"{baseID}_{duplicateNumber}";
+                        }
+                        PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
+                        Printers.Add(printerID, printer.Value);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                */
+            }
         }
     }
 }
