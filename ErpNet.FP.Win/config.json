@@ -1,0 +1,15 @@
+{
+  "autodetect": false,
+  "printers": [
+    {
+      "vpn_tremol_1": {
+        "uri": "bg.tr.zfp.tcp://tremol.bg:5060"
+      }
+    },
+    {
+      "office2": {
+        "uri": "bg.dt.p.isl.tcp://office.company.com:8081"
+      }
+    }
+  ]
+}
