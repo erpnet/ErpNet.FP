@@ -11,6 +11,31 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected const byte
             EltradeCommandOpenFiscalReceipt = 0x90;
 
+        public override string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "P";
+                case PaymentType.Check:
+                    return "N";
+                case PaymentType.Coupon:
+                    return "C";
+                case PaymentType.Voucher:
+                    return "D";
+                case PaymentType.Card:
+                    return "L";
+                case PaymentType.Bank:
+                    return "M";
+                case PaymentType.Reserved1:
+                    return "Q";
+                case PaymentType.Reserved2:
+                    return "R";
+                default:
+                    return "P";
+            }
+        }
+
         public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             var header = string.Join(",",
