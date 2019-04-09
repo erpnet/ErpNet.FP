@@ -1,9 +1,7 @@
-﻿using ErpNet.FP.Core;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Globalization;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {

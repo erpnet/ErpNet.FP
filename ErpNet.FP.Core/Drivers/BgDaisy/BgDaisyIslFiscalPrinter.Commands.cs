@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers.BgDaisy
+﻿namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.

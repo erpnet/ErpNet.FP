@@ -1,5 +1,4 @@
-﻿using ErpNet.FP.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ErpNet.FP.Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO.Ports;
-using ErpNet.FP.Core;
+using System.Linq;
 
 namespace ErpNet.FP.CoreExample
 {
