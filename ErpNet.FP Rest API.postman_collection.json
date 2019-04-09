@@ -17,8 +17,8 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -26,12 +26,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers"
 					]
@@ -56,12 +56,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers"
 							]
@@ -103,12 +103,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dt525860",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/dt525860",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
 						"dt525860"
@@ -126,12 +126,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/dy448967_1",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"dy448967_1"
@@ -174,15 +174,15 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dy448967_1/status",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/zk970105/status",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
-						"dy448967_1",
+						"zk970105",
 						"status"
 					]
 				},
@@ -199,12 +199,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/status",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/dy448967_1/status",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"dy448967_1",
@@ -255,12 +255,12 @@
 					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dt525860/printreceipt",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/dt525860/printreceipt",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
 						"dt525860",
@@ -286,12 +286,12 @@
 							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Нулев\",\n\t\t\t\"unitPrice\": 0\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/zk126720/printreceipt",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/zk126720/printreceipt",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"zk126720",
@@ -339,18 +339,18 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000026\",\n    \"receiptDateTime\": \"2019-04-08T21:41:20\",\n    \"fiscalMemorySerialNumber\": \"02525860\",\n\t\"reason\": \"operator-error\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}\n}"
+					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"000159\",\n    \"receiptDateTime\": \"2019-04-09T15:18:47\",\n    \"fiscalMemorySerialNumber\": \"50970105\",\n\t\"reason\": \"operator-error\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dt525860/printreversalreceipt",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/zk970105/printreversalreceipt",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
-						"dt525860",
+						"zk970105",
 						"printreversalreceipt"
 					]
 				}
@@ -373,12 +373,12 @@
 							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000101\",\n    \"receiptDateTime\": \"2019-04-08T16:50:00\",\n    \"fiscalMemorySerialNumber\": \"50663145\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Нулев\",\n\t\t\t\"unitPrice\": 0\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": 0\n\t\t}\n\t]\n}\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/zk126720/printreversalreceipt",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/zk126720/printreversalreceipt",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"zk126720",
@@ -429,15 +429,15 @@
 					"raw": "{\n\t\"amount\":123\n}"
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dy448967_1/printdeposit",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/zk970105/printdeposit",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
-						"dy448967_1",
+						"zk970105",
 						"printdeposit"
 					]
 				}
@@ -460,12 +460,12 @@
 							"raw": "{\n\t\"amount\":123\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printdeposit",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/dy448967_1/printdeposit",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"dy448967_1",
@@ -516,15 +516,15 @@
 					"raw": "{\n\t\"amount\":123\n}"
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dy448967_1/printwithdraw",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/zk970105/printwithdraw",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
-						"dy448967_1",
+						"zk970105",
 						"printwithdraw"
 					]
 				}
@@ -547,12 +547,12 @@
 							"raw": "{\n\t\"amount\":123\n}"
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printwithdraw",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/dy448967_1/printwithdraw",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"dy448967_1",
@@ -603,15 +603,15 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://localhost:5001/printers/dy448967_1/printzeroingreport",
-					"protocol": "https",
+					"raw": "http://localhost:5000/printers/zk970105/printzeroingreport",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"printers",
-						"dy448967_1",
+						"zk970105",
 						"printzeroingreport"
 					]
 				}
@@ -634,12 +634,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://localhost:5001/printers/dy448967_1/printzeroingreport",
-							"protocol": "https",
+							"raw": "http://localhost:5000/printers/dy448967_1/printzeroingreport",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5001",
+							"port": "5000",
 							"path": [
 								"printers",
 								"dy448967_1",
@@ -657,7 +657,7 @@
 	],
 	"variable": [
 		{
-			"id": "50cb1b38-ecbb-422f-9040-3d2a89d75d66",
+			"id": "e612b279-2b4e-481b-a6c7-3f77c262d683",
 			"key": "defaulthost",
 			"value": "localhost:5001",
 			"type": "string"
