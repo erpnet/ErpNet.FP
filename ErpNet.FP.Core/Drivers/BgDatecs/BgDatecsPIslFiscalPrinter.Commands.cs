@@ -20,6 +20,25 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandOpenFiscalReceipt, header);
         }
 
+        public override string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "P";
+                case PaymentType.Coupon:
+                    return "J";
+                case PaymentType.Voucher:
+                    return "I";
+                case PaymentType.Card:
+                    return "C";
+                case PaymentType.Reserved1:
+                    return "D"; // National Health Insurance Fund
+                default:
+                    return "P";
+            }
+        }
+
         // 6 Bytes x 8 bits
 
         protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {

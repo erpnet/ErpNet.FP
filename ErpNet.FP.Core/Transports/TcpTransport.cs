@@ -13,7 +13,7 @@ namespace ErpNet.FP.Core.Transports
     {
         public override string TransportName => "tcp";
 
-        protected readonly int DefaultPort = 80;
+        protected readonly int DefaultPort = 4999;
 
         private readonly IDictionary<string, TcpTransport.Channel?> openedChannels =
             new Dictionary<string, TcpTransport.Channel?>();
@@ -66,8 +66,18 @@ namespace ErpNet.FP.Core.Transports
             {
                 HostName = hostName;
                 Port = port;
-                tcpClient = new TcpClient(hostName, port);
-                netStream = tcpClient.GetStream();
+                tcpClient = new TcpClient();
+                netStream = ConnectAndGetStream();
+            }
+
+            protected NetworkStream ConnectAndGetStream()
+            {
+                var task = tcpClient.ConnectAsync(HostName, Port);
+                if (task.Wait(tcpClient.ReceiveTimeout))
+                {
+                    return tcpClient.GetStream();
+                }
+                throw new TimeoutException($"timeout occured while connecting to {HostName}:{Port}");
             }
 
             public void Dispose()
