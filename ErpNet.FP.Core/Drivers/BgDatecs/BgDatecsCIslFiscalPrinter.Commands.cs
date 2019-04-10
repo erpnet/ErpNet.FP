@@ -20,22 +20,18 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandOpenFiscalReceipt, header);
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+                case "":
                     return "P";
-                case PaymentType.Coupon:
-                    return "J";
-                case PaymentType.Voucher:
-                    return "I";
-                case PaymentType.Card:
+                case "cash":
+                    return "P";
+                case "card":
                     return "C";
-                case PaymentType.Reserved1:
-                    return "D"; // National Health Insurance Fund
                 default:
-                    return "P";
+                    return paymentType;
             }
         }
 

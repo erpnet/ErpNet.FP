@@ -11,28 +11,19 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected const byte
             EltradeCommandOpenFiscalReceipt = 0x90;
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+
+                case "":
                     return "P";
-                case PaymentType.Check:
-                    return "N";
-                case PaymentType.Coupon:
-                    return "C";
-                case PaymentType.Voucher:
-                    return "D";
-                case PaymentType.Card:
+                case "cash":
+                    return "P";
+                case "card":
                     return "L";
-                case PaymentType.Bank:
-                    return "M";
-                case PaymentType.Reserved1:
-                    return "Q";
-                case PaymentType.Reserved2:
-                    return "R";
                 default:
-                    return "P";
+                    return paymentType;
             }
         }
 

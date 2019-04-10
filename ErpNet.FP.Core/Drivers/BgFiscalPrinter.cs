@@ -19,7 +19,7 @@ namespace ErpNet.FP.Core.Drivers
 
         protected enum DeviceStatusBitsStringType { Error, Warning, Status, Reserved };
 
-        protected BgFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
+        protected BgFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         {
             Options = new Dictionary<string, string>()
                 .MergeWith(GetDefaultOptions())
@@ -32,42 +32,30 @@ namespace ErpNet.FP.Core.Drivers
             return null;
         }
 
-        public virtual string GetTaxGroupText(TaxGroup taxGroup)
+        public virtual string GetTaxGroupText(string taxGroup)
         {
 
             switch (taxGroup)
             {
-                case TaxGroup.GroupA:
-                    return "À";
-                case TaxGroup.GroupB:
+                case "":
                     return "Á";
-                case TaxGroup.GroupC:
-                    return "Â";
-                case TaxGroup.GroupD:
-                    return "Ã";
                 default:
-                    return "Á";
+                    return taxGroup;
             }
         }
 
-        public virtual string GetPaymentTypeText(PaymentType paymentType)
+        public virtual string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+                case "":
                     return "P";
-                case PaymentType.Bank:
-                    return "N";
-                case PaymentType.Card:
+                case "cash":
+                    return "P";
+                case "card":
                     return "C";
-                case PaymentType.Reserved1:
-                    return "D";
-                case PaymentType.Voucher:
-                    return "I";
-                case PaymentType.Coupon:
-                    return "J";
                 default:
-                    return "P";
+                    return paymentType;
             }
         }
 

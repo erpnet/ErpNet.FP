@@ -12,40 +12,30 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected const byte
            DatecsXCommandOpenStornoDocument = 0x2b;
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+                case "":
                     return "0";
-                case PaymentType.Check:
-                    return "3";
-                case PaymentType.Coupon:
-                    return "5";
-                case PaymentType.Voucher:
-                    return "4";
-                case PaymentType.Card:
+                case "cash":
+                    return "0";
+                case "card":
                     return "1";
                 default:
-                    return "0";
+                    return paymentType;
             }
         }
 
-        public override string GetTaxGroupText(TaxGroup taxGroup)
+        public override string GetTaxGroupText(string taxGroup)
         {
 
             switch (taxGroup)
             {
-                case TaxGroup.GroupA:
-                    return "1";
-                case TaxGroup.GroupB:
+                case "":
                     return "2";
-                case TaxGroup.GroupC:
-                    return "3";
-                case TaxGroup.GroupD:
-                    return "4";
                 default:
-                    return "2";
+                    return taxGroup;
             }
         }
 
@@ -61,7 +51,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         public override (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,
-            TaxGroup taxGroup = TaxGroup.GroupB,
+            string taxGroup,
             decimal quantity = 0m,
             decimal priceModifierValue = 0m,
             PriceModifierType priceModifierType = PriceModifierType.None)
@@ -102,7 +92,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         {
             return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength) + "\t");
         }
-        public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType = PaymentType.Cash)
+        public override (string, DeviceStatus) AddPayment(decimal amount, string paymentType)
         {
             // Protocol: {PaidMode}<SEP>{Amount}<SEP>{Type}<SEP>
             var paymentData = string.Join("\t",
