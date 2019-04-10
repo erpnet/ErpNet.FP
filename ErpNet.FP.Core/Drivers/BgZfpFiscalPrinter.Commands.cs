@@ -89,7 +89,7 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,
-            TaxGroup taxGroup = TaxGroup.GroupB,
+            string taxGroup,
             decimal quantity = 0,
             decimal priceModifierValue = 0,
             PriceModifierType priceModifierType = PriceModifierType.None)
@@ -158,7 +158,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public virtual (string, DeviceStatus) AddPayment(
             decimal amount,
-            PaymentType paymentType = PaymentType.Cash)
+            string paymentType)
         {
             // Protocol: input: <PaymentType [1..2]> <;> <OptionChange [1]> <;> <Amount[1..10]> {<;><OptionChangeType[1]>}
             return Request(CommandPayment, string.Join(";", new string[] {

@@ -12,28 +12,16 @@ namespace ErpNet.FP.Core.Drivers
         protected BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+                case "cash":
                     return "0";
-                case PaymentType.Check:
-                    return "1";
-                case PaymentType.Coupon:
-                    return "2";
-                case PaymentType.Voucher:
-                    return "3";
-                case PaymentType.Card:
+                case "card":
                     return "7";
-                case PaymentType.Bank:
-                    return "8";
-                case PaymentType.Reserved1:
-                    return "9";
-                case PaymentType.Reserved2:
-                    return "10";
                 default:
-                    return "0";
+                    return paymentType;
             }
         }
 
@@ -190,7 +178,7 @@ namespace ErpNet.FP.Core.Drivers
             {
                 return PrintReceiptBody(reversalReceipt);
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();

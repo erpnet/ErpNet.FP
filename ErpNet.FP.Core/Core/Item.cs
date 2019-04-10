@@ -36,7 +36,7 @@ namespace ErpNet.FP.Core
         /// <value>
         /// The tax group.
         /// </value>
-        public TaxGroup TaxGroup { get; set; } = TaxGroup.GroupB;
+        public string TaxGroup { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the quantity.

@@ -21,18 +21,18 @@
             return Request(DaisyCommandGetDeviceConstants);
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override string GetPaymentTypeText(string paymentType)
         {
             switch (paymentType)
             {
-                case PaymentType.Cash:
+                case "":
                     return "P";
-                case PaymentType.Check:
-                    return "N";
-                case PaymentType.Card:
+                case "cash":
+                    return "P";
+                case "card":
                     return "C";
                 default:
-                    return "P";
+                    return paymentType;
             }
         }
 

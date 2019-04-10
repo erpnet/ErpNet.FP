@@ -196,8 +196,7 @@ namespace ErpNet.FP.CoreExample
                     {
                         Text = "Сирене",
                         Quantity = 1,
-                        UnitPrice = 12,
-                        TaxGroup = TaxGroup.GroupB
+                        UnitPrice = 12
                     },
                     new Item()
                     {
@@ -211,23 +210,20 @@ namespace ErpNet.FP.CoreExample
                         Quantity = 2,
                         UnitPrice = 10,
                         PriceModifierValue = 10,
-                        PriceModifierType = PriceModifierType.DiscountPercent,
-                        TaxGroup = TaxGroup.GroupB
+                        PriceModifierType = PriceModifierType.DiscountPercent
                     },
                     new Item()
                     {
                         Text = "Нулев",
                         Quantity = 1,
                         UnitPrice = 0,
-                        TaxGroup = TaxGroup.GroupB
                     }
                 },
                 Payments = new Payment[]
                 {
                     new Payment()
                     {
-                        Amount = 30,
-                        PaymentType = PaymentType.Cash
+                        Amount = 30
                     }
                 }
             };
