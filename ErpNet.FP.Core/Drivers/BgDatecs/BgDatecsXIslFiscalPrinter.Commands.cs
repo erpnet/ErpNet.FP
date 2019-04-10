@@ -19,19 +19,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 case PaymentType.Cash:
                     return "0";
                 case PaymentType.Check:
-                    return "1";
-                case PaymentType.Coupon:
-                    return "2";
-                case PaymentType.Voucher:
                     return "3";
+                case PaymentType.Coupon:
+                    return "5";
+                case PaymentType.Voucher:
+                    return "4";
                 case PaymentType.Card:
-                    return "7";
-                case PaymentType.Bank:
-                    return "8";
-                case PaymentType.Reserved1:
-                    return "9";
-                case PaymentType.Reserved2:
-                    return "10";
+                    return "1";
                 default:
                     return "0";
             }
@@ -59,7 +53,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         {
             // Protocol: {Type}<SEP>{Amount}<SEP>
             return Request(CommandMoneyTransfer, string.Join("\t",
-                amount<0 ? "1" : "0",
+                amount < 0 ? "1" : "0",
                 Math.Abs(amount).ToString("F2", CultureInfo.InvariantCulture),
                 ""));
         }
@@ -165,7 +159,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 GetReversalReasonText(reason),
                 receiptNumber,
                 receiptDateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture),
-                fiscalMemorySerialNumber,                
+                fiscalMemorySerialNumber,
                 "",
                 "",
                 "",
@@ -174,7 +168,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
             return Request(DatecsXCommandOpenStornoDocument, headerData.ToString());
         }
-        
+
 
         public override (string, DeviceStatus) PrintDailyReport()
         {

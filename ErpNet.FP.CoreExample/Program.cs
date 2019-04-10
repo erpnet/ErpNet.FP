@@ -17,8 +17,9 @@ namespace ErpNet.FP.CoreExample
         {
             //TestTremolPrinter();
             //TestEltradePrinter();
-            //TestDatecsXPrinter();
-            TestDaisyPrinter();
+            //TestDatecsXComPrinter();
+            TestDatecsXTcpPrinter();
+            //TestDaisyPrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
             //TestByUri();
@@ -94,11 +95,20 @@ namespace ErpNet.FP.CoreExample
             TestAllMethods(eltrade);
         }
 
-        static void TestDatecsXPrinter()
+        static void TestDatecsXComPrinter()
         {
             var datecsX = new Provider()
                 .Register(new BgDatecsXIslFiscalPrinterDriver(), new ComTransport())
                 .Connect("bg.dt.x.isl.com://COM8");
+            ShowFiscalPrinterInfo(datecsX);
+            TestAllMethods(datecsX);
+        }
+
+        static void TestDatecsXTcpPrinter()
+        {
+            var datecsX = new Provider()
+                .Register(new BgDatecsXIslFiscalPrinterDriver(), new TcpTransport())
+                .Connect("bg.dt.x.isl.tcp://10.10.1.208:4999");
             ShowFiscalPrinterInfo(datecsX);
             TestAllMethods(datecsX);
         }
