@@ -10,6 +10,7 @@
             DaisyCommandGetDeviceConstants = 0x80,
             DaisyCommandAbortFiscalReceipt = 0x82;
 
+
         public override (string, DeviceStatus) AbortReceipt()
         {
             return Request(DaisyCommandAbortFiscalReceipt);
@@ -18,6 +19,21 @@
         public (string, DeviceStatus) GetRawDeviceConstants()
         {
             return Request(DaisyCommandGetDeviceConstants);
+        }
+
+        public override string GetPaymentTypeText(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.Cash:
+                    return "P";
+                case PaymentType.Check:
+                    return "N";
+                case PaymentType.Card:
+                    return "C";
+                default:
+                    return "P";
+            }
         }
 
         // 6 Bytes x 8 bits
@@ -86,12 +102,12 @@
             if (status == null)
             {
                 return deviceStatus;
-            }            
+            }
             for (var i = 0; i < status.Length; i++)
             {
                 // Byte 3 is special in Daisy, it contains error code, from bit 0 to bit 6
                 // bit 7 is reserved, so we will clear it from errorCode.
-                if (i==3) 
+                if (i == 3)
                 {
                     byte errorCode = (byte)(status[i] & 0b01111111);
                     if (errorCode > 0)
