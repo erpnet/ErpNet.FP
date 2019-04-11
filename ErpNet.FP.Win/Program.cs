@@ -20,7 +20,6 @@ namespace ErpNet.FP.Win
                     webBuilder.UseStartup<Startup>();
                     webBuilder.ConfigureKestrel((context, options) =>
                     {
-                        options.ListenAnyIP(5000);
                         options.Listen(IPAddress.Any, 5000);
                         options.Listen(IPAddress.Any, 5001, listenOptions =>
                         {
