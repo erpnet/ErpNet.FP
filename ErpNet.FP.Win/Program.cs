@@ -22,10 +22,10 @@ namespace ErpNet.FP.Win
                     {
                         options.ListenAnyIP(5000);
                         options.Listen(IPAddress.Any, 5000);
-                        options.Listen(IPAddress.Any, 5001, listenOptions =>
+                        /*options.Listen(IPAddress.Any, 5001, listenOptions =>
                         {
                             listenOptions.UseHttps();
-                        });
+                        });*/
                     });
                 });
 
