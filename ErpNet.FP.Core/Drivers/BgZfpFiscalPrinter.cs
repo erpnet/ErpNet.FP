@@ -127,7 +127,7 @@ namespace ErpNet.FP.Core.Drivers
                 (_, deviceStatus) = CloseReceipt();
                 if (!deviceStatus.Ok)
                 {
-                    (_, deviceStatus) = AbortReceipt();
+                    AbortReceipt();
                     deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
                     return deviceStatus;
                 }
