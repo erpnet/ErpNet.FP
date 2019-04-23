@@ -69,27 +69,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    // For debugging purposes only (to view status bits)    
-                    var deviceID = (Info == null ? "" : Info.SerialNumber);
-                    System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
-                    for (var i = 0; i < status.Length; i++)
-                    {
-                        byte mask = 0b10000000;
-                        byte b = status[i];
-                        // Ignore j==0 because bit 7 is always reserved and 1
-                        for (var j = 1; j < 8; j++)
-                        {
-                            mask >>= 1;
-                            if ((mask & b) == mask)
-                            {
-                                System.Diagnostics.Debug.Write($"{i}.{7 - j} ");
-                            }
-                        }
-                    }
-                    System.Diagnostics.Debug.WriteLine("");
-
                     var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Debug.WriteLine($"Response: {response}");
+                    System.Diagnostics.Debug.WriteLine($"Response({data.Length}): {response}");
 
                     return (response, ParseStatus(status));
                 }

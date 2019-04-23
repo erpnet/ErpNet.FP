@@ -61,7 +61,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             ("A fiscal receipt is open", DeviceStatusBitsStringType.Status),
             ("The end of the EJ is near", DeviceStatusBitsStringType.Warning),
             ("A service receipt is open", DeviceStatusBitsStringType.Status),
-            ("The end of the EJ is very near", DeviceStatusBitsStringType.Reserved),
+            ("The end of the EJ is very near", DeviceStatusBitsStringType.Warning),
             (string.Empty, DeviceStatusBitsStringType.Reserved),
 
             // Byte 3, bits from 0 to 6 are SW 1 to 7
@@ -112,9 +112,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     // Skip bit 7
                     for (var j = 0; j < 7; j++)
                     {
+                        mask >>= 1;
                         var switchState = ((mask & b) != 0) ? "ON" : "OFF";
                         switchData.Add($"SW{7 - j}={switchState}");
-                        mask >>= 1;
                     }
                     deviceStatus.Statuses.Add(string.Join(", ", switchData));
                 }
