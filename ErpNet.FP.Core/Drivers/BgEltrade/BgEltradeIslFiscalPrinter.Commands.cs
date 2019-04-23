@@ -80,7 +80,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             ("EIK is entered", DeviceStatusBitsStringType.Status),
             ("FM number has been set", DeviceStatusBitsStringType.Status),
             ("There is space for not more than 50 entries in the FM", DeviceStatusBitsStringType.Warning),
-            ("TFiscal memory is fully engaged", DeviceStatusBitsStringType.Error),
+            ("Fiscal memory is fully engaged", DeviceStatusBitsStringType.Error),
             ("FM general error", DeviceStatusBitsStringType.Error),
             (string.Empty, DeviceStatusBitsStringType.Reserved),
             (string.Empty, DeviceStatusBitsStringType.Reserved),
@@ -113,9 +113,9 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                     // Skip bit 7
                     for (var j = 0; j < 7; j++)
                     {
+                        mask >>= 1;
                         var switchState = ((mask & b) != 0) ? "ON" : "OFF";
                         switchData.Add($"SW{7 - j}={switchState}");
-                        mask >>= 1;
                     }
                     deviceStatus.Statuses.Add(string.Join(", ", switchData));
                 }

@@ -56,7 +56,6 @@ namespace ErpNet.FP.Core.Provider
                     try
                     {
                         var channel = transport.OpenChannel(address);
-                        // TODO: Asynchronous probing all drivers for this channel
                         foreach (var driver in drivers)
                         {
                             try
@@ -115,7 +114,7 @@ namespace ErpNet.FP.Core.Provider
         /// The fiscal printer object.
         /// </returns>
         /// <exception cref="InvalidOperationException">When the printer is not found or the URI is not correctly formatted.</exception>
-        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string> ?options = null)
+        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string>? options = null)
         {
             var match = uriPattern.Match(deviceUri);
             if (!match.Success)

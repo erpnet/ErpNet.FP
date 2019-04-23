@@ -104,10 +104,6 @@ namespace ErpNet.FP.CoreExample
             /// <param name="data">The data to write.</param>
             public void Write(byte[] data)
             {
-                if (!serialPort.IsOpen)
-                {
-                    serialPort.Open();
-                }
                 serialPort.DiscardInBuffer();
                 var bytesToWrite = data.Length;
                 while (bytesToWrite > 0)

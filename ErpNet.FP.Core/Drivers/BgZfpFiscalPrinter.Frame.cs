@@ -19,7 +19,7 @@ namespace ErpNet.FP.Core.Drivers
             PingAnswerDeviceReady = 0x40,
             SpecialCommandPing = 0x09;
         protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
-        protected const byte MaxWriteRetries = 6;
+        protected const byte MaxWriteRetries = 3;
         protected const byte MaxReadRetries = 200;
 
         protected virtual byte[] ByteTo2Bytes(UInt16 word)

@@ -17,8 +17,8 @@ namespace ErpNet.FP.CoreExample
         {
             //TestTremolPrinter();
             //TestEltradePrinter();
-            //TestDatecsXComPrinter();
-            TestDatecsXTcpPrinter();
+            TestDatecsXComPrinter();
+            //TestDatecsXTcpPrinter();
             //TestDaisyPrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
@@ -29,8 +29,8 @@ namespace ErpNet.FP.CoreExample
         {
             // Transports
             var comTransport = new ComTransport();
-            var btTransport = new BtTransport();
-            var httpTransport = new HttpTransport();
+            //var btTransport = new BtTransport();
+            //var httpTransport = new HttpTransport();
 
             // Cloud transport with account.
             // var cloudPrintTransport = new CloudPrintTransport("user", "pwd");
@@ -51,12 +51,11 @@ namespace ErpNet.FP.CoreExample
             // Add drivers and their compatible transports to the provider.
             var provider = new Provider()
                 .Register(daisyIsl, comTransport)
-                .Register(datecsPIsl, comTransport)
                 .Register(datecsCIsl, comTransport)
-                .Register(datecsXIsl, comTransport)
+                .Register(datecsPIsl, comTransport)
                 .Register(eltradeIsl, comTransport)
-                .Register(tremolZfp, comTransport)
-                .Register(daisyIsl, btTransport);
+                .Register(datecsXIsl, comTransport)
+                .Register(tremolZfp, comTransport);
 
             return provider;
         }
@@ -99,7 +98,7 @@ namespace ErpNet.FP.CoreExample
         {
             var datecsX = new Provider()
                 .Register(new BgDatecsXIslFiscalPrinterDriver(), new ComTransport())
-                .Connect("bg.dt.x.isl.com://COM8");
+                .Connect("bg.dt.x.isl.com://COM21");
             ShowFiscalPrinterInfo(datecsX);
             TestAllMethods(datecsX);
         }
