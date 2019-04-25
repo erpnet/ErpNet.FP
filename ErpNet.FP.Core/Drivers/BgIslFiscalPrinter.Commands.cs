@@ -16,6 +16,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
             CommandPrintDailyReport = 0x45,
+            CommandGetDateTime = 0x3e,
             CommandReadLastReceiptQRCodeData = 0x74;
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
@@ -41,6 +42,11 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
             return Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+        }
+
+        public virtual (string, DeviceStatus) GetDateTime()
+        {
+            return Request(CommandGetDateTime);
         }
 
         public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
