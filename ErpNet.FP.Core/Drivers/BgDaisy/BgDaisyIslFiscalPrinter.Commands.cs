@@ -1,4 +1,6 @@
-﻿namespace ErpNet.FP.Core.Drivers.BgDaisy
+﻿using System;
+
+namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
@@ -21,18 +23,20 @@
             return Request(DaisyCommandGetDeviceConstants);
         }
 
-        public override string GetPaymentTypeText(string paymentType)
+        public override string GetPaymentTypeText(PaymentType paymentType)
         {
             switch (paymentType)
             {
-                case "":
+                case PaymentType.Cash:
                     return "P";
-                case "cash":
-                    return "P";
-                case "card":
+                case PaymentType.Card:
                     return "C";
+                case PaymentType.Check:
+                    return "N";
+                case PaymentType.Reserved1:
+                    return "D";
                 default:
-                    return paymentType;
+                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
             }
         }
 

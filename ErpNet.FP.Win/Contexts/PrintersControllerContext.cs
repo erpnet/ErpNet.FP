@@ -53,15 +53,17 @@ namespace ErpNet.FP.Win.Contexts
             var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
+            var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
 
             // Add drivers and their compatible transports to the provider.
-            Provider
+            var provider = new Provider()
                 .Register(daisyIsl, comTransport)
-                .Register(datecsPIsl, comTransport)
                 .Register(datecsCIsl, comTransport)
-                .Register(datecsXIsl, comTransport)
+                .Register(datecsPIsl, comTransport)
                 .Register(eltradeIsl, comTransport)
-                .Register(tremolZfp, comTransport);
+                .Register(datecsXIsl, comTransport)
+                .Register(tremolZfp, comTransport)
+                .Register(tremolV2Zfp, comTransport);
 
             if (autoDetect)
             {

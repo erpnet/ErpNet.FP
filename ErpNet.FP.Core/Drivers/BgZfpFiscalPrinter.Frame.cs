@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected byte FrameSequenceNumber = 0;
         protected const byte

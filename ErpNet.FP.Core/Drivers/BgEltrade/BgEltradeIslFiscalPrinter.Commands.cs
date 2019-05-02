@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
@@ -11,19 +12,24 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected const byte
             EltradeCommandOpenFiscalReceipt = 0x90;
 
-        public override string GetPaymentTypeText(string paymentType)
+        public override string GetPaymentTypeText(PaymentType paymentType)
         {
             switch (paymentType)
             {
-
-                case "":
+                case PaymentType.Cash:
                     return "P";
-                case "cash":
-                    return "P";
-                case "card":
+                case PaymentType.Card:
                     return "L";
+                case PaymentType.Check:
+                    return "N";
+                case PaymentType.Packaging:
+                    return "I";
+                case PaymentType.Reserved1:
+                    return "Q";
+                case PaymentType.Reserved2:
+                    return "R";
                 default:
-                    return paymentType;
+                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
             }
         }
 

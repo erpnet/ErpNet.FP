@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ErpNet.FP.Core.Drivers
 {
-    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected const byte
             CommandReadFDNumbers = 0x60,
@@ -89,7 +89,7 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,
-            string taxGroup,
+            TaxGroup taxGroup,
             decimal quantity = 0,
             decimal priceModifierValue = 0,
             PriceModifierType priceModifierType = PriceModifierType.None)
@@ -158,7 +158,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public virtual (string, DeviceStatus) AddPayment(
             decimal amount,
-            string paymentType)
+            PaymentType paymentType)
         {
             // Protocol: input: <PaymentType [1..2]> <;> <OptionChange [1]> <;> <Amount[1..10]> {<;><OptionChangeType[1]>}
             return Request(CommandPayment, string.Join(";", new string[] {

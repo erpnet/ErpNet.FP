@@ -12,30 +12,45 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected const byte
            DatecsXCommandOpenStornoDocument = 0x2b;
 
-        public override string GetPaymentTypeText(string paymentType)
+        public override string GetPaymentTypeText(PaymentType paymentType)
         {
             switch (paymentType)
             {
-                case "":
+                case PaymentType.Cash:
                     return "0";
-                case "cash":
-                    return "0";
-                case "card":
+                case PaymentType.Card:
                     return "1";
+                case PaymentType.Reserved1:
+                    return "3";
+                case PaymentType.Reserved2:
+                    return "4";
                 default:
-                    return paymentType;
+                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
             }
         }
 
-        public override string GetTaxGroupText(string taxGroup)
+        public override string GetTaxGroupText(TaxGroup taxGroup)
         {
-
             switch (taxGroup)
             {
-                case "":
+                case TaxGroup.TaxGroup1:
+                    return "1";
+                case TaxGroup.TaxGroup2:
                     return "2";
+                case TaxGroup.TaxGroup3:
+                    return "3";
+                case TaxGroup.TaxGroup4:
+                    return "4";
+                case TaxGroup.TaxGroup5:
+                    return "5";
+                case TaxGroup.TaxGroup6:
+                    return "6";
+                case TaxGroup.TaxGroup7:
+                    return "7";
+                case TaxGroup.TaxGroup8:
+                    return "8";
                 default:
-                    return taxGroup;
+                    throw new ArgumentOutOfRangeException($"tax group {taxGroup} unsupported");
             }
         }
 
@@ -51,7 +66,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         public override (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,
-            string taxGroup,
+            TaxGroup taxGroup,
             decimal quantity = 0m,
             decimal priceModifierValue = 0m,
             PriceModifierType priceModifierType = PriceModifierType.None)
@@ -92,7 +107,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         {
             return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength) + "\t");
         }
-        public override (string, DeviceStatus) AddPayment(decimal amount, string paymentType)
+        public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)
         {
             // Protocol: {PaidMode}<SEP>{Amount}<SEP>{Type}<SEP>
             var paymentData = string.Join("\t",
