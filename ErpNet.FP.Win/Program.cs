@@ -18,15 +18,14 @@ namespace ErpNet.FP.Win
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    /*
                     webBuilder.ConfigureKestrel((context, options) =>
                     {
                         options.Listen(IPAddress.Any, 5000);
                         options.Listen(IPAddress.Loopback, 5000);
-                        /*options.Listen(IPAddress.Any, 5001, listenOptions =>
-                        {
-                            listenOptions.UseHttps();
-                        });*/
+     
                     });
+        */
                 });
 
     }
