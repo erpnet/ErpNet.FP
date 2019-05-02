@@ -224,6 +224,18 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
+
+            string dateTimeResponse;
+            (dateTimeResponse, deviceStatus) = GetDateTime();
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
+                return (receiptInfo, deviceStatus);
+            }
+
+
+
             try
             {
                 deviceStatus = PrintReceiptBody(receipt);
