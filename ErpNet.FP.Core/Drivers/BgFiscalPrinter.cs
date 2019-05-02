@@ -32,32 +32,9 @@ namespace ErpNet.FP.Core.Drivers
             return null;
         }
 
-        public virtual string GetTaxGroupText(string taxGroup)
-        {
+        public abstract string GetTaxGroupText(TaxGroup taxGroup);
 
-            switch (taxGroup)
-            {
-                case "":
-                    return "Á";
-                default:
-                    return taxGroup;
-            }
-        }
-
-        public virtual string GetPaymentTypeText(string paymentType)
-        {
-            switch (paymentType)
-            {
-                case "":
-                    return "P";
-                case "cash":
-                    return "P";
-                case "card":
-                    return "C";
-                default:
-                    return paymentType;
-            }
-        }
+        public abstract string GetPaymentTypeText(PaymentType paymentType);
 
         public virtual string GetReversalReasonText(ReversalReason reversalReason)
         {

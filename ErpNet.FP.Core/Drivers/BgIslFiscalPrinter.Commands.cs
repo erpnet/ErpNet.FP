@@ -84,7 +84,7 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) AddItem(
             string itemText,
             decimal unitPrice,
-            string taxGroup,
+            TaxGroup taxGroup,
             decimal quantity = 0,
             decimal priceModifierValue = 0,
             PriceModifierType priceModifierType = PriceModifierType.None)
@@ -136,7 +136,7 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandFiscalReceiptTotal);
         }
 
-        public virtual (string, DeviceStatus) AddPayment(decimal amount, string paymentType)
+        public virtual (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)
         {
             var paymentData = new StringBuilder()
                 .Append('\t')

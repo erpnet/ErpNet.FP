@@ -7,21 +7,54 @@ namespace ErpNet.FP.Core.Drivers
     /// Fiscal printer using the Zfp implementation.
     /// </summary>
     /// <seealso cref="ErpNet.FP.Core.Drivers.BgFiscalPrinter" />
-    public abstract partial class BgZfpFiscalPrinter : BgFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
-        protected BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
+        public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
-        public override string GetPaymentTypeText(string paymentType)
+        public override string GetTaxGroupText(TaxGroup taxGroup)
+        {
+            switch (taxGroup)
+            {
+                case TaxGroup.TaxGroup1:
+                    return "À";
+                case TaxGroup.TaxGroup2:
+                    return "Á";
+                case TaxGroup.TaxGroup3:
+                    return "Â";
+                case TaxGroup.TaxGroup4:
+                    return "Ã";
+                case TaxGroup.TaxGroup5:
+                    return "Ä";
+                case TaxGroup.TaxGroup6:
+                    return "Å";
+                case TaxGroup.TaxGroup7:
+                    return "Æ";
+                case TaxGroup.TaxGroup8:
+                    return "Ç";
+                default:
+                    throw new ArgumentOutOfRangeException($"tax group {taxGroup} unsupported");
+            }
+        }
+
+        public override string GetPaymentTypeText(PaymentType paymentType)
         {
             switch (paymentType)
             {
-                case "cash":
+                case PaymentType.Cash:
                     return "0";
-                case "card":
+                case PaymentType.Card:
                     return "7";
+                case PaymentType.Check:
+                    return "1";
+                case PaymentType.Packaging:
+                    return "4";
+                case PaymentType.Reserved1:
+                    return "9";
+                case PaymentType.Reserved2:
+                    return "10";
                 default:
-                    return paymentType;
+                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
             }
         }
 

@@ -1,10 +1,10 @@
-namespace ErpNet.FP.Core.Drivers.BgTremol
+namespace ErpNet.FP.Core.Drivers
 {
     /// <summary>
     /// Fiscal printer using the Zfp implementation of Tremol Bulgaria.
     /// </summary>
     /// <seealso cref="ErpNet.FP.Drivers.BgZfpFiscalPrinter" />
-    public partial class BgTremolZfpFiscalPrinter : BgZfpFiscalPrinter
+    public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         // Begins at 0x30, ends at 0x3f
         // All strings are errors

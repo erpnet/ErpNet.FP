@@ -42,6 +42,7 @@ namespace ErpNet.FP.CoreExample
             var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
+            var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
 
             // Add ErpNet Json driver, which can be used to forward the commands to:
             // 1. Another ErpNet print server.
@@ -55,7 +56,8 @@ namespace ErpNet.FP.CoreExample
                 .Register(datecsPIsl, comTransport)
                 .Register(eltradeIsl, comTransport)
                 .Register(datecsXIsl, comTransport)
-                .Register(tremolZfp, comTransport);
+                .Register(tremolZfp, comTransport)
+                .Register(tremolV2Zfp, comTransport);
 
             return provider;
         }

@@ -2,15 +2,15 @@ using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers.BgTremol
 {
-    public class BgTremolZfpFiscalPrinterDriver : FiscalPrinterDriver
+    public class BgTremolZfpV2FiscalPrinterDriver : FiscalPrinterDriver
     {
 
         protected readonly string SerialNumberPrefix = "ZK";
-        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.zfp";
+        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.v2.zfp";
 
         public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
         {
-            var fiscalPrinter = new BgTremolZfpFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgTremolZfpV2FiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
             return fiscalPrinter;
@@ -30,9 +30,9 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
             var model = fields[3].Replace("TREMOL ", "");
-            if (model.EndsWith("V2"))
+            if (!model.EndsWith("V2"))
             {
-                throw new InvalidDeviceInfoException($"model should NOT have a suffux 'V2'");
+                throw new InvalidDeviceInfoException($"model should have a suffix 'V2'");
             }
             var info = new DeviceInfo
             {

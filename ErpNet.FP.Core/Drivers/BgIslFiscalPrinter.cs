@@ -9,13 +9,38 @@ namespace ErpNet.FP.Core.Drivers
     /// <seealso cref="ErpNet.FP.BgFiscalPrinter" />
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
-        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
+        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
         public override DeviceStatus CheckStatus()
         {
             var (_, status) = GetStatus();
             return status;
+        }
+
+        public override string GetTaxGroupText(TaxGroup taxGroup)
+        {
+            switch (taxGroup)
+            {
+                case TaxGroup.TaxGroup1:
+                    return "À";
+                case TaxGroup.TaxGroup2:
+                    return "Á";
+                case TaxGroup.TaxGroup3:
+                    return "Â";
+                case TaxGroup.TaxGroup4:
+                    return "Ã";
+                case TaxGroup.TaxGroup5:
+                    return "Ä";
+                case TaxGroup.TaxGroup6:
+                    return "Å";
+                case TaxGroup.TaxGroup7:
+                    return "Æ";
+                case TaxGroup.TaxGroup8:
+                    return "Ç";
+                default:
+                    throw new ArgumentOutOfRangeException($"tax group {taxGroup} unsupported");
+            }
         }
 
         public override DeviceStatus PrintMoneyDeposit(decimal amount)
