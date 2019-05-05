@@ -224,8 +224,7 @@ namespace ErpNet.FP.Core.Drivers
             }
 
             // Receipt finalization
-            string closeReceiptResponse;
-            (closeReceiptResponse, deviceStatus) = CloseReceipt();
+            (_, deviceStatus) = CloseReceipt();
             if (!deviceStatus.Ok)
             {
                 (_, deviceStatus) = AbortReceipt();
@@ -233,15 +232,16 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-            var fields = closeReceiptResponse.Split(',');
-            if (fields.Length != 2)
+            string lastDocumentNumberResponse;
+            (lastDocumentNumberResponse, deviceStatus) = GetLastDocumentNumber();
+            if (!deviceStatus.Ok)
             {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while parsing CloseReceipt response");
+                (_, deviceStatus) = AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occurred while reading last document number");
                 return (receiptInfo, deviceStatus);
             }
 
-            receiptInfo.ReceiptNumber = fields[1];
+            receiptInfo.ReceiptNumber = lastDocumentNumberResponse;
 
             string receiptStatusResponse;
             (receiptStatusResponse, deviceStatus) = GetReceiptStatus();
@@ -252,7 +252,7 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-            fields = receiptStatusResponse.Split(',');
+            var fields = receiptStatusResponse.Split(',');
             if (fields.Length != 5)
             {
                 AbortReceipt();
