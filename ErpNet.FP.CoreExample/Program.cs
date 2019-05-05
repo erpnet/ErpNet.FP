@@ -17,9 +17,9 @@ namespace ErpNet.FP.CoreExample
         {
             //TestTremolPrinter();
             //TestEltradePrinter();
-            TestDatecsXComPrinter();
+            //TestDatecsXComPrinter();
             //TestDatecsXTcpPrinter();
-            //TestDaisyPrinter();
+            TestDaisyPrinter();
             //TestSpecificPrinter();
             //TestAutoDetect();
             //TestByUri();
@@ -80,11 +80,11 @@ namespace ErpNet.FP.CoreExample
 
         static void TestDaisyPrinter()
         {
-            var eltrade = new Provider()
+            var daisy = new Provider()
                 .Register(new BgDaisyIslFiscalPrinterDriver(), new ComTransport())
-                .Connect("bg.dy.isl.com://COM12");
-            ShowFiscalPrinterInfo(eltrade);
-            TestAllMethods(eltrade);
+                .Connect("bg.dy.isl.com://COM3");
+            ShowFiscalPrinterInfo(daisy);
+            TestAllMethods(daisy);
         }
 
         static void TestEltradePrinter()
@@ -197,7 +197,8 @@ namespace ErpNet.FP.CoreExample
                     {
                         Text = "Сирене",
                         Quantity = 1,
-                        UnitPrice = 12
+                        UnitPrice = 12,
+                        TaxGroup = TaxGroup.TaxGroup2
                     },
                     new Item()
                     {
@@ -210,48 +211,30 @@ namespace ErpNet.FP.CoreExample
                         Text = "Кашкавал",
                         Quantity = 2,
                         UnitPrice = 10,
+                        TaxGroup = TaxGroup.TaxGroup2,
                         PriceModifierValue = 10,
                         PriceModifierType = PriceModifierType.DiscountPercent
-                    },
-                    new Item()
-                    {
-                        Text = "Нулев",
-                        Quantity = 1,
-                        UnitPrice = 0,
                     }
                 },
                 Payments = new Payment[]
                 {
                     new Payment()
                     {
-                        Amount = 30
-                    }
-                }
-            };
-
-            // Minimal Receipt
-            var minDoc = new Receipt()
-            {
-                UniqueSaleNumber = "DT279013-DD01-0000002",
-                Items = new Item[]
-                {
-                    new Item()
-                    {
-                        Text = "Ф-ра 0000012345/12.03.2019",
-                        UnitPrice = 234.56m
+                        Amount = 30,
+                        PaymentType = PaymentType.Cash
                     }
                 }
             };
 
             //fp.PrintMoneyDeposit(123.4m);
             //fp.PrintMoneyWithdraw(43.21m);
-            //var deviceStatus = fp.CheckStatus();
-            //ShowStatus(deviceStatus);
+            var deviceStatus = fp.CheckStatus();
+            ShowStatus(deviceStatus);
             var (result, commandStatus) = fp.PrintReceipt(doc);
             ShowStatus(commandStatus);
 
-            //Console.Write($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, ");
-            //Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
+            Console.Write($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, Amount: {result.ReceiptAmount}, ");
+            Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
 
             /*
             var 

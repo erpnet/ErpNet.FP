@@ -68,7 +68,7 @@ namespace ErpNet.FP.Core.Drivers
                 throw new ArgumentNullException("receipt.Items must be not null or empty");
             }
 
-            DeviceStatus deviceStatus;
+            var deviceStatus = new DeviceStatus();
 
             uint itemNumber = 0;
             // Receipt items
@@ -95,13 +95,23 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         throw new ArgumentOutOfRangeException("priceModifierValue must be 0 if priceModifierType is None");
                     }
-                    (_, deviceStatus) = AddItem(
-                        item.Text,
-                        item.UnitPrice,
-                        item.TaxGroup,
-                        item.Quantity,
-                        item.PriceModifierValue,
-                        item.PriceModifierType);
+                    try
+                    {
+                        (_, deviceStatus) = AddItem(
+                            item.Text,
+                            item.UnitPrice,
+                            item.TaxGroup,
+                            item.Quantity,
+                            item.PriceModifierValue,
+                            item.PriceModifierType);
+                    }
+                    catch (Exception e)
+                    {
+                        deviceStatus = new DeviceStatus();
+                        deviceStatus.Statuses.Add($"Error occured while in Item {itemNumber}");
+                        deviceStatus.Errors.Add(e.Message);
+                        return deviceStatus;
+                    }
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
@@ -138,49 +148,9 @@ namespace ErpNet.FP.Core.Drivers
                 }
             }
 
-            // Receipt finalization
-            (_, deviceStatus) = CloseReceipt();
-            if (!deviceStatus.Ok)
-            {
-                (_, deviceStatus) = AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
-                return deviceStatus;
-            }
-
             return deviceStatus;
         }
 
-        protected virtual (ReceiptInfo, DeviceStatus) GetLastReceiptInfo()
-        {
-            // QR Code Data Format: <FM Number>*<Receipt Number>*<Receipt Date>*<Receipt Hour>*<Receipt Amount>
-            var (qrData, deviceStatus) = GetLastReceiptQRCodeData();
-            if (!deviceStatus.Ok)
-            {
-                deviceStatus.Statuses.Add($"Error occurred while reading last receipt QR code data");
-                return (new ReceiptInfo(), deviceStatus);
-            }
-
-            System.Diagnostics.Debug.WriteLine($"QRData: {qrData}");
-
-            var qrDataFields = qrData.Split(',');
-            if (qrDataFields.Length != 2)
-            {
-                deviceStatus.Errors.Add("Last receipt info should be splittable in two parts by comma.");
-                deviceStatus.Statuses.Add($"Error occurred while parsing last receipt QR code data");
-                return (new ReceiptInfo(), deviceStatus);
-            }
-
-            var qrCodeFields = qrDataFields[1].Split('*');
-            return (new ReceiptInfo
-            {
-                FiscalMemorySerialNumber = qrCodeFields[0],
-                ReceiptNumber = qrCodeFields[1],
-                ReceiptDateTime = DateTime.ParseExact(string.Format(
-                    $"{qrCodeFields[2]} {qrCodeFields[3]}"),
-                    "yyyy-MM-dd HH:mm:ss",
-                    System.Globalization.CultureInfo.InvariantCulture)
-            }, deviceStatus);
-        }
 
         public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
@@ -198,18 +168,17 @@ namespace ErpNet.FP.Core.Drivers
                 return deviceStatus;
             }
 
-            try
-            {
-                return PrintReceiptBody(reversalReceipt);
-            }
-            catch (ArgumentNullException e)
+            deviceStatus = PrintReceiptBody(reversalReceipt);
+            if (!deviceStatus.Ok)
             {
                 AbortReceipt();
-                deviceStatus = new DeviceStatus();
                 deviceStatus.Statuses.Add($"Error occured while printing receipt items");
-                deviceStatus.Errors.Add(e.Message);
                 return deviceStatus;
             }
+
+            // Receipt finalization
+            (_, deviceStatus) = CloseReceipt();
+            return deviceStatus;
         }
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
@@ -224,36 +193,87 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-
             string dateTimeResponse;
             (dateTimeResponse, deviceStatus) = GetDateTime();
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
+                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
                 return (receiptInfo, deviceStatus);
             }
-
 
 
             try
             {
-                deviceStatus = PrintReceiptBody(receipt);
-                if (!deviceStatus.Ok)
-                {
-                    return (receiptInfo, deviceStatus);
-                }
+                receiptInfo.ReceiptDateTime = DateTime.ParseExact(dateTimeResponse,
+                    "dd-MM-yy HH:mm:ss",
+                    System.Globalization.CultureInfo.InvariantCulture);
+            } catch
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
+                return (receiptInfo, deviceStatus);
             }
-            catch (ArgumentNullException e)
+
+            deviceStatus = PrintReceiptBody(receipt);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                return (receiptInfo, deviceStatus);
+            }
+
+            // Receipt finalization
+            string closeReceiptResponse;
+            (closeReceiptResponse, deviceStatus) = CloseReceipt();
+            if (!deviceStatus.Ok)
+            {
+                (_, deviceStatus) = AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
+                return (receiptInfo, deviceStatus);
+            }
+
+            var fields = closeReceiptResponse.Split(',');
+            if (fields.Length != 2)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while parsing CloseReceipt response");
+                return (receiptInfo, deviceStatus);
+            }
+
+            receiptInfo.ReceiptNumber = fields[1];
+
+            string receiptStatusResponse;
+            (receiptStatusResponse, deviceStatus) = GetReceiptStatus();
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                return (receiptInfo, deviceStatus);
+            }
+
+            fields = receiptStatusResponse.Split(',');
+            if (fields.Length != 5)
+            {
+                AbortReceipt();
+                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
+                return (receiptInfo, deviceStatus);
+            }
+
+            try
+            {
+                receiptInfo.ReceiptAmount = decimal.Parse(fields[2], System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch(Exception e)
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
+                deviceStatus.Statuses.Add($"Error occured while parsing amount of last receipt status");
                 deviceStatus.Errors.Add(e.Message);
                 return (receiptInfo, deviceStatus);
             }
 
-            return GetLastReceiptInfo();
+            return (receiptInfo, deviceStatus);
         }
 
         public override DeviceStatus PrintZeroingReport()
