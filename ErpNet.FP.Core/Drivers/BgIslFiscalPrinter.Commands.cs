@@ -18,6 +18,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandPrintDailyReport = 0x45,
             CommandGetDateTime = 0x3e,
             CommandGetReceiptStatus = 0x4c,
+            CommandGetLastDocumentNumber = 0x71,
             CommandReadLastReceiptQRCodeData = 0x74;
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
@@ -38,6 +39,11 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) GetStatus()
         {
             return Request(CommandGetStatus);
+        }
+
+        public virtual (string, DeviceStatus) GetLastDocumentNumber()
+        {
+            return Request(CommandGetLastDocumentNumber);
         }
 
         public virtual (string, DeviceStatus) GetReceiptStatus()
