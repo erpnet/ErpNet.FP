@@ -17,8 +17,8 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
+						"value": "application/json",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -26,12 +26,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers",
+					"raw": "http://localhost:8001/printers",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers"
 					]
@@ -40,7 +40,7 @@
 			},
 			"response": [
 				{
-					"name": "{{defaulthost}}/fp/printers",
+					"name": "Get the list of printers",
 					"originalRequest": {
 						"method": "GET",
 						"header": [
@@ -56,12 +56,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers",
+							"raw": "http://localhost:8001/printers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers"
 							]
@@ -73,7 +73,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:26:49 GMT"
+							"value": "Tue, 07 May 2019 08:11:57 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -89,7 +89,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"dy448967\": {\n        \"uri\": \"bg.dy.isl.com://COM5\",\n        \"serialNumber\": \"DY448967\",\n        \"fiscalMemorySerialNumber\": \"36607003\",\n        \"company\": \"Daisy\",\n        \"model\": \"CompactM\",\n        \"firmwareVersion\": \"ONL-4.01BG\",\n        \"itemTextMaxLength\": 20,\n        \"commentTextMaxLength\": 28,\n        \"operatorPasswordMaxLength\": 6\n    },\n    \"dy448967_1\": {\n        \"uri\": \"bg.dy.isl.com://COM3\",\n        \"serialNumber\": \"DY448967\",\n        \"fiscalMemorySerialNumber\": \"36607003\",\n        \"company\": \"Daisy\",\n        \"model\": \"CompactM\",\n        \"firmwareVersion\": \"ONL-4.01BG\",\n        \"itemTextMaxLength\": 20,\n        \"commentTextMaxLength\": 28,\n        \"operatorPasswordMaxLength\": 6\n    }\n}"
+					"body": "{\n    \"dt525860\": {\n        \"uri\": \"bg.dt.x.isl.com://COM21\",\n        \"serialNumber\": \"DT525860\",\n        \"fiscalMemorySerialNumber\": \"02525860\",\n        \"company\": \"Datecs\",\n        \"model\": \"FP-700X\",\n        \"firmwareVersion\": \"266207 29Jan19 1634\",\n        \"itemTextMaxLength\": 22,\n        \"commentTextMaxLength\": 42,\n        \"operatorPasswordMaxLength\": 8\n    },\n    \"dt517985\": {\n        \"uri\": \"bg.dt.c.isl.com://COM11\",\n        \"serialNumber\": \"DT517985\",\n        \"fiscalMemorySerialNumber\": \"02517985\",\n        \"company\": \"Datecs\",\n        \"model\": \"DP-25\",\n        \"firmwareVersion\": \"263453 08Nov18 1312\",\n        \"itemTextMaxLength\": 22,\n        \"commentTextMaxLength\": 42,\n        \"operatorPasswordMaxLength\": 8\n    },\n    \"zk970105\": {\n        \"uri\": \"bg.zk.v2.zfp.com://COM23\",\n        \"serialNumber\": \"ZK970105\",\n        \"fiscalMemorySerialNumber\": \"50970105\",\n        \"company\": \"Tremol\",\n        \"model\": \"FP01-KL-V2\",\n        \"firmwareVersion\": \"\\ufffd.\\ufffd.99C4\",\n        \"itemTextMaxLength\": 32,\n        \"commentTextMaxLength\": 30,\n        \"operatorPasswordMaxLength\": 6\n    },\n    \"dt279013\": {\n        \"uri\": \"bg.dt.p.isl.com://COM15\",\n        \"serialNumber\": \"DT279013\",\n        \"fiscalMemorySerialNumber\": \"02279013\",\n        \"company\": \"Datecs\",\n        \"model\": \"FP-2000\",\n        \"firmwareVersion\": \"1.00BG 23NOV18 1000\",\n        \"itemTextMaxLength\": 22,\n        \"commentTextMaxLength\": 42,\n        \"operatorPasswordMaxLength\": 8\n    }\n}"
 				}
 			]
 		},
@@ -103,15 +103,15 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/dt525860",
+					"raw": "http://localhost:8001/printers/dt517985",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"dt525860"
+						"dt517985"
 					]
 				}
 			},
@@ -126,15 +126,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/dy448967_1",
+							"raw": "http://localhost:8001/printers/dt517985",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"dy448967_1"
+								"dt517985"
 							]
 						}
 					},
@@ -144,7 +144,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:38:42 GMT"
+							"value": "Tue, 07 May 2019 08:11:28 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -160,7 +160,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"uri\": \"bg.dy.isl.com://COM3\",\n    \"serialNumber\": \"DY448967\",\n    \"fiscalMemorySerialNumber\": \"36607003\",\n    \"company\": \"Daisy\",\n    \"model\": \"CompactM\",\n    \"firmwareVersion\": \"ONL-4.01BG\",\n    \"itemTextMaxLength\": 20,\n    \"commentTextMaxLength\": 28,\n    \"operatorPasswordMaxLength\": 6\n}"
+					"body": "{\n    \"uri\": \"bg.dt.c.isl.com://COM11\",\n    \"serialNumber\": \"DT517985\",\n    \"fiscalMemorySerialNumber\": \"02517985\",\n    \"company\": \"Datecs\",\n    \"model\": \"DP-25\",\n    \"firmwareVersion\": \"263453 08Nov18 1312\",\n    \"itemTextMaxLength\": 22,\n    \"commentTextMaxLength\": 42,\n    \"operatorPasswordMaxLength\": 8\n}"
 				}
 			]
 		},
@@ -174,15 +174,15 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/zk970105/status",
+					"raw": "http://localhost:8001/printers/dt517985/status",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"zk970105",
+						"dt517985",
 						"status"
 					]
 				},
@@ -199,15 +199,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/dy448967_1/status",
+							"raw": "http://localhost:8001/printers/dt517985/status",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"dt517985",
 								"status"
 							]
 						}
@@ -218,7 +218,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:28:04 GMT"
+							"value": "Tue, 07 May 2019 08:12:24 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -234,7 +234,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"statuses\": [\n        \"No external display\",\n        \"Printing allowed\",\n        \"Device S/N and FM S/N are set\",\n        \"VAT groups are set\"\n    ],\n    \"warnings\": [],\n    \"errors\": [],\n    \"ok\": true\n}"
+					"body": "{\n    \"statuses\": [\n        \"SW7=OFF, SW6=OFF, SW5=OFF, SW4=OFF, SW3=OFF, SW2=OFF, SW1=OFF\",\n        \"Unique Printer ID and Fiscal Memory ID are set\",\n        \"BULSTAT UIC is set\",\n        \"The tax rates are set at least once\",\n        \"The printer is in fiscal mode\",\n        \"The fiscal memory is formatted\"\n    ],\n    \"warnings\": [],\n    \"errors\": [],\n    \"ok\": true\n}"
 				}
 			]
 		},
@@ -252,18 +252,18 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
+					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"taxGroup\": 2,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\"\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/dt525860/printreceipt",
+					"raw": "http://localhost:8001/printers/dt517985/printreceipt",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"dt525860",
+						"dt517985",
 						"printreceipt"
 					]
 				}
@@ -283,18 +283,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Сирене\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Допълнителен коментар към сиренето...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Кашкавал\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Нулев\",\n\t\t\t\"unitPrice\": 0\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
+							"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"taxGroup\": 2,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\"\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/zk126720/printreceipt",
+							"raw": "http://localhost:8001/printers/dt517985/printreceipt",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"zk126720",
+								"dt517985",
 								"printreceipt"
 							]
 						}
@@ -305,7 +305,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Mon, 08 Apr 2019 14:48:55 GMT"
+							"value": "Tue, 07 May 2019 08:33:04 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -321,7 +321,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"Error occurred while reading last receipt QR code data\"\n        ],\n        \"warnings\": [],\n        \"errors\": [\n            \"Illegal command\"\n        ],\n        \"ok\": false\n    },\n    \"info\": {\n        \"receiptNumber\": \"\",\n        \"receiptDateTime\": \"0001-01-01T00:00:00\",\n        \"fiscalMemorySerialNumber\": \"\"\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"SW7=OFF, SW6=OFF, SW5=OFF, SW4=OFF, SW3=OFF, SW2=OFF, SW1=OFF\",\n            \"Unique Printer ID and Fiscal Memory ID are set\",\n            \"BULSTAT UIC is set\",\n            \"The tax rates are set at least once\",\n            \"The printer is in fiscal mode\",\n            \"The fiscal memory is formatted\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    },\n    \"info\": {\n        \"receiptNumber\": \"0000075\",\n        \"receiptDateTime\": \"2019-05-07T11:33:22\",\n        \"receiptAmount\": 30\n    }\n}"
 				}
 			]
 		},
@@ -339,18 +339,18 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"000159\",\n    \"receiptDateTime\": \"2019-04-09T15:18:47\",\n    \"fiscalMemorySerialNumber\": \"50970105\",\n\t\"reason\": \"operator-error\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\",\n\t\t\t\"taxGroup\": 2\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
+					"raw": "{\n\t\"uniqueSaleNumber\": \"DT279013-DD01-0000001\",\n\t\"receiptNumber\": \"0000075\",\n    \"receiptDateTime\": \"2019-05-07T11:33:22\",\n    \"fiscalMemorySerialNumber\": \"02517985\",\n\t\"reason\": \"operator-error\",\n\t\"items\" : \n\t[\n\t\t{\n\t\t\t\"text\": \"Cheese\",\n\t\t\t\"quantity\": 1,\n\t\t\t\"unitPrice\": 12,\n\t\t\t\"taxGroup\": 2\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Additional comment to the cheese...\",\n\t\t\t\"isComment\": true\n\t\t},\n\t\t{\n\t\t\t\"text\": \"Milk\",\n\t\t\t\"quantity\": 2,\n\t\t\t\"unitPrice\": 10,\n\t\t\t\"taxGroup\": 2,\n\t\t\t\"priceModifierValue\": 10,\n\t\t\t\"priceModifierType\": \"discount-percent\"\n\t\t}\n\t],\n\t\"payments\": \n\t[\n\t\t{\n\t\t\t\"amount\": 30,\n\t\t\t\"paymentType\": \"cash\"\n\t\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/zk970105/printreversalreceipt",
+					"raw": "http://localhost:8001/printers/dt517985/printreversalreceipt",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"zk970105",
+						"dt517985",
 						"printreversalreceipt"
 					]
 				}
@@ -429,15 +429,15 @@
 					"raw": "{\n\t\"amount\":123\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/zk970105/printdeposit",
+					"raw": "http://localhost:8001/printers/dt517985/printdeposit",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"zk970105",
+						"dt517985",
 						"printdeposit"
 					]
 				}
@@ -460,15 +460,15 @@
 							"raw": "{\n\t\"amount\":123\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/dy448967_1/printdeposit",
+							"raw": "http://localhost:8001/printers/dt517985/printdeposit",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"dt517985",
 								"printdeposit"
 							]
 						}
@@ -479,7 +479,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:27:39 GMT"
+							"value": "Tue, 07 May 2019 08:39:21 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -495,7 +495,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"SW7=OFF, SW6=OFF, SW5=OFF, SW4=OFF, SW3=OFF, SW2=OFF, SW1=OFF\",\n            \"Unique Printer ID and Fiscal Memory ID are set\",\n            \"BULSTAT UIC is set\",\n            \"The tax rates are set at least once\",\n            \"The printer is in fiscal mode\",\n            \"The fiscal memory is formatted\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
 				}
 			]
 		},
@@ -516,15 +516,15 @@
 					"raw": "{\n\t\"amount\":123\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/zk970105/printwithdraw",
+					"raw": "http://localhost:8001/printers/dt517985/printwithdraw",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"zk970105",
+						"dt517985",
 						"printwithdraw"
 					]
 				}
@@ -547,15 +547,15 @@
 							"raw": "{\n\t\"amount\":123\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/dy448967_1/printwithdraw",
+							"raw": "http://localhost:8001/printers/dt517985/printwithdraw",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"dt517985",
 								"printwithdraw"
 							]
 						}
@@ -566,7 +566,7 @@
 					"header": [
 						{
 							"key": "Date",
-							"value": "Sun, 07 Apr 2019 16:27:55 GMT"
+							"value": "Tue, 07 May 2019 08:39:59 GMT"
 						},
 						{
 							"key": "Content-Type",
@@ -582,7 +582,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"SW7=OFF, SW6=OFF, SW5=OFF, SW4=OFF, SW3=OFF, SW2=OFF, SW1=OFF\",\n            \"Unique Printer ID and Fiscal Memory ID are set\",\n            \"BULSTAT UIC is set\",\n            \"The tax rates are set at least once\",\n            \"The printer is in fiscal mode\",\n            \"The fiscal memory is formatted\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
 				}
 			]
 		},
@@ -603,15 +603,15 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/printers/zk970105/printzeroingreport",
+					"raw": "http://localhost:8001/printers/dt517985/printzeroingreport",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "8001",
 					"path": [
 						"printers",
-						"zk970105",
+						"dt517985",
 						"printzeroingreport"
 					]
 				}
@@ -634,30 +634,49 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/printers/dy448967_1/printzeroingreport",
+							"raw": "http://localhost:8001/printers/dt517985/printzeroingreport",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "5000",
+							"port": "8001",
 							"path": [
 								"printers",
-								"dy448967_1",
+								"dt517985",
 								"printzeroingreport"
 							]
 						}
 					},
+					"status": "OK",
+					"code": 200,
 					"_postman_previewlanguage": "json",
-					"header": [],
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 07 May 2019 08:40:41 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
 					"cookie": [],
-					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"No external display\",\n            \"Printing allowed\",\n            \"Device S/N and FM S/N are set\",\n            \"VAT groups are set\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
+					"body": "{\n    \"status\": {\n        \"statuses\": [\n            \"SW7=OFF, SW6=OFF, SW5=OFF, SW4=OFF, SW3=OFF, SW2=OFF, SW1=OFF\",\n            \"Unique Printer ID and Fiscal Memory ID are set\",\n            \"BULSTAT UIC is set\",\n            \"The tax rates are set at least once\",\n            \"The printer is in fiscal mode\",\n            \"The fiscal memory is formatted\"\n        ],\n        \"warnings\": [],\n        \"errors\": [],\n        \"ok\": true\n    }\n}"
 				}
 			]
 		}
 	],
 	"variable": [
 		{
-			"id": "e612b279-2b4e-481b-a6c7-3f77c262d683",
+			"id": "ace4683c-4821-4ed0-804c-894cf082891d",
 			"key": "defaulthost",
 			"value": "localhost:5001",
 			"type": "string"

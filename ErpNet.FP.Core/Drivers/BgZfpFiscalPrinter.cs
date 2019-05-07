@@ -182,7 +182,6 @@ namespace ErpNet.FP.Core.Drivers
             var qrCodeFields = qrCodeData.Split('*');
             return (new ReceiptInfo
             {
-                FiscalMemorySerialNumber = qrCodeFields[0],
                 ReceiptNumber = qrCodeFields[1],
                 ReceiptDateTime = DateTime.ParseExact(string.Format(
                     $"{qrCodeFields[2]} {qrCodeFields[3]}"),
