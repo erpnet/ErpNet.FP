@@ -74,13 +74,20 @@ namespace ErpNet.FP.Core.Drivers
                     switch (amountString[0])
                     {
                         case '+':
-                            receiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            receiptAmount = decimal.Parse(amountString.Substring(1), CultureInfo.InvariantCulture) / 100m;
                             break;
                         case '-':
-                            receiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            receiptAmount = -decimal.Parse(amountString.Substring(1), CultureInfo.InvariantCulture) / 100m;
                             break;
                         default:
-                            receiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
+                            if (amountString.Contains("."))
+                            {
+                                receiptAmount = decimal.Parse(amountString, CultureInfo.InvariantCulture);
+                            }
+                            else
+                            {
+                                receiptAmount = decimal.Parse(amountString, CultureInfo.InvariantCulture) / 100m;
+                            }
                             break;
                     }
                 }

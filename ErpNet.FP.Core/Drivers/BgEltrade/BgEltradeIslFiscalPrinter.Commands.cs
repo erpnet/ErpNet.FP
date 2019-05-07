@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
@@ -39,6 +40,42 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 new string[] {
                     Options.ValueOrDefault("Operator.Name", "Operator"),
                     uniqueSaleNumber
+                });
+            return Request(CommandOpenFiscalReceipt, header);
+        }
+
+        public override string GetReversalReasonText(ReversalReason reversalReason)
+        {
+            switch (reversalReason)
+            {
+                case ReversalReason.OperatorError:
+                    return "O";
+                case ReversalReason.Refund:
+                    return "R";
+                case ReversalReason.TaxBaseReduction:
+                    return "T";
+                default:
+                    return "O";
+            }
+        }
+
+        public override (string, DeviceStatus) OpenReversalReceipt(
+            ReversalReason reason,
+            string receiptNumber,
+            System.DateTime receiptDateTime,
+            string fiscalMemorySerialNumber,
+            string uniqueSaleNumber)
+        {
+            // Protocol: <OperName>,<UNP>[,Type[ ,<FMIN>,<Reason>,<num>[,<time>[,<inv>]]]]
+            var header = string.Join(",",
+                new string[] {
+                    Options.ValueOrDefault("Operator.Name", "Operator"),
+                    uniqueSaleNumber,
+                    "S",
+                    fiscalMemorySerialNumber,
+                    GetReversalReasonText(reason),
+                    receiptNumber,
+                    receiptDateTime.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)
                 });
             return Request(CommandOpenFiscalReceipt, header);
         }
