@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace ErpNet.FP.Core.Drivers
@@ -41,14 +42,59 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandGetStatus);
         }
 
-        public virtual (string, DeviceStatus) GetLastDocumentNumber()
+        public virtual (string, DeviceStatus) GetLastDocumentNumber(string closeReceiptResponse)
         {
             return Request(CommandGetLastDocumentNumber);
         }
 
-        public virtual (string, DeviceStatus) GetReceiptStatus()
+        public virtual (decimal?, DeviceStatus) GetReceiptAmount()
         {
-            return Request(CommandGetReceiptStatus, "T");
+            decimal? receiptAmount = null;
+
+            var (receiptStatusResponse, deviceStatus) = Request(CommandGetReceiptStatus, "T");
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                return (null, deviceStatus);
+            }
+
+            var fields = receiptStatusResponse.Split(',');
+            if (fields.Length < 3)
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
+                deviceStatus.Errors.Add("Wrong format of receipt status");
+                return (null, deviceStatus);
+            }
+
+            try
+            {
+                var amountString = fields[2];
+                if (amountString.Length > 0)
+                {
+                    switch (amountString[0])
+                    {
+                        case '+':
+                            receiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        case '-':
+                            receiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        default:
+                            receiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while parsing the amount of last receipt status");
+                deviceStatus.Errors.Add(e.Message);
+                return (null, deviceStatus);
+            }
+
+            return (receiptAmount, deviceStatus);
         }
 
 
@@ -57,9 +103,28 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
         }
 
-        public virtual (string, DeviceStatus) GetDateTime()
+        public virtual (System.DateTime?, DeviceStatus) GetDateTime()
         {
-            return Request(CommandGetDateTime);
+            var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
+                return (null, deviceStatus);
+            }
+
+            try
+            {
+                var dateTime = DateTime.ParseExact(dateTimeResponse,
+                    "dd-MM-yy HH:mm:ss",
+                    CultureInfo.InvariantCulture);
+                return (dateTime, deviceStatus);
+            }
+            catch
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
+                deviceStatus.Errors.Add($"Wrong format of date and time");
+                return (null, deviceStatus);
+            }
         }
 
         public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)

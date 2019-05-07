@@ -54,6 +54,103 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
         }
 
+        public override (decimal?, DeviceStatus) GetReceiptAmount()
+        {
+            decimal? receiptAmount = null;
+
+            var (receiptStatusResponse, deviceStatus) = Request(CommandGetReceiptStatus);
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                return (null, deviceStatus);
+            }
+
+            var fields = receiptStatusResponse.Split('\t');
+            if (fields.Length < 5)
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
+                deviceStatus.Errors.Add("Wrong format of receipt status");
+                return (null, deviceStatus);
+            }
+
+            try
+            {
+                var amountString = fields[4];
+                if (amountString.Length > 0)
+                {
+                    switch (amountString[0])
+                    {
+                        case '+':
+                            receiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        case '-':
+                            receiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        default:
+                            receiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                deviceStatus = new DeviceStatus();
+                deviceStatus.Statuses.Add($"Error occured while parsing the amount of last receipt status");
+                deviceStatus.Errors.Add(e.Message);
+                return (null, deviceStatus);
+            }
+
+            return (receiptAmount, deviceStatus);
+        }
+
+        public override (System.DateTime?, DeviceStatus) GetDateTime()
+        {
+            var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
+                return (null, deviceStatus);
+            }
+
+            var fields = dateTimeResponse.Split('\t');
+            if (fields.Length < 2)
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing date and time");
+                deviceStatus.Errors.Add("Wrong format of date and time");
+                return (null, deviceStatus);
+            }
+
+            var fixedDateAndTimeString = fields[1].Replace(" DST", "");
+
+            try
+            {
+                var dateTime = DateTime.ParseExact(fixedDateAndTimeString,
+                    "dd-MM-yy HH:mm:ss",
+                    CultureInfo.InvariantCulture);
+                return (dateTime, deviceStatus);
+            }
+            catch
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
+                deviceStatus.Errors.Add($"Wrong format of date and time");
+                return (null, deviceStatus);
+            }
+        }
+
+        public override (string, DeviceStatus) GetLastDocumentNumber(string closeReceiptResponse)
+        {
+            var deviceStatus = new DeviceStatus();
+            var fields = closeReceiptResponse.Split('\t');
+            if (fields.Length < 2)
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing close receipt response");
+                deviceStatus.Errors.Add($"Wrong format of close receipt response");
+                return (string.Empty, deviceStatus);
+            }
+            return (fields[1], deviceStatus);
+        }
+
         public override (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
             // Protocol: {Type}<SEP>{Amount}<SEP>
@@ -155,8 +252,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             string fiscalMemorySerialNumber,
             string uniqueSaleNumber)
         {
-            // Protocol: {OpCode}<SEP>{OpPwd}<SEP>{TillNmb}<SEP>{Storno}<SEP>{DocNum}<SEP>{DateTime}<SEP>{FMNumber}<SEP>
-            //           {Invoice}<SEP>{ToInvoice}<SEP>{Reason}<SEP>{NSale}<SEP>
+            // Protocol: {OpCode}<SEP>{OpPwd}<SEP>{TillNmb}<SEP>{Storno}<SEP>{DocNum}<SEP>{DateTime}<SEP>
+            //           {FM Number}<SEP>{Invoice}<SEP>{ToInvoice}<SEP>{Reason}<SEP>{NSale}<SEP>
             var headerData = string.Join("\t",
                 Options.ValueOrDefault("Operator.ID", "1"),
                 Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength),
