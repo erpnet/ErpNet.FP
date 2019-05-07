@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
@@ -9,6 +11,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDatecsCIslFiscalPrinter : BgIslFiscalPrinter
     {
+        protected const byte
+            CommandDatecsOpenReversalReceipt = 0x2e;
+
         public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
         {
             var header = string.Join(",",
@@ -19,6 +24,29 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     "1"
                 });
             return Request(CommandOpenFiscalReceipt, header);
+        }
+
+        public override (string, DeviceStatus) OpenReversalReceipt(
+            ReversalReason reason,
+            string receiptNumber,
+            System.DateTime receiptDateTime,
+            string fiscalMemorySerialNumber,
+            string uniqueSaleNumber)
+        {
+            // Protocol: <OpCode>,<OpPwd>,<NSale>,<TillNmb>,<DocType>,<DocNumber>,<DocDateTime>,< FMNumber >[,< Invoice >,< InvNumber >,< Reason >]
+            var header = string.Join(",",
+                new string[] {
+                    Options.ValueOrDefault("Operator.ID", "1"),
+                    Options.ValueOrDefault("Operator.Password", "1").WithMaxLength(Info.OperatorPasswordMaxLength),
+                    uniqueSaleNumber,
+                    "1",
+                    GetReversalReasonText(reason),
+                    receiptNumber,
+                    receiptDateTime.ToString("ddMMyyHHmmss", CultureInfo.InvariantCulture),
+                    fiscalMemorySerialNumber
+                });
+
+            return Request(CommandDatecsOpenReversalReceipt, header);
         }
 
         public override string GetPaymentTypeText(PaymentType paymentType)

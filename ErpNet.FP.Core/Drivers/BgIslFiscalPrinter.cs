@@ -184,7 +184,8 @@ namespace ErpNet.FP.Core.Drivers
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
             var receiptInfo = new ReceiptInfo();
-            // Receipt header
+
+            // Opening receipt
             var (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
             if (!deviceStatus.Ok)
             {
@@ -193,29 +194,7 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-            string dateTimeResponse;
-            (dateTimeResponse, deviceStatus) = GetDateTime();
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
-                return (receiptInfo, deviceStatus);
-            }
-
-
-            try
-            {
-                receiptInfo.ReceiptDateTime = DateTime.ParseExact(dateTimeResponse,
-                    "dd-MM-yy HH:mm:ss",
-                    System.Globalization.CultureInfo.InvariantCulture);
-            }
-            catch
-            {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
-                return (receiptInfo, deviceStatus);
-            }
-
+            // Printing receipt's body
             deviceStatus = PrintReceiptBody(receipt);
             if (!deviceStatus.Ok)
             {
@@ -224,8 +203,19 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
-            // Receipt finalization
-            (_, deviceStatus) = CloseReceipt();
+            // Get the receipt date and time (current fiscal device date and time)
+            DateTime? dateTime;
+            (dateTime, deviceStatus) = GetDateTime();
+            if (!dateTime.HasValue || !deviceStatus.Ok)
+            {
+                AbortReceipt();
+                return (receiptInfo, deviceStatus);
+            }
+            receiptInfo.ReceiptDateTime = dateTime.Value;
+
+            // Closing receipt
+            string closeReceiptResponse;
+            (closeReceiptResponse, deviceStatus) = CloseReceipt();
             if (!deviceStatus.Ok)
             {
                 (_, deviceStatus) = AbortReceipt();
@@ -233,63 +223,26 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
 
+            // Get receipt number
             string lastDocumentNumberResponse;
-            (lastDocumentNumberResponse, deviceStatus) = GetLastDocumentNumber();
+            (lastDocumentNumberResponse, deviceStatus) = GetLastDocumentNumber(closeReceiptResponse);
             if (!deviceStatus.Ok)
             {
                 (_, deviceStatus) = AbortReceipt();
                 deviceStatus.Statuses.Add($"Error occurred while reading last document number");
                 return (receiptInfo, deviceStatus);
             }
-
             receiptInfo.ReceiptNumber = lastDocumentNumberResponse;
 
-            string receiptStatusResponse;
-            (receiptStatusResponse, deviceStatus) = GetReceiptStatus();
-            if (!deviceStatus.Ok)
+            // Get receipt amount
+            decimal? receiptAmount;
+            (receiptAmount, deviceStatus) = GetReceiptAmount();
+            if (!receiptAmount.HasValue || !deviceStatus.Ok)
             {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                (_, deviceStatus) = AbortReceipt();
                 return (receiptInfo, deviceStatus);
             }
-
-            var fields = receiptStatusResponse.Split(',');
-            if (fields.Length < 3)
-            {
-                AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
-                deviceStatus.Errors.Add("Wrong format of receipt status");
-                return (receiptInfo, deviceStatus);
-            }
-
-            try
-            {
-                var amountString = fields[2];
-                if (amountString.Length > 0)
-                {
-                    switch (amountString[0])
-                    {
-                        case '+':
-                            receiptInfo.ReceiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
-                            break;
-                        case '-':
-                            receiptInfo.ReceiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
-                            break;
-                        default:
-                            receiptInfo.ReceiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
-                            break;
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                AbortReceipt();
-                deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while parsing amount of last receipt status");
-                deviceStatus.Errors.Add(e.Message);
-                return (receiptInfo, deviceStatus);
-            }
+            receiptInfo.ReceiptAmount = receiptAmount.Value;
 
             return (receiptInfo, deviceStatus);
         }
