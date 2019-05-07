@@ -14,10 +14,6 @@
         /// </summary>
         public System.DateTime ReceiptDateTime;
         /// <summary>
-        /// The device fiscal memory serial number.
-        /// </summary>
-        public string FiscalMemorySerialNumber = string.Empty;
-        /// <summary>
         /// The receipt amount.
         /// </summary>
         public decimal ReceiptAmount = 0m;

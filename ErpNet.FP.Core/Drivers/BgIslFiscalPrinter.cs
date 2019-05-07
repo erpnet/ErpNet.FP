@@ -208,7 +208,8 @@ namespace ErpNet.FP.Core.Drivers
                 receiptInfo.ReceiptDateTime = DateTime.ParseExact(dateTimeResponse,
                     "dd-MM-yy HH:mm:ss",
                     System.Globalization.CultureInfo.InvariantCulture);
-            } catch
+            }
+            catch
             {
                 AbortReceipt();
                 deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
@@ -253,18 +254,35 @@ namespace ErpNet.FP.Core.Drivers
             }
 
             var fields = receiptStatusResponse.Split(',');
-            if (fields.Length != 5)
+            if (fields.Length < 3)
             {
                 AbortReceipt();
                 deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
+                deviceStatus.Errors.Add("Wrong format of receipt status");
                 return (receiptInfo, deviceStatus);
             }
 
             try
             {
-                receiptInfo.ReceiptAmount = decimal.Parse(fields[2], System.Globalization.CultureInfo.InvariantCulture);
+                var amountString = fields[2];
+                if (amountString.Length > 0)
+                {
+                    switch (amountString[0])
+                    {
+                        case '+':
+                            receiptInfo.ReceiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        case '-':
+                            receiptInfo.ReceiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
+                            break;
+                        default:
+                            receiptInfo.ReceiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
+                            break;
+                    }
+                }
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();

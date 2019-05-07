@@ -29,20 +29,6 @@ namespace ErpNet.FP.Win.Contexts
         {
             bool autoDetect = true;
 
-            IConfigurationRoot? config = null;
-            try
-            {
-                config = new ConfigurationBuilder()
-                     .AddJsonFile("config.json")
-                     .Build();
-
-                autoDetect = (config["autodetect"] != "false");
-            }
-            catch
-            {
-                // We do not have a config.json
-            }
-
             // Transports
             var comTransport = new ComTransport();
 
@@ -68,7 +54,7 @@ namespace ErpNet.FP.Win.Contexts
             if (autoDetect)
             {
                 System.Console.WriteLine("Detecting available printers...");
-                var printers = Provider.DetectAvailablePrinters();
+                var printers = provider.DetectAvailablePrinters();
                 foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                 {
                     // We use serial number of local connected fiscal printers as Printer ID
@@ -86,34 +72,6 @@ namespace ErpNet.FP.Win.Contexts
                     System.Console.WriteLine($"Found {printerID}: {printer.Value.DeviceInfo.Uri}");
                 }
                 System.Console.WriteLine($"Detecting done. Found {Printers.Count} printer(s).");
-            }
-            if (config != null)
-            {
-                /* TODO: deserialize printers
-                var configuredPrinters = config["printers"];
-                foreach (var configuredPrinter in configuredPrinters)
-                {
-                    try
-                    {
-                        var printer = Provider.Connect(configuredPrinter["uri"]);
-                        var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
-
-                        var printerID = baseID;
-                        int duplicateNumber = 0;
-                        while (PrintersInfo.ContainsKey(printerID))
-                        {
-                            duplicateNumber++;
-                            printerID = $"{baseID}_{duplicateNumber}";
-                        }
-                        PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
-                        Printers.Add(printerID, printer.Value);
-                    }
-                    catch
-                    {
-
-                    }
-                }
-                */
             }
         }
     }

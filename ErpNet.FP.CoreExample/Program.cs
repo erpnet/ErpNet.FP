@@ -233,8 +233,7 @@ namespace ErpNet.FP.CoreExample
             var (result, commandStatus) = fp.PrintReceipt(doc);
             ShowStatus(commandStatus);
 
-            Console.Write($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, Amount: {result.ReceiptAmount}, ");
-            Console.WriteLine($"FM S/N: {result.FiscalMemorySerialNumber}");
+            Console.WriteLine($"Receipt Number: {result.ReceiptNumber}, DateTime: {result.ReceiptDateTime}, Amount: {result.ReceiptAmount}");
 
             /*
             var 
