@@ -19,15 +19,37 @@ namespace ErpNet.FP.Win.Contexts
 
     public class PrintersControllerContext : IPrintersControllerContext
     {
+        public class PrinterConfig
+        {
+            public string Uri { get; set; } = string.Empty;
+        }
 
         public Provider Provider { get; } = new Provider();
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
 
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter>();
 
-        public PrintersControllerContext()
+        public void AddPrinter(IFiscalPrinter printer)
         {
-            bool autoDetect = true;
+            // We use serial number of local connected fiscal printers as Printer ID
+            var baseID = printer.DeviceInfo.SerialNumber.ToLowerInvariant();
+
+            var printerID = baseID;
+            int duplicateNumber = 0;
+            while (PrintersInfo.ContainsKey(printerID))
+            {
+                duplicateNumber++;
+                printerID = $"{baseID}_{duplicateNumber}";
+            }
+            PrintersInfo.Add(printerID, printer.DeviceInfo);
+            Printers.Add(printerID, printer);
+            System.Console.WriteLine($"Found {printerID}: {printer.DeviceInfo.Uri}");
+        }
+
+        public PrintersControllerContext(IConfiguration configuration)
+        {
+            var autoDetect = configuration.GetValue<bool>("AutoDetect", true);
+            System.Diagnostics.Debug.Print($"Config: Autodetect: {autoDetect}\n");
 
             // Transports
             var comTransport = new ComTransport();
@@ -53,26 +75,38 @@ namespace ErpNet.FP.Win.Contexts
 
             if (autoDetect)
             {
-                System.Console.WriteLine("Detecting available printers...");
+                System.Console.WriteLine("Autodetecting local printers...");
                 var printers = provider.DetectAvailablePrinters();
                 foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                 {
-                    // We use serial number of local connected fiscal printers as Printer ID
-                    var baseID = printer.Value.DeviceInfo.SerialNumber.ToLowerInvariant();
-
-                    var printerID = baseID;
-                    int duplicateNumber = 0;
-                    while (PrintersInfo.ContainsKey(printerID))
-                    {
-                        duplicateNumber++;
-                        printerID = $"{baseID}_{duplicateNumber}";
-                    }
-                    PrintersInfo.Add(printerID, printer.Value.DeviceInfo);
-                    Printers.Add(printerID, printer.Value);
-                    System.Console.WriteLine($"Found {printerID}: {printer.Value.DeviceInfo.Uri}");
+                    AddPrinter(printer.Value);
                 }
-                System.Console.WriteLine($"Detecting done. Found {Printers.Count} printer(s).");
             }
+
+            System.Console.WriteLine("Detecting configured printers...");
+            var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
+            foreach (var printerSetting in printersSettings)
+            {
+                System.Console.Write($"Trying {printerSetting.Key}: {printerSetting.Value.Uri}");
+                var uri = printerSetting.Value.Uri;
+                if (uri.Length > 0)
+                {
+                    try
+                    {
+                        var printer = provider.Connect(printerSetting.Value.Uri, null);
+                        System.Console.WriteLine("...OK");
+                        PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
+                        Printers.Add(printerSetting.Key, printer);
+                    }
+                    catch
+                    {
+                        System.Console.WriteLine("...failed");
+                        // Do not add this printer, it fails to connect.
+                    }
+                }
+            }
+
+            System.Console.WriteLine($"Detecting done. Found {Printers.Count} available printer(s).");
         }
     }
 }

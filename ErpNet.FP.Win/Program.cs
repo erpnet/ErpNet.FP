@@ -21,6 +21,10 @@ namespace ErpNet.FP.Win
                           optional: true, reloadOnChange: true);
                 config.AddEnvironmentVariables();
             })
+            .ConfigureKestrel((hostingContext, options) =>
+            {
+                options.Configure(hostingContext.Configuration.GetSection("Kestrel"));
+            })
             .ConfigureLogging((hostingContext, logging) =>
             {
                 logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));

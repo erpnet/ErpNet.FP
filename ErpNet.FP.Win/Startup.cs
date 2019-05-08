@@ -19,10 +19,9 @@ namespace ErpNet.FP.Win
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var printersControllerContextSingleton = new PrintersControllerContext();
+            var printersControllerContextSingleton = new PrintersControllerContext(this.Configuration);
             services.AddSingleton<IPrintersControllerContext>(printersControllerContextSingleton);
-            services.AddMvc()
-                .AddNewtonsoftJson();
+            services.AddRouting();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,22 +31,8 @@ namespace ErpNet.FP.Win
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting(routes =>
-            {
-                routes.MapControllers();
-            });
-
-            app.UseAuthorization();
-
-            app.UseMvc();
+            app.UseRouting();
         }
     }
 }
