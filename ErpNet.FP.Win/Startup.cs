@@ -4,14 +4,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.Win
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger logger;
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            this.logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -19,7 +23,7 @@ namespace ErpNet.FP.Win
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var printersControllerContextSingleton = new PrintersControllerContext(this.Configuration);
+            var printersControllerContextSingleton = new PrintersControllerContext(this.Configuration, this.logger);
             services.AddSingleton<IPrintersControllerContext>(printersControllerContextSingleton);
             services.AddRouting();
         }

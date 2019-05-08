@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -35,7 +36,19 @@ namespace ErpNet.FP.Win
             .UseStartup<Startup>()
             .Build();
 
-            webHost.Run();
+            var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Starting the service...");
+
+            try
+            {
+                webHost.Run();
+                logger.LogInformation("Service stopped.");
+            }
+            catch
+            {
+                logger.LogCritical("Starting the service failed.");
+            }
+
         }
 
     }
