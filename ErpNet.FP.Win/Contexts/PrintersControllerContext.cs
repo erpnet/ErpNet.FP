@@ -6,6 +6,7 @@ using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Win.Transports;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
 namespace ErpNet.FP.Win.Contexts
@@ -19,6 +20,8 @@ namespace ErpNet.FP.Win.Contexts
 
     public class PrintersControllerContext : IPrintersControllerContext
     {
+        private readonly ILogger logger;
+
         public class PrinterConfig
         {
             public string Uri { get; set; } = string.Empty;
@@ -43,13 +46,14 @@ namespace ErpNet.FP.Win.Contexts
             }
             PrintersInfo.Add(printerID, printer.DeviceInfo);
             Printers.Add(printerID, printer);
-            System.Console.WriteLine($"Found {printerID}: {printer.DeviceInfo.Uri}");
+            logger.LogInformation($"Found {printerID}: {printer.DeviceInfo.Uri}");
         }
 
-        public PrintersControllerContext(IConfiguration configuration)
+        public PrintersControllerContext(IConfiguration configuration, ILogger logger)
         {
+            this.logger = logger;
+
             var autoDetect = configuration.GetValue<bool>("AutoDetect", true);
-            System.Diagnostics.Debug.Print($"Config: Autodetect: {autoDetect}\n");
 
             // Transports
             var comTransport = new ComTransport();
@@ -75,7 +79,7 @@ namespace ErpNet.FP.Win.Contexts
 
             if (autoDetect)
             {
-                System.Console.WriteLine("Autodetecting local printers...");
+                logger.LogInformation("Autodetecting local printers...");
                 var printers = provider.DetectAvailablePrinters();
                 foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                 {
@@ -83,30 +87,30 @@ namespace ErpNet.FP.Win.Contexts
                 }
             }
 
-            System.Console.WriteLine("Detecting configured printers...");
+            logger.LogInformation("Detecting configured printers...");
             var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
             foreach (var printerSetting in printersSettings)
             {
-                System.Console.Write($"Trying {printerSetting.Key}: {printerSetting.Value.Uri}");
+                string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
                 var uri = printerSetting.Value.Uri;
                 if (uri.Length > 0)
                 {
                     try
                     {
                         var printer = provider.Connect(printerSetting.Value.Uri, null);
-                        System.Console.WriteLine("...OK");
+                        logger.LogInformation($"{logString}, OK");
                         PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
                         Printers.Add(printerSetting.Key, printer);
                     }
                     catch
                     {
-                        System.Console.WriteLine("...failed");
+                        logger.LogInformation($"{logString}, failed");
                         // Do not add this printer, it fails to connect.
                     }
                 }
             }
 
-            System.Console.WriteLine($"Detecting done. Found {Printers.Count} available printer(s).");
+            logger.LogInformation($"Detecting done. Found {Printers.Count} available printer(s).");
         }
     }
 }
