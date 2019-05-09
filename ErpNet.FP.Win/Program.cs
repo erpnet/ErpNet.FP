@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.IO;
 
 namespace ErpNet.FP.Win
@@ -11,6 +12,9 @@ namespace ErpNet.FP.Win
     {
         public static void Main(string[] args)
         {
+            Trace.Listeners.Add(new TextWriterTraceListener("debug.log"));
+            Trace.AutoFlush = true;
+
             var webHost = new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -48,6 +52,8 @@ namespace ErpNet.FP.Win
             {
                 logger.LogCritical("Starting the service failed.");
             }
+
+            Trace.Flush();
 
         }
 
