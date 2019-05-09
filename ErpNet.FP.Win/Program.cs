@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -10,10 +11,11 @@ namespace ErpNet.FP.Win
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             Trace.Listeners.Add(new TextWriterTraceListener("debug.log"));
             Trace.AutoFlush = true;
+            Trace.WriteLine("Starting the application...");
 
             var webHost = new WebHostBuilder()
             .UseKestrel()
@@ -53,8 +55,8 @@ namespace ErpNet.FP.Win
                 logger.LogCritical("Starting the service failed.");
             }
 
+            Trace.WriteLine("Stopping the application.");
             Trace.Flush();
-
         }
 
     }
