@@ -14,7 +14,16 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus CheckStatus()
         {
-            var (_, status) = GetStatus();
+            var (dateTime, status) = GetDateTime();
+            if (dateTime.HasValue)
+            {
+                status.DateTime = dateTime.Value;
+            }
+            else
+            {
+                status.Statuses.Add("Error occured while reading current status");
+                status.Errors.Add("Cannot read current date and time");
+            }
             return status;
         }
 

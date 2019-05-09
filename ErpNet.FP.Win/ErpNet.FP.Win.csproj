@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview5-19227-01" />
   </ItemGroup>
 
   <ItemGroup>

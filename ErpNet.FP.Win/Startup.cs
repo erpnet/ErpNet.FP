@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace ErpNet.FP.Win
 {
@@ -25,7 +26,7 @@ namespace ErpNet.FP.Win
         {
             var printersControllerContextSingleton = new PrintersControllerContext(this.Configuration, this.logger);
             services.AddSingleton<IPrintersControllerContext>(printersControllerContextSingleton);
-            services.AddRouting();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +38,11 @@ namespace ErpNet.FP.Win
             }
 
             app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
