@@ -6,7 +6,27 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <NullableContextOptions>enable</NullableContextOptions>
+    <ApplicationIcon>ErpNet.Win.FP.ico</ApplicationIcon>
+    <StartupObject />
+    <Company>ErpNet</Company>
+    <Authors>ErpNet and Contributors</Authors>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Copyright>(c) ErpNet and Contributors</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ErpNet.Win.FP.ico" />
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ErpNet.Win.FP.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="4.5.0" />
