@@ -31,7 +31,8 @@ namespace ErpNet.FP.Win.Manager
                 Multiline = true,
                 BackColor = Color.Black,
                 ForeColor = Color.White,
-                BorderStyle = BorderStyle.None
+                BorderStyle = BorderStyle.None,
+                WordWrap = false
             };
 
             this.components.Add(this.logBox);

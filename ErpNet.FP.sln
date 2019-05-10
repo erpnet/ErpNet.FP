@@ -7,7 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		LICENSE.txt = LICENSE.txt
-		Publishing.md = Publishing.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -20,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Win", "ErpNet.FP.
 		{E6273892-F5B1-485E-A4BE-3934214B40BA} = {E6273892-F5B1-485E-A4BE-3934214B40BA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErpNet.FP.Win.Manager", "ErpNet.FP.Win.Manager\ErpNet.FP.Win.Manager.csproj", "{AA5243EF-F9CF-4B02-80C9-5F7DBA75DDAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Win.Manager", "ErpNet.FP.Win.Manager\ErpNet.FP.Win.Manager.csproj", "{AA5243EF-F9CF-4B02-80C9-5F7DBA75DDAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
