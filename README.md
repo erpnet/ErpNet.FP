@@ -19,10 +19,14 @@ The http server receives input through the REST API and uses different transport
 
 ### You want to try it now? You can download windows version of ErpNet.FP
 
--  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip] to try it.
+-  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip].
+
 Inside the zip file, you will find two Windows executables: ErpNet.FP.Win.exe (service) and ErpNet.FP.Win.Manager.exe (service manager). 
+
 Run ErpNet.FP.Win.Manager.exe and it will start the ErpNet.FP.Win.exe automatically from the same directory, and will be waiting for your commands as notification icon in the tray.
+
 When you exit the session, you can examine debug.log file for every event occured while using the service. 
+
 Also, you can use "Show console", and "Exit" options from the service manager tray icon.
 
 ## Some concepts needs to be explained
