@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace ErpNet.FP.Core.Drivers
@@ -18,6 +19,8 @@ namespace ErpNet.FP.Core.Drivers
             CommandSellCorrection = 0x31,
             CommandFreeText = 0x37,
             CommandPayment = 0x35,
+            CommandGetDateTime = 0x68,
+            CommandSetDateTime = 0x48,
             CommandReadLastReceiptQRCodeData = 0x72,
             CommandGSCommand = 0x1d;
         protected const byte
@@ -35,6 +38,35 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()
         {
             return Request(CommandReadLastReceiptQRCodeData, "B");
+        }
+
+        public virtual (DateTime?, DeviceStatus) GetDateTime()
+        {
+            var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
+                return (null, deviceStatus);
+            }
+
+            try
+            {
+                var dateTime = DateTime.ParseExact(dateTimeResponse,
+                    "dd-MM-yyyy HH:mm",
+                    CultureInfo.InvariantCulture);
+                return (dateTime, deviceStatus);
+            }
+            catch
+            {
+                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
+                deviceStatus.Errors.Add($"Wrong format of date and time");
+                return (null, deviceStatus);
+            }
+        }
+
+        public virtual (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
+        {
+            return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture));
         }
 
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
