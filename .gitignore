@@ -2,5 +2,4 @@ bin/
 obj/
 .vs/
 .vscode/
-PublishProfiles/
 debug.log

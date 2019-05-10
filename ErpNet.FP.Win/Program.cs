@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -12,7 +13,22 @@ namespace ErpNet.FP.Win
     {
         public static void Main()
         {
-            Trace.Listeners.Add(new TextWriterTraceListener("debug.log"));
+            FileStream traceStream;
+            try
+            {
+                traceStream = new FileStream(@"debug.log", FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error creating FileStream for trace file \"{0}\":" +
+                    "\r\n{1}", @"debug.log", ex.Message);
+                return;
+            }
+
+            // Create a TextWriterTraceListener object that takes a stream.
+            TextWriterTraceListener textListener;
+            textListener = new TextWriterTraceListener(traceStream);
+            Trace.Listeners.Add(textListener);
             Trace.AutoFlush = true;
             Trace.WriteLine("Starting the application...");
 
