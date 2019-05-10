@@ -51,7 +51,9 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public abstract DeviceStatus CheckStatus();
+        public abstract DeviceStatusEx CheckStatus();
+
+        public abstract DeviceStatus SetDateTime(System.DateTime dateTime);
 
         public abstract DeviceStatus PrintMoneyDeposit(decimal amount);
 

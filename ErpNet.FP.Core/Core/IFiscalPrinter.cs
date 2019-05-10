@@ -14,7 +14,12 @@
         /// <summary>
         /// Checks whether the device is currently ready to accept commands.
         /// </summary>
-        DeviceStatus CheckStatus();
+        DeviceStatusEx CheckStatus();
+
+        /// <summary>
+        /// Sets the device date and time
+        /// </summary>
+        DeviceStatus SetDateTime(System.DateTime dateTime);
 
         /// <summary>
         /// Prints the specified receipt.

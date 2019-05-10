@@ -38,7 +38,7 @@ namespace ErpNet.FP.Win.Controllers
 
         // GET printers/{id}/status
         [HttpGet("{id}/status")]
-        public ActionResult<DeviceStatus> Status(string id)
+        public ActionResult<DeviceStatusEx> Status(string id)
         {
             if (!context.Printers.ContainsKey(id))
             {
@@ -90,6 +90,17 @@ namespace ErpNet.FP.Win.Controllers
                 return NotFound();
             }
             return new PrintResult { Status = context.Printers[id].PrintMoneyDeposit(deposit.Amount) };
+        }
+
+        // POST printers/{id}/setdatetime
+        [HttpPost("{id}/setdatetime")]
+        public ActionResult<PrintResult> SetDateTime(string id, [FromBody] CurrentDateTime currentDateTime)
+        {
+            if (!context.Printers.ContainsKey(id))
+            {
+                return NotFound();
+            }
+            return new PrintResult { Status = context.Printers[id].SetDateTime(currentDateTime.DateTime) };
         }
 
         // POST printers/{id}/printzeroingreport

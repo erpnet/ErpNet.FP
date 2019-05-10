@@ -18,6 +18,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandFiscalReceiptSale = 0x31,
             CommandPrintDailyReport = 0x45,
             CommandGetDateTime = 0x3e,
+            CommandSetDateTime = 0x3d,
             CommandGetReceiptStatus = 0x4c,
             CommandGetLastDocumentNumber = 0x71,
             CommandReadLastReceiptQRCodeData = 0x74;
@@ -108,6 +109,11 @@ namespace ErpNet.FP.Core.Drivers
         public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
         {
             return Request(CommandMoneyTransfer, amount.ToString("F2", CultureInfo.InvariantCulture));
+        }
+
+        public virtual (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
+        {
+            return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture));
         }
 
         public virtual (System.DateTime?, DeviceStatus) GetDateTime()

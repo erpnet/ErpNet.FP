@@ -228,8 +228,6 @@ namespace ErpNet.FP.CoreExample
 
             //fp.PrintMoneyDeposit(123.4m);
             //fp.PrintMoneyWithdraw(43.21m);
-            var deviceStatus = fp.CheckStatus();
-            ShowStatus(deviceStatus);
             var (result, commandStatus) = fp.PrintReceipt(doc);
             ShowStatus(commandStatus);
 

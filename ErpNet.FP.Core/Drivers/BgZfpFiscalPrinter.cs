@@ -58,9 +58,25 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public override DeviceStatus CheckStatus()
+        public override DeviceStatusEx CheckStatus()
         {
-            var (_, status) = GetStatus();
+            var (dateTime, status) = GetDateTime();
+            var statusEx = new DeviceStatusEx(status);
+            if (dateTime.HasValue)
+            {
+                statusEx.DateTime = dateTime.Value;
+            }
+            else
+            {
+                statusEx.Statuses.Add("Error occured while reading current status");
+                statusEx.Errors.Add("Cannot read current date and time");
+            }
+            return statusEx;
+        }
+
+        public override DeviceStatus SetDateTime(DateTime dateTime)
+        {
+            var (_, status) = SetDeviceDateTime(dateTime);
             return status;
         }
 
