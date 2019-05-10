@@ -162,6 +162,12 @@ License
 ----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
 
+Contributing
+----
+See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
+
 [Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
 [LICENSE.txt]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
 [ErpNet.FP.Win.zip]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/ErpNet.FP.Win.zip>
+[Contributing]: <https://github.com/erpnet/ErpNet.FP/blob/master/CONTRIBUTING.md>
+[Code of Conduct]: <https://github.com/erpnet/ErpNet.FP/blob/master/CODE_OF_CONDUCT.md>
