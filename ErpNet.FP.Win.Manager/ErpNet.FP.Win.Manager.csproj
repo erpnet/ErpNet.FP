@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>ErpNet.Win.FP.ico</ApplicationIcon>
+    <ApplicationIcon>ErpNet.FP.Win.ico</ApplicationIcon>
     <Company>ErpNet</Company>
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -12,20 +12,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ErpNet.Win.FP.ico" />
+    <None Remove="ErpNet.FP.Win.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ErpNet.Win.FP.ico">
+    <Content Include="ErpNet.FP.Win.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

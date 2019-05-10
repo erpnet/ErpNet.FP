@@ -89,23 +89,26 @@ namespace ErpNet.FP.Win.Contexts
 
             logger.LogInformation("Detecting configured printers...");
             var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
-            foreach (var printerSetting in printersSettings)
+            if (printersSettings != null)
             {
-                string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
-                var uri = printerSetting.Value.Uri;
-                if (uri.Length > 0)
+                foreach (var printerSetting in printersSettings)
                 {
-                    try
+                    string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
+                    var uri = printerSetting.Value.Uri;
+                    if (uri.Length > 0)
                     {
-                        var printer = provider.Connect(printerSetting.Value.Uri, null);
-                        logger.LogInformation($"{logString}, OK");
-                        PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
-                        Printers.Add(printerSetting.Key, printer);
-                    }
-                    catch
-                    {
-                        logger.LogInformation($"{logString}, failed");
-                        // Do not add this printer, it fails to connect.
+                        try
+                        {
+                            var printer = provider.Connect(printerSetting.Value.Uri, null);
+                            logger.LogInformation($"{logString}, OK");
+                            PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
+                            Printers.Add(printerSetting.Key, printer);
+                        }
+                        catch
+                        {
+                            logger.LogInformation($"{logString}, failed");
+                            // Do not add this printer, it fails to connect.
+                        }
                     }
                 }
             }
