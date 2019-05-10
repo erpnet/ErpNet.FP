@@ -66,9 +66,9 @@ When you exit the session, you can examine debug.log file for every event occure
 Also, you can use "Show console", and "Exit" options from the service manager tray icon.
 
 ### Currently supported manifacturers
-Datecs (http://www.datecs.bg)
-Tremol (https://www.tremol.bg)
-Daisy (https://daisy.bg/)
+Datecs (http://www.datecs.bg),
+Tremol (https://www.tremol.bg),
+Daisy (https://daisy.bg/),
 Eltrade (https://www.eltrade.com)
 
 ### Tested on
