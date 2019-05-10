@@ -13,7 +13,21 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-# Printer Id
+### For the impatient, here are some examples
+
+- [Postman collection] of examples
+
+### You want to try it now? You can download windows version of ErpNet.FP
+
+-  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip] to try it.
+Inside the zip file, you will find two Windows executables: ErpNet.FP.Win.exe (service) and ErpNet.FP.Win.Manager.exe (service manager). 
+Run ErpNet.FP.Win.Manager.exe and it will start the ErpNet.FP.Win.exe automatically from the same directory, and will be waiting for your commands as notification icon in the tray.
+When you exit the session, you can examine debug.log file for every event occured while using the service. 
+Also, you can use "Show console", and "Exit" options from the service manager tray icon.
+
+## Some concepts needs to be explained
+
+### Printer Id
 
 Each printer is identified by its printerId. Although the library consumer does not need to know the exact specifics of the algorithm for generating the printerId, they are provided here for completeness:
 
@@ -27,7 +41,7 @@ Note: The algorithm runs always in the same order. Unless transports are changed
 3. For network printers, the printerId is provided in the configuration file.
 For example: "FP_Room1"
 
-# Printer Uri
+### Printer Uri
 
 When a printer is detected, the http server saves something, called printer Uri. The Uri contains the connection information to connect to the printer. It contains details about printer driver, transport and path to the printer. It is similar to the connection string pattern. Example Uris:
 - bg.dy.isl.com://COM5
@@ -38,11 +52,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
 
-# Http Server Setup
-
-In the case of COM and Bluetooth, the http server should be installed on the same machine as the fiscal printer (or some kind of low-latency redirection should be provided). For other protocols, the network fiscal printer needs just to be accessible through its respective protocol.
-
-When the http server starts, it auto-detects the local printers (COM/BT) and reads the addresses (Uris) of the remote printers from a config file. Upon request to return the available printers (URL: "/printers"), it returns all detected + configured printers.
+### Future plans
 
 Currently, the http server is available only for Windows:
 - ErpNet.FP.Win
@@ -53,23 +63,13 @@ However, versions for most major platforms are planned:
 - ErpNet.FP.Android
 - ErpNet.FP.iOS
 
-### Examples of requests using Http Server
-
-- [Postman collection] of examples
-
-### For Windows
-
--  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip] to try it.
-Inside the zip file, you will find two Windows executables: ErpNet.FP.Win.exe (service) and ErpNet.FP.Win.Manager.exe (service manager). 
-Run ErpNet.FP.Win.Manager.exe and it will start the ErpNet.FP.Win.exe automatically from the same directory, and will be waiting for your commands as notification icon in the tray.
-When you exit the session, you can examine debug.log file for every event occured while using the service. 
-Also, you can use "Show console", and "Exit" options from the service manager tray icon.
-
 ### Currently supported manifacturers
 Datecs (http://www.datecs.bg),
 Tremol (https://www.tremol.bg),
 Daisy (https://daisy.bg/),
-Eltrade (https://www.eltrade.com)
+Eltrade (https://www.eltrade.com).
+
+If you want your device to be supported, please contact us, and we will try our best to help you!
 
 ### Tested on
 ```json
