@@ -65,11 +65,14 @@ namespace ErpNet.FP.Core.Drivers
 
         public static string ValueOrDefault(this IDictionary<string, string> options, string key, string defaultValue)
         {
-            if (options.ContainsKey(key))
+            try
             {
                 return options[key];
             }
-            return defaultValue;
+            catch (KeyNotFoundException)
+            {
+                return defaultValue;
+            }
         }
     }
 }
