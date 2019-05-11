@@ -18,7 +18,7 @@ namespace ErpNet.FP.CoreExample
 
         public override IChannel OpenChannel(string address)
         {
-            if (openedChannels.ContainsKey(address))
+            try
             {
                 var channel = openedChannels[address];
                 if (channel == null)
@@ -27,17 +27,22 @@ namespace ErpNet.FP.CoreExample
                 }
                 return channel;
             }
-            try
+            catch (KeyNotFoundException)
             {
-                var channel = new Channel(address);
-                openedChannels.Add(address, channel);
-                return channel;
-            }
-            catch (TimeoutException e)
-            {
-                openedChannels.Add(address, null);
-                throw e;
-            }
+                // There is no opened channel with this address
+                // So we will create and open one
+                try
+                {
+                    var channel = new Channel(address);
+                    openedChannels.Add(address, channel);
+                    return channel;
+                }
+                catch (TimeoutException e)
+                {
+                    openedChannels.Add(address, null);
+                    throw e;
+                }
+            }            
         }
 
         /// <summary>
