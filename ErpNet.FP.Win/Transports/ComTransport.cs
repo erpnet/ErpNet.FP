@@ -18,22 +18,19 @@ namespace ErpNet.FP.Win.Transports
 
         public override IChannel OpenChannel(string address)
         {
-            try
+            if (openedChannels.TryGetValue(address, out Channel? channel))
             {
-                var channel = openedChannels[address];
                 if (channel == null)
                 {
                     throw new TimeoutException("disabled due to timeout");
                 }
                 return channel;
             }
-            catch (KeyNotFoundException)
+            else
             {
-                // There is no opened channel with this address
-                // So we will create and open one
                 try
                 {
-                    var channel = new Channel(address);
+                    channel = new Channel(address);
                     openedChannels.Add(address, channel);
                     return channel;
                 }

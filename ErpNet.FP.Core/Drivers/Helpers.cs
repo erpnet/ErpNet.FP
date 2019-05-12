@@ -63,16 +63,10 @@ namespace ErpNet.FP.Core.Drivers
             return options;
         }
 
-        public static string ValueOrDefault(this IDictionary<string, string> options, string key, string defaultValue)
-        {
-            try
-            {
-                return options[key];
-            }
-            catch (KeyNotFoundException)
-            {
-                return defaultValue;
-            }
-        }
+        public static string ValueOrDefault(
+            this IDictionary<string, string> options, 
+            string key, 
+            string defaultValue) => 
+            options.TryGetValue(key, out string value) ? value : defaultValue;
     }
 }

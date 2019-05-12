@@ -27,130 +27,101 @@ namespace ErpNet.FP.Win.Controllers
 
         // GET printers/{id}
         [HttpGet("{id}")]
-        public ActionResult<DeviceInfo> Info(string id)
-        {
-            try
-            {
-                return context.PrintersInfo[id];
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-        }
+        public ActionResult<DeviceInfo> Info(string id) => 
+            context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo) 
+            ? 
+            (ActionResult<DeviceInfo>) deviceInfo 
+            : 
+            NotFound();
 
         // GET printers/{id}/status
         [HttpGet("{id}/status")]
-        public ActionResult<DeviceStatusEx> Status(string id)
-        {
-            try
-            {
-                return context.Printers[id].CheckStatus();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-        }
+        public ActionResult<DeviceStatusEx> Status(string id) => 
+            context.Printers.TryGetValue(id, out IFiscalPrinter printer) 
+            ? 
+            (ActionResult<DeviceStatusEx>) printer.CheckStatus() 
+            : 
+            NotFound();
 
         // POST printers/{id}/printreceipt
         [HttpPost("{id}/printreceipt")]
-        public ActionResult<PrintReceiptResult> PrintReceipt(string id, [FromBody] Receipt receipt)
-        {
-            try
+        public ActionResult<PrintReceiptResult> PrintReceipt(string id, [FromBody] Receipt receipt) {
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                var (info, status) = context.Printers[id].PrintReceipt(receipt);
+                var (info, status) = printer.PrintReceipt(receipt);
                 return new PrintReceiptResult { Info = info, Status = status };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         // POST printers/{id}/printreversalreceipt
         [HttpPost("{id}/printreversalreceipt")]
         public ActionResult<PrintResult> PrintReversalReceipt(string id, [FromBody] ReversalReceipt reversalReceipt)
         {
-            try
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult {
-                    Status = context.Printers[id].PrintReversalReceipt(reversalReceipt)
+                return new PrintResult
+                {
+                    Status = printer.PrintReversalReceipt(reversalReceipt)
                 };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            
+            return NotFound();
         }
 
         // POST printers/{id}/printwithdraw
         [HttpPost("{id}/printwithdraw")]
         public ActionResult<PrintResult> PrintWithdraw(string id, [FromBody] TransferAmount withdraw)
         {
-            try
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 return new PrintResult
                 {
-                    Status = context.Printers[id].PrintMoneyWithdraw(withdraw.Amount)
+                    Status = printer.PrintMoneyWithdraw(withdraw.Amount)
                 };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         // POST printers/{id}/printdeposit
         [HttpPost("{id}/printdeposit")]
         public ActionResult<PrintResult> PrintDeposit(string id, [FromBody] TransferAmount deposit)
         {
-            try
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 return new PrintResult
                 {
-                    Status = context.Printers[id].PrintMoneyDeposit(deposit.Amount)
+                    Status = printer.PrintMoneyDeposit(deposit.Amount)
                 };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         // POST printers/{id}/setdatetime
         [HttpPost("{id}/setdatetime")]
         public ActionResult<PrintResult> SetDateTime(string id, [FromBody] CurrentDateTime currentDateTime)
         {
-            try
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 return new PrintResult
                 {
-                    Status = context.Printers[id].SetDateTime(currentDateTime.DateTime)
+                    Status = printer.SetDateTime(currentDateTime.DateTime)
                 };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         // POST printers/{id}/printzeroingreport
         [HttpPost("{id}/printzeroingreport")]
         public ActionResult<PrintResult> PrintZeroingReport(string id)
         {
-            try
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 return new PrintResult
                 {
-                    Status = context.Printers[id].PrintZeroingReport()
+                    Status = printer.PrintZeroingReport()
                 };
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
     }
 }
