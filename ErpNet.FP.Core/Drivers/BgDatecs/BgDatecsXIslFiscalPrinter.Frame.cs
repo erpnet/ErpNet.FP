@@ -70,7 +70,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 if (bcc.SequenceEqual(computedBcc))
                 {
                     var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Debug.WriteLine($"Response({data.Length}): {response}");
+                    System.Diagnostics.Trace.WriteLine($"Response({data.Length}): {response}");
 
                     return (response, ParseStatus(status));
                 }
