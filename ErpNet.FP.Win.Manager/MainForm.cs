@@ -16,6 +16,7 @@ namespace ErpNet.FP.Win.Manager
         private readonly MenuItem menuItemShowConsole;
         private readonly TextBox logBox;
         private readonly IContainer components;
+        private Process serviceProcess;
 
         public MainForm()
         {
@@ -106,7 +107,11 @@ namespace ErpNet.FP.Win.Manager
 
         private void MenuItemExit_Click(object Sender, EventArgs e)
         {
-            // Close the form, which closes the application.
+            this.managerNotifyIcon.BalloonTipText = "Stopping ErpNet.FP.Win service...";
+            this.managerNotifyIcon.ShowBalloonTip(2000);
+            serviceProcess.CloseMainWindow();
+            Thread.Sleep(2000);
+            serviceProcess.Kill();
             this.Close();
         }
 
@@ -119,24 +124,25 @@ namespace ErpNet.FP.Win.Manager
         private void RunService()
         {
             // Creating the service process
-            Process process = new Process();
-            process.StartInfo.FileName = @"ErpNet.FP.Win.exe";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
+            serviceProcess = new Process();
+            //serviceProcess.StartInfo.FileName = @"..\..\..\..\ErpNet.FP.Win\Published\ErpNet.FP.Win.exe";
+            serviceProcess.StartInfo.FileName = @"ErpNet.FP.Win.exe";
+            serviceProcess.StartInfo.UseShellExecute = false;
+            serviceProcess.StartInfo.RedirectStandardOutput = true;
+            serviceProcess.StartInfo.RedirectStandardError = true;
+            serviceProcess.StartInfo.CreateNoWindow = true;
 
             // Setting output and error (asynchronous) handlers
-            process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
-            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            serviceProcess.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
+            serviceProcess.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
 
             // Starting process and handlers
             ThreadStart processThreadStarter = new ThreadStart(() =>
             {
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.WaitForExit();
+                serviceProcess.Start();
+                serviceProcess.BeginOutputReadLine();
+                serviceProcess.BeginErrorReadLine();
+                serviceProcess.WaitForExit();
             });
             Thread processThread = new Thread(processThreadStarter);
             processThread.Start();
