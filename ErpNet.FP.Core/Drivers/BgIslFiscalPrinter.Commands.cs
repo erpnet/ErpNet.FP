@@ -125,14 +125,20 @@ namespace ErpNet.FP.Core.Drivers
                 return (null, deviceStatus);
             }
 
-            try
+
+            if (DateTime.TryParseExact(dateTimeResponse,
+                "dd-MM-yy HH:mm:ss",
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime1))
             {
-                var dateTime = DateTime.ParseExact(dateTimeResponse,
-                    "dd-MM-yy HH:mm:ss",
-                    CultureInfo.InvariantCulture);
-                return (dateTime, deviceStatus);
+                return (dateTime1, deviceStatus);
             }
-            catch
+            else if (DateTime.TryParseExact(dateTimeResponse,
+                "dd.MM.yy HH:mm:ss",
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime2))
+            {
+                return (dateTime2, deviceStatus);
+            }
+            else
             {
                 deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
                 deviceStatus.Errors.Add($"Wrong format of date and time");
