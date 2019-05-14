@@ -62,7 +62,7 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintMoneyDeposit(decimal amount)
         {
             var (response, status) = MoneyTransfer(amount);
-            System.Diagnostics.Debug.WriteLine("PrintMoneyDeposit: {0}", response);
+            System.Diagnostics.Trace.WriteLine("PrintMoneyDeposit: {0}", response);
             return status;
         }
 
@@ -73,7 +73,7 @@ namespace ErpNet.FP.Core.Drivers
                 throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
             }
             var (response, status) = MoneyTransfer(-amount);
-            System.Diagnostics.Debug.WriteLine("PrintMoneyWithdraw: {0}", response);
+            System.Diagnostics.Trace.WriteLine("PrintMoneyWithdraw: {0}", response);
             return status;
         }
 
@@ -266,7 +266,7 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintZeroingReport()
         {
             var (response, status) = PrintDailyReport();
-            System.Diagnostics.Debug.WriteLine("PrintZeroingReport: {0}", response);
+            System.Diagnostics.Trace.WriteLine("PrintZeroingReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
         }

@@ -60,7 +60,7 @@ namespace ErpNet.FP.Core.Provider
                         {
                             try
                             {
-                                System.Diagnostics.Debug.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
+                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
                                 var p = driver.Connect(channel);
                                 var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
                                 p.DeviceInfo.Uri = uri;

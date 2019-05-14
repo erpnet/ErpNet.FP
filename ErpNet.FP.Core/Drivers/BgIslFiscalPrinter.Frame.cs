@@ -75,12 +75,12 @@ namespace ErpNet.FP.Core.Drivers
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
-                System.Diagnostics.Debug.Write(">>>");
+                System.Diagnostics.Trace.Write(">>>");
                 foreach (var b in request)
                 {
-                    System.Diagnostics.Debug.Write($"{b:X} ");
+                    System.Diagnostics.Trace.Write($"{b:X} ");
                 }
-                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Trace.WriteLine("");
                 Channel.Write(request);
 
                 // Read response frames.
@@ -90,12 +90,12 @@ namespace ErpNet.FP.Core.Drivers
                     var buffer = Channel.Read();
 
                     // For debugging purposes only.
-                    System.Diagnostics.Debug.Write("<<<");
+                    System.Diagnostics.Trace.Write("<<<");
                     foreach (var b in buffer)
                     {
-                        System.Diagnostics.Debug.Write($"{b:X} ");
+                        System.Diagnostics.Trace.Write($"{b:X} ");
                     }
-                    System.Diagnostics.Debug.WriteLine("");
+                    System.Diagnostics.Trace.WriteLine("");
 
                     // Parse frames
                     var readFrames = new List<List<byte>>();
@@ -180,7 +180,7 @@ namespace ErpNet.FP.Core.Drivers
                 if (bcc.SequenceEqual(computedBcc))
                 {
                     var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Debug.WriteLine($"Response({data.Length}): {response}");
+                    System.Diagnostics.Trace.WriteLine($"Response({data.Length}): {response}");
 
                     return (response, ParseStatus(status));
                 }
@@ -196,7 +196,7 @@ namespace ErpNet.FP.Core.Drivers
             }
             // For debugging purposes only (to view status bits)    
             var deviceID = (Info == null ? "" : Info.SerialNumber);
-            System.Diagnostics.Debug.WriteLine($"Status of device {deviceID}");
+            System.Diagnostics.Trace.WriteLine($"Status of device {deviceID}");
             for (var i = 0; i < status.Length; i++)
             {
                 byte mask = 0b10000000;
@@ -207,11 +207,11 @@ namespace ErpNet.FP.Core.Drivers
                     mask >>= 1;
                     if ((mask & b) == mask)
                     {
-                        System.Diagnostics.Debug.Write($"{i}.{7 - j} ");
+                        System.Diagnostics.Trace.Write($"{i}.{7 - j} ");
                     }
                 }
             }
-            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Trace.WriteLine("");
 
             // TODO: fill the device status
             return new DeviceStatus();
@@ -219,13 +219,13 @@ namespace ErpNet.FP.Core.Drivers
 
         protected (string, DeviceStatus) Request(byte command, string data)
         {
-            System.Diagnostics.Debug.WriteLine($"Request({command:X}): '{data}'");
+            System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
             return ParseResponse(RawRequest(command, PrinterEncoding.GetBytes(data)));
         }
 
         protected (string, DeviceStatus) Request(byte command)
         {
-            System.Diagnostics.Debug.WriteLine($"Request({command:X})");
+            System.Diagnostics.Trace.WriteLine($"Request({command:X})");
             return ParseResponse(RawRequest(command, null));
         }
     }

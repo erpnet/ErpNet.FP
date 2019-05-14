@@ -65,13 +65,13 @@ namespace ErpNet.FP.Core.Drivers
 
         protected void WaitForDeviceToBeReady()
         {
-            System.Diagnostics.Debug.Write(">>> Ping ");
+            System.Diagnostics.Trace.Write(">>> Ping ");
             for (; ; )
             {
                 byte[]? buffer = null;
                 for (var w = 0; w < MaxWriteRetries; w++)
                 {
-                    System.Diagnostics.Debug.Write($">>> {SpecialCommandPing:X} <<< ");
+                    System.Diagnostics.Trace.Write($">>> {SpecialCommandPing:X} <<< ");
                     Channel.Write(new byte[] { SpecialCommandPing });
                     try
                     {
@@ -83,8 +83,8 @@ namespace ErpNet.FP.Core.Drivers
                         // When the device is too busy and cannot even answer ping
                         // It could be read timeout, so we will ping again, until
                         // MaxWriteRetries is exausted.
-                        System.Diagnostics.Debug.WriteLine("Timeout, try again!");
-                        System.Diagnostics.Debug.Write(">>> Ping ");
+                        System.Diagnostics.Trace.WriteLine("Timeout, try again!");
+                        System.Diagnostics.Trace.Write(">>> Ping ");
                         continue;
                     }
                 }
@@ -93,10 +93,10 @@ namespace ErpNet.FP.Core.Drivers
                     throw new TimeoutException("ping timeout");
                 }
                 var b = buffer[0];
-                System.Diagnostics.Debug.Write($"{b:X} ");
+                System.Diagnostics.Trace.Write($"{b:X} ");
                 if (b == PingAnswerDeviceReady)
                 {
-                    System.Diagnostics.Debug.WriteLine("Ready!");
+                    System.Diagnostics.Trace.WriteLine("Ready!");
                     return;
                 }
             }
@@ -117,12 +117,12 @@ namespace ErpNet.FP.Core.Drivers
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
-                System.Diagnostics.Debug.Write(">>>");
+                System.Diagnostics.Trace.Write(">>>");
                 foreach (var b in request)
                 {
-                    System.Diagnostics.Debug.Write($"{b:X} ");
+                    System.Diagnostics.Trace.Write($"{b:X} ");
                 }
-                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Trace.WriteLine("");
                 Channel.Write(request);
 
                 // Read response frames.
@@ -132,12 +132,12 @@ namespace ErpNet.FP.Core.Drivers
                     var buffer = Channel.Read();
 
                     // For debugging purposes only.
-                    System.Diagnostics.Debug.Write("<<<");
+                    System.Diagnostics.Trace.Write("<<<");
                     foreach (var b in buffer)
                     {
-                        System.Diagnostics.Debug.Write($"{b:X} ");
+                        System.Diagnostics.Trace.Write($"{b:X} ");
                     }
-                    System.Diagnostics.Debug.WriteLine("");
+                    System.Diagnostics.Trace.WriteLine("");
 
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
@@ -259,13 +259,13 @@ namespace ErpNet.FP.Core.Drivers
 
         protected (string, DeviceStatus) Request(byte command, string data)
         {
-            System.Diagnostics.Debug.WriteLine($"Request({command:X}): '{data}'");
+            System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
             return ParseResponse(RawRequest(command, PrinterEncoding.GetBytes(data)));
         }
 
         protected (string, DeviceStatus) Request(byte command)
         {
-            System.Diagnostics.Debug.WriteLine($"Request({command:X})");
+            System.Diagnostics.Trace.WriteLine($"Request({command:X})");
             return ParseResponse(RawRequest(command, null));
         }
     }
