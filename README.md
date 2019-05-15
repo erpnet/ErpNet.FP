@@ -1,3 +1,5 @@
+<img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/ErpNet.FP.Win.ico" align="right"/>
+
 # ErpNet.FP
 
 The ErpNet.FP library and server are intended to facilitate the printing to fiscal printers.
