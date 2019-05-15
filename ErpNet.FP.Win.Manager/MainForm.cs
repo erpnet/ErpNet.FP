@@ -17,11 +17,13 @@ namespace ErpNet.FP.Win.Manager
         private readonly TextBox logBox;
         private readonly IContainer components;
         private Process serviceProcess;
+        private bool cancelClose = true;
 
         public MainForm()
         {
             this.Text = "ErpNet.FP.Win Manager";
             this.Icon = new Icon("ErpNet.FP.Win.ico");
+            this.FormClosing += MainForm_FormClosing;
 
             this.components = new Container();
 
@@ -42,13 +44,13 @@ namespace ErpNet.FP.Win.Manager
             {
                 Text = "Show &console"
             };
-            this.menuItemShowConsole.Click += new EventHandler(this.MenuItemShowConsole_Click);
+            this.menuItemShowConsole.Click += MenuItemShowConsole_Click;
 
             this.menuItemExit = new MenuItem
             {
                 Text = "E&xit"
             };
-            this.menuItemExit.Click += new EventHandler(this.MenuItemExit_Click);
+            this.menuItemExit.Click += MenuItemExit_Click;
 
             this.managerContextMenu = new ContextMenu();
             this.managerContextMenu.MenuItems.AddRange(
@@ -65,11 +67,22 @@ namespace ErpNet.FP.Win.Manager
                 Text = "ErpNet.FP.Win.Manager",
                 Visible = true,
             };
-            managerNotifyIcon.DoubleClick += new EventHandler(this.ManagerNotifyIcon_DoubleClick);
+            managerNotifyIcon.DoubleClick += ManagerNotifyIcon_DoubleClick;
 
             this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Win service...";
             this.managerNotifyIcon.ShowBalloonTip(3000);
             RunService();
+        }
+
+        private void MenuItemShowConsole_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = cancelClose;
+            this.Hide();
         }
 
         protected override void SetVisibleCore(bool value)
@@ -112,13 +125,8 @@ namespace ErpNet.FP.Win.Manager
             serviceProcess.CloseMainWindow();
             Thread.Sleep(2000);
             serviceProcess.Kill();
+            cancelClose = false;
             this.Close();
-        }
-
-        private void MenuItemShowConsole_Click(object Sender, EventArgs e)
-        {
-            // Close the form, which closes the application.
-            this.Show();
         }
 
         private void RunService()
