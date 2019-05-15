@@ -116,7 +116,7 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture));
         }
 
-        public virtual (string, DeviceStatus) GetFiscalMemoryNumber()
+        public virtual (string, DeviceStatus) GetFiscalMemorySerialNumber()
         {
             var (rawDeviceInfo, deviceStatus) = GetRawDeviceInfo();
             var fields = rawDeviceInfo.Split(',');

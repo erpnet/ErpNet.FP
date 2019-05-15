@@ -20,6 +20,6 @@
         /// <summary>
         /// The fiscal memory number.
         /// </summary>
-        public string FiscalMemoryNumber = string.Empty;
+        public string FiscalMemorySerialNumber = string.Empty;
     }
 }

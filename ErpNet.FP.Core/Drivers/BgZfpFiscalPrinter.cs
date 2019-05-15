@@ -240,13 +240,13 @@ namespace ErpNet.FP.Core.Drivers
         {
             var receiptInfo = new ReceiptInfo();
 
-            var (fiscalMemoryNumber, deviceStatus) = GetFiscalMemoryNumber();
+            var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
             if (!deviceStatus.Ok)
             {
                 return (receiptInfo, deviceStatus);
             }
 
-            receiptInfo.FiscalMemoryNumber = fiscalMemoryNumber;
+            receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
 
             // Receipt header
             (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);

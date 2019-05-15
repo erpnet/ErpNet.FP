@@ -40,7 +40,7 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandReadLastReceiptQRCodeData, "B");
         }
 
-        public virtual (string, DeviceStatus) GetFiscalMemoryNumber()
+        public virtual (string, DeviceStatus) GetFiscalMemorySerialNumber()
         {
             var (rawDeviceInfo, deviceStatus) = GetRawDeviceInfo();
             var fields = rawDeviceInfo.Split(";");
