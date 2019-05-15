@@ -25,6 +25,7 @@ namespace ErpNet.FP.Win.Manager
             this.Icon = new Icon("ErpNet.FP.Win.ico");
             this.FormClosing += MainForm_FormClosing;
 
+
             this.components = new Container();
 
             this.logBox = new TextBox
@@ -35,8 +36,12 @@ namespace ErpNet.FP.Win.Manager
                 BackColor = Color.Black,
                 ForeColor = Color.White,
                 BorderStyle = BorderStyle.None,
-                WordWrap = false
+                WordWrap = true
             };
+
+            this.logBox.Font = new Font(FontFamily.GenericMonospace, logBox.Font.Size);
+            this.Width = (int)Math.Round(this.logBox.Font.Size * 120);
+            this.Height = (int)Math.Round(this.logBox.Font.GetHeight() * 30);
 
             this.components.Add(this.logBox);
 
@@ -76,6 +81,7 @@ namespace ErpNet.FP.Win.Manager
 
         private void MenuItemShowConsole_Click(object sender, EventArgs e)
         {
+            this.CenterToScreen();
             this.Show();
         }
 
