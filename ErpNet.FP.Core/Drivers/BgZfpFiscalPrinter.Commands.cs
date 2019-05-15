@@ -40,6 +40,22 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandReadLastReceiptQRCodeData, "B");
         }
 
+        public virtual (string, DeviceStatus) GetFiscalMemoryNumber()
+        {
+            var (rawDeviceInfo, deviceStatus) = GetRawDeviceInfo();
+            var fields = rawDeviceInfo.Split(";");
+            if (fields != null && fields.Length > 0)
+            {
+                return (fields[^1], deviceStatus);
+            }
+            else
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading device info");
+                deviceStatus.Errors.Add($"Wrong number of fields");
+                return (string.Empty, deviceStatus);
+            }
+        }
+
         public virtual (DateTime?, DeviceStatus) GetDateTime()
         {
             var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);

@@ -17,5 +17,9 @@
         /// The receipt amount.
         /// </summary>
         public decimal ReceiptAmount = 0m;
+        /// <summary>
+        /// The fiscal memory number.
+        /// </summary>
+        public string FiscalMemoryNumber = string.Empty;
     }
 }

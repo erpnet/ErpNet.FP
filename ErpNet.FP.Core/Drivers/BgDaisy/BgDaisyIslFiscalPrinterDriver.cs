@@ -9,7 +9,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> ?options = null)
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
@@ -28,7 +28,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, string ?rawDeviceConstants = null)
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, string? rawDeviceConstants = null)
         {
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 6)

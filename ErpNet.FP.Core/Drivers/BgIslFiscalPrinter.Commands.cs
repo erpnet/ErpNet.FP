@@ -116,6 +116,22 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture));
         }
 
+        public virtual (string, DeviceStatus) GetFiscalMemoryNumber()
+        {
+            var (rawDeviceInfo, deviceStatus) = GetRawDeviceInfo();
+            var fields = rawDeviceInfo.Split(',');
+            if (fields != null && fields.Length > 0)
+            {
+                return (fields[^1], deviceStatus);
+            }
+            else
+            {
+                deviceStatus.Statuses.Add($"Error occured while reading device info");
+                deviceStatus.Errors.Add($"Wrong number of fields");
+                return (string.Empty, deviceStatus);
+            }
+        }
+
         public virtual (System.DateTime?, DeviceStatus) GetDateTime()
         {
             var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
