@@ -243,7 +243,6 @@ namespace ErpNet.FP.Core.Drivers
             var (fiscalMemoryNumber, deviceStatus) = GetFiscalMemoryNumber();
             if (!deviceStatus.Ok)
             {
-                AbortReceipt();
                 return (receiptInfo, deviceStatus);
             }
 
