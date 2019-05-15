@@ -239,8 +239,18 @@ namespace ErpNet.FP.Core.Drivers
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
             var receiptInfo = new ReceiptInfo();
+
+            var (fiscalMemoryNumber, deviceStatus) = GetFiscalMemoryNumber();
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                return (receiptInfo, deviceStatus);
+            }
+
+            receiptInfo.FiscalMemoryNumber = fiscalMemoryNumber;
+
             // Receipt header
-            var (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
+            (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
