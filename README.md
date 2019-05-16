@@ -2,9 +2,7 @@
 
 # ErpNet.FP
 
-The ErpNet.FP library and server are intended to facilitate the printing to fiscal printers.
-
-The library provides methods to detect, get status, print receipts, reports and other documents to fiscal printers.
+The ErpNet.FP library and server are intended to facilitate the printing to fiscal printers. The library provides methods to detect, get status, print receipts, reports and other documents to fiscal printers.
 
 The ErpNet.FP http server provides a REST API with JSON input/output, which prints documents transactionally and returns result status.
 
@@ -28,7 +26,7 @@ To start the printing service, run ErpNet.FP.Win.Manager.exe. It start and show 
 Starting the manager also starts the service. Stopping the manager stops the service.
 
 ### Console and debug information
-The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the inner workings of the printing service.
+The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the printing service.
 
 After you stop the manager, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
 
