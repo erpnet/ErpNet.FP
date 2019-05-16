@@ -21,7 +21,7 @@ The JSON protocol is documented in a series of postman examples:
 
 ### Want to try it now? Download the windows version of ErpNet.FP
 
--  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip].
+-  You can download the ErpNet.FP.Win Http Server and its manager app ErpNet.FP.Win.Manager here -> [ErpNet.FP.Win.zip].
 
 To start the printing service, run ErpNet.FP.Win.Manager.exe. It start and show notification icon in the tray.
 
