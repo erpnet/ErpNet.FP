@@ -15,23 +15,24 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-### For the impatient, here are some examples
-
+### The JSON protocol
+The JSON protocol is documented in a series of postman examples:
 - [Postman collection] of examples
 
-### You want to try it now? You can download windows version of ErpNet.FP
+### Want to try it now? Download the windows version of ErpNet.FP
 
 -  You can downloading ErpNet.FP.Win Http Server, and its manager ErpNet.FP.Win.Manager.exe here -> [ErpNet.FP.Win.zip].
 
-Inside the zip file, you will find two Windows executables: ErpNet.FP.Win.exe (service) and ErpNet.FP.Win.Manager.exe (service manager). 
+To start the printing service, run ErpNet.FP.Win.Manager.exe. It start and show notification icon in the tray.
 
-Run ErpNet.FP.Win.Manager.exe and it will start the ErpNet.FP.Win.exe automatically from the same directory, and will be waiting for your commands as notification icon in the tray.
+Starting the manager also starts the service. Stopping the manager stops the service.
 
-When you exit the session, you can examine debug.log file for every event occured while using the service. 
+### Console and debug information
+The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the inner workings of the printing service.
 
-Also, you can use "Show console", and "Exit" options from the service manager tray icon.
+After you stop the manager, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
 
-## Some concepts needs to be explained
+## Concepts
 
 ### Printer Id
 
