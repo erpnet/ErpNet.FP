@@ -47,8 +47,13 @@
         DeviceStatus PrintMoneyWithdraw(decimal amount);
 
         /// <summary>
-        /// Prints a zeroing report.
+        /// Prints a zreport.
         /// </summary>
-        DeviceStatus PrintZeroingReport();
+        DeviceStatus PrintZReport();
+
+        /// <summary>
+        /// Prints a xreport.
+        /// </summary>
+        DeviceStatus PrintXReport();
     }
 }

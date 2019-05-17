@@ -277,9 +277,16 @@ namespace ErpNet.FP.Core.Drivers
             return GetLastReceiptInfo();
         }
 
-        public override DeviceStatus PrintZeroingReport()
+        public override DeviceStatus PrintZReport()
         {
-            var (response, status) = PrintDailyReport();
+            var (response, status) = PrintDailyReport(true);
+            System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
+            return status;
+        }
+
+        public override DeviceStatus PrintXReport()
+        {
+            var (response, status) = PrintDailyReport(false);
             System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
             return status;
         }

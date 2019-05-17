@@ -216,9 +216,16 @@ namespace ErpNet.FP.Core.Drivers
             }));
         }
 
-        public virtual (string, DeviceStatus) PrintDailyReport()
+        public virtual (string, DeviceStatus) PrintDailyReport(bool zeroing = true)
         {
-            return Request(CommandPrintDailyFiscalReport, "Z");
+            if (zeroing)
+            {
+                return Request(CommandPrintDailyFiscalReport, "Z");
+            }
+            else
+            {
+                return Request(CommandPrintDailyFiscalReport, "X");
+            }
         }
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()

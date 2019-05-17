@@ -271,10 +271,16 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(DatecsXCommandOpenStornoDocument, headerData.ToString());
         }
 
-
-        public override (string, DeviceStatus) PrintDailyReport()
+        public override (string, DeviceStatus) PrintDailyReport(bool zeroing = true)
         {
-            return Request(CommandPrintDailyReport, "Z\t");
+            if (zeroing)
+            {
+                return Request(CommandPrintDailyReport, "Z\t");
+            }
+            else
+            {
+                return Request(CommandPrintDailyReport, "X\t");
+            }
         }
 
         // 8 Bytes x 8 bits
