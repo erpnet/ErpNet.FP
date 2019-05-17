@@ -247,7 +247,7 @@ namespace ErpNet.FP.CoreExample
             ShowStatus(commandStatus);
             */
 
-            //fp.PrintZeroingReport();
+            //fp.PrintZReport();
         }
 
         static void ShowStatus(DeviceStatus status)

@@ -271,10 +271,18 @@ namespace ErpNet.FP.Core.Drivers
             return (receiptInfo, deviceStatus);
         }
 
-        public override DeviceStatus PrintZeroingReport()
+        public override DeviceStatus PrintZReport()
         {
-            var (response, status) = PrintDailyReport();
-            System.Diagnostics.Trace.WriteLine("PrintZeroingReport: {0}", response);
+            var (response, status) = PrintDailyReport(true);
+            System.Diagnostics.Trace.WriteLine("PrintZReport: {0}", response);
+            // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+            return status;
+        }
+
+        public override DeviceStatus PrintXReport()
+        {
+            var (response, status) = PrintDailyReport(false);
+            System.Diagnostics.Trace.WriteLine("PrintZReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
         }

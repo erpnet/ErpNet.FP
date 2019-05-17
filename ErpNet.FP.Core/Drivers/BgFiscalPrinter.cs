@@ -63,7 +63,9 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
-        public abstract DeviceStatus PrintZeroingReport();
+        public abstract DeviceStatus PrintZReport();
+
+        public abstract DeviceStatus PrintXReport();
 
         protected abstract DeviceStatus ParseStatus(byte[]? status);
 

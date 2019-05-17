@@ -264,9 +264,16 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandFiscalReceiptTotal, paymentData.ToString());
         }
 
-        public virtual (string, DeviceStatus) PrintDailyReport()
+        public virtual (string, DeviceStatus) PrintDailyReport(bool zeroing = true)
         {
-            return Request(CommandPrintDailyReport);
+            if (zeroing)
+            {
+                return Request(CommandPrintDailyReport);
+            }
+            else
+            {
+                return Request(CommandPrintDailyReport, "2");
+            }
         }
 
         public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()

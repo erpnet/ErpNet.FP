@@ -27,25 +27,26 @@ namespace ErpNet.FP.Win.Controllers
 
         // GET printers/{id}
         [HttpGet("{id}")]
-        public ActionResult<DeviceInfo> Info(string id) => 
-            context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo) 
-            ? 
-            (ActionResult<DeviceInfo>) deviceInfo 
-            : 
+        public ActionResult<DeviceInfo> Info(string id) =>
+            context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo)
+            ?
+            (ActionResult<DeviceInfo>)deviceInfo
+            :
             NotFound();
 
         // GET printers/{id}/status
         [HttpGet("{id}/status")]
-        public ActionResult<DeviceStatusEx> Status(string id) => 
-            context.Printers.TryGetValue(id, out IFiscalPrinter printer) 
-            ? 
-            (ActionResult<DeviceStatusEx>) printer.CheckStatus() 
-            : 
+        public ActionResult<DeviceStatusEx> Status(string id) =>
+            context.Printers.TryGetValue(id, out IFiscalPrinter printer)
+            ?
+            (ActionResult<DeviceStatusEx>)printer.CheckStatus()
+            :
             NotFound();
 
-        // POST printers/{id}/printreceipt
-        [HttpPost("{id}/printreceipt")]
-        public ActionResult<PrintReceiptResult> PrintReceipt(string id, [FromBody] Receipt receipt) {
+        // POST printers/{id}/receipt
+        [HttpPost("{id}/receipt")]
+        public ActionResult<PrintReceiptResult> PrintReceipt(string id, [FromBody] Receipt receipt)
+        {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var (info, status) = printer.PrintReceipt(receipt);
@@ -54,8 +55,8 @@ namespace ErpNet.FP.Win.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/printreversalreceipt
-        [HttpPost("{id}/printreversalreceipt")]
+        // POST printers/{id}/reversalreceipt
+        [HttpPost("{id}/reversalreceipt")]
         public ActionResult<PrintResult> PrintReversalReceipt(string id, [FromBody] ReversalReceipt reversalReceipt)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
@@ -68,8 +69,8 @@ namespace ErpNet.FP.Win.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/printwithdraw
-        [HttpPost("{id}/printwithdraw")]
+        // POST printers/{id}/withdraw
+        [HttpPost("{id}/withdraw")]
         public ActionResult<PrintResult> PrintWithdraw(string id, [FromBody] TransferAmount withdraw)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
@@ -82,8 +83,8 @@ namespace ErpNet.FP.Win.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/printdeposit
-        [HttpPost("{id}/printdeposit")]
+        // POST printers/{id}/deposit
+        [HttpPost("{id}/deposit")]
         public ActionResult<PrintResult> PrintDeposit(string id, [FromBody] TransferAmount deposit)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
@@ -96,8 +97,8 @@ namespace ErpNet.FP.Win.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/setdatetime
-        [HttpPost("{id}/setdatetime")]
+        // POST printers/{id}/datetime
+        [HttpPost("{id}/datetime")]
         public ActionResult<PrintResult> SetDateTime(string id, [FromBody] CurrentDateTime currentDateTime)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
@@ -110,15 +111,29 @@ namespace ErpNet.FP.Win.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/printzeroingreport
-        [HttpPost("{id}/printzeroingreport")]
-        public ActionResult<PrintResult> PrintZeroingReport(string id)
+        // POST printers/{id}/zreport
+        [HttpPost("{id}/zreport")]
+        public ActionResult<PrintResult> PrintZReport(string id)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 return new PrintResult
                 {
-                    Status = printer.PrintZeroingReport()
+                    Status = printer.PrintZReport()
+                };
+            }
+            return NotFound();
+        }
+
+        // POST printers/{id}/xreport
+        [HttpPost("{id}/xreport")]
+        public ActionResult<PrintResult> PrintXReport(string id)
+        {
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            {
+                return new PrintResult
+                {
+                    Status = printer.PrintXReport()
                 };
             }
             return NotFound();
