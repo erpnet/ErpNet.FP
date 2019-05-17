@@ -18,6 +18,7 @@ namespace ErpNet.FP.Win.Manager
         private readonly IContainer components;
         private Process serviceProcess;
         private bool cancelClose = true;
+        private readonly Size consoleSize = new Size(120, 30);
 
         public MainForm()
         {
@@ -36,12 +37,13 @@ namespace ErpNet.FP.Win.Manager
                 BackColor = Color.Black,
                 ForeColor = Color.White,
                 BorderStyle = BorderStyle.None,
-                WordWrap = true
+                WordWrap = true,
+                ScrollBars = ScrollBars.Vertical
             };
 
             this.logBox.Font = new Font(FontFamily.GenericMonospace, logBox.Font.Size);
-            this.Width = (int)Math.Round(this.logBox.Font.Size * 120);
-            this.Height = (int)Math.Round(this.logBox.Font.GetHeight() * 30);
+            this.Width = (int)Math.Round(this.logBox.Font.Size * consoleSize.Width);
+            this.Height = (int)Math.Round(this.logBox.Font.GetHeight() * consoleSize.Height);
 
             this.components.Add(this.logBox);
 
@@ -167,7 +169,7 @@ namespace ErpNet.FP.Win.Manager
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 this.logBox.AppendText(outLine.Data ?? string.Empty);
-                this.logBox.AppendText("\n");
+                this.logBox.AppendText(Environment.NewLine);
             }));
         }
     }
