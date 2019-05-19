@@ -257,16 +257,19 @@ namespace ErpNet.FP.Core.Drivers
             throw new InvalidResponseException("the response is invalid");
         }
 
-        protected (string, DeviceStatus) Request(byte command, string data)
+        protected (string, DeviceStatus) Request(byte command, string? data = null)
         {
-            System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
-            return ParseResponse(RawRequest(command, PrinterEncoding.GetBytes(data)));
-        }
-
-        protected (string, DeviceStatus) Request(byte command)
-        {
-            System.Diagnostics.Trace.WriteLine($"Request({command:X})");
-            return ParseResponse(RawRequest(command, null));
+            syncMutex.WaitOne();
+            try
+            {
+                System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
+                return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
+            }
+            catch (Exception e)
+            {
+                syncMutex.ReleaseMutex();
+                throw e;
+            }
         }
     }
 }

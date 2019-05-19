@@ -2,7 +2,9 @@
 using ErpNet.FP.Win.Contexts;
 using ErpNet.FP.Win.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ErpNet.FP.Win.Controllers
 {
@@ -43,98 +45,180 @@ namespace ErpNet.FP.Win.Controllers
             :
             NotFound();
 
+        // GET printers/taskinfo
+        [HttpGet("taskinfo")]
+        public ActionResult<TaskInfoResult> TaskInfo([FromQuery]string id) =>
+            context.GetTaskInfo(id);
+
         // POST printers/{id}/receipt
         [HttpPost("{id}/receipt")]
-        public ActionResult<PrintReceiptResult> PrintReceipt(string id, [FromBody] Receipt receipt)
+        public async Task<IActionResult> PrintReceipt(
+            string id, 
+            [FromBody] Receipt receipt,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                var (info, status) = printer.PrintReceipt(receipt);
-                return new PrintReceiptResult { Info = info, Status = status };
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.Receipt,
+                    receipt,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
+                {
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/reversalreceipt
         [HttpPost("{id}/reversalreceipt")]
-        public ActionResult<PrintResult> PrintReversalReceipt(string id, [FromBody] ReversalReceipt reversalReceipt)
+        public async Task<IActionResult> PrintReversalReceipt(
+            string id,
+            [FromBody] ReversalReceipt reversalReceipt,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout, 
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.ReversalReceipt, 
+                    reversalReceipt, 
+                    timeout, 
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.PrintReversalReceipt(reversalReceipt)
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/withdraw
         [HttpPost("{id}/withdraw")]
-        public ActionResult<PrintResult> PrintWithdraw(string id, [FromBody] TransferAmount withdraw)
+        public async Task<IActionResult> PrintWithdraw(
+            string id,
+            [FromBody] TransferAmount withdraw,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.Withdraw,
+                    withdraw,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.PrintMoneyWithdraw(withdraw.Amount)
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/deposit
         [HttpPost("{id}/deposit")]
-        public ActionResult<PrintResult> PrintDeposit(string id, [FromBody] TransferAmount deposit)
+        public async Task<IActionResult> PrintDeposit(
+            string id,
+            [FromBody] TransferAmount deposit,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.Deposit,
+                    deposit,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.PrintMoneyDeposit(deposit.Amount)
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/datetime
         [HttpPost("{id}/datetime")]
-        public ActionResult<PrintResult> SetDateTime(string id, [FromBody] CurrentDateTime currentDateTime)
+        public async Task<IActionResult> SetDateTime(
+            string id,
+            [FromBody] CurrentDateTime datetime,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.SetDateTime,
+                    datetime,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.SetDateTime(currentDateTime.DateTime)
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/zreport
         [HttpPost("{id}/zreport")]
-        public ActionResult<PrintResult> PrintZReport(string id)
+        public async Task<IActionResult> PrintZReport(
+            string id,
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.ZReport,
+                    null,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.PrintZReport()
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
 
         // POST printers/{id}/xreport
         [HttpPost("{id}/xreport")]
-        public ActionResult<PrintResult> PrintXReport(string id)
+        public async Task<IActionResult> PrintXReport(
+            string id, 
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
-                return new PrintResult
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.XReport,
+                    null,
+                    timeout,
+                    asyncTimeout);
+                if (result == null)
                 {
-                    Status = printer.PrintXReport()
-                };
+                    return NoContent(); // Timeout occured, so nothing returned
+                }
+                return Ok(result);
             }
             return NotFound();
         }
