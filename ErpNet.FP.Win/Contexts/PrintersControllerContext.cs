@@ -4,10 +4,15 @@ using ErpNet.FP.Core.Drivers.BgDatecs;
 using ErpNet.FP.Core.Drivers.BgEltrade;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
+using ErpNet.FP.Win.Models;
 using ErpNet.FP.Win.Transports;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ErpNet.FP.Win.Contexts
 {
@@ -16,11 +21,22 @@ namespace ErpNet.FP.Win.Contexts
         Dictionary<string, DeviceInfo> PrintersInfo { get; }
 
         Dictionary<string, IFiscalPrinter> Printers { get; }
+
+        public Task<object?> RunAsync(
+            IFiscalPrinter printer, 
+            PrintJobAction action, 
+            object? document, 
+            int timeout, 
+            int asyncTimeout);
+
+        public TaskInfoResult GetTaskInfo(string taskId);
     }
 
     public class PrintersControllerContext : IPrintersControllerContext
     {
         private readonly ILogger logger;
+        private Task? consumer;
+        private readonly Mutex taskInfoMutex = new Mutex();
 
         public class PrinterConfig
         {
@@ -31,6 +47,122 @@ namespace ErpNet.FP.Win.Contexts
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
 
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter>();
+
+        public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string>();
+
+        public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
+
+        public TaskInfoResult GetTaskInfo(string taskId)
+        {
+            lock (Tasks)
+            {
+                var taskInfoResult = new TaskInfoResult();
+                {
+                    if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+                    {
+                        taskInfoResult.Status = printJob.TaskStatus;
+                        if (printJob.Result != null)
+                        {
+                            taskInfoResult.Result = printJob.Result;
+                        }
+                    }
+                }
+                return taskInfoResult;
+            }
+        }
+
+        public async Task<object?> RunAsync(
+            IFiscalPrinter printer,
+            PrintJobAction action,
+            object? document, 
+            int timeout, 
+            int asyncTimeout)
+        {
+            var taskId = Enqueue(new PrintJob
+            {
+                Printer = printer,
+                Document = document,
+                Action = action
+            });
+            if (asyncTimeout == 0)
+            {
+                return new TaskIdResult { TaskId = taskId };
+            }
+            return await Task.Run(() => RunTask(taskId, timeout, asyncTimeout));
+        }
+
+        public object? RunTask(string taskId, int timeout, int asyncTimeout)
+        {
+            const int timeoutMinimalStep = 50; // check the queue every 50 ms
+            if (timeout <= 0) timeout = PrintJob.DefaultTimeout;
+            if (asyncTimeout < 0) asyncTimeout = PrintJob.DefaultTimeout;
+            if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+            {
+                // While the print job is not finished
+                while (printJob.Result == null)
+                {
+                    // We give the device some time to process the job
+                    Thread.Sleep(timeoutMinimalStep);
+                    asyncTimeout -= timeoutMinimalStep;
+                    timeout -= timeoutMinimalStep;
+                    if (asyncTimeout<=0) // Async timeout occured, so return taskId
+                    {
+                        return new TaskIdResult{ TaskId = taskId };
+                    }
+                    if (timeout<=0) // Timeout occured, so abort the task
+                    {
+                        // TODO: Aborting printjob
+                        // printJob.Abort();
+                        return null;
+                    }
+                }
+                return printJob.Result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void EnsureConsumer()
+        {
+            var newConsumerNeeded = true;
+            if (consumer != null)
+            {
+                lock(consumer)
+                {
+                    newConsumerNeeded = consumer.IsCompleted || consumer.IsFaulted;
+                }
+            }
+            if (newConsumerNeeded)
+            {
+                consumer = Task.Factory.StartNew(() => ConsumeTaskQueue(), TaskCreationOptions.LongRunning);
+            }
+        }
+
+        public void ConsumeTaskQueue()
+        {
+            // Run all tasks from the TaskQueue
+            while (TaskQueue.TryDequeue(out string taskId))
+            {
+                // Resolve printJob by taskId
+                if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+                {
+                    printJob.Run();
+                }
+            }
+        }
+
+        public string Enqueue(PrintJob printJob)
+        {
+            // TODO: Clear Expired Tasks
+            // ClearExpiredTasks();
+            var taskId = Guid.NewGuid().ToString();
+            Tasks[taskId] = printJob;
+            TaskQueue.Enqueue(taskId);
+            EnsureConsumer();
+            return taskId;
+        }
 
         public void AddPrinter(IFiscalPrinter printer)
         {

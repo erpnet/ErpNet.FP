@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -14,6 +15,8 @@ namespace ErpNet.FP.Core.Drivers
         protected IChannel Channel { get; }
 
         public DeviceInfo Info = new DeviceInfo();
+
+        protected static readonly Mutex syncMutex = new Mutex();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
