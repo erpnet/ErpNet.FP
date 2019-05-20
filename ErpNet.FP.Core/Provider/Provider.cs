@@ -1,6 +1,7 @@
 ﻿using ErpNet.FP.Core.Drivers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ErpNet.FP.Core.Provider
@@ -39,28 +40,28 @@ namespace ErpNet.FP.Core.Provider
             var fp = new Dictionary<string, IFiscalPrinter>();
             var transportDrivers = new Dictionary<Transport, List<FiscalPrinterDriver>>();
 
-            foreach (var (driver, transport) in protocols.Values)
+            foreach (var driverAndTransport in protocols.Values)
             {
-                if (!transportDrivers.ContainsKey(transport))
+                if (!transportDrivers.ContainsKey(driverAndTransport.transport))
                 {
-                    transportDrivers[transport] = new List<FiscalPrinterDriver>();
+                    transportDrivers[driverAndTransport.transport] = new List<FiscalPrinterDriver>();
                 }
-                transportDrivers[transport].Add(driver);
+                transportDrivers[driverAndTransport.transport].Add(driverAndTransport.driver);
             }
             foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers)
             {
                 var transport = td.Key;
                 var drivers = td.Value;
-                foreach (var (address, _) in transport.GetAvailableAddresses())
+                foreach (var addresDescription in transport.GetAvailableAddresses())
                 {
                     try
                     {
-                        var channel = transport.OpenChannel(address);
+                        var channel = transport.OpenChannel(addresDescription.address);
                         foreach (var driver in drivers)
                         {
                             try
                             {
-                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{address}... ");
+                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{addresDescription.address}... ");
                                 var p = driver.Connect(channel);
                                 var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
                                 p.DeviceInfo.Uri = uri;
