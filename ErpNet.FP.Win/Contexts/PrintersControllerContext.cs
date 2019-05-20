@@ -23,10 +23,10 @@ namespace ErpNet.FP.Win.Contexts
         Dictionary<string, IFiscalPrinter> Printers { get; }
 
         public Task<object?> RunAsync(
-            IFiscalPrinter printer, 
-            PrintJobAction action, 
-            object? document, 
-            int timeout, 
+            IFiscalPrinter printer,
+            PrintJobAction action,
+            object? document,
+            int timeout,
             int asyncTimeout);
 
         public TaskInfoResult GetTaskInfo(string taskId);
@@ -36,7 +36,8 @@ namespace ErpNet.FP.Win.Contexts
     {
         private readonly ILogger logger;
         private Task? consumer;
-        private readonly Mutex taskInfoMutex = new Mutex();
+        private readonly object taskSyncLock = new object();
+        private readonly object consumerSyncLock = new object();
 
         public class PrinterConfig
         {
@@ -54,7 +55,7 @@ namespace ErpNet.FP.Win.Contexts
 
         public TaskInfoResult GetTaskInfo(string taskId)
         {
-            lock (Tasks)
+            lock (taskSyncLock)
             {
                 var taskInfoResult = new TaskInfoResult();
                 {
@@ -74,8 +75,8 @@ namespace ErpNet.FP.Win.Contexts
         public async Task<object?> RunAsync(
             IFiscalPrinter printer,
             PrintJobAction action,
-            object? document, 
-            int timeout, 
+            object? document,
+            int timeout,
             int asyncTimeout)
         {
             var taskId = Enqueue(new PrintJob
@@ -105,11 +106,11 @@ namespace ErpNet.FP.Win.Contexts
                     Thread.Sleep(timeoutMinimalStep);
                     asyncTimeout -= timeoutMinimalStep;
                     timeout -= timeoutMinimalStep;
-                    if (asyncTimeout<=0) // Async timeout occured, so return taskId
+                    if (asyncTimeout <= 0) // Async timeout occured, so return taskId
                     {
-                        return new TaskIdResult{ TaskId = taskId };
+                        return new TaskIdResult { TaskId = taskId };
                     }
-                    if (timeout<=0) // Timeout occured, so abort the task
+                    if (timeout <= 0) // Timeout occured, so abort the task
                     {
                         // TODO: Aborting printjob
                         // printJob.Abort();
@@ -126,17 +127,12 @@ namespace ErpNet.FP.Win.Contexts
 
         private void EnsureConsumer()
         {
-            var newConsumerNeeded = true;
-            if (consumer != null)
+            lock (consumerSyncLock)
             {
-                lock(consumer)
+                if (consumer == null || consumer.IsCompleted || consumer.IsFaulted)
                 {
-                    newConsumerNeeded = consumer.IsCompleted || consumer.IsFaulted;
+                    consumer = Task.Factory.StartNew(() => ConsumeTaskQueue(), TaskCreationOptions.LongRunning);
                 }
-            }
-            if (newConsumerNeeded)
-            {
-                consumer = Task.Factory.StartNew(() => ConsumeTaskQueue(), TaskCreationOptions.LongRunning);
             }
         }
 

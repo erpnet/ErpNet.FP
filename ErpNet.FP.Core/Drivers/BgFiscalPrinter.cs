@@ -16,7 +16,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public DeviceInfo Info = new DeviceInfo();
 
-        protected static readonly Mutex syncMutex = new Mutex();
+        protected static readonly object frameSyncLock = new object();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
