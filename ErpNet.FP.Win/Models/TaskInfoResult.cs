@@ -1,4 +1,5 @@
-﻿using ErpNet.FP.Core;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ErpNet.FP.Win.Models
 {
@@ -7,7 +8,8 @@ namespace ErpNet.FP.Win.Models
         /// <summary>
         /// The current status of the task
         /// </summary>
-        public TaskStatus Status = TaskStatus.Unknown;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TaskStatus TaskStatus = TaskStatus.Unknown;
         /// <summary>
         /// The result of the task 
         /// </summary>

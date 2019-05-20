@@ -61,7 +61,7 @@ namespace ErpNet.FP.Win.Contexts
                 {
                     if (Tasks.TryGetValue(taskId, out PrintJob printJob))
                     {
-                        taskInfoResult.Status = printJob.TaskStatus;
+                        taskInfoResult.TaskStatus = printJob.TaskStatus;
                         if (printJob.Result != null)
                         {
                             taskInfoResult.Result = printJob.Result;
@@ -153,7 +153,10 @@ namespace ErpNet.FP.Win.Contexts
         {
             // TODO: Clear Expired Tasks
             // ClearExpiredTasks();
-            var taskId = Guid.NewGuid().ToString();
+            var taskId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+                .Substring(0, 22)
+                .Replace("/", "_")
+                .Replace("+", "-");
             Tasks[taskId] = printJob;
             TaskQueue.Enqueue(taskId);
             EnsureConsumer();
