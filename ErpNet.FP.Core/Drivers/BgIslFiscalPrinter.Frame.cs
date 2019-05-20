@@ -219,16 +219,10 @@ namespace ErpNet.FP.Core.Drivers
 
         protected (string, DeviceStatus) Request(byte command, string? data = null)
         {
-            syncMutex.WaitOne();
-            try
+            lock (frameSyncLock)
             {
                 System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
                 return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
-            }
-            catch(Exception e)
-            {
-                syncMutex.ReleaseMutex();
-                throw e;
             }
         }
     }
