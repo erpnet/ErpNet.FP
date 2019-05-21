@@ -23,7 +23,7 @@ namespace ErpNet.FP.Win.Manager
         public MainForm()
         {
             this.Text = "ErpNet.FP.Win Manager";
-            this.Icon = new Icon("ErpNet.FP.Win.ico");
+            this.Icon = new Icon("ErpNet.FP.ico");
             this.FormClosing += MainForm_FormClosing;
 
 
@@ -69,14 +69,14 @@ namespace ErpNet.FP.Win.Manager
 
             this.managerNotifyIcon = new NotifyIcon(this.components)
             {
-                Icon = new Icon("ErpNet.FP.Win.ico"),
+                Icon = new Icon("ErpNet.FP.ico"),
                 ContextMenu = this.managerContextMenu,
                 Text = "ErpNet.FP.Win.Manager",
                 Visible = true,
             };
             managerNotifyIcon.DoubleClick += ManagerNotifyIcon_DoubleClick;
 
-            this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Win service...";
+            this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Server...";
             this.managerNotifyIcon.ShowBalloonTip(3000);
             RunService();
         }
@@ -128,7 +128,7 @@ namespace ErpNet.FP.Win.Manager
 
         private void MenuItemExit_Click(object Sender, EventArgs e)
         {
-            this.managerNotifyIcon.BalloonTipText = "Stopping ErpNet.FP.Win service...";
+            this.managerNotifyIcon.BalloonTipText = "Stopping ErpNet.FP.Server...";
             this.managerNotifyIcon.ShowBalloonTip(2000);
             serviceProcess.CloseMainWindow();
             Thread.Sleep(2000);
@@ -141,8 +141,8 @@ namespace ErpNet.FP.Win.Manager
         {
             // Creating the service process
             serviceProcess = new Process();
-            //serviceProcess.StartInfo.FileName = @"..\..\..\..\ErpNet.FP.Win\Published\ErpNet.FP.Win.exe";
-            serviceProcess.StartInfo.FileName = @"ErpNet.FP.Win.exe";
+            //serviceProcess.StartInfo.FileName = @"..\..\..\..\ErpNet.FP.Win\Published\win-x86\ErpNet.FP.Server.exe";
+            serviceProcess.StartInfo.FileName = @"ErpNet.FP.Server.exe";
             serviceProcess.StartInfo.UseShellExecute = false;
             serviceProcess.StartInfo.RedirectStandardOutput = true;
             serviceProcess.StartInfo.RedirectStandardError = true;

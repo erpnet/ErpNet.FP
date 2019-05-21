@@ -1,4 +1,4 @@
-<img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/ErpNet.FP.Win.ico" align="right"/>
+<img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/ErpNet.FP.Server.ico" align="right"/>
 
 # ErpNet.FP
 
@@ -17,13 +17,29 @@ The http server receives input through the REST API and uses different transport
 The JSON protocol is documented in a series of postman examples:
 - [Postman collection] of examples
 
-### Want to try it now? Download the windows version of ErpNet.FP
+### Want to try it now? Download the ErpNet.FP.Server for your platform:
 
--  You can download the ErpNet.FP.Win Http Server and its manager app ErpNet.FP.Win.Manager here -> [ErpNet.FP.Win.zip].
-
+* Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
+Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Win.Manager.exe. It start and show notification icon in the tray.
+Starting the manager also starts the service ErpNet.FP.Server.exe. Stopping the manager stops the service.
 
-Starting the manager also starts the service. Stopping the manager stops the service.
+* OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - OSX] - You can download and unzip the server in a folder. 
+Inside the unzipped folder, run it from console/terminal with:
+```bash
+./ErpNet.FP.Server
+```
+
+* Linux 64 bit - [ErpNet.FP.Server.zip - Linux] - You can download and unzip the server. 
+Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
+For convenience, create a systemd service config file, get more info how to do it here [Systemd: Service File Examples].
+The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
+
+* Linux-Arm 64 bit - [ErpNet.FP.Server.zip - Linux Arm] - You can download and unzip the server. 
+This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+.
+Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
+For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
+The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 
 ### Console and debug information
 The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the printing service.
@@ -59,12 +75,14 @@ The printer Uri is currently used only internally in the http server. Still, it 
 
 ### Future plans
 
-Currently, the http server is available only for Windows:
+Currently, the http server is available for:
 - ErpNet.FP.Win
+- ErpNet.FP.Mac
+- ErpNet.FP.Linux
+- ErpNet.FP.Linux-Arm
 
 However, versions for most major platforms are planned:
-- ErpNet.FP.Linux
-- ErpNet.FP.Mac
+
 - ErpNet.FP.Android
 - ErpNet.FP.iOS
 
@@ -96,6 +114,12 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 
 [Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
 [LICENSE.txt]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
-[ErpNet.FP.Win.zip]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/ErpNet.FP.Win.zip>
 [Contributing]: <https://github.com/erpnet/ErpNet.FP/blob/master/CONTRIBUTING.md>
 [Code of Conduct]: <https://github.com/erpnet/ErpNet.FP/blob/master/CODE_OF_CONDUCT.md>
+[Systemd: Service File Examples] https://www.shellhacks.com/systemd-service-file-example/
+[Systemd - Raspberry Pi Documentation] https://www.raspberrypi.org/documentation/linux/usage/systemd.md
+[ErpNet.FP.Server.zip - Windows 32 bit] <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/win-x86/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - Windows 64 bit] <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/win-x64/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - OSX] <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/osx-x64/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - Linux] <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/linux-x64/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - Linux Arm] <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/Published/linux-arm/ErpNet.FP.Server.zip>
