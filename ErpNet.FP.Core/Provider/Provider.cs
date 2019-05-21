@@ -1,7 +1,6 @@
 ﻿using ErpNet.FP.Core.Drivers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ErpNet.FP.Core.Provider
