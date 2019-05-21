@@ -19,7 +19,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             frame.Add(MarkerPreamble);
             frame.AddRange(UInt16To4Bytes((UInt16)(MarkerSpace + 10 + (data != null ? data.Length : 0))));
             frame.Add((byte)(MarkerSpace + FrameSequenceNumber));
-            frame.AddRange(UInt16To4Bytes((UInt16)command));
+            frame.AddRange(UInt16To4Bytes(command));
 
             // Frame data
             if (data != null)

@@ -10,7 +10,7 @@ namespace ErpNet.FP.Core.Provider
     /// </summary>
     public class Provider
     {
-        private Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =
+        private readonly Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =
             new Dictionary<string, (FiscalPrinterDriver driver, Transport transport)>();
 
         /// <summary>
