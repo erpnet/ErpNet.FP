@@ -52,7 +52,7 @@ namespace ErpNet.FP.Server.Controllers
         // POST printers/{id}/receipt
         [HttpPost("{id}/receipt")]
         public async Task<IActionResult> PrintReceipt(
-            string id, 
+            string id,
             [FromBody] Receipt receipt,
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
@@ -79,16 +79,16 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintReversalReceipt(
             string id,
             [FromBody] ReversalReceipt reversalReceipt,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout, 
+            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
                     printer,
-                    PrintJobAction.ReversalReceipt, 
-                    reversalReceipt, 
-                    timeout, 
+                    PrintJobAction.ReversalReceipt,
+                    reversalReceipt,
+                    timeout,
                     asyncTimeout);
                 if (result == null)
                 {
@@ -201,7 +201,7 @@ namespace ErpNet.FP.Server.Controllers
         // POST printers/{id}/xreport
         [HttpPost("{id}/xreport")]
         public async Task<IActionResult> PrintXReport(
-            string id, 
+            string id,
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {

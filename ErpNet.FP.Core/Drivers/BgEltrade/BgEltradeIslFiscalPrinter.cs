@@ -8,7 +8,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgEltradeIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
+        public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
         public override IDictionary<string, string>? GetDefaultOptions()

@@ -18,6 +18,6 @@ namespace ErpNet.FP.Core
         /// </summary>
         /// <param name="data">The data to write.</param>
         void Write(Byte[] data);
-        string Descriptor {get;}
+        string Descriptor { get; }
     }
 }

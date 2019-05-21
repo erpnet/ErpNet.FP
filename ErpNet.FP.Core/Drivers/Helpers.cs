@@ -51,7 +51,7 @@ namespace ErpNet.FP.Core.Drivers
             return listOfStrings;
         }
 
-        public static IDictionary<string, string> MergeWith(this IDictionary<string, string> options, IDictionary<string, string> ?newOptions)
+        public static IDictionary<string, string> MergeWith(this IDictionary<string, string> options, IDictionary<string, string>? newOptions)
         {
             if (newOptions != null)
             {
@@ -64,9 +64,9 @@ namespace ErpNet.FP.Core.Drivers
         }
 
         public static string ValueOrDefault(
-            this IDictionary<string, string> options, 
-            string key, 
-            string defaultValue) => 
+            this IDictionary<string, string> options,
+            string key,
+            string defaultValue) =>
             options.TryGetValue(key, out string value) ? value : defaultValue;
     }
 }

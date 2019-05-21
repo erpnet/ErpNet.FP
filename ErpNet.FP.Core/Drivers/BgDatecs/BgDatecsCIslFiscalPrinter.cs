@@ -8,7 +8,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDatecsCIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgDatecsCIslFiscalPrinter(IChannel channel, IDictionary<string, string> ?options = null)
+        public BgDatecsCIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
         public override IDictionary<string, string>? GetDefaultOptions()
