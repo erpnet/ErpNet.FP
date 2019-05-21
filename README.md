@@ -87,7 +87,7 @@ However, versions for most major platforms are planned:
 - ErpNet.FP.Android
 - ErpNet.FP.iOS
 
-### Currently supported manifacturers
+### Currently supported manufacturers
 Datecs (http://www.datecs.bg),
 Tremol (https://www.tremol.bg),
 Daisy (https://daisy.bg/),
