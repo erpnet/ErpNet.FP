@@ -22,6 +22,7 @@ The JSON protocol is documented in a series of postman examples:
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Win.Manager.exe. It start and show notification icon in the tray.
+The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the printing service.
 Starting the manager also starts the service ErpNet.FP.Server.exe. Stopping the manager stops the service.
 
 * OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - OSX] - You can download and unzip the server in a folder. 
@@ -41,10 +42,9 @@ Because of the serial ports default permissions, run it from sudoer, with sudo, 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 
-### Console and debug information
-The tray icon contains a menu option - "Show console". It can be used to show console, showing real-time information about the printing service.
+### Debug information 
 
-After you stop the manager, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
+After you stop the service ErpNet.FP.Server, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
 
 ## Concepts
 
