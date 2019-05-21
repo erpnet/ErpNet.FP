@@ -21,7 +21,7 @@ namespace ErpNet.FP.Server.Contexts
     public class PrintJob
     {
         public const int DefaultTimeout = 29000; // 29 seconds
-        
+
         public DateTime Enqueued = DateTime.Now;
         public DateTime Started = DateTime.MaxValue;
         public DateTime Finished = DateTime.MaxValue;
@@ -103,6 +103,6 @@ namespace ErpNet.FP.Server.Contexts
             }
             Finished = DateTime.Now;
             TaskStatus = TaskStatus.Finished;
-        }       
+        }
     }
 }

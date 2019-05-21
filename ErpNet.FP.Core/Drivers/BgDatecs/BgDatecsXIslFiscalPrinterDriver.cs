@@ -7,7 +7,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected readonly string SerialNumberPrefix = "DT";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.x.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string> ?options = null)
+        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDatecsXIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
@@ -21,7 +21,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             if (commaFields.Length != 6)
             {
                 throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 6 comma-separated items for '{DriverName}'");
-            }            
+            }
             var serialNumber = commaFields[4];
             if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
             {

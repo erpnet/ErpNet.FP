@@ -1,6 +1,4 @@
-﻿using ErpNet.FP.Core;
-
-namespace ErpNet.FP.Server.Models
+﻿namespace ErpNet.FP.Server.Models
 {
     public class TaskIdResult
     {

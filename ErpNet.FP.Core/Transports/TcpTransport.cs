@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 
 namespace ErpNet.FP.Core.Transports
@@ -27,7 +26,8 @@ namespace ErpNet.FP.Core.Transports
                     throw new TimeoutException("disabled due to timeout");
                 }
                 return channel;
-            } else
+            }
+            else
             {
                 try
                 {

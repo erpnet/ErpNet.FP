@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
     /// <summary>
     /// TaxGroups
