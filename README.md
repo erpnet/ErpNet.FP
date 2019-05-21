@@ -1,4 +1,4 @@
-<img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/ErpNet.FP.Server.ico" align="right"/>
+<img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Win/ErpNet.FP.ico" align="right"/>
 
 # ErpNet.FP
 
