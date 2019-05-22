@@ -25,13 +25,13 @@ To start the printing service, run ErpNet.FP.Win.Manager.exe. It will start and 
 The tray icon contains a menu option - "Show console". It can be used to open a console, showing real-time information about the printing service. 
 Starting the manager also starts the service ErpNet.FP.Server.exe. Stopping the manager stops the service.
 
-* OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - OSX] - You can download and unzip the server in a folder. 
+* OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - macOS] - You can download and unzip the server in a folder. 
 Inside the unzipped folder, run it from console/terminal with:
 ```bash
 ./ErpNet.FP.Server
 ```
 
-* Linux 64 bit - [ErpNet.FP.Server.zip - Linux] - You can download and unzip the server. 
+* Linux 64 bit - [ErpNet.FP.Server.zip - Linux x64] - You can download and unzip the server. 
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd: Service File Examples].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
@@ -76,21 +76,21 @@ The printer Uri is currently used only internally in the http server. Still, it 
 ### Future plans
 
 Currently, the http server is available for:
-- ErpNet.FP.Win
-- ErpNet.FP.Mac
-- ErpNet.FP.Linux
-- ErpNet.FP.Linux-Arm
+- Windows 32/64 bit
+- macOS 10.10 and up
+- Linux x64
+- Linux Arm
 
-However, versions for most major platforms are planned:
-
-- ErpNet.FP.Android
-- ErpNet.FP.iOS
+However, versions for mobile platforms are planned:
+- Android
+- iOS
 
 ### Currently supported manufacturers
-Datecs (http://www.datecs.bg),
-Tremol (https://www.tremol.bg),
-Daisy (https://daisy.bg/),
-Eltrade (https://www.eltrade.com).
+The library supports printers from the following manufacturers:
+* Datecs (http://www.datecs.bg)
+* Tremol (https://www.tremol.bg)
+* Daisy (https://daisy.bg/)
+* Eltrade (https://www.eltrade.com)
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
@@ -120,6 +120,6 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
 [ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/win-x86/ErpNet.FP.Server.zip>
 [ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/win-x64/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - OSX]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/osx-x64/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - Linux]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/linux-x64/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/osx-x64/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/linux-x64/ErpNet.FP.Server.zip>
 [ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/linux-arm/ErpNet.FP.Server.zip>
