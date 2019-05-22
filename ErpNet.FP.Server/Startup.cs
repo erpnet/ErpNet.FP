@@ -36,6 +36,9 @@ namespace ErpNet.FP.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            //Add logging middleware
+            app.UseMiddleware<ActionLoggingMiddleware>();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
