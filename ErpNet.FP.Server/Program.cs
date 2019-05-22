@@ -6,22 +6,26 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 
 namespace ErpNet.FP.Server
 {
     public class Program
     {
+        private static readonly string DebugLogFileName = @"debug.log";
+
         public static void Main()
         {
             FileStream traceStream;
             try
             {
-                traceStream = new FileStream(@"debug.log", FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+                EnsureDebugLogHistory();
+                traceStream = new FileStream(DebugLogFileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error creating FileStream for trace file \"{0}\":" +
-                    "\r\n{1}", @"debug.log", ex.Message);
+                    "\r\n{1}", DebugLogFileName, ex.Message);
                 return;
             }
 
@@ -70,6 +74,23 @@ namespace ErpNet.FP.Server
 
             Trace.WriteLine("Stopping the application.");
             Trace.Flush();
+        }
+
+        public static void EnsureDebugLogHistory()
+        {
+            if (File.Exists(DebugLogFileName))
+            {
+                for (var i = 9; i > 1; i--)
+                {
+                    if (File.Exists($"{DebugLogFileName}.{i - 1}.zip"))
+                    {
+                        File.Move($"{DebugLogFileName}.{i - 1}.zip", $"{DebugLogFileName}.{i}.zip", true);
+                    }
+                }
+                // Zip the file
+                using (var zip = ZipFile.Open($"{DebugLogFileName}.1.zip", ZipArchiveMode.Create))
+                    zip.CreateEntryFromFile(DebugLogFileName, DebugLogFileName);
+            }
         }
 
     }
