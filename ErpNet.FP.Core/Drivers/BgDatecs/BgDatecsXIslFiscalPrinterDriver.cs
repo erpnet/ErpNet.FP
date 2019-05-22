@@ -30,7 +30,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var modelName = commaFields[0];
             if (!modelName.EndsWith("X"))
             {
-                throw new InvalidDeviceInfoException($"model name must end with X for '{DriverName}'");
+                throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
             }
             var info = new DeviceInfo
             {
