@@ -13,8 +13,8 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-### The JSON protocol
-The JSON protocol is documented in a series of postman examples:
+### The JSON protocol of ErpNet.FP
+The protocol is documented in a series of postman examples:
 - [Postman collection] of examples
 
 ### Want to try it now? Download the ErpNet.FP.Server for your platform:
