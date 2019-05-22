@@ -86,10 +86,11 @@ However, versions for mobile platforms are planned:
 - iOS
 
 ### Currently supported manufacturers
-Datecs (http://www.datecs.bg),
-Tremol (https://www.tremol.bg),
-Daisy (https://daisy.bg/),
-Eltrade (https://www.eltrade.com).
+The library supports printers from the following manufacturers:
+* Datecs (http://www.datecs.bg)
+* Tremol (https://www.tremol.bg)
+* Daisy (https://daisy.bg/)
+* Eltrade (https://www.eltrade.com)
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
