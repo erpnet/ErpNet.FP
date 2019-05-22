@@ -30,6 +30,8 @@ namespace ErpNet.FP.Server.Contexts
             int asyncTimeout);
 
         public TaskInfoResult GetTaskInfo(string taskId);
+
+        public bool IsReady();
     }
 
     public class PrintersControllerContext : IPrintersControllerContext
@@ -38,10 +40,16 @@ namespace ErpNet.FP.Server.Contexts
         private Task? consumer;
         private readonly object taskSyncLock = new object();
         private readonly object consumerSyncLock = new object();
+        private volatile bool isReady = false;
 
         public class PrinterConfig
         {
             public string Uri { get; set; } = string.Empty;
+        }
+
+        public bool IsReady()
+        {
+            return isReady;
         }
 
         public Provider Provider { get; } = new Provider();
@@ -245,6 +253,8 @@ namespace ErpNet.FP.Server.Contexts
             }
 
             logger.LogInformation($"Detecting done. Found {Printers.Count} available printer(s).");
+
+            isReady = true;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ErpNet.FP.Core;
 using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,31 +24,49 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet()]
         public ActionResult<Dictionary<string, DeviceInfo>> Printers()
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             return context.PrintersInfo;
         }
 
         // GET printers/{id}
         [HttpGet("{id}")]
-        public ActionResult<DeviceInfo> Info(string id) =>
-            context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo)
-            ?
-            (ActionResult<DeviceInfo>)deviceInfo
-            :
-            NotFound();
+        public ActionResult<DeviceInfo> Info(string id)
+        {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+            if (context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo))
+            {
+                return deviceInfo;
+            }
+            return NotFound();
+        }
 
         // GET printers/{id}/status
         [HttpGet("{id}/status")]
-        public ActionResult<DeviceStatusEx> Status(string id) =>
-            context.Printers.TryGetValue(id, out IFiscalPrinter printer)
-            ?
-            (ActionResult<DeviceStatusEx>)printer.CheckStatus()
-            :
-            NotFound();
+        public ActionResult<DeviceStatusEx> Status(string id)
+        {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            {
+                return printer.CheckStatus();
+            }
+            return NotFound();
+        }
 
         // GET printers/taskinfo
         [HttpGet("taskinfo")]
-        public ActionResult<TaskInfoResult> TaskInfo([FromQuery]string id) =>
-            context.GetTaskInfo(id);
+        public ActionResult<TaskInfoResult> TaskInfo([FromQuery]string id)
+        {
+            return context.GetTaskInfo(id);
+        }
 
         // POST printers/{id}/receipt
         [HttpPost("{id}/receipt")]
@@ -57,6 +76,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -82,6 +105,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -107,6 +134,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -132,6 +163,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -157,6 +192,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -181,6 +220,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
@@ -205,6 +248,10 @@ namespace ErpNet.FP.Server.Controllers
             [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
+            if (!context.IsReady())
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
             if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
             {
                 var result = await context.RunAsync(
