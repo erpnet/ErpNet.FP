@@ -28,9 +28,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
             }
             var modelName = commaFields[0];
-            if (!modelName.StartsWith("D"))
+            if (modelName.EndsWith("X") || !modelName.StartsWith("DP"))
             {
-                throw new InvalidDeviceInfoException($"model name must begin with D for '{DriverName}'");
+                throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
             }
             var info = new DeviceInfo
             {
