@@ -87,10 +87,10 @@ However, versions for mobile platforms are planned:
 
 ### Currently supported manufacturers
 The library supports printers from the following manufacturers:
-* Datecs (http://www.datecs.bg)
-* Tremol (https://www.tremol.bg)
-* Daisy (https://daisy.bg/)
-* Eltrade (https://www.eltrade.com)
+* Datecs (http://www.Datecs.bg)
+* Tremol (https://www.Tremol.bg)
+* Daisy (https://Daisy.bg/)
+* Eltrade (https://www.Eltrade.com)
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
@@ -105,13 +105,13 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 
 ### Supported protocols and devices
-* bg.dt.c.isl - DATECS DP-05, DATECS DP-05B, DATECS DP-05C, DATECS DP-25, DATECS DP-35, DATECS DP-150, DATECS DP-15
-* bg.dt.p.isl - DATECS WP-50, DATECS FP-650, DATECS FP-800, DATECS FP-2000, Datecs FMP-10, DATECS SK1-21F, DATECS SK1-31F
-* bg.dt.x.isl - DATECS DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, DATECS FMP-55X, DATECS WP-50X, DATECS FP-700X
-* bg.zk.zfp - TREMOL A19Plus, TREMOL S21, TREMOL M23, TREMOL M20, TREMOL FP15
-* bg.zk.v2.zfp - TREMOL Z-KL-V2, TREMOL ZM-KL-V2, TREMOL ZS-KL-V2, TREMOL FP01-KL V2, TREMOL FP05-KL V2, TREMOL M-KL-V2, TREMOL S-KL-V2, TREMOL FP15 KL V2, TREMOL FP03-KL V2, TREMOL FP07-KL V2
-* bg.ed.isl - ELTRADE A1 KL, ELTRADE A1 KL, ELTRADE A3 KL, ELTRADE B1 KL, ELTRADE PRP 250F KL, ELTRADE A6 KL, ELTRADE B3 KL 
-* bg.dy.isl - DAISY Compact S, DAISY Compact M
+* bg.dt.c.isl - Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
+* bg.dt.p.isl - Datecs WP-50, Datecs FP-650, Datecs FP-800, Datecs FP-2000, Datecs FMP-10, Datecs SK1-21F, Datecs SK1-31F
+* bg.dt.x.isl - Datecs DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, Datecs FMP-55X, Datecs WP-50X, Datecs FP-700X
+* bg.zk.zfp - Tremol A19Plus, Tremol S21, Tremol M23, Tremol M20, Tremol FP15
+* bg.zk.v2.zfp - Tremol Z-KL-V2, Tremol ZM-KL-V2, Tremol ZS-KL-V2, Tremol FP01-KL V2, Tremol FP05-KL V2, Tremol M-KL-V2, Tremol S-KL-V2, Tremol FP15 KL V2, Tremol FP03-KL V2, Tremol FP07-KL V2
+* bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL 
+* bg.dy.isl - Daisy Compact S, Daisy Compact M
 
 * **You do not find your device in the list?** Please, write at info@erp.bg and we will check whether we can support it with the current set of protocols or we need to implement a new one, for your device.
 
