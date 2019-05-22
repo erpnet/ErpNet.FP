@@ -104,6 +104,17 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 
+### Supported protocols and devices
+* bg.dt.c.isl - DATECS DP-05, DATECS DP-05B, DATECS DP-05C, DATECS DP-25, DATECS DP-35, DATECS DP-150, DATECS DP-15
+* bg.dt.p.isl - DATECS WP-50, DATECS FP-650, DATECS FP-800, DATECS FP-2000, Datecs FMP-10, DATECS SK1-21F, DATECS SK1-31F
+* bg.dt.x.isl - DATECS DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, DATECS FMP-55X, DATECS WP-50X, DATECS FP-700X
+* bg.zk.zfp - TREMOL A19Plus, TREMOL S21, TREMOL M23, TREMOL M20, TREMOL FP15
+* bg.zk.v2.zfp - TREMOL Z-KL-V2, TREMOL ZM-KL-V2, TREMOL ZS-KL-V2, TREMOL FP01-KL V2, TREMOL FP05-KL V2, TREMOL M-KL-V2, TREMOL S-KL-V2, TREMOL FP15 KL V2, TREMOL FP03-KL V2, TREMOL FP07-KL V2
+* bg.ed.isl - ELTRADE A1 KL, ELTRADE A1 KL, ELTRADE A3 KL, ELTRADE B1 KL, ELTRADE PRP 250F KL, ELTRADE A6 KL, ELTRADE B3 KL 
+* bg.dy.isl - DAISY Compact S, DAISY Compact M
+
+* **You do not find your device in the list?** Please, write at info@erp.bg and we will check whether we can support it with the current set of protocols or we need to implement a new one, for your device.
+
 License
 ----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
