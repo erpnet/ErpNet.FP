@@ -1,7 +1,9 @@
 ﻿using ErpNet.FP.Server.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -14,7 +16,12 @@ namespace ErpNet.FP.Win.Manager
         static void ConfigureServices(IConfiguration configuration)
         {
             var services = new ServiceCollection();
+
+            services.AddOptions();
             services.ConfigureWritable<ErpNetFPConfigOptions>(configuration.GetSection("ErpNet.FP"));
+            services.AddSingleton<IOptionsMonitor<ErpNetFPConfigOptions>, OptionsMonitor<ErpNetFPConfigOptions>>();
+            services.AddSingleton<IMainForm, MainForm>();
+
             ServiceProvider = services.BuildServiceProvider();
         }
 
@@ -28,14 +35,16 @@ namespace ErpNet.FP.Win.Manager
                 SetProcessDPIAware();
 
             var builder = new ConfigurationBuilder()
-              .AddJsonFile(@"appsettings.json", optional: true, reloadOnChange: true);
+                .SetBasePath(Path.Combine(AppContext.BaseDirectory))
+                .AddJsonFile(@"appsettings.json", optional: true, reloadOnChange: true);
 
             var configuration = builder.Build();
             ConfigureServices(configuration);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
-            Application.Run(new MainForm());
+            ServiceProvider.GetService<IOptionsMonitor<ErpNetFPConfigOptions>>();
+            Application.Run((MainForm)ServiceProvider.GetService<IMainForm>());
         }
 
         [DllImport("user32.dll", SetLastError = true)]

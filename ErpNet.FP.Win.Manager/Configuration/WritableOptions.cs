@@ -52,7 +52,7 @@ namespace ErpNet.FP.Server.Configuration
             IConfigurationSection section,
             string file = "appsettings.json") where T : class, new()
         {
-            //services.Configure<T>(section);
+            services.Configure<T>(section);
             services.AddTransient<IWritableOptions<T>>(provider =>
             {
                 var options = provider.GetService<IOptionsMonitor<T>>();
