@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ErpNet.FP.Server.Configuration;
+using Microsoft.Extensions.Options;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -7,24 +9,34 @@ using System.Windows.Forms;
 
 namespace ErpNet.FP.Win.Manager
 {
-    public class MainForm : Form
+    public interface IMainForm { }
+    public class MainForm : Form, IMainForm
     {
+        // private const string ServiceFileName = @"..\..\..\..\ErpNet.FP.Server\Published\win-x86\ErpNet.FP.Server.exe";
+        private const string ServiceFileName = @"ErpNet.FP.Server.exe";
         private readonly NotifyIcon managerNotifyIcon;
         private readonly ContextMenu managerContextMenu;
         private readonly MenuItem menuItemExit;
         private readonly MenuItem menuItemShowConsole;
+        private readonly MenuItem menuItemAutoDetect;
         private readonly TextBox logBox;
         private readonly IContainer components;
         private Process serviceProcess;
         private bool cancelClose = true;
         private readonly Size consoleSize = new Size(120, 30);
+        private readonly IWritableOptions<ErpNetFPConfigOptions> options;
+        private ErpNetFPConfigOptions configOptions;
 
-        public MainForm()
+        public MainForm(
+            IWritableOptions<ErpNetFPConfigOptions> options,
+            IOptionsMonitor<ErpNetFPConfigOptions> monitor)
         {
+            this.options = options;
+            this.configOptions = options.Value;
+
             this.Text = "ErpNet.FP.Win Manager";
             this.Icon = new Icon("ErpNet.FP.ico");
             this.FormClosing += MainForm_FormClosing;
-
 
             this.components = new Container();
 
@@ -52,6 +64,13 @@ namespace ErpNet.FP.Win.Manager
             };
             this.menuItemShowConsole.Click += MenuItemShowConsole_Click;
 
+            this.menuItemAutoDetect = new MenuItem
+            {
+                Checked = configOptions.AutoDetect,
+                Text = "Auto &detect"
+            };
+            this.menuItemAutoDetect.Click += MenuItemAutoDetect_Click;
+
             this.menuItemExit = new MenuItem
             {
                 Text = "E&xit"
@@ -62,6 +81,7 @@ namespace ErpNet.FP.Win.Manager
             this.managerContextMenu.MenuItems.AddRange(
                 new MenuItem[] {
                     this.menuItemShowConsole,
+                    this.menuItemAutoDetect,
                     new MenuItem("-"),
                     this.menuItemExit
                 });
@@ -75,9 +95,32 @@ namespace ErpNet.FP.Win.Manager
             };
             managerNotifyIcon.DoubleClick += ManagerNotifyIcon_DoubleClick;
 
+            monitor.OnChange((opt, str) =>
+            {
+                this.configOptions = opt;
+                this.menuItemAutoDetect.Checked = monitor.CurrentValue.AutoDetect;
+            });
+
             this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Server...";
             this.managerNotifyIcon.ShowBalloonTip(3000);
-            RunService();
+            StartService();
+        }
+
+        private void MenuItemAutoDetect_Click(object sender, EventArgs e)
+        {
+            menuItemAutoDetect.Checked = !menuItemAutoDetect.Checked;
+            configOptions.AutoDetect = menuItemAutoDetect.Checked;
+            options.Update(updatedConfigOptions =>
+            {
+                updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
+            });
+            if (configOptions.AutoDetect)
+            {
+                this.managerNotifyIcon.BalloonTipText = "Restarting ErpNet.FP.Server...";
+                this.managerNotifyIcon.ShowBalloonTip(5000);
+                StopService();
+                StartService();
+            }
         }
 
         private void MenuItemShowConsole_Click(object sender, EventArgs e)
@@ -129,19 +172,23 @@ namespace ErpNet.FP.Win.Manager
         {
             this.managerNotifyIcon.BalloonTipText = "Stopping ErpNet.FP.Server...";
             this.managerNotifyIcon.ShowBalloonTip(2000);
-            serviceProcess.CloseMainWindow();
-            Thread.Sleep(2000);
-            serviceProcess.Kill();
+            StopService();
             cancelClose = false;
             this.Close();
         }
 
-        private void RunService()
+        private void StopService()
+        {
+            serviceProcess.CloseMainWindow();
+            Thread.Sleep(2000);
+            serviceProcess.Kill();
+        }
+
+        private void StartService()
         {
             // Creating the service process
             serviceProcess = new Process();
-            //serviceProcess.StartInfo.FileName = @"..\..\..\..\ErpNet.FP.Win\Published\win-x86\ErpNet.FP.Server.exe";
-            serviceProcess.StartInfo.FileName = @"ErpNet.FP.Server.exe";
+            serviceProcess.StartInfo.FileName = ServiceFileName;
             serviceProcess.StartInfo.UseShellExecute = false;
             serviceProcess.StartInfo.RedirectStandardOutput = true;
             serviceProcess.StartInfo.RedirectStandardError = true;
