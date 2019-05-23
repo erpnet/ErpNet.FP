@@ -98,7 +98,7 @@ namespace ErpNet.FP.Win.Manager
             monitor.OnChange((opt, str) =>
             {
                 this.configOptions = opt;
-                this.menuItemAutoDetect.Checked = monitor.CurrentValue.AutoDetect;
+                this.menuItemAutoDetect.Checked = opt.AutoDetect;
             });
 
             this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Server...";
