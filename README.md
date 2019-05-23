@@ -9,7 +9,6 @@ The ErpNet.FP http server provides a REST API with JSON input/output, which prin
 The http server receives input through the REST API and uses different transports to communicate with the fiscal printers. The transports include:
 * COM serial connection
 * Bluetooth
-* Http
 * TCP/IP
 * etc.
 
