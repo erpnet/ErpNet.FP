@@ -1,4 +1,5 @@
 using ErpNet.FP.Server.Contexts;
+using ErpNet.FP.Server.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,7 @@ namespace ErpNet.FP.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureWritable<ServerConfigOptions>(Configuration.GetSection("ErpNet.FP"));
+            services.ConfigureWritable<ErpNetFPConfigOptions>(Configuration.GetSection("ErpNet.FP"));
             services.AddSingleton<IPrintersControllerContext, PrintersControllerContext>();
             services.AddControllers().AddNewtonsoftJson();
         }
