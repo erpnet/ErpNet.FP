@@ -113,7 +113,7 @@ If you want your device to be supported, please contact us, and we will try our 
 * bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL 
 * bg.dy.isl - Daisy Compact S, Daisy Compact M
 
-* **Do not find your device on the list?** Please, write at info@erp.bg and we will check whether we can support it with the current set of protocols or we need to implement a new one, for your device.
+* **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
 License
 ----
