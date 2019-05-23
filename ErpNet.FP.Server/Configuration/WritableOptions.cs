@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 
-namespace ErpNet.FP.Server
+namespace ErpNet.FP.Server.Configuration
 {
     public interface IWritableOptions<out T> : IOptionsSnapshot<T> where T : class, new()
     {
@@ -16,10 +16,10 @@ namespace ErpNet.FP.Server
 
     public class WritableOptions<T> : IWritableOptions<T> where T : class, new()
     {
-        private readonly IWebHostEnvironment _environment;
-        private readonly IOptionsMonitor<T> _options;
-        private readonly string _section;
-        private readonly string _file;
+        private readonly IWebHostEnvironment environment;
+        private readonly IOptionsMonitor<T> options;
+        private readonly string section;
+        private readonly string file;
 
         public WritableOptions(
             IWebHostEnvironment environment,
@@ -27,28 +27,28 @@ namespace ErpNet.FP.Server
             string section,
             string file)
         {
-            _environment = environment;
-            _options = options;
-            _section = section;
-            _file = file;
+            this.environment = environment;
+            this.options = options;
+            this.section = section;
+            this.file = file;
         }
 
-        public T Value => _options.CurrentValue;
-        public T Get(string name) => _options.Get(name);
+        public T Value => options.CurrentValue;
+        public T Get(string name) => options.Get(name);
 
         public void Update(Action<T> applyChanges)
         {
-            var fileProvider = _environment.ContentRootFileProvider;
-            var fileInfo = fileProvider.GetFileInfo(_file);
+            var fileProvider = environment.ContentRootFileProvider;
+            var fileInfo = fileProvider.GetFileInfo(file);
             var physicalPath = fileInfo.PhysicalPath;
 
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
-            var sectionObject = jObject.TryGetValue(_section, out JToken section) ?
-                JsonConvert.DeserializeObject<T>(section.ToString()) : (Value ?? new T());
+            var sectionObject = jObject.TryGetValue(section, out JToken sectionToken) ?
+                JsonConvert.DeserializeObject<T>(sectionToken.ToString()) : (Value ?? new T());
 
             applyChanges(sectionObject);
 
-            jObject[_section] = JObject.Parse(JsonConvert.SerializeObject(sectionObject));
+            jObject[section] = JObject.Parse(JsonConvert.SerializeObject(sectionObject));
             File.WriteAllText(physicalPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
         }
     }

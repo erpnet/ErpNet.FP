@@ -5,6 +5,7 @@ using ErpNet.FP.Core.Drivers.BgEltrade;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Core.Transports;
+using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -170,7 +171,7 @@ namespace ErpNet.FP.Server.Contexts
 
         public PrintersControllerContext(
             ILogger<PrintersControllerContext> logger,
-            IWritableOptions<ServerConfigOptions> options)
+            IWritableOptions<ErpNetFPConfigOptions> options)
         {
             this.logger = logger;
 
