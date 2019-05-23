@@ -6,7 +6,6 @@ using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Core.Transports;
 using ErpNet.FP.Server.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -22,16 +21,15 @@ namespace ErpNet.FP.Server.Contexts
 
         Dictionary<string, IFiscalPrinter> Printers { get; }
 
-        public Task<object?> RunAsync(
+        public Task<object> RunAsync(
             IFiscalPrinter printer,
             PrintJobAction action,
             object? document,
-            int timeout,
             int asyncTimeout);
 
         public TaskInfoResult GetTaskInfo(string taskId);
 
-        public bool IsReady();
+        public bool IsReady { get; }
     }
 
     public class PrintersControllerContext : IPrintersControllerContext
@@ -42,16 +40,6 @@ namespace ErpNet.FP.Server.Contexts
         private readonly object consumerSyncLock = new object();
         private volatile bool isReady = false;
 
-        public class PrinterConfig
-        {
-            public string Uri { get; set; } = string.Empty;
-        }
-
-        public bool IsReady()
-        {
-            return isReady;
-        }
-
         public Provider Provider { get; } = new Provider();
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
 
@@ -60,6 +48,7 @@ namespace ErpNet.FP.Server.Contexts
         public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string>();
 
         public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
+        public bool IsReady { get => isReady; set => isReady = value; }
 
         public TaskInfoResult GetTaskInfo(string taskId)
         {
@@ -80,11 +69,10 @@ namespace ErpNet.FP.Server.Contexts
             }
         }
 
-        public async Task<object?> RunAsync(
+        public async Task<object> RunAsync(
             IFiscalPrinter printer,
             PrintJobAction action,
             object? document,
-            int timeout,
             int asyncTimeout)
         {
             var taskId = Enqueue(new PrintJob
@@ -97,13 +85,12 @@ namespace ErpNet.FP.Server.Contexts
             {
                 return new TaskIdResult { TaskId = taskId };
             }
-            return await Task.Run(() => RunTask(taskId, timeout, asyncTimeout));
+            return await Task.Run(() => RunTask(taskId, asyncTimeout));
         }
 
-        public object? RunTask(string taskId, int timeout, int asyncTimeout)
+        public object? RunTask(string taskId, int asyncTimeout)
         {
             const int timeoutMinimalStep = 50; // check the queue every 50 ms
-            if (timeout <= 0) timeout = PrintJob.DefaultTimeout;
             if (asyncTimeout < 0) asyncTimeout = PrintJob.DefaultTimeout;
             if (Tasks.TryGetValue(taskId, out PrintJob printJob))
             {
@@ -113,16 +100,9 @@ namespace ErpNet.FP.Server.Contexts
                     // We give the device some time to process the job
                     Thread.Sleep(timeoutMinimalStep);
                     asyncTimeout -= timeoutMinimalStep;
-                    timeout -= timeoutMinimalStep;
                     if (asyncTimeout <= 0) // Async timeout occured, so return taskId
                     {
                         return new TaskIdResult { TaskId = taskId };
-                    }
-                    if (timeout <= 0) // Timeout occured, so abort the task
-                    {
-                        // TODO: Aborting printjob
-                        // printJob.Abort();
-                        return null;
                     }
                 }
                 return printJob.Result;
@@ -188,11 +168,13 @@ namespace ErpNet.FP.Server.Contexts
             logger.LogInformation($"Found {printerID}: {printer.DeviceInfo.Uri}");
         }
 
-        public PrintersControllerContext(IConfiguration configuration, ILogger logger)
+        public PrintersControllerContext(
+            ILogger<PrintersControllerContext> logger,
+            IWritableOptions<ServerConfigOptions> options)
         {
             this.logger = logger;
 
-            var autoDetect = configuration.GetValue<bool>("AutoDetect", true);
+            var configOptions = options.Value;
 
             // Transports
             var comTransport = new ComTransport();
@@ -216,7 +198,9 @@ namespace ErpNet.FP.Server.Contexts
                 .Register(tremolZfp, comTransport)
                 .Register(tremolV2Zfp, comTransport);
 
-            if (autoDetect)
+            var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
+
+            if (configOptions.AutoDetect)
             {
                 logger.LogInformation("Autodetecting local printers...");
                 var printers = provider.DetectAvailablePrinters();
@@ -227,10 +211,10 @@ namespace ErpNet.FP.Server.Contexts
             }
 
             logger.LogInformation("Detecting configured printers...");
-            var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
-            if (printersSettings != null)
+            //var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
+            if (configOptions.Printers != null)
             {
-                foreach (var printerSetting in printersSettings)
+                foreach (var printerSetting in configOptions.Printers)
                 {
                     string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
                     var uri = printerSetting.Value.Uri;
@@ -250,7 +234,22 @@ namespace ErpNet.FP.Server.Contexts
                         }
                     }
                 }
+
+                // Auto save to config all listed printers, for future use
+                // It is possible to have aliases, i.e. different PrinterId with the same Uri
+                foreach (var printer in Printers)
+                {
+                    configOptions.Printers[printer.Key] = new PrinterConfig { Uri = printer.Value.DeviceInfo.Uri };
+                }
             }
+
+            configOptions.AutoDetect = Printers.Count == 0;
+
+            options.Update(updatedConfigOptions =>
+            {
+                updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
+                updatedConfigOptions.Printers = configOptions.Printers ?? new Dictionary<string, PrinterConfig>();
+            });
 
             logger.LogInformation($"Detecting done. Found {Printers.Count} available printer(s).");
 

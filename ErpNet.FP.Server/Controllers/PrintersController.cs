@@ -24,7 +24,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet()]
         public ActionResult<Dictionary<string, DeviceInfo>> Printers()
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -35,7 +35,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<DeviceInfo> Info(string id)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -50,7 +50,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet("{id}/status")]
         public ActionResult<DeviceStatusEx> Status(string id)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -73,10 +73,9 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintReceipt(
             string id,
             [FromBody] Receipt receipt,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -86,12 +85,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.Receipt,
                     receipt,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -102,10 +96,9 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintReversalReceipt(
             string id,
             [FromBody] ReversalReceipt reversalReceipt,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -115,12 +108,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.ReversalReceipt,
                     reversalReceipt,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -131,10 +119,9 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintWithdraw(
             string id,
             [FromBody] TransferAmount withdraw,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -144,12 +131,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.Withdraw,
                     withdraw,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -160,10 +142,9 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintDeposit(
             string id,
             [FromBody] TransferAmount deposit,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -173,12 +154,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.Deposit,
                     deposit,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -189,10 +165,9 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> SetDateTime(
             string id,
             [FromBody] CurrentDateTime datetime,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -202,12 +177,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.SetDateTime,
                     datetime,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -217,10 +187,9 @@ namespace ErpNet.FP.Server.Controllers
         [HttpPost("{id}/zreport")]
         public async Task<IActionResult> PrintZReport(
             string id,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -230,12 +199,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.ZReport,
                     null,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();
@@ -245,10 +209,9 @@ namespace ErpNet.FP.Server.Controllers
         [HttpPost("{id}/xreport")]
         public async Task<IActionResult> PrintXReport(
             string id,
-            [FromQuery] int timeout = PrintJob.DefaultTimeout,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
-            if (!context.IsReady())
+            if (!context.IsReady)
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
@@ -258,12 +221,7 @@ namespace ErpNet.FP.Server.Controllers
                     printer,
                     PrintJobAction.XReport,
                     null,
-                    timeout,
                     asyncTimeout);
-                if (result == null)
-                {
-                    return NoContent(); // Timeout occured, so nothing returned
-                }
                 return Ok(result);
             }
             return NotFound();

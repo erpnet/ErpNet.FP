@@ -4,18 +4,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.Server
 {
     public class Startup
     {
-        private readonly ILogger logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            this.logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -23,8 +19,8 @@ namespace ErpNet.FP.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var printersControllerContextSingleton = new PrintersControllerContext(this.Configuration, this.logger);
-            services.AddSingleton<IPrintersControllerContext>(printersControllerContextSingleton);
+            services.ConfigureWritable<ServerConfigOptions>(Configuration.GetSection("ErpNet.FP"));
+            services.AddSingleton<IPrintersControllerContext, PrintersControllerContext>();
             services.AddControllers().AddNewtonsoftJson();
         }
 
@@ -36,7 +32,6 @@ namespace ErpNet.FP.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            //Add logging middleware
             app.UseMiddleware<ActionLoggingMiddleware>();
 
             app.UseRouting();
@@ -45,6 +40,9 @@ namespace ErpNet.FP.Server
             {
                 endpoints.MapControllers();
             });
+
+            // Warming up PrintersControllerContext
+            app.ApplicationServices.GetService<IPrintersControllerContext>();
         }
     }
 }
