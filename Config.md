@@ -1,4 +1,4 @@
-# General
+# Config File
 The config file configures the way the ErpNet.FP print server works.
 The config file is called "appsettings.json" and is located in the same directory as ErpNet.FP.Server.
 
