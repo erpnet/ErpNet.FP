@@ -12,6 +12,8 @@ namespace ErpNet.FP.Server.Models
         [EnumMember(Value = "running")]
         Running,
         [EnumMember(Value = "finished")]
-        Finished
+        Finished,
+        [EnumMember(Value = "timeout")]
+        Timeout
     }
 }

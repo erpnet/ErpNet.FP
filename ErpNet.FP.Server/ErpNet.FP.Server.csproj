@@ -16,6 +16,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="debug.log.1.zip" />
+    <None Remove="debug.log.2.zip" />
+    <None Remove="debug.log.3.zip" />
+    <None Remove="debug.log.4.zip" />
+    <None Remove="debug.log.5.zip" />
+    <None Remove="debug.log.6.zip" />
+    <None Remove="debug.log.7.zip" />
+    <None Remove="debug.log.8.zip" />
+    <None Remove="debug.log.9.zip" />
     <None Remove="ErpNet.FP.ico" />
   </ItemGroup>
 
