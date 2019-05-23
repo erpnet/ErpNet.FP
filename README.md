@@ -66,8 +66,9 @@ For example: "FP_Room1"
 When a printer is detected, the http server saves something, called printer Uri. The Uri contains the connection information to connect to the printer. It contains details about printer driver, transport and path to the printer. It is similar to the connection string pattern. Example Uris:
 - bg.dy.isl.com://COM5
 - bg.dy.isl.com://COM3
-- bg.dt.isl.x.com://COM5
-- bg.tr.zk.http://fp5.mycompany.com
+- bg.dt.x.isl.com://COM21
+- bg.zk.zfp.http://fp5.mycompany.com
+- bg.dt.p.isl.tcp://fp2000.myoffice.bg:4999
 - etc.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
