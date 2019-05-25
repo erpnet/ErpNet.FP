@@ -2,7 +2,7 @@
 
 # ErpNet.FP
 
-The ErpNet.FP library and server are intended to facilitate the printing to fiscal printers. The library provides methods to detect, get status, print receipts, reports and other documents to fiscal printers.
+ErpNet.FP is a light-weight multi-platform Http server facilitating printing to fiscal printers through simple JSON Api. The library provides methods to detect, get status, print receipts, reports and other documents to fiscal printers.
 
 The ErpNet.FP http server provides a REST API with JSON input/output, which prints documents transactionally and returns result status.
 
