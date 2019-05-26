@@ -97,6 +97,29 @@ The most used options are:
 * **EndPoints/Http/Url** - can be used to configure the port on which the server to listen
 * **Limits/MaxRequestBodySize** - configures the max request size. Can be used if there is a need to send very large (not recommended) fiscal notes to the printer.
 
+## Configuring Https
+If you need to configure Https access, you need to have a certificate file.
 
+Then, configure the "Kestrel" section in the following way:
+```
+    "Kestrel": {
+        "EndPoints": {
+            "HttpsInlineCertFile": {
+                "Url":"https://localhost:8001",
+                "Certificate": {
+                    "Path":"<path to .pfx file>",
+                    "Password":"<certificate password>"
+                }
+            }
+        },
+        "Limits": {
+          "MaxConcurrentConnections": 100,
+          "MaxConcurrentUpgradedConnections": 100,
+          "MaxRequestBodySize": 20480,
+          "MaxRequestHeaderCount": 50
+        }        
+    }
+```
 
+This config removes the "http" endpoint and allows only https acccess.
 
