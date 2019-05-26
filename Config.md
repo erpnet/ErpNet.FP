@@ -105,7 +105,7 @@ Then, configure the "Kestrel" section in the following way:
     "Kestrel": {
         "EndPoints": {
             "HttpsInlineCertFile": {
-                "Url":"https://localhost:8001",
+                "Url":"https://<site>:8001",
                 "Certificate": {
                     "Path":"<path to .pfx file>",
                     "Password":"<certificate password>"
@@ -123,3 +123,5 @@ Then, configure the "Kestrel" section in the following way:
 
 This config removes the "http" endpoint and allows only https acccess.
 
+Note:
+* **<site>** should contain the domain name of the site for which the certificate is issued.
