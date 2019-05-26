@@ -124,4 +124,4 @@ Then, configure the "Kestrel" section in the following way:
 This config removes the "http" endpoint and allows only https acccess.
 
 Note:
-* "<site>" should contain the domain name of the site for which the certificate is issued.
+* "site" should contain the domain name of the site for which the certificate is issued.
