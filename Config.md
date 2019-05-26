@@ -94,7 +94,7 @@ For information about all Kestrel options, read:
 https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel
 
 The most used options are:
-* **EndPoints/Http/Url** - can be used to configure the port on which the server to listen
+* **EndPoints/Http/Url** - can be used to configure the port on which the server to listen (default is 8001).
 * **Limits/MaxRequestBodySize** - configures the max request size. Can be used if there is a need to send very large (not recommended) fiscal notes to the printer.
 
 ## Configuring Https
