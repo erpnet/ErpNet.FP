@@ -25,7 +25,6 @@
     <None Remove="debug.log.7.zip" />
     <None Remove="debug.log.8.zip" />
     <None Remove="debug.log.9.zip" />
-    <None Remove="ErpNet.FP.ico" />
   </ItemGroup>
 
   <ItemGroup>
