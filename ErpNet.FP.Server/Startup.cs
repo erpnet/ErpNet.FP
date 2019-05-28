@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Net.WebSockets;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Threading;
 
 namespace ErpNet.FP.Server
 {
@@ -23,6 +28,12 @@ namespace ErpNet.FP.Server
             services.ConfigureWritable<ErpNetFPConfigOptions>(Configuration.GetSection("ErpNet.FP"));
             services.AddSingleton<IPrintersControllerContext, PrintersControllerContext>();
             services.AddControllers().AddNewtonsoftJson();
+            services.AddCors(options =>
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +43,14 @@ namespace ErpNet.FP.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 20 * 1024
+            };
+
+            app.UseCors();
 
             app.UseMiddleware<ActionLoggingMiddleware>();
 
