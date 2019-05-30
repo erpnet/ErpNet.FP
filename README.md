@@ -55,7 +55,7 @@ POST /printers/any/receipt
 For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
-### Interpreting Results
+### Interpreting The Results
 The most important result is the "ok" field. It contains "true" when the POST operation was successful, otherwise - "false".
 If there was error, "ok" would be "false".
 
