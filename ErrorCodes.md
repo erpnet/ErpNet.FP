@@ -1,4 +1,4 @@
-# Standartized Erorr And Warning Codes
+# Standartized Error And Warning Codes
 This file contains the standard error codes of the ErpNet.FP library.
 
 The standard error and warning code is returned in the "code" field of the "messages" array in the result set of each POST operation.
