@@ -66,7 +66,7 @@ The error and warning messages have standardized codes across all manufacturers.
 The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
 
 #### Example return JSON (no problems):
-```
+```json
 {
   "ok": "true",
   "messages": [
@@ -84,7 +84,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 ```
 
 #### Example return JSON (warning):
-```
+```json
 {
   "ok": "true",
   "messages": [
@@ -100,7 +100,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 ```
 
 #### Example return JSON (error):
-```
+```json
 {
   "ok": "false",
   "messages": [
