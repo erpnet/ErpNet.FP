@@ -61,9 +61,9 @@ If there was error, "ok" would be "false".
 
 If "ok"="false", it is guaranteed, that at least one message of type "error" would be present.
 
-The error and warning messages have standartized codes across all manufacturers. The standard error codes are listed in the [Error Codes](ErrorCodes.md) file.
+The error and warning messages have standardized codes across all manufacturers. The standard error codes are listed in the [Error Codes](ErrorCodes.md) file.
 
-The standard error codes are a subset of all manufacturer codes. In some cases, the specific manufacturer codes could contain more detailed information. The manufacturer code is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. They can even change between revisions of printers of the same manufacturer. The standartized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
+The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
 
 #### Example return JSON (no problems):
 ```
