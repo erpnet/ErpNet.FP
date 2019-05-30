@@ -12,8 +12,8 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-## The JSON Protocol
-### Input
+# The JSON Protocol
+## Input
 The print server accepts documents for printing, using JSON based protocol. For example, this would print the specified receipt to any of the detected printers (usually the first one):
 
 POST /printers/any/receipt
@@ -51,11 +51,11 @@ POST /printers/any/receipt
 	]
 }
 ```
-### For More Information
+## For More Information
 For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
-### Interpreting The Results
+## Interpreting The Results
 The most important result is the "ok" field. It contains "true" when the POST operation was successful, otherwise - "false".
 If there was error, "ok" would be "false".
 
@@ -65,7 +65,7 @@ The error and warning messages have standardized codes across all manufacturers.
 
 The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
 
-#### Example Return JSON (No Problems):
+### Example Return JSON (No Problems):
 ```json
 {
   "ok": "true",
@@ -82,7 +82,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-#### Example Return JSON (Warning):
+### Example Return JSON (Warning):
 ```json
 {
   "ok": "true",
@@ -97,7 +97,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-#### Example Return JSON (Error):
+### Example Return JSON (Error):
 ```json
 {
   "ok": "false",
@@ -111,7 +111,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-## Try It Now!
+# Try It Now
 Want to try it now? Download the ErpNet.FP.Server for your platform:
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
@@ -137,16 +137,16 @@ Because of the serial ports default permissions, run it from sudoer, with sudo, 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 
-### Debug information 
+## Debug information 
 
 After you stop the service ErpNet.FP.Server, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
 
-### Server Configuration
+## Server Configuration
 The server configuration options are located in a file, called "appsettings.json". For more information, see [Configuration](https://github.com/erpnet/ErpNet.FP/blob/master/Config.md).
 
-## Concepts
+# Concepts
 
-### Printer Id
+## Printer Id
 
 Each printer is identified by its printerId. Although the library consumer does not need to know the exact specifics of the algorithm for generating the printerId, they are provided here for completeness:
 
@@ -160,7 +160,7 @@ Note: The algorithm runs always in the same order. Unless transports are changed
 3. For network printers, the printerId is provided in the configuration file.
 For example: "FP_Room1"
 
-### Printer Uri
+## Printer Uri
 
 When a printer is detected, the http server saves something, called printer Uri. The Uri contains the connection information to connect to the printer. It contains details about printer driver, transport and path to the printer. It is similar to the connection string pattern. Example Uris:
 - bg.dy.isl.com://COM5
@@ -172,7 +172,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
 
-## Future plans
+# Future plans
 
 Currently, the http server is available for:
 - Windows 32/64 bit
@@ -184,7 +184,7 @@ However, versions for mobile platforms are planned:
 - Android
 - iOS
 
-## Currently supported
+# Currently supported
 The library supports printers from the following manufacturers:
 * Datecs (http://www.Datecs.bg)
 * Tremol (https://www.Tremol.bg)
@@ -193,7 +193,7 @@ The library supports printers from the following manufacturers:
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
-### Tested on
+## Tested on
 - Datecs DP-25, firmware: 263453 08Nov18 131, protocol: bg.dt.c.isl.com
 - Datecs FP-2000, firmware: 1.00BG 23NOV18 1000, protocol: bg.dt.p.isl.com
 - Datecs FP-700X, firmware: 266207 29Jan19 1634, protocol: bg.dt.x.isl.com
@@ -203,7 +203,7 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 
-### Supported protocols and devices
+## Supported protocols and devices
 * bg.dt.c.isl - Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
 * bg.dt.p.isl - Datecs WP-50, Datecs FP-650, Datecs FP-800, Datecs FP-2000, Datecs FMP-10, Datecs SK1-21F, Datecs SK1-31F
 * bg.dt.x.isl - Datecs DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, Datecs FMP-55X, Datecs WP-50X, Datecs FP-700X
@@ -214,7 +214,7 @@ If you want your device to be supported, please contact us, and we will try our 
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
-License
+# License
 ----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
 
