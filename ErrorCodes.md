@@ -12,11 +12,11 @@ If the consumer wants access to the more detailed manufacturer error code, the "
 However, the "originalCode" might not always be available or it might change due to different reasons.
 
 # Error Codes
-**ERR01** - Device not responding
-**ERR02** - Printer is out of paper
-**ERR03** - Fiscal memory is full
-**ERR04** - Revenue agency reporting failed
+* **ERR01** - Device not responding
+* **ERR02** - Printer is out of paper
+* **ERR03** - Fiscal memory is full
+* **ERR04** - Revenue agency reporting failed
 
 # Warning Codes
-**WRN01** - Device cutter is not functioning correctly
-**WRN02** - Revenue agency reporting temporary problem
+* **WRN01** - Device cutter is not functioning correctly
+* **WRN02** - Revenue agency reporting temporary problem
