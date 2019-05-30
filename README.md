@@ -71,15 +71,14 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
   "ok": "true",
   "messages": [
     { 
-      "type": "info"
+      "type": "info",
       "text": "Device registers are set."
-    },
-    ...
+    }
   ],
-  "receiptNumber": ...,
-  "receiptDateTime": ...,
-  "receiptAmount": ...,
-  "fiscalMemorySerialNumber": ...
+  "receiptNumber": "0000085",
+  "receiptDateTime": "2019-05-17T13:55:18",
+  "receiptAmount": 30,
+  "fiscalMemorySerialNumber": "02517985"
 }
 ```
 
@@ -92,10 +91,9 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
       "type": "warning",
       "code": "WRN02",
       "text": "Revenue agency reporting temporary problem."
-    },
-    ...
+    }
   ],
-  "deviceDateTime": ...
+  "deviceDateTime": "2019-05-10T15:50:00"
 }
 ```
 
@@ -108,8 +106,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
       "type": "error",
       "code": "ERR03",
       "text": "The fiscal memory is full."
-    },
-    ...
+    }
   ]
 }
 ```
