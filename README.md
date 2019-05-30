@@ -18,7 +18,7 @@ The print server accepts documents for printing, using JSON based protocol. For 
 
 POST /printers/any/receipt
 
-```
+```json
 {
 	"uniqueSaleNumber": "DT279013-DD01-0000001",
 	"items" : 
@@ -51,7 +51,7 @@ POST /printers/any/receipt
 	]
 }
 ```
-### For more infomation
+### For more information
 For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
