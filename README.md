@@ -12,7 +12,7 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-## The JSON protocol of ErpNet.FP
+## The JSON Protocol
 ### Input
 The print server accepts documents for printing, using JSON based protocol. For example, this would print the specified receipt to any of the detected printers (usually the first one):
 
@@ -51,7 +51,7 @@ POST /printers/any/receipt
 	]
 }
 ```
-### For more information
+### For More Information
 For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
@@ -65,7 +65,7 @@ The error and warning messages have standardized codes across all manufacturers.
 
 The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
 
-#### Example return JSON (no problems):
+#### Example Return JSON (No Problems):
 ```json
 {
   "ok": "true",
@@ -82,7 +82,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-#### Example return JSON (warning):
+#### Example Return JSON (Warning):
 ```json
 {
   "ok": "true",
@@ -97,7 +97,7 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-#### Example return JSON (error):
+#### Example Return JSON (Error):
 ```json
 {
   "ok": "false",
@@ -111,7 +111,8 @@ The standard error codes are a subset of all manufacturer codes and flags. In so
 }
 ```
 
-## Want to try it now? Download the ErpNet.FP.Server for your platform:
+## Try It Now!
+Want to try it now? Download the ErpNet.FP.Server for your platform:
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
