@@ -12,11 +12,109 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-### The JSON protocol of ErpNet.FP
-The protocol is documented in a series of postman examples:
+## The JSON protocol of ErpNet.FP
+### Input
+The print server accepts documents for printing, using JSON based protocol. For example, this would print the specified receipt to any of the detected printers (usually the first one):
+
+POST /printers/any/receipt
+
+```
+{
+	"uniqueSaleNumber": "DT279013-DD01-0000001",
+	"items" : 
+	[
+		{
+			"text": "Cheese",
+			"quantity": 1,
+			"unitPrice": 12,
+			"taxGroup": 2
+		},
+		{
+			"text": "Additional comment to the cheese...",
+			"isComment": true
+		},
+		{
+			"text": "Milk",
+			"quantity": 2,
+			"unitPrice": 10,
+			"taxGroup": 2,
+			"priceModifierValue": 10,
+			"priceModifierType": "discount-percent"
+		}
+	],
+	"payments": 
+	[
+		{
+			"amount": 30,
+			"paymentType": "cash"
+		}
+	]
+}
+```
+### For more infomation
+For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
-### Want to try it now? Download the ErpNet.FP.Server for your platform:
+### Interpreting Results
+The most important result is the "ok" field. It contains "true" when the POST operation was successful, otherwise - "false".
+If there was error, "ok" would be "false".
+
+If "ok"="false", it is guaranteed, that at least one message of type "error" would be present.
+
+The error and warning messages have standartized codes across all manufacturers. The standard error codes are listed in the [Error Codes](ErrorCodes.md) file.
+
+The standard error codes are a subset of all manufacturer codes. In some cases, the specific manufacturer codes could contain more detailed information. The manufacturer code is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. They can even change between revisions of printers of the same manufacturer. The standartized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
+
+#### Example return JSON (no problems):
+```
+{
+  "ok": "true",
+  "messages": [
+    { 
+      "type": "info"
+      "text": "Device registers are set."
+    },
+    ...
+  ],
+  "receiptNumber": ...,
+  "receiptDateTime": ...,
+  "receiptAmount": ...,
+  "fiscalMemorySerialNumber": ...
+}
+```
+
+#### Example return JSON (warning):
+```
+{
+  "ok": "true",
+  "messages": [
+    { 
+      "type": "warning",
+      "code": "WRN02",
+      "text": "Revenue agency reporting temporary problem."
+    },
+    ...
+  ],
+  "deviceDateTime": ...
+}
+```
+
+#### Example return JSON (error):
+```
+{
+  "ok": "false",
+  "messages": [
+    { 
+      "type": "error",
+      "code": "ERR03",
+      "text": "The fiscal memory is full."
+    },
+    ...
+  ]
+}
+```
+
+## Want to try it now? Download the ErpNet.FP.Server for your platform:
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
