@@ -124,7 +124,7 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 
 ### Example Return JSON (Error):
 ```json
-	{
+{
 	"ok": "false",
 	"messages": [
 		{ 
