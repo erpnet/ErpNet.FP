@@ -65,49 +65,75 @@ The error and warning messages have standardized codes across all manufacturers.
 
 The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
 
-### Example Return JSON (No Problems):
+### Example Return JSON (No Problems) after printing receipt:
 ```json
 {
-  "ok": "true",
-  "messages": [
-    { 
-      "type": "info",
-      "text": "Device registers are set."
-    }
-  ],
-  "receiptNumber": "0000085",
-  "receiptDateTime": "2019-05-17T13:55:18",
-  "receiptAmount": 30,
-  "fiscalMemorySerialNumber": "02517985"
+	"ok": "true",
+	"messages": [
+		{
+			"type": "info",
+			"code": "",
+			"text": "Serial number and number of FM are set"
+		},
+		{
+			"type": "info",
+			"code": "",
+			"text": "FM is formatted"
+		}
+	],
+	"receiptNumber": "0000085",
+	"receiptDateTime": "2019-05-17T13:55:18",
+	"receiptAmount": 30,
+	"fiscalMemorySerialNumber": "02517985"
 }
 ```
 
-### Example Return JSON (Warning):
+### Example Return JSON (Warning) while getting the status:
 ```json
 {
-  "ok": "true",
-  "messages": [
-    { 
-      "type": "warning",
-      "code": "WRN02",
-      "text": "Revenue agency reporting temporary problem."
-    }
-  ],
-  "deviceDateTime": "2019-05-10T15:50:00"
+	"ok": "true",
+	"messages": [
+		{ 
+			"type": "warning",
+			"code": "W201",
+			"text": "The fiscal memory almost full"
+		},
+		{
+			"type": "info",
+			"code": "",
+			"text": "Serial number and number of FM are set"
+		},
+		{
+			"type": "info",
+			"code": "",
+			"text": "FM is formatted"
+		}
+	],
+	"deviceDateTime": "2019-05-10T15:50:00"
 }
 ```
 
 ### Example Return JSON (Error):
 ```json
-{
-  "ok": "false",
-  "messages": [
-    { 
-      "type": "error",
-      "code": "ERR03",
-      "text": "The fiscal memory is full."
-    }
-  ]
+	{
+	"ok": "false",
+	"messages": [
+		{ 
+			"type": "error",
+			"code": "E201",
+			"text": "The fiscal memory is full"
+		},
+		{
+			"type": "info",
+			"code": "",
+			"text": "Serial number and number of FM are set"
+		},
+		{
+			"type": "info",
+			"code": "",
+			"text": "FM is formatted"
+		}
+	]
 }
 ```
 
