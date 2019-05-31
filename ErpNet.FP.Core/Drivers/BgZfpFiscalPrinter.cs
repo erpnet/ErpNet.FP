@@ -64,12 +64,12 @@ namespace ErpNet.FP.Core.Drivers
             var statusEx = new DeviceStatusEx(status);
             if (dateTime.HasValue)
             {
-                statusEx.DateTime = dateTime.Value;
+                statusEx.DeviceDateTime = dateTime.Value;
             }
             else
             {
-                statusEx.Statuses.Add("Error occured while reading current status");
-                statusEx.Errors.Add("Cannot read current date and time");
+                statusEx.AddInfo("Error occured while reading current status");
+                statusEx.AddError("E409", "Cannot read current date and time");
             }
             return statusEx;
         }
@@ -118,7 +118,7 @@ namespace ErpNet.FP.Core.Drivers
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
-                        deviceStatus.Statuses.Add($"Error occurred in the comment of Item {itemNumber}");
+                        deviceStatus.AddInfo($"Error occurred in the comment of Item {itemNumber}");
                         return deviceStatus;
                     }
                 }
@@ -142,7 +142,7 @@ namespace ErpNet.FP.Core.Drivers
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
-                        deviceStatus.Statuses.Add($"Error occurred in Item {itemNumber}");
+                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
                         return deviceStatus;
                     }
                 }
@@ -155,7 +155,7 @@ namespace ErpNet.FP.Core.Drivers
                 if (!deviceStatus.Ok)
                 {
                     AbortReceipt();
-                    deviceStatus.Statuses.Add($"Error occurred while making full payment in cash and closing the receipt");
+                    deviceStatus.AddInfo($"Error occurred while making full payment in cash and closing the receipt");
                     return deviceStatus;
                 }
             }
@@ -169,7 +169,7 @@ namespace ErpNet.FP.Core.Drivers
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
-                        deviceStatus.Statuses.Add($"Error occurred in Payment {paymentNumber}");
+                        deviceStatus.AddInfo($"Error occurred in Payment {paymentNumber}");
                         return deviceStatus;
                     }
                 }
@@ -177,7 +177,7 @@ namespace ErpNet.FP.Core.Drivers
                 if (!deviceStatus.Ok)
                 {
                     AbortReceipt();
-                    deviceStatus.Statuses.Add($"Error occurred while closing the receipt");
+                    deviceStatus.AddInfo($"Error occurred while closing the receipt");
                     return deviceStatus;
                 }
             }
@@ -191,7 +191,7 @@ namespace ErpNet.FP.Core.Drivers
             var (qrCodeData, deviceStatus) = GetLastReceiptQRCodeData();
             if (!deviceStatus.Ok)
             {
-                deviceStatus.Statuses.Add($"Error occurred while reading last receipt QR code data");
+                deviceStatus.AddInfo($"Error occurred while reading last receipt QR code data");
                 return (new ReceiptInfo(), deviceStatus);
             }
 
@@ -218,7 +218,7 @@ namespace ErpNet.FP.Core.Drivers
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while opening new fiscal reversal receipt");
+                deviceStatus.AddInfo($"Error occured while opening new fiscal reversal receipt");
                 return deviceStatus;
             }
 
@@ -230,8 +230,8 @@ namespace ErpNet.FP.Core.Drivers
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
-                deviceStatus.Errors.Add(e.Message);
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+                deviceStatus.AddError("E410", e.Message);
                 return deviceStatus;
             }
         }
@@ -253,7 +253,7 @@ namespace ErpNet.FP.Core.Drivers
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
-                deviceStatus.Statuses.Add($"Error occured while opening new fiscal receipt");
+                deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
                 return (receiptInfo, deviceStatus);
             }
 
@@ -269,8 +269,8 @@ namespace ErpNet.FP.Core.Drivers
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while printing receipt items");
-                deviceStatus.Errors.Add(e.Message);
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+                deviceStatus.AddError("E410", e.Message);
                 return (receiptInfo, deviceStatus);
             }
 

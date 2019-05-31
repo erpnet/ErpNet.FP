@@ -1,0 +1,13 @@
+fiscal-memory-warnings
+W201 Fiscal Memory near full
+W202 Electronic Journal/SD Card near full
+W299 General fiscal memory warning
+
+printing-warnings
+W301 Low paper/Near end of paper
+W399 Printing general warning
+
+nra-link-warnings
+W501 Unsent data for 24 hours
+W502 Report not zeroed
+W599 NRA link general warning

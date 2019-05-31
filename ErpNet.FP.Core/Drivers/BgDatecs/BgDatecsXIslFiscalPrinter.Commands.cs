@@ -61,15 +61,15 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var (receiptStatusResponse, deviceStatus) = Request(CommandGetReceiptStatus);
             if (!deviceStatus.Ok)
             {
-                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                deviceStatus.AddInfo($"Error occured while reading last receipt status");
                 return (null, deviceStatus);
             }
 
             var fields = receiptStatusResponse.Split('\t');
             if (fields.Length < 5)
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
-                deviceStatus.Errors.Add("Wrong format of receipt status");
+                deviceStatus.AddInfo($"Error occured while parsing last receipt status");
+                deviceStatus.AddError("E409", "Wrong format of receipt status");
                 return (null, deviceStatus);
             }
 
@@ -96,8 +96,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             catch (Exception e)
             {
                 deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while parsing the amount of last receipt status");
-                deviceStatus.Errors.Add(e.Message);
+                deviceStatus.AddInfo($"Error occured while parsing the amount of last receipt status");
+                deviceStatus.AddError("E409", e.Message);
                 return (null, deviceStatus);
             }
 
@@ -109,15 +109,15 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
             if (!deviceStatus.Ok)
             {
-                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
+                deviceStatus.AddInfo($"Error occured while reading current date and time");
                 return (null, deviceStatus);
             }
 
             var fields = dateTimeResponse.Split('\t');
             if (fields.Length < 2)
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing date and time");
-                deviceStatus.Errors.Add("Wrong format of date and time");
+                deviceStatus.AddInfo($"Error occured while parsing date and time");
+                deviceStatus.AddError("E409", "Wrong format of date and time");
                 return (null, deviceStatus);
             }
 
@@ -132,8 +132,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
             catch
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
-                deviceStatus.Errors.Add($"Wrong format of date and time");
+                deviceStatus.AddInfo($"Error occured while parsing current date and time");
+                deviceStatus.AddError("E409", $"Wrong format of date and time");
                 return (null, deviceStatus);
             }
         }
@@ -144,8 +144,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var fields = closeReceiptResponse.Split('\t');
             if (fields.Length < 2)
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing close receipt response");
-                deviceStatus.Errors.Add($"Wrong format of close receipt response");
+                deviceStatus.AddInfo($"Error occured while parsing close receipt response");
+                deviceStatus.AddError("E409", $"Wrong format of close receipt response");
                 return (string.Empty, deviceStatus);
             }
             return (fields[1], deviceStatus);
@@ -285,78 +285,78 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         // 8 Bytes x 8 bits
 
-        protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
-            ("Syntax error", DeviceStatusBitsStringType.Error),
-            ("Command code is invalid", DeviceStatusBitsStringType.Error),
-            ("The real time clock is not synchronized", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("Failure in printing mechanism", DeviceStatusBitsStringType.Error),
-            ("General error", DeviceStatusBitsStringType.Error),
-            ("Cover is open", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+        protected static readonly (string, string, StatusMessageType)[] StatusBitsStrings = new (string, string, StatusMessageType)[] {
+            ("E401", "Syntax error", StatusMessageType.Error),
+            ("E402", "Command code is invalid", StatusMessageType.Error),
+            ("E103", "The real time clock is not synchronized", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            ("E303", "Failure in printing mechanism", StatusMessageType.Error),
+            ("E199", "General error", StatusMessageType.Error),
+            ("E302", "Cover is open", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Overflow during command execution", DeviceStatusBitsStringType.Error),
-            ("Command is not permitted", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E403", "Overflow during command execution", StatusMessageType.Error),
+            ("E404", "Command is not permitted", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("End of paper", DeviceStatusBitsStringType.Error),
-            ("Near paper end", DeviceStatusBitsStringType.Warning),
-            ("EJ is full", DeviceStatusBitsStringType.Error),
-            ("Fiscal receipt is open", DeviceStatusBitsStringType.Status),
-            ("EJ nearly full", DeviceStatusBitsStringType.Warning),
-            ("Nonfiscal receipt is open", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E301", "End of paper", StatusMessageType.Error),
+            ("W301", "Near paper end", StatusMessageType.Warning),
+            ("E206", "EJ is full", StatusMessageType.Error),
+            (string.Empty, "Fiscal receipt is open", StatusMessageType.Info),
+            ("W202", "EJ nearly full", StatusMessageType.Warning),
+            (string.Empty, "Nonfiscal receipt is open", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Error when trying to access data stored in the FM", DeviceStatusBitsStringType.Error),
-            ("Tax number is set", DeviceStatusBitsStringType.Status),
-            ("Serial number and number of FM are set", DeviceStatusBitsStringType.Status),
-            ("There is space for less then 60 reports in Fiscal memory", DeviceStatusBitsStringType.Warning),
-            ("FM full", DeviceStatusBitsStringType.Error),
-            ("FM general error", DeviceStatusBitsStringType.Error),
-            ("Fiscal memory is not found or damaged", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E203", "Error when trying to access data stored in the FM", StatusMessageType.Error),
+            (string.Empty, "Tax number is set", StatusMessageType.Info),
+            (string.Empty, "Serial number and number of FM are set", StatusMessageType.Info),
+            ("W201", "There is space for less then 60 reports in Fiscal memory", StatusMessageType.Warning),
+            ("E201", "FM full", StatusMessageType.Error),
+            ("E299", "FM general error", StatusMessageType.Error),
+            ("E205", "Fiscal memory is not found or damaged", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("FM is formatted", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("Device is fiscalized", DeviceStatusBitsStringType.Status),
-            ("VAT are set at least once", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, "FM is formatted", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, "Device is fiscalized", StatusMessageType.Info),
+            (string.Empty, "VAT are set at least once", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved)
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved)
         };
 
         protected override DeviceStatus ParseStatus(byte[]? status)
@@ -374,21 +374,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 {
                     if ((mask & b) != 0)
                     {
-                        var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
-                        switch (statusBitStringType)
+                        var (statusBitsCode, statusBitsText, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
+                        deviceStatus.AddMessage(new StatusMessage
                         {
-                            case DeviceStatusBitsStringType.Error:
-                                deviceStatus.Errors.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Warning:
-                                deviceStatus.Warnings.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Status:
-                                deviceStatus.Statuses.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Reserved:
-                                break;
-                        }
+                            Type = statusBitStringType,
+                            Code = statusBitsCode,
+                            Text = statusBitsText
+                        });
                     }
                     mask >>= 1;
                 }

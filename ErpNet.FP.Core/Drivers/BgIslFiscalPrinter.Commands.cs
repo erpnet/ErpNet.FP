@@ -55,15 +55,15 @@ namespace ErpNet.FP.Core.Drivers
             var (receiptStatusResponse, deviceStatus) = Request(CommandGetReceiptStatus, "T");
             if (!deviceStatus.Ok)
             {
-                deviceStatus.Statuses.Add($"Error occured while reading last receipt status");
+                deviceStatus.AddInfo($"Error occured while reading last receipt status");
                 return (null, deviceStatus);
             }
 
             var fields = receiptStatusResponse.Split(',');
             if (fields.Length < 3)
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing last receipt status");
-                deviceStatus.Errors.Add("Wrong format of receipt status");
+                deviceStatus.AddInfo($"Error occured while parsing last receipt status");
+                deviceStatus.AddError("E409", "Wrong format of receipt status");
                 return (null, deviceStatus);
             }
 
@@ -97,8 +97,8 @@ namespace ErpNet.FP.Core.Drivers
             catch (Exception e)
             {
                 deviceStatus = new DeviceStatus();
-                deviceStatus.Statuses.Add($"Error occured while parsing the amount of last receipt status");
-                deviceStatus.Errors.Add(e.Message);
+                deviceStatus.AddInfo($"Error occured while parsing the amount of last receipt status");
+                deviceStatus.AddError("E409", e.Message);
                 return (null, deviceStatus);
             }
 
@@ -126,8 +126,8 @@ namespace ErpNet.FP.Core.Drivers
             }
             else
             {
-                deviceStatus.Statuses.Add($"Error occured while reading device info");
-                deviceStatus.Errors.Add($"Wrong number of fields");
+                deviceStatus.AddInfo($"Error occured while reading device info");
+                deviceStatus.AddError("E409", $"Wrong number of fields");
                 return (string.Empty, deviceStatus);
             }
         }
@@ -137,7 +137,7 @@ namespace ErpNet.FP.Core.Drivers
             var (dateTimeResponse, deviceStatus) = Request(CommandGetDateTime);
             if (!deviceStatus.Ok)
             {
-                deviceStatus.Statuses.Add($"Error occured while reading current date and time");
+                deviceStatus.AddInfo($"Error occured while reading current date and time");
                 return (null, deviceStatus);
             }
 
@@ -156,8 +156,8 @@ namespace ErpNet.FP.Core.Drivers
             }
             else
             {
-                deviceStatus.Statuses.Add($"Error occured while parsing current date and time");
-                deviceStatus.Errors.Add($"Wrong format of date and time");
+                deviceStatus.AddInfo($"Error occured while parsing current date and time");
+                deviceStatus.AddError("E409", $"Wrong format of date and time");
                 return (null, deviceStatus);
             }
         }

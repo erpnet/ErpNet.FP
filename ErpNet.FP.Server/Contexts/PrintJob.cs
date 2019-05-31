@@ -94,7 +94,7 @@ namespace ErpNet.FP.Server.Contexts
                     {
                         Result = new PrintResult
                         {
-                            Status = Printer.SetDateTime(((CurrentDateTime)Document).DateTime)
+                            Status = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime)
                         };
                     }
                     break;

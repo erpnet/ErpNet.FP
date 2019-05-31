@@ -81,61 +81,61 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         }
 
         // 6 Bytes x 8 bits
-        protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
-            ("Incoming data has syntax error", DeviceStatusBitsStringType.Error),
-            ("Code of incoming command is invalid", DeviceStatusBitsStringType.Error),
-            ("The clock needs setting", DeviceStatusBitsStringType.Error),
-            ("Not connected a customer display", DeviceStatusBitsStringType.Status),
-            ("Failure in printing mechanism", DeviceStatusBitsStringType.Error),
-            ("General error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+        protected static readonly (string, string, StatusMessageType)[] StatusBitsStrings = new (string, string, StatusMessageType)[] {
+            ("E401", "Incoming data has syntax error", StatusMessageType.Error),
+            ("E402", "Code of incoming command is invalid", StatusMessageType.Error),
+            ("E103", "The clock needs setting", StatusMessageType.Error),
+            (string.Empty, "Not connected a customer display", StatusMessageType.Info),
+            ("E303", "Failure in printing mechanism", StatusMessageType.Error),
+            ("E199", "General error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("During command some of the fields for the sums overflow", DeviceStatusBitsStringType.Error),
-            ("Command cannot be performed in the current fiscal mode", DeviceStatusBitsStringType.Error),
-            ("Operational memory was cleared", DeviceStatusBitsStringType.Error),
-            ("Low battery (the clock is in reset state)", DeviceStatusBitsStringType.Error),
-            ("RAM failure after switch ON", DeviceStatusBitsStringType.Error),
-            ("Paper cover is open", DeviceStatusBitsStringType.Error),
-            ("The internal terminal is not working", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E403", "During command some of the fields for the sums overflow", StatusMessageType.Error),
+            ("E404", "Command cannot be performed in the current fiscal mode", StatusMessageType.Error),
+            ("E104", "Operational memory was cleared", StatusMessageType.Error),
+            ("E102", "Low battery (the clock is in reset state)", StatusMessageType.Error),
+            ("E105", "RAM failure after switch ON", StatusMessageType.Error),
+            ("E302", "Paper cover is open", StatusMessageType.Error),
+            ("E599", "The internal terminal is not working", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("No paper", DeviceStatusBitsStringType.Error),
-            ("Not enough paper", DeviceStatusBitsStringType.Warning),
-            ("End of KLEN(under 1MB free)", DeviceStatusBitsStringType.Error),
-            ("A fiscal receipt is opened", DeviceStatusBitsStringType.Status),
-            ("Coming end of KLEN (10MB free)", DeviceStatusBitsStringType.Warning),
-            ("A non-fiscal receipt is opened", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E301", "No paper", StatusMessageType.Error),
+            ("W301", "Not enough paper", StatusMessageType.Warning),
+            ("E206", "End of KLEN(under 1MB free)", StatusMessageType.Error),
+            (string.Empty, "A fiscal receipt is opened", StatusMessageType.Info),
+            ("W202", "Coming end of KLEN (10MB free)", StatusMessageType.Warning),
+            (string.Empty, "A non-fiscal receipt is opened", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
             // Byte 3, bits from 0 to 6 are SW 1 to 7
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Error during writing from the fiscal memory", DeviceStatusBitsStringType.Error),
-            ("EIK is entered", DeviceStatusBitsStringType.Status),
-            ("FM number has been set", DeviceStatusBitsStringType.Status),
-            ("There is space for not more than 50 entries in the FM", DeviceStatusBitsStringType.Warning),
-            ("Fiscal memory is fully engaged", DeviceStatusBitsStringType.Error),
-            ("FM general error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E202", "Error during writing to the fiscal memory", StatusMessageType.Error),
+            (string.Empty, "EIK is entered", StatusMessageType.Info),
+            (string.Empty, "FM number has been set", StatusMessageType.Info),
+            ("W201", "There is space for not more than 50 entries in the FM", StatusMessageType.Warning),
+            ("E201", "Fiscal memory is fully engaged", StatusMessageType.Error),
+            ("E299", "FM general error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("The fiscal memory is in the 'read-only' mode", DeviceStatusBitsStringType.Error),
-            ("The fiscal memory is formatted", DeviceStatusBitsStringType.Status),
-            ("The last record in the fiscal memory is not successful", DeviceStatusBitsStringType.Error),
-            ("The printer is in a fiscal mode", DeviceStatusBitsStringType.Status),
-            ("Tax rates have been entered at least once", DeviceStatusBitsStringType.Status),
-            ("Fiscal memory read error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved)
+            ("E204", "The fiscal memory is in the 'read-only' mode", StatusMessageType.Error),
+            (string.Empty, "The fiscal memory is formatted", StatusMessageType.Info),
+            ("E202", "The last record in the fiscal memory is not successful", StatusMessageType.Error),
+            (string.Empty, "The printer is in a fiscal mode", StatusMessageType.Info),
+            (string.Empty, "Tax rates have been entered at least once", StatusMessageType.Info),
+            ("E203", "Fiscal memory read error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved)
         };
 
         protected override DeviceStatus ParseStatus(byte[]? status)
@@ -160,7 +160,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                         var switchState = ((mask & b) != 0) ? "ON" : "OFF";
                         switchData.Add($"SW{7 - j}={switchState}");
                     }
-                    deviceStatus.Statuses.Add(string.Join(", ", switchData));
+                    deviceStatus.AddInfo(string.Join(", ", switchData));
                 }
                 else
                 {
@@ -168,21 +168,13 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                     {
                         if ((mask & b) != 0)
                         {
-                            var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
-                            switch (statusBitStringType)
+                            var (statusBitsCode, statusBitsText, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
+                            deviceStatus.AddMessage(new StatusMessage
                             {
-                                case DeviceStatusBitsStringType.Error:
-                                    deviceStatus.Errors.Add(statusBitString);
-                                    break;
-                                case DeviceStatusBitsStringType.Warning:
-                                    deviceStatus.Warnings.Add(statusBitString);
-                                    break;
-                                case DeviceStatusBitsStringType.Status:
-                                    deviceStatus.Statuses.Add(statusBitString);
-                                    break;
-                                case DeviceStatusBitsStringType.Reserved:
-                                    break;
-                            }
+                                Type = statusBitStringType,
+                                Code = statusBitsCode,
+                                Text = statusBitsText
+                            });
                         }
                         mask >>= 1;
                     }
