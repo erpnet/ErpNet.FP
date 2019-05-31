@@ -14,7 +14,7 @@
         /// <summary>
         /// Checks whether the device is currently ready to accept commands.
         /// </summary>
-        DeviceStatusEx CheckStatus();
+        DeviceStatusWithDateTime CheckStatus();
 
         /// <summary>
         /// Sets the device date and time

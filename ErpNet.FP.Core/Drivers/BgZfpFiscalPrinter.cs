@@ -58,10 +58,10 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public override DeviceStatusEx CheckStatus()
+        public override DeviceStatusWithDateTime CheckStatus()
         {
             var (dateTime, status) = GetDateTime();
-            var statusEx = new DeviceStatusEx(status);
+            var statusEx = new DeviceStatusWithDateTime(status);
             if (dateTime.HasValue)
             {
                 statusEx.DeviceDateTime = dateTime.Value;
