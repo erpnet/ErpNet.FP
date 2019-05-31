@@ -33,10 +33,10 @@ namespace ErpNet.FP.Core
 
     public class DeviceStatus
     {
+        public bool Ok => ErrorsCount == 0;
+
         private int ErrorsCount = 0;
         public IList<StatusMessage> Messages { get; protected set; } = new List<StatusMessage>();
-
-        public bool Ok => ErrorsCount == 0;
 
         public void AddMessage(StatusMessage statusMessage)
         {
