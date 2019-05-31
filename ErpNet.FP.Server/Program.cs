@@ -64,7 +64,9 @@ namespace ErpNet.FP.Server
                 request.CertificateExtensions.Add(sanBuilder.Build());
 
                 var certificate = request.CreateSelfSigned(new DateTimeOffset(DateTime.UtcNow.AddDays(-1)), new DateTimeOffset(DateTime.UtcNow.AddDays(3650)));
-                certificate.FriendlyName = CertificateName;
+
+                // For now, in .net core 3 the property FriendlyName is not implemented for POSIX systems, like linux and macOS
+                // certificate.FriendlyName = CertificateName;
 
                 return new X509Certificate2(certificate.Export(X509ContentType.Pfx, "ErpNet.FP.Password"), "ErpNet.FP.Password", X509KeyStorageFlags.MachineKeySet);
             }

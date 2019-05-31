@@ -42,62 +42,62 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
 
         // 6 Bytes x 8 bits
 
-        protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
-            ("Syntax error", DeviceStatusBitsStringType.Error),
-            ("Invalid command", DeviceStatusBitsStringType.Error),
-            ("Date and time are not set", DeviceStatusBitsStringType.Error),
-            ("No external display", DeviceStatusBitsStringType.Status),
-            ("Error in printing device", DeviceStatusBitsStringType.Error),
-            ("General error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+        protected static readonly (string, string, StatusMessageType)[] StatusBitsStrings = new (string, string, StatusMessageType)[] {
+            ("E401", "Syntax error", StatusMessageType.Error),
+            ("E402", "Invalid command", StatusMessageType.Error),
+            ("E103", "Date and time are not set", StatusMessageType.Error),
+            (string.Empty, "No external display", StatusMessageType.Info),
+            ("E303", "Error in printing device", StatusMessageType.Error),
+            ("E199", "General error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Number field overflow", DeviceStatusBitsStringType.Error),
-            ("Command not allowed in this mode", DeviceStatusBitsStringType.Error),
-            ("Zeroed RAM", DeviceStatusBitsStringType.Warning),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("Error in cutter", DeviceStatusBitsStringType.Error),
-            ("Wrong password", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E403", "Number field overflow", StatusMessageType.Error),
+            ("E404", "Command not allowed in this mode", StatusMessageType.Error),
+            ("E104", "Zeroed RAM", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            ("E306", "Error in cutter", StatusMessageType.Error),
+            ("E408", "Wrong password", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("No paper", DeviceStatusBitsStringType.Error),
-            ("Near end of paper", DeviceStatusBitsStringType.Warning),
-            ("No control paper", DeviceStatusBitsStringType.Error),
-            ("Opened Fiscal Receipt", DeviceStatusBitsStringType.Status),
-            ("Control paper almost full", DeviceStatusBitsStringType.Warning),
-            ("Opened Non-fiscal Receipt", DeviceStatusBitsStringType.Status),
-            ("Printing allowed", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E301", "No paper", StatusMessageType.Error),
+            ("W301", "Near end of paper", StatusMessageType.Warning),
+            ("E206", "No control paper", StatusMessageType.Error),
+            (string.Empty, "Opened Fiscal Receipt", StatusMessageType.Info),
+            ("W202", "Control paper almost full", StatusMessageType.Warning),
+            (string.Empty, "Opened Non-fiscal Receipt", StatusMessageType.Info),
+            (string.Empty, "Printing allowed", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
             // Byte 3 is special in Daisy, it contains error code, from bit 0 to bit 6
             // bit 7 is reserved
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Error while writing to FM", DeviceStatusBitsStringType.Error),
-            ("No task from NRA", DeviceStatusBitsStringType.Error),
-            ("Wrong record in FM", DeviceStatusBitsStringType.Error),
-            ("FM almost full", DeviceStatusBitsStringType.Warning),
-            ("FM full", DeviceStatusBitsStringType.Error),
-            ("FM general error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E202", "Error while writing to FM", StatusMessageType.Error),
+            ("E599", "No task from NRA", StatusMessageType.Error),
+            ("E203", "Wrong record in FM", StatusMessageType.Error),
+            ("W201", "FM almost full", StatusMessageType.Warning),
+            ("E201", "FM full", StatusMessageType.Error),
+            ("E299", "FM general error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("FM overflow", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("VAT groups are set", DeviceStatusBitsStringType.Status),
-            ("Device S/N and FM S/N are set", DeviceStatusBitsStringType.Status),
-            ("FM ready", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved)
+            ("E201", "FM overflow", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, "VAT groups are set", StatusMessageType.Info),
+            (string.Empty, "Device S/N and FM S/N are set", StatusMessageType.Info),
+            (string.Empty, "FM ready", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved)
         };
 
         protected override DeviceStatus ParseStatus(byte[]? status)
@@ -116,7 +116,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                     byte errorCode = (byte)(status[i] & 0b01111111);
                     if (errorCode > 0)
                     {
-                        deviceStatus.Errors.Add($"Error code: {errorCode}, see Daisy Manual");
+                        deviceStatus.AddError("E999", $"Error code: {errorCode}, see Daisy Manual");
                     }
                     continue;
                 }
@@ -126,21 +126,13 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 {
                     if ((mask & b) != 0)
                     {
-                        var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
-                        switch (statusBitStringType)
+                        var (statusBitsCode, statusBitsText, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
+                        deviceStatus.AddMessage(new StatusMessage
                         {
-                            case DeviceStatusBitsStringType.Error:
-                                deviceStatus.Errors.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Warning:
-                                deviceStatus.Warnings.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Status:
-                                deviceStatus.Statuses.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Reserved:
-                                break;
-                        }
+                            Type = statusBitStringType,
+                            Code = statusBitsCode,
+                            Text = statusBitsText
+                        });
                     }
                     mask >>= 1;
                 }

@@ -8,120 +8,120 @@ namespace ErpNet.FP.Core.Drivers
     {
         // Begins at 0x30, ends at 0x3f
         // All strings are errors
-        protected static readonly string[] FiscalDeviceErrors = {
-            string.Empty, // No error
-            "Out of paper, printer failure",
-            "Registers overflow",
-            "Clock failure or incorrect date & time",
-            "Opened fiscal receipt",
-            "Payment residue account",
-            "Opened non-fiscal receipt",
-            "Registered payment but receipt is not closed",
-            "Fiscal memory failure",
-            "Incorrect password",
-            "Missing external display",
-            "24hours block – missing Z report",
-            "Overheated printer thermal head",
-            "Interrupt power supply in fiscal receipt(one time until status is read)",
-            "Overflow EJ",
-            "Insufficient conditions"
+        protected static readonly (string, string)[] FiscalDeviceErrors = new (string, string)[]{
+            (string.Empty, string.Empty), // No error
+            ("E301", "Out of paper, printer failure"),
+            ("E403", "Registers overflow"),
+            ("E103", "Clock failure or incorrect date & time"),
+            ("E404", "Opened fiscal receipt"),
+            ("E406", "Payment residue ammount"),
+            ("E404", "Opened non-fiscal receipt"),
+            ("E405", "Registered payment but receipt is not closed"),
+            ("E299", "Fiscal memory failure"),
+            ("E408", "Incorrect password"),
+            ("E105", "Missing external display"),
+            ("E502", "24hours block – missing Z report"),
+            ("E304", "Overheated printer thermal head"),
+            ("E305", "Interrupt power supply in fiscal receipt(one time until status is read)"),
+            ("E206", "Overflow EJ"),
+            ("E405", "Insufficient conditions")
         };
 
         // Begins at 0x30, ends at 0x38
         // All strings are errors
-        protected static readonly string[] CommandErrors = {
-            string.Empty, // No error
-            "Invalid command",
-            "Illegal command",
-            "Z daily report is not zero",
-            "Syntax error",
-            "Input registers overflow",
-            "Zero input registers",
-            "Unavailable transaction for correction",
-            "Insufficient amount on hand"
+        protected static readonly (string, string)[] CommandErrors = new (string, string)[] {
+            (string.Empty, string.Empty), // No error
+            ("E402", "Invalid command"),
+            ("E404", "Illegal command"),
+            ("E405", "Z daily report is not zero"),
+            ("E401", "Syntax error"),
+            ("E403", "Input registers overflow"),
+            ("E405", "Zero input registers"),
+            ("E405", "Unavailable transaction for correction"),
+            ("E405", "Insufficient amount on hand")
         };
 
         // 7 Bytes x 8 bits
 
-        protected static readonly (string, DeviceStatusBitsStringType)[] StatusBitsStrings = new[] {
-            ("FM Read only", DeviceStatusBitsStringType.Error),
-            ("Power down in opened fiscal receipt", DeviceStatusBitsStringType.Error),
-            ("Printer not ready - overheat", DeviceStatusBitsStringType.Error),
-            ("DateTime not set", DeviceStatusBitsStringType.Error),
-            ("DateTime wrong", DeviceStatusBitsStringType.Error),
-            ("RAM reset", DeviceStatusBitsStringType.Error),
-            ("Hardware clock error", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+        protected static readonly (string, string, StatusMessageType)[] StatusBitsStrings = new (string, string, StatusMessageType)[] {
+            ("E204", "FM Read only", StatusMessageType.Error),
+            ("E305", "Power down in opened fiscal receipt", StatusMessageType.Error),
+            ("E304", "Printer not ready - overheat", StatusMessageType.Error),
+            ("E103", "DateTime not set", StatusMessageType.Error),
+            ("E103", "DateTime wrong", StatusMessageType.Error),
+            ("E104", "RAM reset", StatusMessageType.Error),
+            ("E103", "Hardware clock error", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Printer not ready - no paper", DeviceStatusBitsStringType.Error),
-            ("Reports registers Overflow", DeviceStatusBitsStringType.Error),
-            ("Customer report is not zeroed", DeviceStatusBitsStringType.Warning),
-            ("Daily report is not zeroed", DeviceStatusBitsStringType.Warning),
-            ("Article report is not zeroed", DeviceStatusBitsStringType.Warning),
-            ("Operator report is not zeroed", DeviceStatusBitsStringType.Warning),
-            ("Duplicate printed", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E301", "Printer not ready - no paper", StatusMessageType.Error),
+            ("E403", "Report registers overflow", StatusMessageType.Error),
+            ("W502", "Customer report is not zeroed", StatusMessageType.Warning),
+            ("W502", "Daily report is not zeroed", StatusMessageType.Warning),
+            ("W502", "Article report is not zeroed", StatusMessageType.Warning),
+            ("W502", "Operator report is not zeroed", StatusMessageType.Warning),
+            (string.Empty, "Duplicate printed", StatusMessageType.Info),
+            (string.Empty, string.Empty,StatusMessageType.Reserved),
 
-            ("Opened Non-fiscal Receipt", DeviceStatusBitsStringType.Status),
-            ("Opened Fiscal Receipt", DeviceStatusBitsStringType.Status),
-            ("Opened Fiscal Detailed Receipt", DeviceStatusBitsStringType.Status),
-            ("Opened Fiscal Receipt with VAT", DeviceStatusBitsStringType.Status),
-            ("Opened Invoice Fiscal Receipt", DeviceStatusBitsStringType.Status),
-            ("SD card near full", DeviceStatusBitsStringType.Warning),
-            ("SD card full", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, "Opened Non-fiscal Receipt", StatusMessageType.Info),
+            (string.Empty, "Opened Fiscal Receipt", StatusMessageType.Info),
+            (string.Empty, "Opened Fiscal Detailed Receipt", StatusMessageType.Info),
+            (string.Empty, "Opened Fiscal Receipt with VAT", StatusMessageType.Info),
+            (string.Empty, "Opened Invoice Fiscal Receipt", StatusMessageType.Info),
+            ("W202", "SD card near full", StatusMessageType.Warning),
+            ("E206", "SD card full", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("No FM module", DeviceStatusBitsStringType.Error),
-            ("FM error", DeviceStatusBitsStringType.Error),
-            ("FM full", DeviceStatusBitsStringType.Error),
-            ("FM near full", DeviceStatusBitsStringType.Warning),
-            ("Decimal point(1=fract, 0=whole)", DeviceStatusBitsStringType.Status),
-            ("FM fiscalized", DeviceStatusBitsStringType.Status),
-            ("FM produced", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E205", "No FM module", StatusMessageType.Error),
+            ("E299", "FM error", StatusMessageType.Error),
+            ("E201", "FM full", StatusMessageType.Error),
+            ("W201", "FM near full", StatusMessageType.Warning),
+            (string.Empty, "Decimal point(1=fract, 0=whole)", StatusMessageType.Info),
+            (string.Empty, "FM fiscalized", StatusMessageType.Info),
+            (string.Empty, "FM produced", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Printer: automatic cutting", DeviceStatusBitsStringType.Status),
-            ("External display: transparent display", DeviceStatusBitsStringType.Status),
-            ("Speed is 9600", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("Drawer: automatic opening", DeviceStatusBitsStringType.Status),
-            ("Customer logo included in the receipt", DeviceStatusBitsStringType.Status),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            (string.Empty, "Printer: automatic cutting", StatusMessageType.Info),
+            (string.Empty, "External display: transparent display", StatusMessageType.Info),
+            (string.Empty, "Speed is 9600", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, "Drawer: automatic opening", StatusMessageType.Info),
+            (string.Empty, "Customer logo included in the receipt", StatusMessageType.Info),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("Wrong SIM card", DeviceStatusBitsStringType.Error),
-            ("Blocking 3 days without mobile operator", DeviceStatusBitsStringType.Error),
-            ("No task from NRA", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            ("Wrong SD card", DeviceStatusBitsStringType.Error),
-            ("Deregistered", DeviceStatusBitsStringType.Error),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
+            ("E504", "Wrong SIM card", StatusMessageType.Error),
+            ("E503", "Blocking 3 days without mobile operator", StatusMessageType.Error),
+            ("E501", "No task from NRA", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            ("E207", "Wrong SD card", StatusMessageType.Error),
+            ("E599", "Deregistered", StatusMessageType.Error),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
 
-            ("No SIM card", DeviceStatusBitsStringType.Error),
-            ("No GPRS Modem", DeviceStatusBitsStringType.Error),
-            ("No mobile operator", DeviceStatusBitsStringType.Error),
-            ("No GPRS service", DeviceStatusBitsStringType.Error),
-            ("Near end of paper", DeviceStatusBitsStringType.Warning),
-            ("Unsent data for 24 hours", DeviceStatusBitsStringType.Warning),
-            (string.Empty, DeviceStatusBitsStringType.Reserved),
-            (string.Empty, DeviceStatusBitsStringType.Reserved)
+            ("E504", "No SIM card", StatusMessageType.Error),
+            ("E507", "No GPRS Modem", StatusMessageType.Error),
+            ("E506", "No mobile operator", StatusMessageType.Error),
+            ("E505", "No GPRS service", StatusMessageType.Error),
+            ("W301", "Near end of paper", StatusMessageType.Warning),
+            ("W501", "Unsent data for 24 hours", StatusMessageType.Warning),
+            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (string.Empty, string.Empty, StatusMessageType.Reserved)
         };
 
         protected virtual DeviceStatus ParseCommandStatus(byte[] status)
         {
             var deviceStatus = new DeviceStatus();
             // Byte 0
-            var fiscalDeviceError = FiscalDeviceErrors[status[0] - 0x30];
-            if (fiscalDeviceError.Length > 0)
+            var (errorCode, errorText) = FiscalDeviceErrors[status[0] - 0x30];
+            if (errorText.Length > 0)
             {
-                deviceStatus.Errors.Add(fiscalDeviceError);
+                deviceStatus.AddError(errorCode, errorText);
             }
             // Byte 1
-            var commandError = CommandErrors[status[1] - 0x30];
-            if (commandError.Length > 0)
+            (errorCode, errorText) = CommandErrors[status[1] - 0x30];
+            if (errorText.Length > 0)
             {
-                deviceStatus.Errors.Add(commandError);
+                deviceStatus.AddError(errorCode, errorText);
             }
             return deviceStatus;
         }
@@ -137,21 +137,13 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     if ((mask & b) != 0)
                     {
-                        var (statusBitString, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
-                        switch (statusBitStringType)
+                        var (statusBitsCode, statusBitsText, statusBitStringType) = StatusBitsStrings[i * 8 + (7 - j)];
+                        deviceStatus.AddMessage(new StatusMessage
                         {
-                            case DeviceStatusBitsStringType.Error:
-                                deviceStatus.Errors.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Warning:
-                                deviceStatus.Warnings.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Status:
-                                deviceStatus.Statuses.Add(statusBitString);
-                                break;
-                            case DeviceStatusBitsStringType.Reserved:
-                                break;
-                        }
+                            Type = statusBitStringType,
+                            Code = statusBitsCode,
+                            Text = statusBitsText
+                        });
                     }
                     mask >>= 1;
                 }

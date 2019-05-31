@@ -2,6 +2,6 @@
 {
     public class CurrentDateTime
     {
-        public System.DateTime DateTime = System.DateTime.MinValue;
+        public System.DateTime DeviceDateTime = System.DateTime.MinValue;
     }
 }
