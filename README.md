@@ -15,7 +15,7 @@ The http server receives input through the REST API and uses different transport
 # The JSON Protocol
 ## Requests
 The print server accepts documents for printing, using JSON based protocol. 
-For example, this would print the specified receipt to dt517985, which is the PrinterID of one of the detected printers, listed with GET /printers.
+For example, this would print the specified receipt to dt517985, which is the printerId of one of the detected printers, listed with GET /printers (see below for printerId explanation):
 
 POST /printers/dt517985/receipt
 
