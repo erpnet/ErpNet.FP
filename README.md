@@ -62,7 +62,8 @@ If there was error, "ok" would be "false".
 
 If "ok"="false", it is guaranteed, that at least one message of type "error" would be present.
 
-The error and warning messages have standardized codes across all manufacturers. The standard error codes are listed in the [Error Codes](ErrorCodes.md) file.
+The error and warning messages have standardized codes across all manufacturers. The standard error and warning codes are listed in the 
+[Error and Warning Codes](ErrorCodes.md) file.
 
 The standard error codes are a subset of all manufacturer codes and flags. 
 In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. 
