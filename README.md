@@ -13,8 +13,9 @@ The http server receives input through the REST API and uses different transport
 * etc.
 
 # The JSON Protocol
-## Input
-The print server accepts documents for printing, using JSON based protocol. For example, this would print the specified receipt to any of the detected printers (usually the first one):
+## Requests
+The print server accepts documents for printing, using JSON based protocol. 
+For example, this would print the specified receipt to any of the detected printers (usually the first one):
 
 POST /printers/any/receipt
 
@@ -55,7 +56,7 @@ POST /printers/any/receipt
 For more information, see the full documentation of the protocol in postman examples:
 - [Postman collection] of examples
 
-## Interpreting The Results
+## Response - Interpreting The Results
 The most important result is the "ok" field. It contains "true" when the POST operation was successful, otherwise - "false".
 If there was error, "ok" would be "false".
 
@@ -63,7 +64,14 @@ If "ok"="false", it is guaranteed, that at least one message of type "error" wou
 
 The error and warning messages have standardized codes across all manufacturers. The standard error codes are listed in the [Error Codes](ErrorCodes.md) file.
 
-The standard error codes are a subset of all manufacturer codes and flags. In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. The manufacturer code, when available, is contained in the "originalCode" field. The problem with using the manufacturer codes is that they are different for each manufacturer. For some manufacturers they are not even present (there might be just some status flags). The manufacturer codes can even change between revisions of printers of the same manufacturer. The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
+The standard error codes are a subset of all manufacturer codes and flags. 
+In some cases, the specific manufacturer codes, flags and messages could contain more detailed information. 
+The manufacturer code, when available, is contained in the "originalCode" field. 
+The problem with using the manufacturer codes is that they are different for each manufacturer. 
+For some manufacturers they are not even present (there might be just some status flags). 
+The manufacturer codes can even change between revisions of printers of the same manufacturer. 
+The standardized error and warning codes are guaranteed to be the same across all manufacturers and printer versions.
+Messages with "type": "info", have no codes, because they cannot be standardized.
 
 ### Example Return JSON (No Problems) after printing receipt:
 ```json
