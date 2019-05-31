@@ -12,10 +12,10 @@ namespace ErpNet.FP.Core.Drivers
         protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         : base(channel, options) { }
 
-        public override DeviceStatusEx CheckStatus()
+        public override DeviceStatusWithDateTime CheckStatus()
         {
             var (dateTime, status) = GetDateTime();
-            var statusEx = new DeviceStatusEx(status);
+            var statusEx = new DeviceStatusWithDateTime(status);
             if (dateTime.HasValue)
             {
                 statusEx.DeviceDateTime = dateTime.Value;

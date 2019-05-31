@@ -51,7 +51,7 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public abstract DeviceStatusEx CheckStatus();
+        public abstract DeviceStatusWithDateTime CheckStatus();
 
         public abstract DeviceStatus SetDateTime(System.DateTime dateTime);
 

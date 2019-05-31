@@ -48,7 +48,7 @@ namespace ErpNet.FP.Server.Controllers
 
         // GET printers/{id}/status
         [HttpGet("{id}/status")]
-        public ActionResult<DeviceStatusEx> Status(string id)
+        public ActionResult<DeviceStatusWithDateTime> Status(string id)
         {
             if (!context.IsReady)
             {

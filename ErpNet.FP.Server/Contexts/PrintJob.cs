@@ -43,60 +43,38 @@ namespace ErpNet.FP.Server.Contexts
                     if (Document != null)
                     {
                         var (info, status) = Printer.PrintReceipt((Receipt)Document);
-                        Result = new PrintReceiptResult
-                        {
-                            Info = info,
-                            Status = status
-                        };
+                        Result = new DeviceStatusWithReceiptInfo(status, info);
                     }
                     break;
                 case PrintJobAction.ReversalReceipt:
                     if (Document != null)
                     {
-                        Result = new PrintResult
-                        {
-                            Status = Printer.PrintReversalReceipt((ReversalReceipt)Document)
-                        };
+                        Result = Printer.PrintReversalReceipt((ReversalReceipt)Document);
                     };
                     break;
                 case PrintJobAction.Withdraw:
                     if (Document != null)
                     {
-                        Result = new PrintResult
-                        {
-                            Status = Printer.PrintMoneyWithdraw(((TransferAmount)Document).Amount)
-                        };
+                        Result = Printer.PrintMoneyWithdraw(((TransferAmount)Document).Amount);
                     }
                     break;
                 case PrintJobAction.Deposit:
                     if (Document != null)
                     {
-                        Result = new PrintResult
-                        {
-                            Status = Printer.PrintMoneyDeposit(((TransferAmount)Document).Amount)
-                        };
+                        Result = Printer.PrintMoneyDeposit(((TransferAmount)Document).Amount);
                     }
                     break;
                 case PrintJobAction.XReport:
-                    Result = new PrintResult
-                    {
-                        Status = Printer.PrintXReport()
-                    };
+                    Result = Printer.PrintXReport();
                     break;
                 case PrintJobAction.ZReport:
-                    Result = new PrintResult
-                    {
-                        Status = Printer.PrintZReport()
-                    };
+                    Result = Printer.PrintZReport();
                     break;
                 case PrintJobAction.SetDateTime:
                     if (Document != null)
                     {
-                        Result = new PrintResult
-                        {
-                            Status = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime)
-                        };
-                    }
+                        Result = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime);
+                    };
                     break;
                 default:
                     break;

@@ -86,13 +86,42 @@ namespace ErpNet.FP.Core
         }
     }
 
-    public class DeviceStatusEx : DeviceStatus
+    public class DeviceStatusWithDateTime : DeviceStatus
     {
         public System.DateTime DeviceDateTime { get; set; }
 
-        public DeviceStatusEx(DeviceStatus status) : base()
+        public DeviceStatusWithDateTime(DeviceStatus status) : base()
         {
             Messages = status.Messages;
+        }
+    }
+
+    public class DeviceStatusWithReceiptInfo : DeviceStatus
+    {
+        /// <summary>
+        /// The receipt number.
+        /// </summary>
+        public string ReceiptNumber = string.Empty;
+        /// <summary>
+        /// The receipt date and time.
+        /// </summary>
+        public System.DateTime ReceiptDateTime;
+        /// <summary>
+        /// The receipt amount.
+        /// </summary>
+        public decimal ReceiptAmount = 0m;
+        /// <summary>
+        /// The fiscal memory number.
+        /// </summary>
+        public string FiscalMemorySerialNumber = string.Empty;
+
+        public DeviceStatusWithReceiptInfo(DeviceStatus status, ReceiptInfo info) : base()
+        {
+            Messages = status.Messages;
+            ReceiptNumber = info.ReceiptNumber;
+            ReceiptDateTime = info.ReceiptDateTime;
+            ReceiptAmount = info.ReceiptAmount;
+            FiscalMemorySerialNumber = info.FiscalMemorySerialNumber;
         }
     }
 
