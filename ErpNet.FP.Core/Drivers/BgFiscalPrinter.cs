@@ -53,19 +53,19 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatusWithDateTime CheckStatus();
 
-        public abstract DeviceStatus SetDateTime(System.DateTime dateTime);
+        public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
-        public abstract DeviceStatus PrintMoneyDeposit(decimal amount);
+        public abstract DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount);
 
-        public abstract DeviceStatus PrintMoneyWithdraw(decimal amount);
+        public abstract DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount);
 
         public abstract (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt);
 
         public abstract DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
-        public abstract DeviceStatus PrintZReport();
+        public abstract DeviceStatus PrintZReport(Credentials credentials);
 
-        public abstract DeviceStatus PrintXReport();
+        public abstract DeviceStatus PrintXReport(Credentials credentials);
 
         protected abstract DeviceStatus ParseStatus(byte[]? status);
 

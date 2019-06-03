@@ -15,6 +15,7 @@ namespace ErpNet.FP.Core
         /// <value>
         /// The type of the payment.
         /// </value>
+        [JsonProperty(Required = Required.Always)]
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentType PaymentType { get; set; } = PaymentType.Unspecified;
 
@@ -24,6 +25,7 @@ namespace ErpNet.FP.Core
         /// <value>
         /// The amount.
         /// </value>
+        [JsonProperty(Required = Required.Always)]
         public decimal Amount { get; set; }
     }
 }

@@ -57,25 +57,33 @@ namespace ErpNet.FP.Server.Contexts
                     case PrintJobAction.Withdraw:
                         if (Document != null)
                         {
-                            Result = Printer.PrintMoneyWithdraw(((TransferAmount)Document).Amount);
+                            Result = Printer.PrintMoneyWithdraw((TransferAmount)Document);
                         }
                         break;
                     case PrintJobAction.Deposit:
                         if (Document != null)
                         {
-                            Result = Printer.PrintMoneyDeposit(((TransferAmount)Document).Amount);
+                            Result = Printer.PrintMoneyDeposit((TransferAmount)Document);
                         }
                         break;
                     case PrintJobAction.XReport:
-                        Result = Printer.PrintXReport();
+                        if (Document == null)
+                        {
+                            Document = new Credentials();
+                        }
+                        Result = Printer.PrintXReport((Credentials)Document);
                         break;
                     case PrintJobAction.ZReport:
-                        Result = Printer.PrintZReport();
+                        if (Document == null)
+                        {
+                            Document = new Credentials();
+                        }
+                        Result = Printer.PrintZReport((Credentials)Document);
                         break;
                     case PrintJobAction.SetDateTime:
                         if (Document != null)
                         {
-                            Result = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime);
+                            Result = Printer.SetDateTime((CurrentDateTime)Document);
                         };
                         break;
                     default:

@@ -15,6 +15,7 @@ namespace ErpNet.FP.Core
         /// <value>
         /// The text.
         /// </value>
+        [JsonProperty(Required = Required.Always)]
         public string Text { get; set; } = "";
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace ErpNet.FP.Core
         /// </summary>
         /// <value>
         /// The tax group.
-        /// </value>
+        /// </value>        
         public TaxGroup TaxGroup { get; set; } = TaxGroup.Unspecified;
 
         /// <summary>
