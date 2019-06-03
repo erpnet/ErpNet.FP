@@ -30,7 +30,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 case PaymentType.Reserved2:
                     return "R";
                 default:
-                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
+                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 

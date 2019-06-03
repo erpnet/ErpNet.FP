@@ -36,7 +36,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 case PaymentType.Reserved1:
                     return "D";
                 default:
-                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
+                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 

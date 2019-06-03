@@ -55,7 +55,7 @@ namespace ErpNet.FP.Core.Drivers
                 case TaxGroup.TaxGroup8:
                     return "Ç";
                 default:
-                    throw new StandardizedResponseException($"Tax group {taxGroup} unsupported", "E411");
+                    throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411");
             }
         }
 
@@ -70,7 +70,7 @@ namespace ErpNet.FP.Core.Drivers
         {
             if (transferAmount.Amount < 0m)
             {
-                throw new StandardizedResponseException("Withdraw amount must be positive number", "E403");
+                throw new StandardizedStatusMessageException("Withdraw amount must be positive number", "E403");
             }
             var (response, status) = MoneyTransfer(-transferAmount.Amount);
             System.Diagnostics.Trace.WriteLine("PrintMoneyWithdraw: {0}", response);
@@ -81,7 +81,7 @@ namespace ErpNet.FP.Core.Drivers
         {
             if (receipt.Items == null || receipt.Items.Count == 0)
             {
-                throw new StandardizedResponseException("Receipt.Items must be not null or empty", "E410");
+                throw new StandardizedStatusMessageException("Receipt.Items must be not null or empty", "E410");
             }
 
             var deviceStatus = new DeviceStatus();
@@ -105,11 +105,11 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     if (item.PriceModifierValue < 0m)
                     {
-                        throw new StandardizedResponseException("PriceModifierValue amount must be positive number", "E403");
+                        throw new StandardizedStatusMessageException("PriceModifierValue amount must be positive number", "E403");
                     }
                     if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
                     {
-                        throw new StandardizedResponseException("PriceModifierValue must be 0 if priceModifierType is None", "E403");
+                        throw new StandardizedStatusMessageException("PriceModifierValue must be 0 if priceModifierType is None", "E403");
                     }
                     try
                     {
@@ -121,11 +121,10 @@ namespace ErpNet.FP.Core.Drivers
                             item.PriceModifierValue,
                             item.PriceModifierType);
                     }
-                    catch (StandardizedResponseException e)
+                    catch (StandardizedStatusMessageException e)
                     {
                         deviceStatus = new DeviceStatus();
                         deviceStatus.AddError(e.Code, e.Message);
-                        return deviceStatus;
                     }
                     if (!deviceStatus.Ok)
                     {
@@ -157,11 +156,10 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
                     }
-                    catch (StandardizedResponseException e)
+                    catch (StandardizedStatusMessageException e)
                     {
                         deviceStatus = new DeviceStatus();
                         deviceStatus.AddError(e.Code, e.Message);
-                        return deviceStatus;
                     }
                     if (!deviceStatus.Ok)
                     {

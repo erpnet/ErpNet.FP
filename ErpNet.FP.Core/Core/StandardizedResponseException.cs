@@ -3,24 +3,24 @@ using System;
 namespace ErpNet.FP.Core
 {
     [Serializable]
-    public class StandardizedResponseException : Exception
+    public class StandardizedStatusMessageException : Exception
     {
         public string Code = string.Empty;
         public StatusMessageType Type = StatusMessageType.Error;
-        public StandardizedResponseException() { }
-        public StandardizedResponseException(string message) : base(message) { }
+        public StandardizedStatusMessageException() { }
+        public StandardizedStatusMessageException(string message) : base(message) { }
 
-        public StandardizedResponseException(string message, string code) : base(message)
+        public StandardizedStatusMessageException(string message, string code) : base(message)
         {
             Code = code;
         }
-        public StandardizedResponseException(string message, string code, StatusMessageType type) : base(message)
+        public StandardizedStatusMessageException(string message, string code, StatusMessageType type) : base(message)
         {
             Code = code;
             Type = type;
         }
-        public StandardizedResponseException(string message, Exception inner) : base(message, inner) { }
-        protected StandardizedResponseException(
+        public StandardizedStatusMessageException(string message, Exception inner) : base(message, inner) { }
+        protected StandardizedStatusMessageException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
