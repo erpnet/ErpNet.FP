@@ -20,6 +20,7 @@ However, the "originalCode" might not always be available or it might change due
 * **E104** RAM has been reset
 * **E104** RAM failure
 * **E106** External display required
+* **E107** Invalid device response
 * **E199** Device general error
 
 ## Fiscal memory and journal error codes
