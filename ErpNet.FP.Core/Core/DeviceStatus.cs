@@ -33,9 +33,7 @@ namespace ErpNet.FP.Core
 
     public class DeviceStatus
     {
-        public bool Ok => ErrorsCount == 0;
-
-        private int ErrorsCount = 0;
+        public bool Ok { get; private set; } = true;
         public IList<StatusMessage> Messages { get; protected set; } = new List<StatusMessage>();
 
         public void AddMessage(StatusMessage statusMessage)
@@ -51,7 +49,7 @@ namespace ErpNet.FP.Core
             }
             if (statusMessage.Type == StatusMessageType.Error)
             {
-                ErrorsCount++;
+                Ok = false;
             }
             Messages.Add(statusMessage);
         }
