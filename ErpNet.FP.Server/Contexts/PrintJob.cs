@@ -23,8 +23,8 @@ namespace ErpNet.FP.Server.Contexts
         public const int DefaultTimeout = 29000; // 29 seconds
 
         public DateTime Enqueued = DateTime.Now;
-        public DateTime Started = DateTime.MaxValue;
-        public DateTime Finished = DateTime.MaxValue;
+        public DateTime? Started = null;
+        public DateTime? Finished = null;
 
         public PrintJobAction Action = PrintJobAction.None;
         public IFiscalPrinter? Printer;
@@ -37,50 +37,56 @@ namespace ErpNet.FP.Server.Contexts
             if (Printer == null) return;
             Started = DateTime.Now;
             TaskStatus = TaskStatus.Running;
-            switch (Action)
+            try
             {
-                case PrintJobAction.Receipt:
-                    if (Document != null)
-                    {
-                        var (info, status) = Printer.PrintReceipt((Receipt)Document);
-                        Result = new DeviceStatusWithReceiptInfo(status, info);
-                    }
-                    break;
-                case PrintJobAction.ReversalReceipt:
-                    if (Document != null)
-                    {
-                        Result = Printer.PrintReversalReceipt((ReversalReceipt)Document);
-                    };
-                    break;
-                case PrintJobAction.Withdraw:
-                    if (Document != null)
-                    {
-                        Result = Printer.PrintMoneyWithdraw(((TransferAmount)Document).Amount);
-                    }
-                    break;
-                case PrintJobAction.Deposit:
-                    if (Document != null)
-                    {
-                        Result = Printer.PrintMoneyDeposit(((TransferAmount)Document).Amount);
-                    }
-                    break;
-                case PrintJobAction.XReport:
-                    Result = Printer.PrintXReport();
-                    break;
-                case PrintJobAction.ZReport:
-                    Result = Printer.PrintZReport();
-                    break;
-                case PrintJobAction.SetDateTime:
-                    if (Document != null)
-                    {
-                        Result = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime);
-                    };
-                    break;
-                default:
-                    break;
+                switch (Action)
+                {
+                    case PrintJobAction.Receipt:
+                        if (Document != null)
+                        {
+                            var (info, status) = Printer.PrintReceipt((Receipt)Document);
+                            Result = new DeviceStatusWithReceiptInfo(status, info);
+                        }
+                        break;
+                    case PrintJobAction.ReversalReceipt:
+                        if (Document != null)
+                        {
+                            Result = Printer.PrintReversalReceipt((ReversalReceipt)Document);
+                        };
+                        break;
+                    case PrintJobAction.Withdraw:
+                        if (Document != null)
+                        {
+                            Result = Printer.PrintMoneyWithdraw(((TransferAmount)Document).Amount);
+                        }
+                        break;
+                    case PrintJobAction.Deposit:
+                        if (Document != null)
+                        {
+                            Result = Printer.PrintMoneyDeposit(((TransferAmount)Document).Amount);
+                        }
+                        break;
+                    case PrintJobAction.XReport:
+                        Result = Printer.PrintXReport();
+                        break;
+                    case PrintJobAction.ZReport:
+                        Result = Printer.PrintZReport();
+                        break;
+                    case PrintJobAction.SetDateTime:
+                        if (Document != null)
+                        {
+                            Result = Printer.SetDateTime(((CurrentDateTime)Document).DeviceDateTime);
+                        };
+                        break;
+                    default:
+                        break;
+                }
             }
-            Finished = DateTime.Now;
-            TaskStatus = TaskStatus.Finished;
+            finally
+            {
+                Finished = DateTime.Now;
+                TaskStatus = TaskStatus.Finished;
+            }
         }
     }
 }
