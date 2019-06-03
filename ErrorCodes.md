@@ -44,7 +44,7 @@ However, the "originalCode" might not always be available or it might change due
 ## Command error codes
 * **E401** Syntax error
 * **E402** Invalid command
-* **E403** Value overflow (value out of bounds)
+* **E403** Value overflow or underflow (value out of bounds)
 * **E404** Illegal command, not allowed in this mode
 * **E405** Insufficient conditions
 * **E406** Invalid payment
@@ -52,11 +52,12 @@ However, the "originalCode" might not always be available or it might change due
 * **E408** Wrong password or access denied
 * **E409** Wrong command response format
 * **E410** Document is empty or no items
+* **E411** Invalid tax group
 * **E499** Command general error
 
 ## NRA link error codes
 * **E501** NRA report fail
-* **E502** 24hours block – missing Z report
+* **E502** 24hours block â€“ missing Z report
 * **E503** Blocking 3 days without mobile operator
 * **E504** Wrong SIM card
 * **E505** No GPRS service
