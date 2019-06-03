@@ -85,24 +85,39 @@ namespace ErpNet.FP.Core.Drivers
             return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss", CultureInfo.InvariantCulture));
         }
 
-        public virtual (string, DeviceStatus) MoneyTransfer(decimal amount)
+        public virtual (string, DeviceStatus) MoneyTransfer(TransferAmount transferAmount)
         {
             return Request(CommandNoFiscalRAorPOAmount, string.Join(";", new string[]
             {
-                Options.ValueOrDefault("Operator.ID", "1"),
-                Options.ValueOrDefault("Operator.Password", "0000"),
+                String.IsNullOrEmpty(transferAmount.Operator) ?
+                    Options.ValueOrDefault("Operator.ID", "1")
+                    :
+                    transferAmount.Operator,
+                String.IsNullOrEmpty(transferAmount.OperatorPassword) ?
+                    Options.ValueOrDefault("Operator.Password", "0000")
+                    :
+                    transferAmount.OperatorPassword,
                 "0", // Protocol: Reserved 
-                amount.ToString("F2", CultureInfo.InvariantCulture)
+                transferAmount.Amount.ToString("F2", CultureInfo.InvariantCulture)
             }));
         }
 
-        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
+        public virtual (string, DeviceStatus) OpenReceipt(
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             // Protocol: <OperNum[1..2]> <;> <OperPass[6]> <;> <ReceiptFormat[1]> <;> 
             //           <PrintVAT[1]> <;> <FiscalRcpPrintType[1]> {<’$’> <UniqueReceiptNumber[24]>}
             return Request(CommandOpenReceipt, string.Join(";", new string[] {
-                Options.ValueOrDefault("Operator.ID", "1"),
-                Options.ValueOrDefault("Operator.Password", "0000"),
+                String.IsNullOrEmpty(operatorId) ?
+                    Options.ValueOrDefault("Operator.ID", "1")
+                    :
+                    operatorId,
+                String.IsNullOrEmpty(operatorPassword) ?
+                    Options.ValueOrDefault("Operator.Password", "0000")
+                    :
+                    operatorPassword,
                 "1", // Protocol: Detailed
                 "1", // Protocol: Include VAT
                 "4$"+uniqueSaleNumber, // Protocol: Buffered printing (faster), delimiter '$' before USN
@@ -114,15 +129,23 @@ namespace ErpNet.FP.Core.Drivers
             string receiptNumber,
             System.DateTime receiptDateTime,
             string fiscalMemorySerialNumber,
-            string uniqueSaleNumber)
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             // Protocol: <OperNum[1..2]> <;> <OperPass[6]> <;> <ReceiptFormat[1]> <;>
             //            < PrintVAT[1] > <;> < StornoRcpPrintType[1] > <;> < StornoReason[1] > <;>
             //            < RelatedToRcpNum[1..6] > <;> < RelatedToRcpDateTime ”DD-MM-YY HH:MM[:SS]”> <;>
             //            < FMNum[8] > {<;> < RelatedToURN[24] >}            
             return Request(CommandOpenReceipt, string.Join(";", new string[] {
-                Options.ValueOrDefault("Operator.ID", "1"),
-                Options.ValueOrDefault("Operator.Password", "0000"),
+                String.IsNullOrEmpty(operatorId) ?
+                    Options.ValueOrDefault("Operator.ID", "1")
+                    :
+                    operatorId,
+                String.IsNullOrEmpty(operatorPassword) ?
+                    Options.ValueOrDefault("Operator.Password", "0000")
+                    :
+                    operatorPassword,
                 "1", // Protocol: Detailed
                 "1", // Protocol: Include VAT
                 "D", // Protocol: Buffered printing

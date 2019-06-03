@@ -14,12 +14,21 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         protected const byte
             CommandDatecsOpenReversalReceipt = 0x2e;
-        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
+        public override (string, DeviceStatus) OpenReceipt(
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             var header = string.Join(",",
                 new string[] {
-                    Options.ValueOrDefault("Operator.ID", "1"),
-                    Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength),
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.ID", "1")
+                        :
+                        operatorId,
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength)
+                        :
+                        operatorPassword,
                     "1",
                     uniqueSaleNumber
                 });
@@ -82,13 +91,21 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             string receiptNumber,
             System.DateTime receiptDateTime,
             string fiscalMemorySerialNumber,
-            string uniqueSaleNumber)
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
-            // Protocol: OpNum>,<Password>,<TillNum>[,<Invoice><InvNum>][,<UNP>],< StType >< DocNo >[,< StUNP >,< StDT >,< StFMIN >][#<StornoReason>]
+            // Protocol:<OpNum>,<Password>,<TillNum>[,<Invoice><InvNum>][,<UNP>],< StType >< DocNo >[,< StUNP >,< StDT >,< StFMIN >][#<StornoReason>]
             var header = string.Join(",",
                 new string[] {
-                    Options.ValueOrDefault("Operator.ID", "1"),
-                    Options.ValueOrDefault("Operator.Password", "1").WithMaxLength(Info.OperatorPasswordMaxLength),
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.ID", "1")
+                        :
+                        operatorId,
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength)
+                        :
+                        operatorPassword,
                     "1",
                     GetReversalReasonText(reason)+receiptNumber,
                     uniqueSaleNumber,

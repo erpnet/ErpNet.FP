@@ -74,26 +74,27 @@ namespace ErpNet.FP.Core.Drivers
             return statusEx;
         }
 
-        public override DeviceStatus SetDateTime(DateTime dateTime)
+        public override DeviceStatus SetDateTime(CurrentDateTime currentDateTime)
         {
-            var (_, status) = SetDeviceDateTime(dateTime);
+            var (_, status) = SetDeviceDateTime(currentDateTime.DeviceDateTime);
             return status;
         }
 
-        public override DeviceStatus PrintMoneyDeposit(decimal amount)
+        public override DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount)
         {
-            var (response, status) = MoneyTransfer(amount);
-            System.Diagnostics.Trace.WriteLine($"PrintMoneyDeposit: {response}");
+            var (_, status) = MoneyTransfer(transferAmount);
+            System.Diagnostics.Trace.WriteLine($"PrintMoneyDeposit: {transferAmount}");
             return status;
         }
 
-        public override DeviceStatus PrintMoneyWithdraw(decimal amount)
+        public override DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount)
         {
-            if (amount < 0m)
+            if (transferAmount.Amount < 0m)
             {
                 throw new StandardizedResponseException("Withdraw amount must be positive number", "E403");
             }
-            var (response, status) = MoneyTransfer(-amount);
+            transferAmount.Amount = -transferAmount.Amount;
+            var (response, status) = MoneyTransfer(transferAmount);
             System.Diagnostics.Trace.WriteLine($"PrintMoneyWithdraw: {response}");
             return status;
         }
@@ -232,7 +233,9 @@ namespace ErpNet.FP.Core.Drivers
                 reversalReceipt.ReceiptNumber,
                 reversalReceipt.ReceiptDateTime,
                 reversalReceipt.FiscalMemorySerialNumber,
-                reversalReceipt.UniqueSaleNumber);
+                reversalReceipt.UniqueSaleNumber,
+                reversalReceipt.Operator,
+                reversalReceipt.OperatorPassword);
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
@@ -265,7 +268,11 @@ namespace ErpNet.FP.Core.Drivers
             receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
 
             // Receipt header
-            (_, deviceStatus) = OpenReceipt(receipt.UniqueSaleNumber);
+            (_, deviceStatus) = OpenReceipt(
+                receipt.UniqueSaleNumber,
+                receipt.Operator,
+                receipt.OperatorPassword
+            );
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
@@ -292,14 +299,14 @@ namespace ErpNet.FP.Core.Drivers
             return GetLastReceiptInfo();
         }
 
-        public override DeviceStatus PrintZReport()
+        public override DeviceStatus PrintZReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(true);
             System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
             return status;
         }
 
-        public override DeviceStatus PrintXReport()
+        public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(false);
             System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");

@@ -19,7 +19,7 @@
         /// <summary>
         /// Sets the device date and time
         /// </summary>
-        DeviceStatus SetDateTime(System.DateTime dateTime);
+        DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
         /// <summary>
         /// Prints the specified receipt.
@@ -38,22 +38,22 @@
         /// Prints a deposit money note.
         /// </summary>
         /// <param name="amount">The deposited amount. Should be greater than 0.</param>
-        DeviceStatus PrintMoneyDeposit(decimal amount);
+        DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount);
 
         /// <summary>
         /// Prints a withdraw money note.
         /// </summary>
         /// <param name="amount">The withdrawn amount. Should be greater than 0.</param>
-        DeviceStatus PrintMoneyWithdraw(decimal amount);
+        DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount);
 
         /// <summary>
         /// Prints a zreport.
         /// </summary>
-        DeviceStatus PrintZReport();
+        DeviceStatus PrintZReport(Credentials credentials);
 
         /// <summary>
         /// Prints a xreport.
         /// </summary>
-        DeviceStatus PrintXReport();
+        DeviceStatus PrintXReport(Credentials credentials);
     }
 }

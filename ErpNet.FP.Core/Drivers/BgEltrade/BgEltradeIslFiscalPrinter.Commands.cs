@@ -34,11 +34,17 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             }
         }
 
-        public override (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
+        public override (string, DeviceStatus) OpenReceipt(
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             var header = string.Join(",",
                 new string[] {
-                    Options.ValueOrDefault("Operator.Name", "Operator"),
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Name", "Operator")
+                        :
+                        operatorId,
                     uniqueSaleNumber
                 });
             return Request(CommandOpenFiscalReceipt, header);
@@ -64,12 +70,17 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             string receiptNumber,
             System.DateTime receiptDateTime,
             string fiscalMemorySerialNumber,
-            string uniqueSaleNumber)
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             // Protocol: <OperName>,<UNP>[,Type[ ,<FMIN>,<Reason>,<num>[,<time>[,<inv>]]]]
             var header = string.Join(",",
                 new string[] {
-                    Options.ValueOrDefault("Operator.Name", "Operator"),
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Name", "Operator")
+                        :
+                        operatorId,
                     uniqueSaleNumber,
                     "S",
                     fiscalMemorySerialNumber,

@@ -185,7 +185,7 @@ namespace ErpNet.FP.Core.Drivers
                     return (response, ParseStatus(status));
                 }
             }
-            throw new InvalidResponseException("the response is invalid");
+            throw new InvalidResponseException("The response is invalid. Checksum does not match.");
         }
 
         protected override DeviceStatus ParseStatus(byte[]? status)
@@ -221,8 +221,23 @@ namespace ErpNet.FP.Core.Drivers
         {
             lock (frameSyncLock)
             {
-                System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
-                return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
+                try
+                {
+                    System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
+                    return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
+                }
+                catch (InvalidResponseException e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E107", e.Message);
+                    return (string.Empty, deviceStatus);
+                }
+                catch (Exception e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E101", e.Message);
+                    return (string.Empty, deviceStatus);
+                }
             }
         }
     }

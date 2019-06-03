@@ -162,12 +162,21 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public virtual (string, DeviceStatus) OpenReceipt(string uniqueSaleNumber)
+        public virtual (string, DeviceStatus) OpenReceipt(
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             var header = string.Join(",",
                 new string[] {
-                    Options.ValueOrDefault("Operator.ID", "1"),
-                    Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength),
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.ID", "1")
+                        :
+                        operatorId,
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength)
+                        :
+                        operatorPassword,
                     uniqueSaleNumber
                 });
             return Request(CommandOpenFiscalReceipt, header);
@@ -178,13 +187,25 @@ namespace ErpNet.FP.Core.Drivers
             string receiptNumber,
             System.DateTime receiptDateTime,
             string fiscalMemorySerialNumber,
-            string uniqueSaleNumber)
+            string uniqueSaleNumber,
+            string operatorId,
+            string operatorPassword)
         {
             // Protocol: {ClerkNum},{Password},{UnicSaleNum}[{Tab}{Refund}{Reason},{DocLink},{DocLinkDT}{Tab}{FiskMem}
             var headerData = new StringBuilder()
-                .Append(Options.ValueOrDefault("Administrator.ID", "20"))
+                .Append(
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Administrator.ID", "20")
+                        :
+                        operatorId
+                )
                 .Append(',')
-                .Append(Options.ValueOrDefault("Administrator.Password", "9999").WithMaxLength(Info.OperatorPasswordMaxLength))
+                .Append(
+                    String.IsNullOrEmpty(operatorPassword) ?
+                        Options.ValueOrDefault("Administrator.Password", "9999").WithMaxLength(Info.OperatorPasswordMaxLength)
+                        :
+                        operatorPassword
+                )
                 .Append(',')
                 .Append(uniqueSaleNumber)
                 .Append('\t')
