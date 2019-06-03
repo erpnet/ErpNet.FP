@@ -96,7 +96,7 @@ namespace ErpNet.FP.Server.Contexts
             if (Tasks.TryGetValue(taskId, out PrintJob printJob))
             {
                 // While the print job is not finished
-                while (printJob.Result == null)
+                while (printJob.Finished == null)
                 {
                     // We give the device some time to process the job
                     Thread.Sleep(timeoutMinimalStep);

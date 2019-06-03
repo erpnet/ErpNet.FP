@@ -35,7 +35,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 case PaymentType.Check:
                     return "2";
                 default:
-                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
+                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 

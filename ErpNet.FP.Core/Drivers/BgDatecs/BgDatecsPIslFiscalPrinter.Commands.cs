@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
@@ -23,6 +24,42 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     uniqueSaleNumber
                 });
             return Request(CommandOpenFiscalReceipt, header);
+        }
+
+        public override (string, DeviceStatus) AddItem(
+            string itemText,
+            decimal unitPrice,
+            TaxGroup taxGroup,
+            decimal quantity = 0,
+            decimal priceModifierValue = 0,
+            PriceModifierType priceModifierType = PriceModifierType.None)
+        // Protocol [<L1>][<Lf><L2>]<Tab><TaxCd><[Sign]Price>[*<Qwan>][,Perc|;Abs]
+        {
+            var itemData = new StringBuilder()
+                .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
+                .Append('\t').Append(GetTaxGroupText(taxGroup))
+                .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
+            if (quantity != 0)
+            {
+                itemData
+                    .Append('*')
+                    .Append(quantity.ToString(CultureInfo.InvariantCulture));
+            }
+            if (priceModifierType != PriceModifierType.None)
+            {
+                itemData
+                    .Append(
+                        priceModifierType == PriceModifierType.DiscountPercent
+                        ||
+                        priceModifierType == PriceModifierType.SurchargePercent
+                        ? ',' : ';')
+                    .Append((
+                        priceModifierType == PriceModifierType.DiscountPercent
+                        ||
+                        priceModifierType == PriceModifierType.DiscountAmount
+                        ? -priceModifierValue : priceModifierValue).ToString("F2", CultureInfo.InvariantCulture));
+            }
+            return Request(CommandFiscalReceiptSale, itemData.ToString());
         }
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
@@ -73,7 +110,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 case PaymentType.Reserved1:
                     return "D";
                 default:
-                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
+                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 

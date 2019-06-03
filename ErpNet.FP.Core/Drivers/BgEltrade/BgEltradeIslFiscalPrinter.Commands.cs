@@ -30,7 +30,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 case PaymentType.Reserved2:
                     return "R";
                 default:
-                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
+                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 

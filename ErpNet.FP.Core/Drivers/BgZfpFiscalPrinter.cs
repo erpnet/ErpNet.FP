@@ -33,7 +33,7 @@ namespace ErpNet.FP.Core.Drivers
                 case TaxGroup.TaxGroup8:
                     return "Ç";
                 default:
-                    throw new ArgumentOutOfRangeException($"tax group {taxGroup} unsupported");
+                    throw new StandardizedResponseException($"Tax group {taxGroup} unsupported", "E411");
             }
         }
 
@@ -54,7 +54,7 @@ namespace ErpNet.FP.Core.Drivers
                 case PaymentType.Reserved2:
                     return "10";
                 default:
-                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
+                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 
@@ -91,7 +91,7 @@ namespace ErpNet.FP.Core.Drivers
         {
             if (amount < 0m)
             {
-                throw new ArgumentOutOfRangeException("withdraw amount must be positive number");
+                throw new StandardizedResponseException("Withdraw amount must be positive number", "E403");
             }
             var (response, status) = MoneyTransfer(-amount);
             System.Diagnostics.Trace.WriteLine($"PrintMoneyWithdraw: {response}");
@@ -102,7 +102,7 @@ namespace ErpNet.FP.Core.Drivers
         {
             if (receipt.Items == null || receipt.Items.Count == 0)
             {
-                throw new ArgumentNullException("receipt.Items must be not null or empty");
+                throw new StandardizedResponseException("Receipt.Items must be not null or empty", "E410");
             }
 
             DeviceStatus deviceStatus;
@@ -126,19 +126,28 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     if (item.PriceModifierValue < 0m)
                     {
-                        throw new ArgumentOutOfRangeException("priceModifierValue amount must be positive number");
+                        throw new StandardizedResponseException("PriceModifierValue amount must be positive number", "E403");
                     }
                     if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
                     {
-                        throw new ArgumentOutOfRangeException("priceModifierValue must be 0 if priceModifierType is None");
+                        throw new StandardizedResponseException("PriceModifierValue must be 0 if priceModifierType is None", "E403");
                     }
-                    (_, deviceStatus) = AddItem(
-                        item.Text,
-                        item.UnitPrice,
-                        item.TaxGroup,
-                        item.Quantity,
-                        item.PriceModifierValue,
-                        item.PriceModifierType);
+                    try
+                    {
+                        (_, deviceStatus) = AddItem(
+                            item.Text,
+                            item.UnitPrice,
+                            item.TaxGroup,
+                            item.Quantity,
+                            item.PriceModifierValue,
+                            item.PriceModifierType);
+                    }
+                    catch (StandardizedResponseException e)
+                    {
+                        deviceStatus = new DeviceStatus();
+                        deviceStatus.AddError(e.Code, e.Message);
+                        return deviceStatus;
+                    }
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
@@ -165,7 +174,16 @@ namespace ErpNet.FP.Core.Drivers
                 foreach (var payment in receipt.Payments)
                 {
                     paymentNumber++;
-                    (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
+                    try
+                    {
+                        (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
+                    }
+                    catch (StandardizedResponseException e)
+                    {
+                        deviceStatus = new DeviceStatus();
+                        deviceStatus.AddError(e.Code, e.Message);
+                        return deviceStatus;
+                    }
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();
@@ -226,12 +244,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 return PrintReceiptBody(reversalReceipt);
             }
-            catch (ArgumentNullException e)
+            catch (StandardizedResponseException e)
             {
-                AbortReceipt();
                 deviceStatus = new DeviceStatus();
-                deviceStatus.AddInfo($"Error occured while printing receipt items");
-                deviceStatus.AddError("E410", e.Message);
+                deviceStatus.AddError(e.Code, e.Message);
                 return deviceStatus;
             }
         }
@@ -265,12 +281,11 @@ namespace ErpNet.FP.Core.Drivers
                     return (receiptInfo, deviceStatus);
                 }
             }
-            catch (ArgumentNullException e)
+            catch (StandardizedResponseException e)
             {
                 AbortReceipt();
                 deviceStatus = new DeviceStatus();
-                deviceStatus.AddInfo($"Error occured while printing receipt items");
-                deviceStatus.AddError("E410", e.Message);
+                deviceStatus.AddError(e.Code, e.Message);
                 return (receiptInfo, deviceStatus);
             }
 

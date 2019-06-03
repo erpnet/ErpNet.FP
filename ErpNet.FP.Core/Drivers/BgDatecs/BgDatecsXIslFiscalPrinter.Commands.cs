@@ -25,7 +25,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 case PaymentType.Reserved2:
                     return "4";
                 default:
-                    throw new ArgumentOutOfRangeException($"payment type {paymentType} unsupported");
+                    throw new StandardizedResponseException($"Payment type {paymentType} unsupported", "E406");
             }
         }
 
@@ -50,7 +50,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 case TaxGroup.TaxGroup8:
                     return "8";
                 default:
-                    throw new ArgumentOutOfRangeException($"tax group {taxGroup} unsupported");
+                    throw new StandardizedResponseException($"Tax group {taxGroup} unsupported", "E411");
             }
         }
 
