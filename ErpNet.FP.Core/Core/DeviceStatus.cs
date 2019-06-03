@@ -33,7 +33,7 @@ namespace ErpNet.FP.Core
 
     public class DeviceStatus
     {
-        public bool Ok { get; private set; } = true;
+        public bool Ok { get; protected set; } = true;
         public IList<StatusMessage> Messages { get; protected set; } = new List<StatusMessage>();
 
         public void AddMessage(StatusMessage statusMessage)
@@ -90,6 +90,7 @@ namespace ErpNet.FP.Core
 
         public DeviceStatusWithDateTime(DeviceStatus status) : base()
         {
+            Ok = status.Ok;
             Messages = status.Messages;
         }
     }
@@ -115,6 +116,7 @@ namespace ErpNet.FP.Core
 
         public DeviceStatusWithReceiptInfo(DeviceStatus status, ReceiptInfo info) : base()
         {
+            Ok = status.Ok;
             Messages = status.Messages;
             ReceiptNumber = info.ReceiptNumber;
             ReceiptDateTime = info.ReceiptDateTime;
