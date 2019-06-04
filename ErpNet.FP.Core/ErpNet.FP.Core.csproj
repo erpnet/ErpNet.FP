@@ -5,7 +5,9 @@
     <RootNamespace>ErpNet.FP.Core</RootNamespace>
     <AssemblyName>ErpNet.FP.Core</AssemblyName>
     <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
+    <NullableReferenceTypes>true</NullableReferenceTypes>
   </PropertyGroup>
 
   <ItemGroup>

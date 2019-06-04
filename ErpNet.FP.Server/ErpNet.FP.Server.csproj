@@ -5,8 +5,9 @@
     <AssemblyName>ErpNet.FP.Server</AssemblyName>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
-
+    <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
+    <NullableReferenceTypes>true</NullableReferenceTypes>
     <ApplicationIcon>ErpNet.FP.ico</ApplicationIcon>
     <StartupObject />
     <Company>ErpNet</Company>
