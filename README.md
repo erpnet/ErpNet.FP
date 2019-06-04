@@ -246,8 +246,8 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 
 ## Supported protocols and devices
-* bg.dt.c.isl - Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
-* bg.dt.p.isl - Datecs WP-50, Datecs FP-650, Datecs FP-800, Datecs FP-2000, Datecs FMP-10, Datecs SK1-21F, Datecs SK1-31F
+* bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
+* bg.dt.p.isl - Datecs FP-650, Datecs FP-800, Datecs FP-2000, Datecs FMP-10, Datecs SK1-21F, Datecs SK1-31F
 * bg.dt.x.isl - Datecs DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, Datecs FMP-55X, Datecs WP-50X, Datecs FP-700X
 * bg.zk.zfp - Tremol A19Plus, Tremol S21, Tremol M23, Tremol M20, Tremol FP15
 * bg.zk.v2.zfp - Tremol Z-KL-V2, Tremol ZM-KL-V2, Tremol ZS-KL-V2, Tremol FP01-KL V2, Tremol FP05-KL V2, Tremol M-KL-V2, Tremol S-KL-V2, Tremol FP15 KL V2, Tremol FP03-KL V2, Tremol FP07-KL V2
