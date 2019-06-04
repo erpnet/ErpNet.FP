@@ -265,9 +265,9 @@ Contributing
 See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
 
 [Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
-[LICENSE.txt]: <https://raw.githubusercontent.com/erpnet/ErpNet.FP/master/LICENSE.txt>
-[Contributing]: <https://github.com/erpnet/ErpNet.FP/blob/master/CONTRIBUTING.md>
-[Code of Conduct]: <https://github.com/erpnet/ErpNet.FP/blob/master/CODE_OF_CONDUCT.md>
+[LICENSE.txt]: <LICENSE.txt>
+[Contributing]: <CONTRIBUTING.md>
+[Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
 [ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/win-x86/ErpNet.FP.Server.zip>
