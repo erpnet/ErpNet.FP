@@ -4,6 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <NullableContextOptions>enable</NullableContextOptions>
+    <NullableReferenceTypes>true</NullableReferenceTypes>
     <ApplicationIcon>ErpNet.FP.ico</ApplicationIcon>
     <Company>ErpNet</Company>
     <Authors>ErpNet and Contributors</Authors>

@@ -21,7 +21,7 @@ namespace ErpNet.FP.Win.Manager
         private readonly MenuItem menuItemAutoDetect;
         private readonly TextBox logBox;
         private readonly IContainer components;
-        private Process serviceProcess;
+        private Process? serviceProcess;
         private bool cancelClose = true;
         private readonly Size consoleSize = new Size(120, 30);
         private readonly IWritableOptions<ErpNetFPConfigOptions> options;
@@ -179,9 +179,12 @@ namespace ErpNet.FP.Win.Manager
 
         private void StopService()
         {
-            serviceProcess.CloseMainWindow();
-            Thread.Sleep(2000);
-            serviceProcess.Kill();
+            if (serviceProcess != null)
+            {
+                serviceProcess.CloseMainWindow();
+                Thread.Sleep(2000);
+                serviceProcess.Kill();
+            }
         }
 
         private void StartService()
