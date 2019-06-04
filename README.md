@@ -179,6 +179,12 @@ After you stop the service ErpNet.FP.Server, you can examine the debug.log file.
 ## Server Configuration
 The server configuration options are located in a file, called "appsettings.json". For more information, see [Configuration](https://github.com/erpnet/ErpNet.FP/blob/master/Config.md).
 
+## Fiscal Printer Setup
+Most fiscal printers or cash register should be in "Fiscal Printer" mode in order to accept commands from the PC through the serial interface. Refer to your printer manual how to setup the fiscal printer mode.
+
+The following non-comprehensive article contains the setup procedure for some fiscal printers:
+* [Popular Bulgarian Fiscal Printers Setup](BGFiscalPrinterSetup.md)
+
 # Concepts
 
 ## Printer Id
@@ -231,7 +237,7 @@ If you want your device to be supported, please contact us, and we will try our 
 ## Tested on
 - Datecs DP-25, firmware: 263453 08Nov18 131, protocol: bg.dt.c.isl.com
 - Datecs FP-2000, firmware: 1.00BG 23NOV18 1000, protocol: bg.dt.p.isl.com
-- Datecs WP-50, firmware:261403 08Nov18 1050, protocol: bg.dt.p.isl.com
+- Datecs WP-50, firmware: 261403 08Nov18 1050, protocol: bg.dt.p.isl.com
 - Datecs FP-700X, firmware: 266207 29Jan19 1634, protocol: bg.dt.x.isl.com
 - Daisy CompactM, firmware: ONL-4.01BG, protocol: bg.dy.isl.com
 - Daisy CompactM, firmware: ONL01-4.01BG, protocol: bg.dy.isl.com
