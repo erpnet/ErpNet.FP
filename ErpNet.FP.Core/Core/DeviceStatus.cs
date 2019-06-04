@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -27,7 +28,8 @@ namespace ErpNet.FP.Core
         /* Error and Warning Codes are strings with length of 5 characters.
         First 3 characters are the type of the error, i.e., ERR, WRN.
         Next 2 characters are digits, representing the ID of the error or warning. */
-        public string Code { get; set; } = string.Empty;
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? Code { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
@@ -50,6 +52,10 @@ namespace ErpNet.FP.Core
             if (statusMessage.Type == StatusMessageType.Error)
             {
                 Ok = false;
+            }
+            if (String.IsNullOrEmpty(statusMessage.Code))
+            {
+                statusMessage.Code = null;
             }
             Messages.Add(statusMessage);
         }

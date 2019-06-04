@@ -8,8 +8,8 @@ namespace ErpNet.FP.Core.Drivers
     {
         // Begins at 0x30, ends at 0x3f
         // All strings are errors
-        protected static readonly (string, string)[] FiscalDeviceErrors = new (string, string)[]{
-            (string.Empty, string.Empty), // No error
+        protected static readonly (string?, string)[] FiscalDeviceErrors = new (string?, string)[]{
+            (null, string.Empty), // No error
             ("E301", "Out of paper, printer failure"),
             ("E403", "Registers overflow"),
             ("E103", "Clock failure or incorrect date & time"),
@@ -29,8 +29,8 @@ namespace ErpNet.FP.Core.Drivers
 
         // Begins at 0x30, ends at 0x38
         // All strings are errors
-        protected static readonly (string, string)[] CommandErrors = new (string, string)[] {
-            (string.Empty, string.Empty), // No error
+        protected static readonly (string?, string)[] CommandErrors = new (string?, string)[] {
+            (null, string.Empty), // No error
             ("E402", "Invalid command"),
             ("E404", "Illegal command"),
             ("E405", "Z daily report is not zero"),
@@ -43,7 +43,7 @@ namespace ErpNet.FP.Core.Drivers
 
         // 7 Bytes x 8 bits
 
-        protected static readonly (string, string, StatusMessageType)[] StatusBitsStrings = new (string, string, StatusMessageType)[] {
+        protected static readonly (string?, string, StatusMessageType)[] StatusBitsStrings = new (string?, string, StatusMessageType)[] {
             ("E204", "FM Read only", StatusMessageType.Error),
             ("E305", "Power down in opened fiscal receipt", StatusMessageType.Error),
             ("E304", "Printer not ready - overheat", StatusMessageType.Error),
@@ -51,7 +51,7 @@ namespace ErpNet.FP.Core.Drivers
             ("E103", "DateTime wrong", StatusMessageType.Error),
             ("E104", "RAM reset", StatusMessageType.Error),
             ("E103", "Hardware clock error", StatusMessageType.Error),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
 
             ("E301", "Printer not ready - no paper", StatusMessageType.Error),
             ("E403", "Report registers overflow", StatusMessageType.Error),
@@ -59,44 +59,44 @@ namespace ErpNet.FP.Core.Drivers
             ("W502", "Daily report is not zeroed", StatusMessageType.Warning),
             ("W502", "Article report is not zeroed", StatusMessageType.Warning),
             ("W502", "Operator report is not zeroed", StatusMessageType.Warning),
-            (string.Empty, "Duplicate printed", StatusMessageType.Info),
-            (string.Empty, string.Empty,StatusMessageType.Reserved),
+            (null, "Duplicate printed", StatusMessageType.Info),
+            (null, string.Empty,StatusMessageType.Reserved),
 
-            (string.Empty, "Opened Non-fiscal Receipt", StatusMessageType.Info),
-            (string.Empty, "Opened Fiscal Receipt", StatusMessageType.Info),
-            (string.Empty, "Opened Fiscal Detailed Receipt", StatusMessageType.Info),
-            (string.Empty, "Opened Fiscal Receipt with VAT", StatusMessageType.Info),
-            (string.Empty, "Opened Invoice Fiscal Receipt", StatusMessageType.Info),
+            (null, "Opened Non-fiscal Receipt", StatusMessageType.Info),
+            (null, "Opened Fiscal Receipt", StatusMessageType.Info),
+            (null, "Opened Fiscal Detailed Receipt", StatusMessageType.Info),
+            (null, "Opened Fiscal Receipt with VAT", StatusMessageType.Info),
+            (null, "Opened Invoice Fiscal Receipt", StatusMessageType.Info),
             ("W202", "SD card near full", StatusMessageType.Warning),
             ("E206", "SD card full", StatusMessageType.Error),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
 
             ("E205", "No FM module", StatusMessageType.Error),
             ("E299", "FM error", StatusMessageType.Error),
             ("E201", "FM full", StatusMessageType.Error),
             ("W201", "FM near full", StatusMessageType.Warning),
-            (string.Empty, "Decimal point(1=fract, 0=whole)", StatusMessageType.Info),
-            (string.Empty, "FM fiscalized", StatusMessageType.Info),
-            (string.Empty, "FM produced", StatusMessageType.Info),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, "Decimal point(1=fract, 0=whole)", StatusMessageType.Info),
+            (null, "FM fiscalized", StatusMessageType.Info),
+            (null, "FM produced", StatusMessageType.Info),
+            (null, string.Empty, StatusMessageType.Reserved),
 
-            (string.Empty, "Printer: automatic cutting", StatusMessageType.Info),
-            (string.Empty, "External display: transparent display", StatusMessageType.Info),
-            (string.Empty, "Speed is 9600", StatusMessageType.Info),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
-            (string.Empty, "Drawer: automatic opening", StatusMessageType.Info),
-            (string.Empty, "Customer logo included in the receipt", StatusMessageType.Info),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, "Printer: automatic cutting", StatusMessageType.Info),
+            (null, "External display: transparent display", StatusMessageType.Info),
+            (null, "Speed is 9600", StatusMessageType.Info),
+            (null, string.Empty, StatusMessageType.Reserved),
+            (null, "Drawer: automatic opening", StatusMessageType.Info),
+            (null, "Customer logo included in the receipt", StatusMessageType.Info),
+            (null, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
 
             ("E504", "Wrong SIM card", StatusMessageType.Error),
             ("E503", "Blocking 3 days without mobile operator", StatusMessageType.Error),
             ("E501", "No task from NRA", StatusMessageType.Error),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
             ("E207", "Wrong SD card", StatusMessageType.Error),
             ("E599", "Deregistered", StatusMessageType.Error),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved),
 
             ("E504", "No SIM card", StatusMessageType.Error),
             ("E507", "No GPRS Modem", StatusMessageType.Error),
@@ -104,8 +104,8 @@ namespace ErpNet.FP.Core.Drivers
             ("E505", "No GPRS service", StatusMessageType.Error),
             ("W301", "Near end of paper", StatusMessageType.Warning),
             ("W501", "Unsent data for 24 hours", StatusMessageType.Warning),
-            (string.Empty, string.Empty, StatusMessageType.Reserved),
-            (string.Empty, string.Empty, StatusMessageType.Reserved)
+            (null, string.Empty, StatusMessageType.Reserved),
+            (null, string.Empty, StatusMessageType.Reserved)
         };
 
         protected virtual DeviceStatus ParseCommandStatus(byte[] status)
@@ -113,13 +113,13 @@ namespace ErpNet.FP.Core.Drivers
             var deviceStatus = new DeviceStatus();
             // Byte 0
             var (errorCode, errorText) = FiscalDeviceErrors[status[0] - 0x30];
-            if (errorText.Length > 0)
+            if (errorText.Length > 0 && errorCode != null)
             {
                 deviceStatus.AddError(errorCode, errorText);
             }
             // Byte 1
             (errorCode, errorText) = CommandErrors[status[1] - 0x30];
-            if (errorText.Length > 0)
+            if (errorText.Length > 0 && errorCode != null)
             {
                 deviceStatus.AddError(errorCode, errorText);
             }
