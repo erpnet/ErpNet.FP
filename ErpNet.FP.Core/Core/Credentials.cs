@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Represents one Receipt, which can be printed on a fiscal printer.
