@@ -31,8 +31,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             if (modelName.EndsWith("X") || (
                 !modelName.StartsWith("FP") &&
                 !modelName.StartsWith("FMP") &&
-                !modelName.StartsWith("SK") &&
-                !modelName.StartsWith("WP")))
+                !modelName.StartsWith("SK")))
             {
                 throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
             }
