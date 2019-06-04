@@ -183,7 +183,7 @@ The server configuration options are located in a file, called "appsettings.json
 Most fiscal printers or cash register should be in "Fiscal Printer" mode in order to accept commands from the PC through the serial interface. Refer to your printer manual how to setup the fiscal printer mode.
 
 The following non-comprehensive article contains the setup procedure for some fiscal printers:
-[Popular Bulgarian Fiscal Printers Setup](BGFiscalPrinterSetup.md)
+* [Popular Bulgarian Fiscal Printers Setup](BGFiscalPrinterSetup.md)
 
 # Concepts
 
