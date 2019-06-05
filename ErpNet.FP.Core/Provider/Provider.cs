@@ -65,6 +65,8 @@ namespace ErpNet.FP.Core.Provider
                                 var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
                                 p.DeviceInfo.Uri = uri;
                                 fp.Add(uri, p);
+                                // We found our driver, so do not test more
+                                break;
                             }
                             catch (InvalidResponseException)
                             {

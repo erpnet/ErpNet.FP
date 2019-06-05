@@ -249,6 +249,16 @@ namespace ErpNet.FP.Core.Drivers
             }
             receiptInfo.ReceiptDateTime = dateTime.Value;
 
+            // Get receipt amount
+            decimal? receiptAmount;
+            (receiptAmount, deviceStatus) = GetReceiptAmount();
+            if (!receiptAmount.HasValue || !deviceStatus.Ok)
+            {
+                (_, deviceStatus) = AbortReceipt();
+                return (receiptInfo, deviceStatus);
+            }
+            receiptInfo.ReceiptAmount = receiptAmount.Value;
+
             // Closing receipt
             string closeReceiptResponse;
             (closeReceiptResponse, deviceStatus) = CloseReceipt();
@@ -269,16 +279,6 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
             receiptInfo.ReceiptNumber = lastDocumentNumberResponse;
-
-            // Get receipt amount
-            decimal? receiptAmount;
-            (receiptAmount, deviceStatus) = GetReceiptAmount();
-            if (!receiptAmount.HasValue || !deviceStatus.Ok)
-            {
-                (_, deviceStatus) = AbortReceipt();
-                return (receiptInfo, deviceStatus);
-            }
-            receiptInfo.ReceiptAmount = receiptAmount.Value;
 
             return (receiptInfo, deviceStatus);
         }
