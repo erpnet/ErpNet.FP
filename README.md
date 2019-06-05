@@ -232,6 +232,7 @@ The library supports printers from the following manufacturers:
 * Tremol (https://www.Tremol.bg)
 * Daisy (https://Daisy.bg/)
 * Eltrade (https://www.Eltrade.com)
+* Incotex (http://www.incotex.bg/) *(in progress, not ready ...)*
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
