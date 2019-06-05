@@ -2,6 +2,7 @@
 using ErpNet.FP.Core.Drivers.BgDaisy;
 using ErpNet.FP.Core.Drivers.BgDatecs;
 using ErpNet.FP.Core.Drivers.BgEltrade;
+using ErpNet.FP.Core.Drivers.BgIncotex;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
 using ErpNet.FP.Core.Transports;
@@ -181,21 +182,27 @@ namespace ErpNet.FP.Server.Contexts
             var comTransport = new ComTransport();
 
             // Drivers
-            var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
+            var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var datecsPIsl = new BgDatecsPIslFiscalPrinterDriver();
             var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
-            var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
+            var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
+            var incotexIsl = new BgIncotexIslFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
             var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
 
             // Add drivers and their compatible transports to the provider.
             var provider = new Provider()
-                .Register(daisyIsl, comTransport)
+                // Isl X Frame
+                .Register(datecsXIsl, comTransport)
+                // Isl Frame
                 .Register(datecsCIsl, comTransport)
                 .Register(datecsPIsl, comTransport)
                 .Register(eltradeIsl, comTransport)
-                .Register(datecsXIsl, comTransport)
+                // Isl Frame + constants
+                .Register(daisyIsl, comTransport)
+                .Register(incotexIsl, comTransport)
+                // Zfp Frame
                 .Register(tremolZfp, comTransport)
                 .Register(tremolV2Zfp, comTransport);
 
