@@ -146,7 +146,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             {
                 deviceStatus.AddInfo($"Error occured while parsing close receipt response");
                 deviceStatus.AddError("E409", $"Wrong format of close receipt response");
-                return (null, deviceStatus);
+                return (string.Empty, deviceStatus);
             }
             return (fields[1], deviceStatus);
         }
