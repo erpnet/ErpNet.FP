@@ -228,10 +228,10 @@ However, versions for mobile platforms are planned:
 
 # Currently supported
 The library supports printers from the following manufacturers:
-* Datecs (http://www.Datecs.bg)
-* Tremol (https://www.Tremol.bg)
-* Daisy (https://Daisy.bg/)
-* Eltrade (https://www.Eltrade.com)
+* Datecs (http://www.datecs.bg)
+* Tremol (https://www.tremol.bg)
+* Daisy (https://daisy.bg/)
+* Eltrade (https://www.eltrade.com)
 * Incotex (http://www.incotex.bg/) *(in progress, not ready ...)*
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
