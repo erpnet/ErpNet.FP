@@ -258,6 +258,7 @@ If you want your device to be supported, please contact us, and we will try our 
 
 # Source Code
 To compile and run the source code, you need Visual Studio 2019, version 16.2 Preview 1 (May 21st 2019) or newer.
+You also need .Net Core 3.0 Preview 5 SDK (May 6th 2019).
 
 # License
 ----
