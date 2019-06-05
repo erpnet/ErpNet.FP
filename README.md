@@ -147,7 +147,8 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 ```
 
 # Eager to try? 
-You can download the ErpNet.FP.Server for your platform:
+You can list and download the ErpNet.FP.Server for your platform at [sourceforge](https://sourceforge.net/projects/erpnet-fp/files/):
+
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
