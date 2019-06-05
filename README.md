@@ -147,7 +147,7 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 ```
 
 # Eager to try? 
-You can list and download the ErpNet.FP.Server for your platform at [sourceforge](https://sourceforge.net/projects/erpnet-fp/files/):
+You can list and [download the binaries for ErpNet.FP.Server at sourceforge](https://sourceforge.net/projects/erpnet-fp/files/):
 
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
@@ -275,8 +275,8 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/win-x86/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/win-x64/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/osx-x64/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/linux-x64/ErpNet.FP.Server.zip>
-[ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/Published/linux-arm/ErpNet.FP.Server.zip>
+[ErpNet.FP.Server.zip - Windows 32 bit]: <https://sourceforge.net/projects/erpnet-fp/files/win-x86.zip/download>
+[ErpNet.FP.Server.zip - Windows 64 bit]: <https://sourceforge.net/projects/erpnet-fp/files/win-x64.zip/download>
+[ErpNet.FP.Server.zip - macOS]: <https://sourceforge.net/projects/erpnet-fp/files/osx-x64.zip/download>
+[ErpNet.FP.Server.zip - Linux x64]: <https://sourceforge.net/projects/erpnet-fp/files/linux-x64.zip/download>
+[ErpNet.FP.Server.zip - Linux Arm]: <https://sourceforge.net/projects/erpnet-fp/files/linux-arm.zip/download>
