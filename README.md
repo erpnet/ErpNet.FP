@@ -81,12 +81,10 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 	"messages": [
 		{
 			"type": "info",
-			"code": "",
 			"text": "Serial number and number of FM are set"
 		},
 		{
 			"type": "info",
-			"code": "",
 			"text": "FM is formatted"
 		}
 	],
@@ -109,12 +107,10 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 		},
 		{
 			"type": "info",
-			"code": "",
 			"text": "Serial number and number of FM are set"
 		},
 		{
 			"type": "info",
-			"code": "",
 			"text": "FM is formatted"
 		}
 	],
@@ -134,12 +130,10 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 		},
 		{
 			"type": "info",
-			"code": "",
 			"text": "Serial number and number of FM are set"
 		},
 		{
 			"type": "info",
-			"code": "",
 			"text": "FM is formatted"
 		}
 	]
@@ -232,7 +226,7 @@ The library supports printers from the following manufacturers:
 * Tremol (https://www.tremol.bg)
 * Daisy (https://daisy.bg/)
 * Eltrade (https://www.eltrade.com)
-* Incotex (http://www.incotex.bg/) *(in progress, not ready ...)*
+* Incotex (http://www.incotex.bg/) 
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
@@ -246,7 +240,7 @@ If you want your device to be supported, please contact us, and we will try our 
 - Eltrade A1, firmware: KL5101.1811.0.3 15Nov18 15:49, protocol: bg.ed.isl.com
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
-- Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl *(in progress, not ready ...)*
+- Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl
 
 ## Supported protocols and devices
 * bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
@@ -256,7 +250,7 @@ If you want your device to be supported, please contact us, and we will try our 
 * bg.zk.v2.zfp - Tremol Z-KL-V2, Tremol ZM-KL-V2, Tremol ZS-KL-V2, Tremol FP01-KL V2, Tremol FP05-KL V2, Tremol M-KL-V2, Tremol S-KL-V2, Tremol FP15 KL V2, Tremol FP03-KL V2, Tremol FP07-KL V2
 * bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL 
 * bg.dy.isl - Daisy Compact S, Daisy Compact M
-* bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, INCOTEX 300S KL-Q *(in progress, not ready ...)*
+* bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, INCOTEX 300S KL-Q
 
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.

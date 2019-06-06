@@ -225,6 +225,9 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
+            // Abort all unfinished or erroneus receipts
+            AbortReceipt();
+
             // Receipt header
             var (_, deviceStatus) = OpenReversalReceipt(
                 reversalReceipt.Reason,
@@ -257,6 +260,9 @@ namespace ErpNet.FP.Core.Drivers
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
             var receiptInfo = new ReceiptInfo();
+
+            // Abort all unfinished or erroneus receipts
+            AbortReceipt();
 
             var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
             if (!deviceStatus.Ok)

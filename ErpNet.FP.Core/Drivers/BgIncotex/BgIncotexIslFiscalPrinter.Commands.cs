@@ -85,7 +85,7 @@ namespace ErpNet.FP.Core.Drivers.BgIncotex
             var headerData = new StringBuilder()
                 .Append(
                     String.IsNullOrEmpty(operatorId) ?
-                        Options.ValueOrDefault("Administrator.ID", "10")
+                        Options.ValueOrDefault("Operator.ID", "1")
                         :
                         operatorId
                 )

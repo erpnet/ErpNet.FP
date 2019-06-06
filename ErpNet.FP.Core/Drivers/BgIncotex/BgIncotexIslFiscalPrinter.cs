@@ -16,10 +16,7 @@ namespace ErpNet.FP.Core.Drivers.BgIncotex
             return new Dictionary<string, string>
             {
                 ["Operator.ID"] = "1",
-                ["Operator.Password"] = "0",
-
-                ["Administrator.ID"] = "10",
-                ["Administrator.Password"] = "0"
+                ["Operator.Password"] = "0"
             };
         }
     }
