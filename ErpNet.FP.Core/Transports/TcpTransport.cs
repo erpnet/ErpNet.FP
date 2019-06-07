@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Transports
     {
         public override string TransportName => "tcp";
 
-        protected readonly int DefaultPort = 4999;
+        protected readonly int DefaultPort = 9100;
 
         private readonly IDictionary<string, TcpTransport.Channel?> openedChannels =
             new Dictionary<string, TcpTransport.Channel?>();

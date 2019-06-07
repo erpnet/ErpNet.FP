@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -72,6 +73,12 @@ namespace ErpNet.FP.Server
             }
         }
 
+        public static string GetVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            return assembly.GetName().Version.ToString();
+        }
+
         public static void Main()
         {
             FileStream traceStream;
@@ -92,7 +99,8 @@ namespace ErpNet.FP.Server
             textListener = new TextWriterTraceListener(traceStream);
             Trace.Listeners.Add(textListener);
             Trace.AutoFlush = true;
-            Trace.WriteLine("Starting the application...");
+
+            Trace.WriteLine($"Starting the application, version {GetVersion()}...");
 
             var webHost = new WebHostBuilder()
                 .UseKestrel()

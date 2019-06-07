@@ -180,6 +180,7 @@ namespace ErpNet.FP.Server.Contexts
 
             // Transports
             var comTransport = new ComTransport();
+            var tcpTransport = new TcpTransport();
 
             // Drivers
             var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
@@ -195,16 +196,24 @@ namespace ErpNet.FP.Server.Contexts
             var provider = new Provider()
                 // Isl X Frame
                 .Register(datecsXIsl, comTransport)
+                .Register(datecsXIsl, tcpTransport)
                 // Isl Frame
                 .Register(datecsCIsl, comTransport)
+                .Register(datecsCIsl, tcpTransport)
                 .Register(datecsPIsl, comTransport)
+                .Register(datecsPIsl, tcpTransport)
                 .Register(eltradeIsl, comTransport)
+                .Register(eltradeIsl, tcpTransport)
                 // Isl Frame + constants
                 .Register(daisyIsl, comTransport)
+                .Register(daisyIsl, tcpTransport)
                 .Register(incotexIsl, comTransport)
+                .Register(incotexIsl, tcpTransport)
                 // Zfp Frame
                 .Register(tremolZfp, comTransport)
-                .Register(tremolV2Zfp, comTransport);
+                .Register(tremolZfp, tcpTransport)
+                .Register(tremolV2Zfp, comTransport)
+                .Register(tremolV2Zfp, tcpTransport);
 
             var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
 
@@ -251,7 +260,7 @@ namespace ErpNet.FP.Server.Contexts
                 }
             }
 
-            configOptions.AutoDetect = Printers.Count == 0;
+            // configOptions.AutoDetect = Printers.Count == 0;
 
             options.Update(updatedConfigOptions =>
             {

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="admin/css">
+    <title>ErpNet.FP Admin Page</title>
+</head>
+<body>
+    <form>
+        <fieldset>
+            <legend>Authorization</legend>
+            <div class="row">
+                <div class="col-sm-4">
+                    <img src="admin/logo" />
+                </div>
+                <div class="col-sm-8 col-md-6 input-group vertical">
+                    <label for="username">Admin Secret</label>
+                    <input type="text" id="AdminSecret" placeholder="password" />
+                    <button class="primary">Login</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <script src="admin/js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/printers',
+                // data to be added to query string:
+                data: {},
+                // type of data we are expecting in return:
+                dataType: 'json',
+                timeout: 0,
+                context: $('body'),
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!')
+                }
+            })
+        })
+    </script>
+</body>
+</html>
