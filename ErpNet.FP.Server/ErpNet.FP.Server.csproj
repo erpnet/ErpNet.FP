@@ -68,7 +68,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties BuildVersion_StartDate="2000/1/1" appsettings_1json__JsonSchema="http://json.schemastore.org/contribute" /></VisualStudio></ProjectExtensions>
-
 </Project>

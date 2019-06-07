@@ -1,6 +1,5 @@
 ﻿using ErpNet.FP.Core;
 using ErpNet.FP.Server.Contexts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
@@ -19,15 +18,8 @@ namespace ErpNet.FP.Server.Controllers
             this.context = context;
         }
 
-        // GET json api definition
+        // GET / 
         [HttpGet()]
-        public ActionResult ApiDocumentation()
-        {
-            return RedirectPermanent("https://documenter.getpostman.com/view/6751288/S1EJYMg5");
-        }
-
-        // GET admin 
-        [HttpGet("admin")]
         public ActionResult<Dictionary<string, DeviceInfo>> Admin()
         {
             var file = Path.Combine(Directory.GetCurrentDirectory(), "admin.html");

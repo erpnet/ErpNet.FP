@@ -7,14 +7,26 @@
     <title>ErpNet.FP Admin Page</title>
 </head>
 <body>
-    <form>
+    <header>
+        <a href="#" class="logo hidden-sm"><img style="height: 20px;" src="admin/logo" />&nbsp;ErpNet.FP <small>ver.1.0.607.1421</small></a>
+    </header>
+    <div class="row">
+        <div class="col-sm-8 input-group horizontal">
+            <button class="primary">Set Admin Secret</button><button class="primary">Detect Printers</button>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Detected Printers</legend>
+        <div id="PrintersList" class="collapse"></div>
+    </fieldset>
+    <form id="AuthorizationForm" class="hidden">
         <fieldset>
             <legend>Authorization</legend>
             <div class="row">
                 <div class="col-sm-4">
                     <img src="admin/logo" />
                 </div>
-                <div class="col-sm-8 col-md-6 input-group vertical">
+                <div class="col-sm-8 col-md-6 col-lg-4 input-group vertical">
                     <label for="username">Admin Secret</label>
                     <input type="text" id="AdminSecret" placeholder="password" />
                     <button class="primary">Login</button>
@@ -24,7 +36,7 @@
     </form>
     <script src="admin/js"></script>
     <script>
-        $(function () {
+        function showDetectedPrinters() {
             $.ajax({
                 type: 'GET',
                 url: '/printers',
@@ -33,15 +45,41 @@
                 // type of data we are expecting in return:
                 dataType: 'json',
                 timeout: 0,
-                context: $('body'),
+                context: $('#PrintersList'),
                 success: function (data) {
-                    console.log(data);
+                    console.log(data)
+                    for (var printerId in data) {
+                        var printer = data[printerId]
+                        var characteristics = ""
+                        for (var characteristic in printer) {
+                            characteristics += '<li>' + characteristic + ': <strong>' + printer[characteristic] + '</strong></li>'
+                        }
+                        var section =
+                            '<input type="radio" id="accordion-section-' + printerId + '" checked aria-hidden="true" name="accordion">' +
+                            '<label for="accordion-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.company + ' ' + printer.model + ', ' + printer.uri + '</label>' +
+                            '<div><ul>' + characteristics + '</ul></div>'
+                        this.append(section)
+                    }
                 },
                 error: function (xhr, type) {
                     alert('Ajax error!')
                 }
             })
+        }
+
+        $(function () {
+            showDetectedPrinters()
         })
     </script>
+    <footer>
+        <div class="row">
+            <div input-group horizontal">
+                <img href="#" style="height: 20px;" src="admin/logo" />
+                <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">Source</a> •
+                <a target="_blank" href="https://documenter.getpostman.com/view/6751288/S1EJYMg5?version=latest">Examples</a> •
+                <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
