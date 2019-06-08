@@ -1,39 +1,39 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="admin/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="admin/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="admin/css">
-    <title>ErpNet.FP Admin Page</title>
+    <title>ErpNet.FP Admin Page</span></title>
 </head>
+
 <body>
     <header>
-        <a href="#" class="logo hidden-sm"><img style="height: 20px;" src="admin/logo" />&nbsp;ErpNet.FP <small>ver.1.0.607.1421</small></a>
+        <a href="/" class="logo"><img style="height: 24px;" src="admin/logo" />&nbsp;ErpNet.FP
+            <small id="Version"></small></a>
     </header>
-    <div class="row">
-        <div class="col-sm-8 input-group horizontal">
-            <button class="primary">Set Admin Secret</button><button class="primary">Detect Printers</button>
+    <div class="container responsive-padding">
+        <div class="row">
+            <div class="col-sm-8 input-group horizontal">
+                <button class="primary"><span class="icon-search inverse"></span>&nbsp;Detect Printers</button>
+            </div>
         </div>
-    </div>
-    <fieldset>
-        <legend>Detected Printers</legend>
-        <div id="PrintersList" class="collapse"></div>
-    </fieldset>
-    <form id="AuthorizationForm" class="hidden">
         <fieldset>
-            <legend>Authorization</legend>
-            <div class="row">
-                <div class="col-sm-4">
-                    <img src="admin/logo" />
-                </div>
-                <div class="col-sm-8 col-md-6 col-lg-4 input-group vertical">
-                    <label for="username">Admin Secret</label>
-                    <input type="text" id="AdminSecret" placeholder="password" />
-                    <button class="primary">Login</button>
-                </div>
+            <legend>Available Printers</legend>
+            <div id="PrintersList" class="collapse">
+                <div class="spinner primary"></div>Detecting...
             </div>
         </fieldset>
-    </form>
+        <fieldset>
+            <legend>Configured Printers</legend>
+            <div id="ConfiguredPrintersList" class="collapse">
+                <div class="spinner primary"></div>Loading...
+            </div>
+        </fieldset>
+    </div>
     <script src="admin/js"></script>
     <script>
         function showDetectedPrinters() {
@@ -48,6 +48,7 @@
                 context: $('#PrintersList'),
                 success: function (data) {
                     console.log(data)
+                    this.html("")
                     for (var printerId in data) {
                         var printer = data[printerId]
                         var characteristics = ""
@@ -60,6 +61,28 @@
                             '<div><ul>' + characteristics + '</ul></div>'
                         this.append(section)
                     }
+                    var printersCount = Object.keys(data).length
+                    this.append('<p>Available ' + printersCount + ' printer(s).</p>');
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!')
+                }
+            })
+        }
+
+        function getServerVariables() {
+            $.ajax({
+                type: 'GET',
+                url: '/vars',
+                // data to be added to query string:
+                data: {},
+                // type of data we are expecting in return:
+                dataType: 'json',
+                timeout: 0,
+                success: function (data) {
+                    console.log(data)
+                    $("#Version").html('ver.' + data.version)
+                    $("#ServerId").html('Server Id: ' + data.serverId)
                 },
                 error: function (xhr, type) {
                     alert('Ajax error!')
@@ -68,18 +91,17 @@
         }
 
         $(function () {
+            getServerVariables()
             showDetectedPrinters()
         })
     </script>
-    <footer>
-        <div class="row">
-            <div input-group horizontal">
-                <img href="#" style="height: 20px;" src="admin/logo" />
-                <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">Source</a> •
-                <a target="_blank" href="https://documenter.getpostman.com/view/6751288/S1EJYMg5?version=latest">Examples</a> •
-                <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a>
-            </div>
-        </div>
+
+    <footer class="responsive-padding"></footer>
+    <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">&nbsp;Source</a> •
+    <a target="_blank" href="https://documenter.getpostman.com/view/6751288/S1EJYMg5?version=latest">Examples</a> •
+    <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a><br />
+    <small><mark class="tag responsive-margin" id="ServerId"></mark></small>
     </footer>
 </body>
+
 </html>
