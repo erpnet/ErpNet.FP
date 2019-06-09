@@ -14,15 +14,16 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.0607.1421</AssemblyVersion>
+    <AssemblyVersion>1.0.0906.1240</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="admin.css" />
-    <None Remove="admin.html" />
-    <None Remove="admin.js" />
+    <Content Remove="appsettings.Development.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="debug.log.1.zip" />
     <None Remove="debug.log.2.zip" />
     <None Remove="debug.log.3.zip" />
@@ -34,16 +35,23 @@
     <None Remove="debug.log.9.zip" />
     <None Remove="ErpNet.FP.ico" />
     <None Remove="ErpNet.FP.thumb.png" />
+    <None Remove="favicon.ico" />
+    <None Remove="index.css" />
+    <None Remove="index.html" />
+    <None Remove="index.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="admin.css">
+    <Content Include="index.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="admin.html">
+    <Content Include="index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="admin.js">
+    <Content Include="index.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="favicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ErpNet.FP.ico">
@@ -59,6 +67,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <None Include="appsettings.Development.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,5 +76,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

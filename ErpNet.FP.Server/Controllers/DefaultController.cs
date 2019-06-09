@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using ErpNet.FP.Core;
+using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace ErpNet.FP.Server.Controllers {
     public class DefaultController : ControllerBase {
         private readonly IPrintersControllerContext context;
         private readonly ServerVariables serverVariables = new ServerVariables ();
+        private readonly IDictionary<string, string> AvailableFiles = new Dictionary<string, string>();
 
         public DefaultController (IPrintersControllerContext context) {
             this.context = context;
@@ -20,13 +22,17 @@ namespace ErpNet.FP.Server.Controllers {
             var assembly = Assembly.GetExecutingAssembly ();
             serverVariables.Version = assembly.GetName ().Version.ToString ();
             serverVariables.ServerId = context.ServerId;
+
+            AvailableFiles.Add("index.css", "text/css");
+            AvailableFiles.Add("index.js", "text/javascript");
+            AvailableFiles.Add("ErpNet.FP.thumb.png", "image/png");
+            AvailableFiles.Add("favicon.ico", "image/x-icon");
         }
 
         // GET / 
         [HttpGet ()]
         public ActionResult<Dictionary<string, DeviceInfo>> Admin () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "admin.html");
-
+            var file = Path.Combine (Directory.GetCurrentDirectory (), "index.html");
             return PhysicalFile (file, "text/html");
         }
 
@@ -36,36 +42,22 @@ namespace ErpNet.FP.Server.Controllers {
             return serverVariables;
         }
 
-        // GET admin/logo
-        [HttpGet ("admin/logo")]
-        public ActionResult<Dictionary<string, DeviceInfo>> Logo () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "ErpNet.FP.thumb.png");
-
-            return PhysicalFile (file, "image/png");
+        // GET configured
+        [HttpGet("configured")]
+        public ActionResult<Dictionary<string, PrinterConfig>> Configured()
+        {
+            return context.ConfiguredPrinters;
         }
 
-        // GET admin/logo
-        [HttpGet ("admin/favicon.ico")]
-        public ActionResult<Dictionary<string, DeviceInfo>> Favicon () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "ErpNet.FP.ico");
-
-            return PhysicalFile (file, "image/x-icon");
-        }
-
-        // GET admin/css
-        [HttpGet ("admin/css")]
-        public ActionResult<Dictionary<string, DeviceInfo>> Css () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "admin.css");
-
-            return PhysicalFile (file, "text/css");
-        }
-
-        // GET admin/js
-        [HttpGet ("admin/js")]
-        public ActionResult<Dictionary<string, DeviceInfo>> JS () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "admin.js");
-
-            return PhysicalFile (file, "text/javascript");
+        // GET file/{id}
+        [HttpGet ("file/{id}")]
+        public ActionResult<Dictionary<string, DeviceInfo>> File (string id) {
+            if (AvailableFiles.TryGetValue(id, out string mimeType))
+            {
+                var file = Path.Combine(Directory.GetCurrentDirectory(), id);
+                return PhysicalFile(file, mimeType);
+            }
+            return NotFound();
         }
     }
 }

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="file/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="file/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="file/index.css">
+    <title>ErpNet.FP Admin Page</title>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo"><img style="height: 24px;" src="file/ErpNet.FP.thumb.png" />&nbsp;ErpNet.FP
+            <small id="Version"></small></a>
+    </header>
+    <div class="container responsive-padding">
+        <div class="row">
+            <div class="col-sm-8 input-group horizontal">
+                <button class="primary"><span class="icon-search inverse"></span>&nbsp;Detect Printers</button>
+            </div>
+        </div>
+        <fieldset>
+            <legend>Available Printers</legend>
+            <div id="PrintersList" class="collapse">
+                <div class="spinner primary"></div>Detecting...
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Configured Printers<button class="small primary">Add printer...</button></legend>
+            <div id="ConfiguredPrintersList" class="collapse">
+                <div class="spinner primary"></div>Loading...
+            </div>
+        </fieldset>
+    </div>
+    <script src="file/index.js"></script>
+    <script>
+        var availablePrinters = {}
+
+        function showAvailablePrinters() {
+            $.ajax({
+                type: 'GET',
+                url: '/printers',
+                data: {},
+                dataType: 'json',
+                timeout: 0,
+                context: $('#PrintersList'),
+                success: function (data) {
+                    availablePrinters = data
+                    this.html("")
+                    for (var printerId in data) {
+                        var printer = data[printerId]
+                        var characteristics = ""
+                        for (var characteristic in printer) {
+                            characteristics += '<li>' + characteristic + ': <strong>' + printer[characteristic] + '</strong></li>'
+                        }
+                        var section =
+                            '<input type="radio" id="accordion-section-' + printerId + '" aria-hidden="true" name="accordion">' +
+                            '<label for="accordion-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.company + ' ' + printer.model + ', ' + printer.uri + '</label>' +
+                            '<div><ul>' + characteristics + '</ul></div>'
+                        this.append(section)
+                    }
+                    var printersCount = Object.keys(data).length
+                    this.append('<p>Available ' + printersCount + ' printer(s).</p>')
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!')
+                }
+            })
+        }
+
+        function showConfiguredPrinters() {
+            $.ajax({
+                type: 'GET',
+                url: '/configured',
+                data: {},
+                dataType: 'json',
+                timeout: 0,
+                context: $('#ConfiguredPrintersList'),
+                success: function (data) {
+                    this.html("")
+                    for (var printerId in data) {
+                        var printer = data[printerId]
+                        var ready = (printerId in availablePrinters && availablePrinters[printerId].uri === printer.uri)
+                        var section =
+                            '<input type="radio" id="accordion-section-' + printerId + '" aria-hidden="true" name="accordion">' +
+                            '<label for="accordion-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.uri + '&nbsp;<small><mark class="'+(ready ? "tertiary" : "secondary")+' tag">'+(ready ? "Ready" : "Not found")+'</mark><small></label>' +
+                            '<div><button class="small primary">Detect again</button><button class="small secondary">Delete</button></div>'
+                        this.append(section)
+                    }
+                    var printersCount = Object.keys(data).length
+                    this.append('<p>Configured ' + printersCount + ' printer(s).</p>')
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!')
+                }
+            })
+        }
+
+        function getServerVariables() {
+            $.ajax({
+                type: 'GET',
+                url: '/vars',
+                data: {},
+                dataType: 'json',
+                timeout: 0,
+                success: function (data) {
+                    $("#Version").html('ver.' + data.version)
+                    $("#ServerId").html('Server Id: ' + data.serverId)
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!')
+                }
+            })
+        }
+
+        $(function () {
+            getServerVariables()
+            showAvailablePrinters()
+            showConfiguredPrinters()
+        })
+    </script>
+
+    <footer class="responsive-padding">
+        <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">&nbsp;Source</a> •
+        <a target="_blank" href="https://documenter.getpostman.com/view/6751288/S1EJYMg5?version=latest">Examples</a> •
+        <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a><br />
+        <small><mark class="tag" id="ServerId"></mark></small>
+    </footer>
+</body>
+
+</html>

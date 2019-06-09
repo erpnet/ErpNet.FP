@@ -21,6 +21,8 @@ namespace ErpNet.FP.Server.Contexts {
 
         Dictionary<string, IFiscalPrinter> Printers { get; }
 
+        Dictionary<string, PrinterConfig> ConfiguredPrinters { get; }
+
         public Task<object> RunAsync (
             IFiscalPrinter printer,
             PrintJobAction action,
@@ -47,6 +49,8 @@ namespace ErpNet.FP.Server.Contexts {
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo> ();
 
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter> ();
+
+        public Dictionary<string, PrinterConfig> ConfiguredPrinters { get; } = new Dictionary<string, PrinterConfig>();
 
         public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string> ();
 
@@ -218,6 +222,7 @@ namespace ErpNet.FP.Server.Contexts {
             logger.LogInformation ("Detecting configured printers...");
             //var printersSettings = configuration.GetSection("Printers").Get<Dictionary<string, PrinterConfig>>();
             if (configOptions.Printers != null) {
+                ConfiguredPrinters = configOptions.Printers;
                 foreach (var printerSetting in configOptions.Printers) {
                     string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
                     var uri = printerSetting.Value.Uri;
