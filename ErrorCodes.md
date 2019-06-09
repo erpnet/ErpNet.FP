@@ -18,7 +18,7 @@ However, the "originalCode" might not always be available or it might change due
 * **E102** Low battery
 * **E103** Date and time not set or invalid
 * **E104** RAM has been reset
-* **E104** RAM failure
+* **E105** RAM failure
 * **E106** External display required
 * **E107** Invalid device response
 * **E199** Device general error
