@@ -12,13 +12,14 @@ namespace ErpNet.FP.Win.Manager
     public interface IMainForm { }
     public class MainForm : Form, IMainForm
     {
-        // private const string ServiceFileName = @"..\..\..\..\ErpNet.FP.Server\Published\win-x86\ErpNet.FP.Server.exe";
+        //private const string ServiceFileName = @"..\..\..\..\ErpNet.FP.Server\Published\win-x86\ErpNet.FP.Server.exe";
         private const string ServiceFileName = @"ErpNet.FP.Server.exe";
         private readonly NotifyIcon managerNotifyIcon;
         private readonly ContextMenu managerContextMenu;
         private readonly MenuItem menuItemExit;
         private readonly MenuItem menuItemShowConsole;
-        private readonly MenuItem menuItemAutoDetect;
+        private readonly MenuItem menuItemShowAdminPage;
+        private readonly MenuItem menuItemRestartService;
         private readonly TextBox logBox;
         private readonly IContainer components;
         private Process? serviceProcess;
@@ -64,12 +65,17 @@ namespace ErpNet.FP.Win.Manager
             };
             this.menuItemShowConsole.Click += MenuItemShowConsole_Click;
 
-            this.menuItemAutoDetect = new MenuItem
+            this.menuItemShowAdminPage = new MenuItem
             {
-                Checked = configOptions.AutoDetect,
-                Text = "Auto &detect"
+                Text = "Show &Admin Page"
             };
-            this.menuItemAutoDetect.Click += MenuItemAutoDetect_Click;
+            this.menuItemShowAdminPage.Click += MenuItemShowAdminPage_Click;
+
+            this.menuItemRestartService = new MenuItem
+            {
+                Text = "&Restart and Detect"
+            };
+            this.menuItemRestartService.Click += menuItemRestartService_Click;
 
             this.menuItemExit = new MenuItem
             {
@@ -81,7 +87,9 @@ namespace ErpNet.FP.Win.Manager
             this.managerContextMenu.MenuItems.AddRange(
                 new MenuItem[] {
                     this.menuItemShowConsole,
-                    this.menuItemAutoDetect,
+                    this.menuItemShowAdminPage,
+                    new MenuItem("-"),
+                    this.menuItemRestartService,
                     new MenuItem("-"),
                     this.menuItemExit
                 });
@@ -98,7 +106,6 @@ namespace ErpNet.FP.Win.Manager
             monitor.OnChange((opt, str) =>
             {
                 this.configOptions = opt;
-                this.menuItemAutoDetect.Checked = opt.AutoDetect;
             });
 
             this.managerNotifyIcon.BalloonTipText = "Starting ErpNet.FP.Server...";
@@ -106,13 +113,11 @@ namespace ErpNet.FP.Win.Manager
             StartService();
         }
 
-        private void MenuItemAutoDetect_Click(object sender, EventArgs e)
+        private void menuItemRestartService_Click(object sender, EventArgs e)
         {
-            menuItemAutoDetect.Checked = !menuItemAutoDetect.Checked;
-            configOptions.AutoDetect = menuItemAutoDetect.Checked;
             options.Update(updatedConfigOptions =>
             {
-                updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
+                updatedConfigOptions.AutoDetect = true;
             });
             if (configOptions.AutoDetect)
             {
@@ -127,6 +132,16 @@ namespace ErpNet.FP.Win.Manager
         {
             this.CenterToScreen();
             this.Show();
+        }
+
+        private void MenuItemShowAdminPage_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo
+            {
+                FileName = "http://localhost:8001",
+                UseShellExecute = true
+            };
+            Process.Start(sInfo);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

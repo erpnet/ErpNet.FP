@@ -20,7 +20,7 @@
     <div class="container responsive-padding">
         <div class="row">
             <div class="col-sm-8 input-group horizontal">
-                <button class="primary" onclick="detectAvailablePrinters()">
+                <button id="DetectButton" class="primary" onclick="detectAvailablePrinters()">
                     <span class="icon-search inverse"></span>
                     &nbsp;Detect Printers
                 </button>
@@ -62,7 +62,7 @@
                         }
                         var section =
                             '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
-                            '<label for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.company + ' ' + printer.model + ', ' + printer.uri + '</label>' +
+                            '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
                             '<div><ul>' + characteristics + '</ul></div>'
                         this.append(section)
                     }
@@ -94,8 +94,8 @@
                         var ready = (printerId in availablePrinters && availablePrinters[printerId].uri === printer.uri)
                         var section =
                             '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
-                            '<label for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.uri + '&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark><small></label>' +
-                            '<div><button class="small primary">Detect again</button><button class="small secondary">Delete</button></div>'
+                            '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark><small></label>' +
+                            '<div class="input-group vertical"><input id="' + printerId + '" value="' + printer.uri + '" /><div><button class="small primary">Detect again</button><button class="small secondary">Delete</button></div></div>'
                         this.append(section)
                     }
                     var printersCount = Object.keys(data).length
@@ -126,6 +126,7 @@
         }
 
         function detectAvailablePrinters() {
+            $("#DetectButton").attr("disabled", "disabled")
             $('#PrintersList').html('<div class="spinner primary"></div>Detecting...')
             $('#ConfiguredPrintersList').html('<div class="spinner primary"></div>Loading...')
             $.ajax({
@@ -135,10 +136,12 @@
                 timeout: 0,
                 success: function (data) {
                     showPrinters()
+                    $("#DetectButton").attr("disabled", null)
                 },
                 error: function (xhr, type) {
                     showToastMessage("Cannot detect printers now. Try again later.")
                     showPrinters()
+                    $("#DetectButton").attr("disabled", null)
                 }
             })
         }
