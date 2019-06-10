@@ -74,7 +74,7 @@
                 error: function (xhr, type) {
                     showToastMessage("Cannot get available printers list.")
                     this.html("")
-                    showConfiguredPrinters()
+                    $('#ConfiguredPrintersList').html("")
                 }
             })
         }
@@ -154,7 +154,7 @@
         function showToastMessage(msg) {
             var toastArea = $("#ToastArea")
             toastArea.html('<span class="toast">' + msg + '</span>')
-            setTimeout(function () { toastArea.html(""); }, 5000);
+            setTimeout(function () { toastArea.html(""); }, 3000);
         }
 
         $(function () {
