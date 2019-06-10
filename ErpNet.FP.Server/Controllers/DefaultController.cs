@@ -5,22 +5,26 @@ using ErpNet.FP.Core;
 using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ErpNet.FP.Server.Controllers {
+namespace ErpNet.FP.Server.Controllers
+{
     // Default controller, example: https://hostname
-    [Route ("")]
+    [Route("")]
     [ApiController]
-    public class DefaultController : ControllerBase {
+    public class DefaultController : ControllerBase
+    {
         private readonly IPrintersControllerContext context;
-        private readonly ServerVariables serverVariables = new ServerVariables ();
+        private readonly ServerVariables serverVariables = new ServerVariables();
         private readonly IDictionary<string, string> AvailableFiles = new Dictionary<string, string>();
 
-        public DefaultController (IPrintersControllerContext context) {
+        public DefaultController(IPrintersControllerContext context)
+        {
             this.context = context;
 
-            var assembly = Assembly.GetExecutingAssembly ();
-            serverVariables.Version = assembly.GetName ().Version.ToString ();
+            var assembly = Assembly.GetExecutingAssembly();
+            serverVariables.Version = assembly.GetName().Version.ToString();
             serverVariables.ServerId = context.ServerId;
 
             AvailableFiles.Add("index.css", "text/css");
@@ -30,16 +34,29 @@ namespace ErpNet.FP.Server.Controllers {
         }
 
         // GET / 
-        [HttpGet ()]
-        public ActionResult<Dictionary<string, DeviceInfo>> Admin () {
-            var file = Path.Combine (Directory.GetCurrentDirectory (), "index.html");
-            return PhysicalFile (file, "text/html");
+        [HttpGet()]
+        public ActionResult<Dictionary<string, DeviceInfo>> Admin()
+        {
+            var file = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
+            return PhysicalFile(file, "text/html");
         }
 
         // GET vars
-        [HttpGet ("vars")]
-        public ActionResult<ServerVariables> Vars () {
+        [HttpGet("vars")]
+        public ActionResult<ServerVariables> Vars()
+        {
             return serverVariables;
+        }
+
+        // GET detect
+        [HttpGet("detect")]
+        public ActionResult<DeviceStatus> Detect()
+        {
+            if (context.Detect())
+            {
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            return StatusCode(StatusCodes.Status423Locked);
         }
 
         // GET configured
@@ -50,8 +67,9 @@ namespace ErpNet.FP.Server.Controllers {
         }
 
         // GET file/{id}
-        [HttpGet ("file/{id}")]
-        public ActionResult<Dictionary<string, DeviceInfo>> File (string id) {
+        [HttpGet("file/{id}")]
+        public ActionResult<Dictionary<string, DeviceInfo>> File(string id)
+        {
             if (AvailableFiles.TryGetValue(id, out string mimeType))
             {
                 var file = Path.Combine(Directory.GetCurrentDirectory(), id);

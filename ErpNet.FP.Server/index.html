@@ -12,13 +12,18 @@
 
 <body>
     <header>
-        <a href="/" class="logo"><img style="height: 24px;" src="file/ErpNet.FP.thumb.png" />&nbsp;ErpNet.FP
-            <small id="Version"></small></a>
+        <a href="/" class="logo">
+            <img style="height: 24px;" src="file/ErpNet.FP.thumb.png" />&nbsp;ErpNet.FP
+            <small id="Version"></small>
+        </a>
     </header>
     <div class="container responsive-padding">
         <div class="row">
             <div class="col-sm-8 input-group horizontal">
-                <button class="primary"><span class="icon-search inverse"></span>&nbsp;Detect Printers</button>
+                <button class="primary" onclick="detectAvailablePrinters()">
+                    <span class="icon-search inverse"></span>
+                    &nbsp;Detect Printers
+                </button>
             </div>
         </div>
         <fieldset>
@@ -28,7 +33,7 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>Configured Printers<button class="small primary">Add printer...</button></legend>
+            <legend>Configured Printers<button class="small primary" onclick="addPrinter()">Add printer...</button></legend>
             <div id="ConfiguredPrintersList" class="collapse">
                 <div class="spinner primary"></div>Loading...
             </div>
@@ -56,16 +61,20 @@
                             characteristics += '<li>' + characteristic + ': <strong>' + printer[characteristic] + '</strong></li>'
                         }
                         var section =
-                            '<input type="radio" id="accordion-section-' + printerId + '" aria-hidden="true" name="accordion">' +
-                            '<label for="accordion-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.company + ' ' + printer.model + ', ' + printer.uri + '</label>' +
+                            '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
+                            '<label for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.company + ' ' + printer.model + ', ' + printer.uri + '</label>' +
                             '<div><ul>' + characteristics + '</ul></div>'
                         this.append(section)
                     }
                     var printersCount = Object.keys(data).length
                     this.append('<p>Available ' + printersCount + ' printer(s).</p>')
+
+                    showConfiguredPrinters()
                 },
                 error: function (xhr, type) {
-                    alert('Ajax error!')
+                    showToastMessage("Cannot get available printers list.")
+                    this.html("")
+                    showConfiguredPrinters()
                 }
             })
         }
@@ -84,8 +93,8 @@
                         var printer = data[printerId]
                         var ready = (printerId in availablePrinters && availablePrinters[printerId].uri === printer.uri)
                         var section =
-                            '<input type="radio" id="accordion-section-' + printerId + '" aria-hidden="true" name="accordion">' +
-                            '<label for="accordion-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.uri + '&nbsp;<small><mark class="'+(ready ? "tertiary" : "secondary")+' tag">'+(ready ? "Ready" : "Not found")+'</mark><small></label>' +
+                            '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
+                            '<label for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>, ' + printer.uri + '&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark><small></label>' +
                             '<div><button class="small primary">Detect again</button><button class="small secondary">Delete</button></div>'
                         this.append(section)
                     }
@@ -93,7 +102,8 @@
                     this.append('<p>Configured ' + printersCount + ' printer(s).</p>')
                 },
                 error: function (xhr, type) {
-                    alert('Ajax error!')
+                    showToastMessage("Cannot get configured printers list.")
+                    this.html("")
                 }
             })
         }
@@ -110,15 +120,46 @@
                     $("#ServerId").html('Server Id: ' + data.serverId)
                 },
                 error: function (xhr, type) {
-                    alert('Ajax error!')
+                    showToastMessage("Cannot get server variables.")
                 }
             })
         }
 
+        function detectAvailablePrinters() {
+            $('#PrintersList').html('<div class="spinner primary"></div>Detecting...')
+            $('#ConfiguredPrintersList').html('<div class="spinner primary"></div>Loading...')
+            $.ajax({
+                type: 'GET',
+                url: '/detect',
+                data: {},
+                timeout: 0,
+                success: function (data) {
+                    showPrinters()
+                },
+                error: function (xhr, type) {
+                    showToastMessage("Cannot detect printers now. Try again later.")
+                    showPrinters()
+                }
+            })
+        }
+
+        function showPrinters() {
+            showAvailablePrinters()
+        }
+
+        function addPrinter() {
+            alert('Not implemented.')
+        }
+
+        function showToastMessage(msg) {
+            var toastArea = $("#ToastArea")
+            toastArea.html('<span class="toast">' + msg + '</span>')
+            setTimeout(function () { toastArea.html(""); }, 5000);
+        }
+
         $(function () {
             getServerVariables()
-            showAvailablePrinters()
-            showConfiguredPrinters()
+            showPrinters()
         })
     </script>
 
@@ -128,6 +169,7 @@
         <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a><br />
         <small><mark class="tag" id="ServerId"></mark></small>
     </footer>
+    <div id="ToastArea"></div>
 </body>
 
 </html>

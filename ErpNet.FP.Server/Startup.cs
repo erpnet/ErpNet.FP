@@ -1,5 +1,6 @@
 using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;
+using ErpNet.FP.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,9 @@ namespace ErpNet.FP.Server
             services.ConfigureWritable<ErpNetFPConfigOptions>(Configuration.GetSection("ErpNet.FP"));
             services.AddSingleton<IPrintersControllerContext, PrintersControllerContext>();
             services.AddControllers().AddNewtonsoftJson();
+
+            // KeepAliveHostedService will warm up PrintersController context at start
+            services.AddHostedService<KeepAliveHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,9 +53,6 @@ namespace ErpNet.FP.Server
             {
                 endpoints.MapControllers();
             });
-
-            // Warming up PrintersControllerContext
-            app.ApplicationServices.GetService<IPrintersControllerContext>();
         }
     }
 }
