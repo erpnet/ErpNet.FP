@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -68,6 +70,128 @@ namespace ErpNet.FP.Core.Drivers
         public abstract DeviceStatus PrintXReport(Credentials credentials);
 
         protected abstract DeviceStatus ParseStatus(byte[]? status);
+
+        public virtual DeviceStatus ValidateReceipt(Receipt receipt)
+        {
+            var status = new DeviceStatus();
+            if (receipt.Items == null || receipt.Items.Count == 0)
+            {
+                status.AddError("E410", "Receipt is empty, no items");
+                return status;
+            }
+            if (String.IsNullOrEmpty(receipt.UniqueSaleNumber))
+            {
+                status.AddError("E405", "UniqueSaleNumber is empty");
+                return status;
+            }
+            var uniqueSaleNumberMatch = Regex.Match(receipt.UniqueSaleNumber, "^[A-Z0-9]{8}-[A-Z0-9]{4}-[0-9]{7}$");
+            if (!uniqueSaleNumberMatch.Success)
+            {
+                status.AddError("E405", "Invalid format of UniqueSaleNumber");
+                return status;
+            }
+            var row = 0;
+            foreach(var item in receipt.Items)
+            {
+                row++;
+                if (String.IsNullOrEmpty(item.Text))
+                {
+                    status.AddError("E407", $"Item {row}: \"text\" is empty");
+                }
+                if (item.IsComment)
+                {
+                    status.AddWarning("W401", $"Item {row}: \"isComment\" is deprecated in Item {row}. Use \"type\" : \"comment\" instead");
+                }
+                if (item.PriceModifierValue < 0)
+                {
+                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
+                }
+                if (item.PriceModifierValue == 0)
+                {
+                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number. You can avoid setting priceModifier if you do not want price modification");
+                }
+                if (item.PriceModifierType == PriceModifierType.None)
+                {
+                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
+                }
+                if (item.Quantity <= 0)
+                {
+                    status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
+                }
+                if (item.TaxGroup == TaxGroup.Unspecified)
+                {
+                    status.AddError("E403", $"Item {row}: \"taxGroup\" should'nt be \"unspecified\" or empty");
+                }
+                try
+                {
+                    GetTaxGroupText(item.TaxGroup);
+                }
+                catch(StandardizedStatusMessageException e)
+                {
+                    status.AddError(e.Code, e.Message);
+                }
+                if (item.UnitPrice <= 0)
+                {
+                    status.AddError("E403", $"Item {row}: \"unitPrice\" should be positive number");
+                }
+                if (!status.Ok)
+                {
+                    return status;
+                }
+            }
+            if (receipt.Payments?.Count > 0)
+            {
+                row = 0;
+                foreach(var payment in receipt.Payments)
+                {
+                    row++;
+                    try
+                    {
+                        GetPaymentTypeText(payment.PaymentType);
+                    }
+                    catch (StandardizedStatusMessageException e)
+                    {
+                        status.AddError(e.Code, e.Message);
+                    }
+                    if (!status.Ok)
+                    {
+                        status.AddInfo($"Error occured at Payment {row}");
+                        return status;
+                    }
+                }
+            }
+            return status;
+        }
+
+        public virtual DeviceStatus ValidateReversalReceipt(ReversalReceipt reversalReceipt)
+        {
+            var status = ValidateReceipt(reversalReceipt);
+            if (!status.Ok)
+            {
+                return status;
+            }
+            if (String.IsNullOrEmpty(reversalReceipt.ReceiptNumber))
+            {
+                status.AddError("E405", $"ReceiptNumber of the original receipt is empty");
+                return status;
+            }
+            if (String.IsNullOrEmpty(reversalReceipt.FiscalMemorySerialNumber))
+            {
+                status.AddError("E405", $"FiscalMemorySerialNumber of the original receipt is empty");
+                return status;
+            }
+            return status;
+        }
+
+        public virtual DeviceStatus ValidateTransferAmount(TransferAmount transferAmount)
+        {
+            var status = new DeviceStatus();
+            if (transferAmount.Amount <= 0)
+            {
+                status.AddError("E403", "Amount should be positive number");
+            }
+            return status;
+        }
 
         protected virtual string WithPrinterEncoding(string text)
         {

@@ -82,6 +82,9 @@ However, the "originalCode" might not always be available or it might change due
 * **W301** Low paper/Near end of paper
 * **W399** Printing general warning
 
+## Command warning codes
+* **W401** Deprecated 
+
 ## NRA link warning codes
 * **W501** Unsent data for 24 hours
 * **W502** Report not zeroed

@@ -1,3 +1,5 @@
+using ErpNet.FP.Core.Configuration;
+using ErpNet.FP.Core.Service;
 using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Services;
@@ -21,8 +23,8 @@ namespace ErpNet.FP.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureWritable<ErpNetFPConfigOptions>(Configuration.GetSection("ErpNet.FP"));
-            services.AddSingleton<IPrintersControllerContext, PrintersControllerContext>();
+            services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
+            services.AddSingleton<IServiceController, ServiceSingleton>();
             services.AddControllers().AddNewtonsoftJson();
 
             // KeepAliveHostedService will warm up PrintersController context at start

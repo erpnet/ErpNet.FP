@@ -2,8 +2,8 @@
 using System.IO;
 using System.Reflection;
 using ErpNet.FP.Core;
-using ErpNet.FP.Server.Configuration;
-using ErpNet.FP.Server.Contexts;
+using ErpNet.FP.Core.Configuration;
+using ErpNet.FP.Core.Service;
 using ErpNet.FP.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +15,11 @@ namespace ErpNet.FP.Server.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        private readonly IPrintersControllerContext context;
+        private readonly IServiceController context;
         private readonly ServerVariables serverVariables = new ServerVariables();
         private readonly IDictionary<string, string> AvailableFiles = new Dictionary<string, string>();
 
-        public DefaultController(IPrintersControllerContext context)
+        public DefaultController(IServiceController context)
         {
             this.context = context;
 

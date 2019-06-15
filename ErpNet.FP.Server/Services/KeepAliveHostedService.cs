@@ -1,9 +1,7 @@
-﻿using ErpNet.FP.Server.Contexts;
+﻿using ErpNet.FP.Core.Service;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,12 +10,12 @@ namespace ErpNet.FP.Server.Services
     public class KeepAliveHostedService : IHostedService, IDisposable
     {
         private readonly ILogger Logger;
-        private readonly IPrintersControllerContext Context;
+        private readonly IServiceController Context;
         private Timer? Timer;
 
         public KeepAliveHostedService(
             ILogger<KeepAliveHostedService> logger,
-            IPrintersControllerContext context)
+            IServiceController context)
         {
             this.Logger = logger;
             this.Context = context;

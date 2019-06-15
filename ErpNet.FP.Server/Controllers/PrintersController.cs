@@ -1,6 +1,5 @@
 ﻿using ErpNet.FP.Core;
-using ErpNet.FP.Server.Contexts;
-using ErpNet.FP.Server.Models;
+using ErpNet.FP.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -13,9 +12,9 @@ namespace ErpNet.FP.Server.Controllers
     [ApiController]
     public class PrintersController : ControllerBase
     {
-        private readonly IPrintersControllerContext context;
+        private readonly IServiceController context;
 
-        public PrintersController(IPrintersControllerContext context)
+        public PrintersController(IServiceController context)
         {
             this.context = context;
         }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace ErpNet.FP.Server.Models
+namespace ErpNet.FP.Core.Service
 {
     public class TaskInfoResult
     {

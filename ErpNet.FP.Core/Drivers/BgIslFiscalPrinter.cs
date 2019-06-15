@@ -91,7 +91,7 @@ namespace ErpNet.FP.Core.Drivers
             foreach (var item in receipt.Items)
             {
                 itemNumber++;
-                if (item.IsComment)
+                if (item.Type == ItemType.Comment || item.IsComment)
                 {
                     (_, deviceStatus) = AddComment(item.Text);
                     if (!deviceStatus.Ok)

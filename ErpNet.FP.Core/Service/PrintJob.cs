@@ -1,8 +1,6 @@
-﻿using ErpNet.FP.Core;
-using ErpNet.FP.Server.Models;
-using System;
+﻿using System;
 
-namespace ErpNet.FP.Server.Contexts
+namespace ErpNet.FP.Core.Service
 {
     public enum PrintJobAction
     {
@@ -44,7 +42,13 @@ namespace ErpNet.FP.Server.Contexts
                     case PrintJobAction.Receipt:
                         if (Document != null)
                         {
-                            var (info, status) = Printer.PrintReceipt((Receipt)Document);
+                            var receipt = (Receipt)Document;
+                            var validateStatus = Printer.ValidateReceipt(receipt);
+                            if (!validateStatus.Ok)
+                            {
+                                Result = validateStatus;
+                            }
+                            var (info, status) = Printer.PrintReceipt(receipt);
                             Result = new DeviceStatusWithReceiptInfo(status, info);
                         }
                         break;

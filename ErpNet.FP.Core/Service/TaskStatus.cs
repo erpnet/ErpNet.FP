@@ -1,7 +1,7 @@
 ﻿
 using System.Runtime.Serialization;
 
-namespace ErpNet.FP.Server.Models
+namespace ErpNet.FP.Core.Service
 {
     public enum TaskStatus
     {

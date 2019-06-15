@@ -1,23 +1,13 @@
-﻿using System;
+﻿using ErpNet.FP.Core.Configuration;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ErpNet.FP.Core;
-using ErpNet.FP.Core.Drivers.BgDaisy;
-using ErpNet.FP.Core.Drivers.BgDatecs;
-using ErpNet.FP.Core.Drivers.BgEltrade;
-using ErpNet.FP.Core.Drivers.BgIncotex;
-using ErpNet.FP.Core.Drivers.BgTremol;
-using ErpNet.FP.Core.Provider;
-using ErpNet.FP.Core.Transports;
-using ErpNet.FP.Server.Configuration;
-using ErpNet.FP.Server.Models;
-using Microsoft.Extensions.Logging;
 
-namespace ErpNet.FP.Server.Contexts
+namespace ErpNet.FP.Core.Service
 {
-    public interface IPrintersControllerContext
+    public interface IServiceController
     {
         Dictionary<string, DeviceInfo> PrintersInfo { get; }
 
@@ -25,33 +15,32 @@ namespace ErpNet.FP.Server.Contexts
 
         Dictionary<string, PrinterConfig> ConfiguredPrinters { get; }
 
-        public Task<object> RunAsync(
+        Task<object> RunAsync(
             IFiscalPrinter printer,
             PrintJobAction action,
             object? document,
             int asyncTimeout);
 
-        public TaskInfoResult GetTaskInfo(string taskId);
+        TaskInfoResult GetTaskInfo(string taskId);
 
-        public bool Detect();
+        bool Detect();
 
-        public bool IsReady { get; }
+        bool IsReady { get; }
 
-        public string ServerId { get; }
+        string ServerId { get; }
     }
 
-    public class PrintersControllerContext : IPrintersControllerContext
+    public abstract class ServiceControllerContext : IServiceController
     {
-        private readonly ILogger logger;
+        
         private Task? consumer;
         private readonly object taskSyncLock = new object();
         private readonly object consumerSyncLock = new object();
-        private volatile bool isReady = false;
-        private IWritableOptions<ErpNetFPConfigOptions> writableConfigOptions;
-        private ErpNetFPConfigOptions configOptions;
-        private readonly Provider provider;
+        protected volatile bool isReady = false;
+        
+        protected ServiceOptions configOptions = new ServiceOptions();
         public string ServerId { get; private set; } = string.Empty;
-        public Provider Provider { get; } = new Provider();
+        public Provider.Provider Provider { get; protected set; } = new Provider.Provider();
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter>();
         public Dictionary<string, PrinterConfig> ConfiguredPrinters { get; private set; } = new Dictionary<string, PrinterConfig>();
@@ -59,52 +48,19 @@ namespace ErpNet.FP.Server.Contexts
         public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
         public bool IsReady { get => isReady; set => isReady = value; }
 
-        public PrintersControllerContext(
-            ILogger<PrintersControllerContext> logger,
-            IWritableOptions<ErpNetFPConfigOptions> writableConfigOptions)
+        protected abstract void SetupProvider();
+        protected abstract void WriteOptions();
+
+        protected virtual void Setup()
         {
-            this.logger = logger;
+            ReadOptions();
+            SetupProvider();
+            isReady = true;
+            Detect();
+        }
 
-            this.writableConfigOptions = writableConfigOptions;
-            this.configOptions = writableConfigOptions.Value;
-
-            // Transports
-            var comTransport = new ComTransport();
-            var tcpTransport = new TcpTransport();
-
-            // Drivers
-            var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
-            var datecsPIsl = new BgDatecsPIslFiscalPrinterDriver();
-            var datecsCIsl = new BgDatecsCIslFiscalPrinterDriver();
-            var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
-            var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
-            var incotexIsl = new BgIncotexIslFiscalPrinterDriver();
-            var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
-            var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
-
-            // Add drivers and their compatible transports to the provider.
-            this.provider = new Provider()
-                // Isl X Frame
-                .Register(datecsXIsl, comTransport)
-                .Register(datecsXIsl, tcpTransport)
-                // Isl Frame
-                .Register(datecsCIsl, comTransport)
-                .Register(datecsCIsl, tcpTransport)
-                .Register(datecsPIsl, comTransport)
-                .Register(datecsPIsl, tcpTransport)
-                .Register(eltradeIsl, comTransport)
-                .Register(eltradeIsl, tcpTransport)
-                // Isl Frame + constants
-                .Register(daisyIsl, comTransport)
-                .Register(daisyIsl, tcpTransport)
-                .Register(incotexIsl, comTransport)
-                .Register(incotexIsl, tcpTransport)
-                // Zfp Frame
-                .Register(tremolZfp, comTransport)
-                .Register(tremolZfp, tcpTransport)
-                .Register(tremolV2Zfp, comTransport)
-                .Register(tremolV2Zfp, tcpTransport);
-
+        protected virtual void ReadOptions()
+        {
             // Server ID
             if (String.IsNullOrEmpty(configOptions.ServerId))
             {
@@ -116,9 +72,6 @@ namespace ErpNet.FP.Server.Contexts
                 configOptions.ServerId = serverId;
             }
             this.ServerId = configOptions.ServerId;
-
-            isReady = true;
-            Detect();
         }
 
         public bool Detect()
@@ -133,8 +86,8 @@ namespace ErpNet.FP.Server.Contexts
                     var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
                     if (configOptions.AutoDetect)
                     {
-                        logger.LogInformation("Autodetecting local printers...");
-                        var printers = provider.DetectAvailablePrinters();
+                        System.Diagnostics.Trace.WriteLine("Autodetecting local printers...");
+                        var printers = Provider.DetectAvailablePrinters();
                         foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                         {
                             AddPrinter(printer.Value);
@@ -142,7 +95,7 @@ namespace ErpNet.FP.Server.Contexts
                     }
 
                     // Detecting configured printers
-                    logger.LogInformation("Detecting configured printers...");
+                    System.Diagnostics.Trace.WriteLine("Detecting configured printers...");
                     if (configOptions.Printers != null)
                     {
                         ConfiguredPrinters = configOptions.Printers;
@@ -154,14 +107,14 @@ namespace ErpNet.FP.Server.Contexts
                             {
                                 try
                                 {
-                                    var printer = provider.Connect(printerSetting.Value.Uri, null);
-                                    logger.LogInformation($"{logString}, OK");
+                                    var printer = Provider.Connect(printerSetting.Value.Uri, null);
+                                    System.Diagnostics.Trace.WriteLine($"{logString}, OK");
                                     PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
                                     Printers.Add(printerSetting.Key, printer);
                                 }
                                 catch
                                 {
-                                    logger.LogInformation($"{logString}, failed");
+                                    System.Diagnostics.Trace.WriteLine($"{logString}, failed");
                                     // Do not add this printer, it fails to connect.
                                 }
                             }
@@ -177,14 +130,9 @@ namespace ErpNet.FP.Server.Contexts
 
                     configOptions.AutoDetect = Printers.Count == 0;
 
-                    writableConfigOptions.Update(updatedConfigOptions =>
-                    {
-                        updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
-                        updatedConfigOptions.ServerId = configOptions.ServerId;
-                        updatedConfigOptions.Printers = configOptions.Printers ?? new Dictionary<string, PrinterConfig>();
-                    });
+                    WriteOptions();
 
-                    logger.LogInformation($"Detecting done. Found {Printers.Count} available printer(s).");
+                    System.Diagnostics.Trace.WriteLine($"Detecting done. Found {Printers.Count} available printer(s).");
 
                     isReady = true;
 
@@ -310,7 +258,7 @@ namespace ErpNet.FP.Server.Contexts
             }
             PrintersInfo.Add(printerID, printer.DeviceInfo);
             Printers.Add(printerID, printer);
-            logger.LogInformation($"Found {printerID}: {printer.DeviceInfo.Uri}");
+            System.Diagnostics.Trace.WriteLine($"Found {printerID}: {printer.DeviceInfo.Uri}");
         }
 
 

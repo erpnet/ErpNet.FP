@@ -32,7 +32,7 @@ POST /printers/dt517985/receipt
 		},
 		{
 			"text": "Additional comment to the cheese...",
-			"isComment": true
+			"type": "comment"
 		},
 		{
 			"text": "Milk",

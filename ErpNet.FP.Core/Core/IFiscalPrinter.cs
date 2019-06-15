@@ -28,11 +28,25 @@
         (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt);
 
         /// <summary>
+        /// Validates the receipt object
+        /// </summary>
+        /// <param name="receipt"></param>
+        /// <returns></returns>
+        DeviceStatus ValidateReceipt(Receipt receipt);
+
+        /// <summary>
         /// Prints the specified reversal receipt.
         /// </summary>
         /// <param name="reversalReceipt">The reversal receipt.</param>
         /// <returns></returns>
         DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
+
+        /// <summary>
+        /// Validates the reversal receipt object
+        /// </summary>
+        /// <param name="reversalReceipt"></param>
+        /// <returns></returns>
+        DeviceStatus ValidateReversalReceipt(ReversalReceipt reversalReceipt);
 
         /// <summary>
         /// Prints a deposit money note.
@@ -45,6 +59,13 @@
         /// </summary>
         /// <param name="amount">The withdrawn amount. Should be greater than 0.</param>
         DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount);
+
+        /// <summary>
+        /// Validates transfer amount object
+        /// </summary>
+        /// <param name="transferAmount"></param>
+        /// <returns></returns>
+        DeviceStatus ValidateTransferAmount(TransferAmount transferAmount);
 
         /// <summary>
         /// Prints a zreport.
