@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using ErpNet.FP.Core;
+﻿using ErpNet.FP.Core;
 using ErpNet.FP.Core.Configuration;
 using ErpNet.FP.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace ErpNet.FP.Server.Controllers
 {

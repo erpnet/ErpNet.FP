@@ -32,12 +32,12 @@ namespace ErpNet.FP.Core.Service
 
     public abstract class ServiceControllerContext : IServiceController
     {
-        
+
         private Task? consumer;
         private readonly object taskSyncLock = new object();
         private readonly object consumerSyncLock = new object();
         protected volatile bool isReady = false;
-        
+
         protected ServiceOptions configOptions = new ServiceOptions();
         public string ServerId { get; private set; } = string.Empty;
         public Provider.Provider Provider { get; protected set; } = new Provider.Provider();

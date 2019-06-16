@@ -11,9 +11,9 @@ namespace ErpNet.FP.Server.Services
     public class KeepAliveHostedService : KeepAliveService, IHostedService
     {
         public KeepAliveHostedService(
-            IServiceController context) 
-            : 
+            IServiceController context)
+            :
             base(context)
-        {}       
+        { }
     }
 }

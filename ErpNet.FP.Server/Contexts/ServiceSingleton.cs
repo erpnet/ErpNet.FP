@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using ErpNet.FP.Core.Configuration;
 using ErpNet.FP.Core.Drivers.BgDaisy;
 using ErpNet.FP.Core.Drivers.BgDatecs;
 using ErpNet.FP.Core.Drivers.BgEltrade;
 using ErpNet.FP.Core.Drivers.BgIncotex;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
-using ErpNet.FP.Core.Transports;
 using ErpNet.FP.Core.Service;
+using ErpNet.FP.Core.Transports;
 using ErpNet.FP.Server.Configuration;
-using ErpNet.FP.Core.Configuration;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Server.Contexts
 {
@@ -17,7 +17,8 @@ namespace ErpNet.FP.Server.Contexts
     /// introduces writableConfigOptions through dependency injection, 
     /// and setting up the Provider
     /// </summary>
-    public class ServiceSingleton : ServiceControllerContext {
+    public class ServiceSingleton : ServiceControllerContext
+    {
 
         private IWritableOptions<ServiceOptions> writableConfigOptions;
 

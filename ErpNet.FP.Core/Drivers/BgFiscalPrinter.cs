@@ -91,7 +91,7 @@ namespace ErpNet.FP.Core.Drivers
                 return status;
             }
             var row = 0;
-            foreach(var item in receipt.Items)
+            foreach (var item in receipt.Items)
             {
                 row++;
                 if (String.IsNullOrEmpty(item.Text))
@@ -126,7 +126,7 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     GetTaxGroupText(item.TaxGroup);
                 }
-                catch(StandardizedStatusMessageException e)
+                catch (StandardizedStatusMessageException e)
                 {
                     status.AddError(e.Code, e.Message);
                 }
@@ -142,7 +142,7 @@ namespace ErpNet.FP.Core.Drivers
             if (receipt.Payments?.Count > 0)
             {
                 row = 0;
-                foreach(var payment in receipt.Payments)
+                foreach (var payment in receipt.Payments)
                 {
                     row++;
                     try
