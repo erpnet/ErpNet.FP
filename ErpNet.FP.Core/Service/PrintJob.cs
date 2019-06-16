@@ -44,30 +44,60 @@ namespace ErpNet.FP.Core.Service
                         {
                             var receipt = (Receipt)Document;
                             var validateStatus = Printer.ValidateReceipt(receipt);
-                            if (!validateStatus.Ok)
+                            if (validateStatus.Ok)
+                            {
+                                var (info, status) = Printer.PrintReceipt(receipt);
+                                Result = new DeviceStatusWithReceiptInfo(status, info);
+                            }
+                            else
                             {
                                 Result = validateStatus;
-                            }
-                            var (info, status) = Printer.PrintReceipt(receipt);
-                            Result = new DeviceStatusWithReceiptInfo(status, info);
+                            }                            
                         }
                         break;
                     case PrintJobAction.ReversalReceipt:
                         if (Document != null)
                         {
-                            Result = Printer.PrintReversalReceipt((ReversalReceipt)Document);
+                            var reversalReceipt = (ReversalReceipt)Document;
+                            var validateStatus = Printer.ValidateReversalReceipt(reversalReceipt);
+                            if (validateStatus.Ok)
+                            {
+                                Result = Printer.PrintReversalReceipt(reversalReceipt);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
                         };
                         break;
                     case PrintJobAction.Withdraw:
                         if (Document != null)
                         {
-                            Result = Printer.PrintMoneyWithdraw((TransferAmount)Document);
+                            var transferAmount = (TransferAmount)Document;
+                            var validateStatus = Printer.ValidateTransferAmount(transferAmount);
+                            if (validateStatus.Ok)
+                            {
+                                Result = Printer.PrintMoneyWithdraw(transferAmount);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
                         }
                         break;
                     case PrintJobAction.Deposit:
                         if (Document != null)
                         {
-                            Result = Printer.PrintMoneyDeposit((TransferAmount)Document);
+                            var transferAmount = (TransferAmount)Document;
+                            var validateStatus = Printer.ValidateTransferAmount(transferAmount);
+                            if (validateStatus.Ok)
+                            {
+                                Result = Printer.PrintMoneyDeposit((TransferAmount)Document);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
                         }
                         break;
                     case PrintJobAction.XReport:

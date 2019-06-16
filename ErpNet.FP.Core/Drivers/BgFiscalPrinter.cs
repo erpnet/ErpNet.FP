@@ -102,38 +102,44 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     status.AddWarning("W401", $"Item {row}: \"isComment\" is deprecated in Item {row}. Use \"type\" : \"comment\" instead");
                 }
-                if (item.PriceModifierValue < 0)
+
+                // Validation of "type" : "sale"
+                if (item.Type == ItemType.Sale)
                 {
-                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
+                    if (item.PriceModifierValue < 0)
+                    {
+                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
+                    }
+                    if (item.PriceModifierValue == 0)
+                    {
+                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number. You can avoid setting priceModifier if you do not want price modification");
+                    }
+                    if (item.PriceModifierType == PriceModifierType.None)
+                    {
+                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
+                    }
+                    if (item.Quantity <= 0)
+                    {
+                        status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
+                    }
+                    if (item.TaxGroup == TaxGroup.Unspecified)
+                    {
+                        status.AddError("E403", $"Item {row}: \"taxGroup\" should'nt be \"unspecified\" or empty");
+                    }
+                    try
+                    {
+                        GetTaxGroupText(item.TaxGroup);
+                    }
+                    catch (StandardizedStatusMessageException e)
+                    {
+                        status.AddError(e.Code, e.Message);
+                    }
+                    if (item.UnitPrice <= 0)
+                    {
+                        status.AddError("E403", $"Item {row}: \"unitPrice\" should be positive number");
+                    }
                 }
-                if (item.PriceModifierValue == 0)
-                {
-                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number. You can avoid setting priceModifier if you do not want price modification");
-                }
-                if (item.PriceModifierType == PriceModifierType.None)
-                {
-                    status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
-                }
-                if (item.Quantity <= 0)
-                {
-                    status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
-                }
-                if (item.TaxGroup == TaxGroup.Unspecified)
-                {
-                    status.AddError("E403", $"Item {row}: \"taxGroup\" should'nt be \"unspecified\" or empty");
-                }
-                try
-                {
-                    GetTaxGroupText(item.TaxGroup);
-                }
-                catch (StandardizedStatusMessageException e)
-                {
-                    status.AddError(e.Code, e.Message);
-                }
-                if (item.UnitPrice <= 0)
-                {
-                    status.AddError("E403", $"Item {row}: \"unitPrice\" should be positive number");
-                }
+
                 if (!status.Ok)
                 {
                     return status;

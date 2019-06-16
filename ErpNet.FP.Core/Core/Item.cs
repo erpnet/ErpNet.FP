@@ -93,7 +93,19 @@ namespace ErpNet.FP.Core
         /// <value>
         ///   <c>true</c> if this line is comment; otherwise, <c>false</c>.
         /// </value>
-        public bool IsComment { get; set; } = false;
+        public bool IsComment {
+
+            get
+            {
+                return Type == ItemType.Comment;
+            }
+
+            set
+            {
+                Type = value ? ItemType.Comment : ItemType.Sale;
+            }
+
+        }
 
         /// <summary>
         /// Gets or sets the tax group. 

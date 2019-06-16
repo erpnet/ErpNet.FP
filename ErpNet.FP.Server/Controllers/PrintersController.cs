@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ErpNet.FP.Server.Controllers
 {
-    // PrintersController, example: https://hostname/printers/[controller]
+    // PrintersController, example: //host/printers/[controller]
     [Route("[controller]")]
     [ApiController]
     public class PrintersController : ControllerBase
@@ -19,7 +19,7 @@ namespace ErpNet.FP.Server.Controllers
             this.context = context;
         }
 
-        // GET printers
+        // GET /
         [HttpGet()]
         public ActionResult<Dictionary<string, DeviceInfo>> Printers()
         {
@@ -30,7 +30,7 @@ namespace ErpNet.FP.Server.Controllers
             return context.PrintersInfo;
         }
 
-        // GET printers/{id}
+        // GET {id}
         [HttpGet("{id}")]
         public ActionResult<DeviceInfo> Info(string id)
         {
@@ -45,7 +45,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // GET printers/{id}/status
+        // GET {id}/status
         [HttpGet("{id}/status")]
         public ActionResult<DeviceStatusWithDateTime> Status(string id)
         {
@@ -60,14 +60,14 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // GET printers/taskinfo
+        // GET taskinfo
         [HttpGet("taskinfo")]
         public ActionResult<TaskInfoResult> TaskInfo([FromQuery]string id)
         {
             return context.GetTaskInfo(id);
         }
 
-        // POST printers/{id}/receipt
+        // POST {id}/receipt
         [HttpPost("{id}/receipt")]
         public async Task<IActionResult> PrintReceipt(
             string id,
@@ -90,7 +90,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/reversalreceipt
+        // POST {id}/reversalreceipt
         [HttpPost("{id}/reversalreceipt")]
         public async Task<IActionResult> PrintReversalReceipt(
             string id,
@@ -113,7 +113,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/withdraw
+        // POST {id}/withdraw
         [HttpPost("{id}/withdraw")]
         public async Task<IActionResult> PrintWithdraw(
             string id,
@@ -136,7 +136,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/deposit
+        // POST {id}/deposit
         [HttpPost("{id}/deposit")]
         public async Task<IActionResult> PrintDeposit(
             string id,
@@ -159,7 +159,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/datetime
+        // POST {id}/datetime
         [HttpPost("{id}/datetime")]
         public async Task<IActionResult> SetDateTime(
             string id,
@@ -182,7 +182,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/zreport
+        // POST {id}/zreport
         [HttpPost("{id}/zreport")]
         public async Task<IActionResult> PrintZReport(
             string id,
@@ -204,7 +204,7 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST printers/{id}/xreport
+        // POST {id}/xreport
         [HttpPost("{id}/xreport")]
         public async Task<IActionResult> PrintXReport(
             string id,

@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace ErpNet.FP.Server.Controllers
 {
-    // Default controller, example: https://hostname
+    // Default controller, example: //host/[controller]
     [Route("")]
     [ApiController]
     public class DefaultController : ControllerBase
