@@ -12,6 +12,11 @@ using ErpNet.FP.Core.Configuration;
 
 namespace ErpNet.FP.Server.Contexts
 {
+    /// <summary>
+    /// ServiceSingleton is wrapper around ServiceControllerContext, that
+    /// introduces writableConfigOptions through dependency injection, 
+    /// and setting up the Provider
+    /// </summary>
     public class ServiceSingleton : ServiceControllerContext {
 
         private IWritableOptions<ServiceOptions> writableConfigOptions;

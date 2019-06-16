@@ -27,7 +27,7 @@ namespace ErpNet.FP.Server
             services.AddSingleton<IServiceController, ServiceSingleton>();
             services.AddControllers().AddNewtonsoftJson();
 
-            // KeepAliveHostedService will warm up PrintersController context at start
+            // KeepAliveHostedService will warm up ServiceSingleton context at start
             services.AddHostedService<KeepAliveHostedService>();
         }
 
@@ -35,8 +35,6 @@ namespace ErpNet.FP.Server
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-            app.UseStaticFiles();
 
             if (env.IsDevelopment())
             {

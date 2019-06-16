@@ -1,4 +1,4 @@
-﻿namespace ErpNet.FP.Server.Models {
+﻿namespace ErpNet.FP.Core.Service {
     public class ServerVariables {
         public string Version = string.Empty;
         public string ServerId = string.Empty;
