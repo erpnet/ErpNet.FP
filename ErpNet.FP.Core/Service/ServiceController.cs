@@ -23,7 +23,7 @@ namespace ErpNet.FP.Core.Service
 
         TaskInfoResult GetTaskInfo(string taskId);
 
-        bool Detect();
+        bool Detect(bool forceAutoDetect = false);
 
         bool IsReady { get; }
 
@@ -84,7 +84,7 @@ namespace ErpNet.FP.Core.Service
             this.ServerId = configOptions.ServerId;
         }
 
-        public bool Detect()
+        public bool Detect(bool forceAutoDetect = false)
         {
             lock (taskSyncLock)
             {
@@ -94,7 +94,7 @@ namespace ErpNet.FP.Core.Service
 
                     // Autodetecting
                     var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
-                    if (configOptions.AutoDetect)
+                    if (forceAutoDetect || configOptions.AutoDetect)
                     {
                         System.Diagnostics.Trace.WriteLine("Autodetecting local printers...");
                         var printers = Provider.DetectAvailablePrinters();
@@ -137,7 +137,7 @@ namespace ErpNet.FP.Core.Service
                         }
                     }
 
-                    configOptions.AutoDetect = Printers.Count == 0;
+                    // configOptions.AutoDetect = Printers.Count == 0;
 
                     WriteOptions();
 

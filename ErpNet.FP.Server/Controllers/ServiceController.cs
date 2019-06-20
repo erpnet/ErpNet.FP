@@ -37,7 +37,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet("detect")]
         public ActionResult Detect()
         {
-            if (context.Detect())
+            if (context.Detect(true))
             {
                 return StatusCode(StatusCodes.Status200OK);
             }
