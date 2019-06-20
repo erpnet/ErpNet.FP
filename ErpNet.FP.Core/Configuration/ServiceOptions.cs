@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Configuration
 {
     public class PrinterConfig
     {
         public string Uri { get; set; } = string.Empty;
+    }
+
+    public class PrinterConfigWithId : PrinterConfig
+    {
+        public string Id { get; set; } = string.Empty;
     }
 
     public class ServiceOptions

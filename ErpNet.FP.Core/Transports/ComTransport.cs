@@ -93,7 +93,9 @@ namespace ErpNet.FP.Core.Transports
                     Array.Copy(buffer, result, task.Result);
                     return result;
                 }
-                throw new TimeoutException($"timeout occured while reading from com port '{serialPort.PortName}'");
+                var errorMessage = $"Timeout occured while reading from com port '{serialPort.PortName}'";
+                System.Diagnostics.Trace.WriteLine(errorMessage);
+                throw new TimeoutException(errorMessage);
             }
 
             /// <summary>
@@ -122,7 +124,9 @@ namespace ErpNet.FP.Core.Transports
                     }
                     else
                     {
-                        throw new TimeoutException($"timeout occured while writing to com port '{serialPort.PortName}'");
+                        var errorMessage = $"Timeout occured while writing to com port '{serialPort.PortName}'";
+                        System.Diagnostics.Trace.WriteLine(errorMessage);
+                        throw new TimeoutException(errorMessage);
                     }
                 }
             }

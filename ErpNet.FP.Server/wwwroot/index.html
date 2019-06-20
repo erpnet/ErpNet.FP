@@ -4,16 +4,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="file/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="file/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="file/index.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="index.css">
     <title>ErpNet.FP Admin Page</title>
 </head>
 
 <body>
     <header>
         <a href="/" class="logo">
-            <img style="height: 24px;" src="file/ErpNet.FP.thumb.png" />&nbsp;ErpNet.FP
+            <img style="height: 24px;" src="ErpNet.FP.thumb.png" />&nbsp;ErpNet.FP
             <small id="Version"></small>
         </a>
     </header>
@@ -33,13 +33,32 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>Configured Printers<button class="small primary" onclick="addPrinter()">Add printer...</button></legend>
+            <legend>
+                Configured Printers
+                <label for="NewPrinterModal" class="button small primary" style="font-weight: normal;">
+                    Add printer...
+                </label>
+            </legend>
+            <input type="checkbox" id="NewPrinterModal" class="modal">
+            <div>
+                <div class="card">
+                    <label for="NewPrinterModal" class="modal-close"></label>
+                    <h3 class="section">New printer configuration</h3>
+                    <div class="input-group vertical">
+                        <label>Printer's Id:</label>
+                        <input id="NewPrinterId" value="" />
+                        <label>Printer's Uri:</label>
+                        <input id="NewPrinterUri" value="" />
+                        <button class="small primary" onclick="configurePrinter()">Detect and add the printer...</button>
+                    </div>
+                </div>
+            </div>
             <div id="ConfiguredPrintersList" class="collapse">
                 <div class="spinner primary"></div>Loading...
             </div>
         </fieldset>
     </div>
-    <script src="file/index.js"></script>
+    <script src="index.js"></script>
     <script>
         var availablePrinters = {}
 
@@ -82,7 +101,7 @@
         function showConfiguredPrinters() {
             $.ajax({
                 type: 'GET',
-                url: '/configured',
+                url: '/service/printers',
                 data: {},
                 dataType: 'json',
                 timeout: 0,
@@ -95,7 +114,7 @@
                         var section =
                             '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
                             '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark><small></label>' +
-                            '<div class="input-group vertical"><input id="' + printerId + '" value="' + printer.uri + '" /><div><button class="small primary">Detect again</button><button class="small secondary">Delete</button></div></div>'
+                            '<div class="input-group vertical"><input id="' + printerId + '" value="' + printer.uri + '" /><div><button class="small secondary" onclick="deletePrinter(\'' + printer.uri + '\')">Delete printer</button></div></div>'
                         this.append(section)
                     }
                     var printersCount = Object.keys(data).length
@@ -111,7 +130,7 @@
         function getServerVariables() {
             $.ajax({
                 type: 'GET',
-                url: '/vars',
+                url: '/service/vars',
                 data: {},
                 dataType: 'json',
                 timeout: 0,
@@ -131,7 +150,7 @@
             $('#ConfiguredPrintersList').html('<div class="spinner primary"></div>Loading...')
             $.ajax({
                 type: 'GET',
-                url: '/detect',
+                url: '/service/detect',
                 data: {},
                 timeout: 0,
                 success: function (data) {
@@ -150,8 +169,43 @@
             showAvailablePrinters()
         }
 
-        function addPrinter() {
-            alert('Not implemented.')
+        function configurePrinter() {
+            $.ajax({
+                type: 'POST',
+                url: '/service/printers/add',
+                data: JSON.stringify({
+                    "id": $("#NewPrinterId").val(),
+                    "uri": $("#NewPrinterUri").val()
+                }),
+                contentType: 'application/json',
+                dataType: 'json',
+                timeout: 0,
+                success: function (data) {
+                    detectAvailablePrinters()
+                },
+                error: function (xhr, type) {
+                    showToastMessage("Cannot configure the new printer.")
+                }
+            })
+        }
+
+        function deletePrinter(printerUri) {
+            $.ajax({
+                type: 'POST',
+                url: '/service/printers/delete',
+                data: JSON.stringify({
+                    "id": printerUri
+                }),
+                contentType: 'application/json',
+                dataType: 'json',
+                timeout: 0,
+                success: function (data) {
+                    detectAvailablePrinters()
+                },
+                error: function (xhr, type) {
+                    showToastMessage("Cannot delete the printer.")
+                }
+            })
         }
 
         function showToastMessage(msg) {
@@ -166,7 +220,7 @@
         })
     </script>
 
-    <footer class="responsive-padding">
+    <footer class="responsive-padd`ing">
         <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">&nbsp;Source</a> •
         <a target="_blank" href="https://documenter.getpostman.com/view/6751288/S1EJYMg5?version=latest">Examples</a> •
         <a target="_blank" href="https://sourceforge.net/projects/erpnet-fp/files/">Download</a><br />

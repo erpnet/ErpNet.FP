@@ -28,6 +28,10 @@ namespace ErpNet.FP.Core.Service
         bool IsReady { get; }
 
         string ServerId { get; }
+
+        bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
+
+        bool DeletePrinter(PrinterConfigWithId printerConfigWithId);
     }
 
     public abstract class ServiceControllerContext : IServiceController
@@ -43,7 +47,13 @@ namespace ErpNet.FP.Core.Service
         public Provider.Provider Provider { get; protected set; } = new Provider.Provider();
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter>();
-        public Dictionary<string, PrinterConfig> ConfiguredPrinters { get; private set; } = new Dictionary<string, PrinterConfig>();
+        public Dictionary<string, PrinterConfig> ConfiguredPrinters
+        {
+            get
+            {
+                return configOptions.Printers;
+            }
+        }
         public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string>();
         public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
         public bool IsReady { get => isReady; set => isReady = value; }
@@ -98,7 +108,6 @@ namespace ErpNet.FP.Core.Service
                     System.Diagnostics.Trace.WriteLine("Detecting configured printers...");
                     if (configOptions.Printers != null)
                     {
-                        ConfiguredPrinters = configOptions.Printers;
                         foreach (var printerSetting in configOptions.Printers)
                         {
                             string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
@@ -261,6 +270,35 @@ namespace ErpNet.FP.Core.Service
             System.Diagnostics.Trace.WriteLine($"Found {printerID}: {printer.DeviceInfo.Uri}");
         }
 
+        public bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId)
+        {
+            if (String.IsNullOrEmpty(printerConfigWithId.Id) || String.IsNullOrEmpty(printerConfigWithId.Uri))
+            {
+                return false;
+            }
+            lock (taskSyncLock)
+            {
+                ConfiguredPrinters.Add(printerConfigWithId.Id, printerConfigWithId);
+                WriteOptions();
+                return true;
+            }
+        }
 
+        public bool DeletePrinter(PrinterConfigWithId printerConfigWithId)
+        {
+            if (String.IsNullOrEmpty(printerConfigWithId.Id))
+            {
+                return false;
+            }
+            lock (taskSyncLock)
+            {
+                if (!ConfiguredPrinters.Remove(printerConfigWithId.Id))
+                {
+                    return false;
+                }
+                WriteOptions();
+                return true;
+            }
+        }
     }
 }

@@ -74,11 +74,13 @@ namespace ErpNet.FP.Core.Transports
             protected NetworkStream ConnectAndGetStream()
             {
                 var task = tcpClient.ConnectAsync(HostName, Port);
-                if (task.Wait(tcpClient.ReceiveTimeout))
+                if (task.Wait(Math.Max(200, tcpClient.ReceiveTimeout)))
                 {
                     return tcpClient.GetStream();
                 }
-                throw new TimeoutException($"timeout occured while connecting to {HostName}:{Port}");
+                var errorMessage = $"Timeout occured while connecting to {HostName}:{Port}";
+                System.Diagnostics.Trace.WriteLine(errorMessage);
+                throw new TimeoutException(errorMessage);
             }
 
             public void Dispose()
@@ -102,7 +104,9 @@ namespace ErpNet.FP.Core.Transports
                     Array.Copy(buffer, result, task.Result);
                     return result;
                 }
-                throw new TimeoutException($"timeout occured while reading from tcp connection {HostName}:{Port}");
+                var errorMessage = $"Timeout occured while reading from tcp connection {HostName}:{Port}";
+                System.Diagnostics.Trace.WriteLine(errorMessage);
+                throw new TimeoutException(errorMessage);
             }
 
             /// <summary>
@@ -130,7 +134,9 @@ namespace ErpNet.FP.Core.Transports
                     }
                     else
                     {
-                        throw new TimeoutException($"timeout occured while writing to com port '{HostName}:{Port}'");
+                        var errorMessage = $"Timeout occured while writing to tcp connection {HostName}:{Port}";
+                        System.Diagnostics.Trace.WriteLine(errorMessage);
+                        throw new TimeoutException(errorMessage);
                     }
                 }
             }

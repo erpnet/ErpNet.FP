@@ -9,35 +9,21 @@ using System.Reflection;
 
 namespace ErpNet.FP.Server.Controllers
 {
-    // Default controller, example: //host/[controller]
-    [Route("")]
+    // PrintersController, example: //host/service/[controller]
+    [Route("[controller]")]
     [ApiController]
-    public class DefaultController : ControllerBase
+    public class ServiceController : ControllerBase
     {
         private readonly IServiceController context;
         private readonly ServerVariables serverVariables = new ServerVariables();
-        private readonly IDictionary<string, string> AvailableFiles = new Dictionary<string, string>();
 
-        public DefaultController(IServiceController context)
+        public ServiceController(IServiceController context)
         {
             this.context = context;
 
             var assembly = Assembly.GetExecutingAssembly();
             serverVariables.Version = assembly.GetName().Version.ToString();
             serverVariables.ServerId = context.ServerId;
-
-            AvailableFiles.Add("index.css", "text/css");
-            AvailableFiles.Add("index.js", "text/javascript");
-            AvailableFiles.Add("ErpNet.FP.thumb.png", "image/png");
-            AvailableFiles.Add("favicon.ico", "image/x-icon");
-        }
-
-        // GET / 
-        [HttpGet()]
-        public ActionResult<Dictionary<string, DeviceInfo>> Admin()
-        {
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
-            return PhysicalFile(file, "text/html");
         }
 
         // GET vars
@@ -49,7 +35,7 @@ namespace ErpNet.FP.Server.Controllers
 
         // GET detect
         [HttpGet("detect")]
-        public ActionResult<DeviceStatus> Detect()
+        public ActionResult Detect()
         {
             if (context.Detect())
             {
@@ -58,23 +44,37 @@ namespace ErpNet.FP.Server.Controllers
             return StatusCode(StatusCodes.Status423Locked);
         }
 
-        // GET configured
-        [HttpGet("configured")]
+        // GET printers
+        [HttpGet("printers")]
         public ActionResult<Dictionary<string, PrinterConfig>> Configured()
         {
             return context.ConfiguredPrinters;
         }
 
-        // GET file/{id}
-        [HttpGet("file/{id}")]
-        public ActionResult<Dictionary<string, DeviceInfo>> File(string id)
+        // POST printers/add
+        [HttpPost("printers/add")]
+        public ActionResult Configure(
+            [FromBody] PrinterConfigWithId printerConfigWithId
+        )
         {
-            if (AvailableFiles.TryGetValue(id, out string mimeType))
+            if (context.ConfigurePrinter(printerConfigWithId))
             {
-                var file = Path.Combine(Directory.GetCurrentDirectory(), id);
-                return PhysicalFile(file, mimeType);
+                return StatusCode(StatusCodes.Status200OK);
             }
-            return NotFound();
+            return StatusCode(StatusCodes.Status423Locked);
+        }
+
+        // POST printers/delete
+        [HttpPost("printers/delete")]
+        public ActionResult Delete(
+            [FromBody] PrinterConfigWithId printerConfigWithId
+        )
+        {
+            if (context.DeletePrinter(printerConfigWithId))
+            {
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            return StatusCode(StatusCodes.Status423Locked);
         }
     }
 }

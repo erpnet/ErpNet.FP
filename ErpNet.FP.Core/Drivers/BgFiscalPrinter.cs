@@ -151,6 +151,10 @@ namespace ErpNet.FP.Core.Drivers
                 foreach (var payment in receipt.Payments)
                 {
                     row++;
+                    if (payment.Amount <= 0)
+                    {
+                        status.AddError("E403", $"Payment {row}: \"amount\" should be positive number");
+                    }
                     try
                     {
                         GetPaymentTypeText(payment.PaymentType);
