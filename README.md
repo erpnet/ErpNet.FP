@@ -141,13 +141,11 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 ```
 
 # Eager to try? 
-You can list and [download the binaries for ErpNet.FP.Server at sourceforge](https://sourceforge.net/projects/erpnet-fp/files/):
-
+You can list and [download the binaries for ErpNet.FP.Server](https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.2006.1330):
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Win.Manager.exe. It will start and show notification icon in the tray.
-The tray icon contains a menu option - "Show console". It can be used to open a console, showing real-time information about the printing service. 
 Starting the manager also starts the service ErpNet.FP.Server.exe. Stopping the manager stops the service.
 
 * OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - macOS] - You can download and unzip the server in a folder. 
@@ -273,8 +271,8 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[ErpNet.FP.Server.zip - Windows 32 bit]: <https://sourceforge.net/projects/erpnet-fp/files/win-x86.zip/download>
-[ErpNet.FP.Server.zip - Windows 64 bit]: <https://sourceforge.net/projects/erpnet-fp/files/win-x64.zip/download>
-[ErpNet.FP.Server.zip - macOS]: <https://sourceforge.net/projects/erpnet-fp/files/osx-x64.zip/download>
-[ErpNet.FP.Server.zip - Linux x64]: <https://sourceforge.net/projects/erpnet-fp/files/linux-x64.zip/download>
-[ErpNet.FP.Server.zip - Linux Arm]: <https://sourceforge.net/projects/erpnet-fp/files/linux-arm.zip/download>
+[ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.2006.1330/win-x86.zip>
+[ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.2006.1330/win-x64.zip>
+[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.2006.1330/osx-x64.zip>
+[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.2006.1330/linux-x64.zip>
+[ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.2006.1330/linux-arm.zip>
