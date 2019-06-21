@@ -35,7 +35,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 FiscalMemorySerialNumber = commaFields[6],
                 Model = commaFields[0],
                 FirmwareVersion = commaFields[2],
-                Manifacturer = "Eltrade",
+                Manufacturer = "Eltrade",
                 CommentTextMaxLength = 46, // Set by Eltrade protocol
                 ItemTextMaxLength = 30, // Set by Eltrade protocol
                 OperatorPasswordMaxLength = 8 // Set by Eltrade protocol

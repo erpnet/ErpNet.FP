@@ -15,9 +15,9 @@
         /// </summary>
         public string FiscalMemorySerialNumber = string.Empty;
         /// <summary>
-        /// Manifacturer - Company or Trademark of Company that produces the fiscal device
+        /// Manufacturer - Company or Trademark of Company that produces the fiscal device
         /// </summary>
-        public string Manifacturer = string.Empty;
+        public string Manufacturer = string.Empty;
         /// <summary>
         /// Model
         /// </summary>
