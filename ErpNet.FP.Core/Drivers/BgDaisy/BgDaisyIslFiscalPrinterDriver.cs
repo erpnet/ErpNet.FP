@@ -64,7 +64,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 FiscalMemorySerialNumber = commaFields[5],
                 Model = spaceFields[0],
                 FirmwareVersion = spaceFields[1],
-                Manifacturer = "Daisy",
+                Manufacturer = "Daisy",
                 CommentTextMaxLength = int.Parse(commaConstants[9]), // P10 max symbols per comment.
                 ItemTextMaxLength = int.Parse(commaConstants[10]), // P11 max symbols for operator names, item names, department names.
                 OperatorPasswordMaxLength = 6 // Set by Daisy protocol

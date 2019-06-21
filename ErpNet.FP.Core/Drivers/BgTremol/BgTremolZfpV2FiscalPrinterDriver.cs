@@ -42,7 +42,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 FiscalMemorySerialNumber = fields[6],
                 Model = model,
                 FirmwareVersion = fields[4].Trim(),
-                Manifacturer = "Tremol",
+                Manufacturer = "Tremol",
                 CommentTextMaxLength = 30,
                 ItemTextMaxLength = 32,
                 OperatorPasswordMaxLength = 6
