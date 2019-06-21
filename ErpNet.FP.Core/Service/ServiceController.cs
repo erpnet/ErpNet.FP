@@ -240,8 +240,9 @@ namespace ErpNet.FP.Core.Service
 
         public string Enqueue(PrintJob printJob)
         {
-            // TODO: Clear Expired Tasks
+            // CASE: Clearing Expired Tasks?
             // ClearExpiredTasks();
+
             // taskId is RFC7515 Guid
             var taskId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
                 .Substring(0, 22)

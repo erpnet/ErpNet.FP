@@ -12,6 +12,8 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
+            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 
@@ -33,7 +35,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 FiscalMemorySerialNumber = commaFields[6],
                 Model = commaFields[0],
                 FirmwareVersion = commaFields[2],
-                Company = "Eltrade",
+                Manifacturer = "Eltrade",
                 CommentTextMaxLength = 46, // Set by Eltrade protocol
                 ItemTextMaxLength = 30, // Set by Eltrade protocol
                 OperatorPasswordMaxLength = 8 // Set by Eltrade protocol

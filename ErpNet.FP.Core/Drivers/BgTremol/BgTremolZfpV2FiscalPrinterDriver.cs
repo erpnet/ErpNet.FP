@@ -13,6 +13,8 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             var fiscalPrinter = new BgTremolZfpV2FiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
+            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 
@@ -40,7 +42,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
                 FiscalMemorySerialNumber = fields[6],
                 Model = model,
                 FirmwareVersion = fields[4].Trim(),
-                Company = "Tremol",
+                Manifacturer = "Tremol",
                 CommentTextMaxLength = 30,
                 ItemTextMaxLength = 32,
                 OperatorPasswordMaxLength = 6

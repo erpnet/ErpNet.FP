@@ -20,6 +20,8 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 // If there is no InvalidDeviceInfoException get the device info and constants
                 var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
                 fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, rawDeviceConstants);
+                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             }
             catch (InvalidDeviceInfoException e)
             {
@@ -62,7 +64,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 FiscalMemorySerialNumber = commaFields[5],
                 Model = spaceFields[0],
                 FirmwareVersion = spaceFields[1],
-                Company = "Daisy",
+                Manifacturer = "Daisy",
                 CommentTextMaxLength = int.Parse(commaConstants[9]), // P10 max symbols per comment.
                 ItemTextMaxLength = int.Parse(commaConstants[10]), // P11 max symbols for operator names, item names, department names.
                 OperatorPasswordMaxLength = 6 // Set by Daisy protocol

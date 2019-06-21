@@ -106,15 +106,11 @@ namespace ErpNet.FP.Core.Drivers
                 // Validation of "type" : "sale"
                 if (item.Type == ItemType.Sale)
                 {
-                    if (item.PriceModifierValue < 0)
+                    if (item.PriceModifierValue <= 0 && item.PriceModifierType != PriceModifierType.None)
                     {
                         status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
                     }
-                    if (item.PriceModifierValue == 0)
-                    {
-                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number. You can avoid setting priceModifier if you do not want price modification");
-                    }
-                    if (item.PriceModifierType == PriceModifierType.None)
+                    if (item.PriceModifierValue != 0 && item.PriceModifierType == PriceModifierType.None)
                     {
                         status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
                     }

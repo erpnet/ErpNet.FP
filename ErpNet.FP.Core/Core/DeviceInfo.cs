@@ -15,9 +15,9 @@
         /// </summary>
         public string FiscalMemorySerialNumber = string.Empty;
         /// <summary>
-        /// Company that produces the printer
+        /// Manifacturer - Company or Trademark of Company that produces the fiscal device
         /// </summary>
-        public string Company = string.Empty;
+        public string Manifacturer = string.Empty;
         /// <summary>
         /// Model
         /// </summary>
@@ -38,5 +38,9 @@
         /// Maximal operator password length allowed;
         /// </summary>
         public int OperatorPasswordMaxLength;
+        /// <summary>
+        /// Tax Number is Fiscal Subject Identification Number
+        /// </summary>
+        public string TaxIdentificationNumber = string.Empty;
     }
 }

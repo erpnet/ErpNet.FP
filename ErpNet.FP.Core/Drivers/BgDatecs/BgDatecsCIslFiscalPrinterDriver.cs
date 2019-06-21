@@ -12,6 +12,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var fiscalPrinter = new BgDatecsCIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
+            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 
@@ -40,7 +42,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 FiscalMemorySerialNumber = commaFields[5],
                 Model = modelName,
                 FirmwareVersion = commaFields[1],
-                Company = "Datecs",
+                Manifacturer = "Datecs",
                 CommentTextMaxLength = 42, // Set by Datecs protocol
                 ItemTextMaxLength = 22, // Set by Datecs protocol
                 OperatorPasswordMaxLength = 8 // Set by Datecs protocol

@@ -35,6 +35,17 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandOpenFiscalReceipt, header);
         }
 
+        public override (string, DeviceStatus) GetTaxIdentificationNumber()
+        {
+            var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);
+            var commaFields = response.Split(',');
+            if (commaFields.Length == 2)
+            {
+                return (commaFields[0].Trim(), deviceStatus);
+            }
+            return (string.Empty, deviceStatus);
+        }
+
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
             switch (reversalReason)

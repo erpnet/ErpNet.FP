@@ -25,6 +25,17 @@ namespace ErpNet.FP.Core.Drivers.BgIncotex
             return Request(IncotexCommandGetDeviceConstants);
         }
 
+        public override (string, DeviceStatus) GetTaxIdentificationNumber()
+        {
+            var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);
+            var commaFields = response.Split(',');
+            if (commaFields.Length == 2)
+            {
+                return (commaFields[1].Trim(), deviceStatus);
+            }
+            return (string.Empty, deviceStatus);
+        }
+
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
             switch (reversalReason)

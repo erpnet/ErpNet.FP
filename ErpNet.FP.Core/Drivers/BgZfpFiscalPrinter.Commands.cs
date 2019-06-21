@@ -22,6 +22,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandGetDateTime = 0x68,
             CommandSetDateTime = 0x48,
             CommandReadLastReceiptQRCodeData = 0x72,
+            CommandGetTaxIdentificationNumber = 0x61,
             CommandGSCommand = 0x1d;
         protected const byte
             // Protocol: 36 symbols for article's name. 34 symbols are printed on paper.
@@ -33,6 +34,17 @@ namespace ErpNet.FP.Core.Drivers
         {
             var (deviceStatus, _ /* ignore commandStatus */) = ParseResponseAsByteArray(RawRequest(CommandGetStatus, null));
             return ("", ParseStatus(deviceStatus));
+        }
+
+        public virtual (string, DeviceStatus) GetTaxIdentificationNumber()
+        {
+            var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);
+            var commaFields = response.Split(';');
+            if (commaFields.Length > 1)
+            {
+                return (commaFields[0].Trim(), deviceStatus);
+            }
+            return (string.Empty, deviceStatus);
         }
 
         public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()

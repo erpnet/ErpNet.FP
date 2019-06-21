@@ -54,6 +54,17 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
         }
 
+        public override (string, DeviceStatus) GetTaxIdentificationNumber()
+        {
+            var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);
+            var commaFields = response.Split('\t');
+            if (commaFields.Length == 2)
+            {
+                return (commaFields[1].Trim(), deviceStatus);
+            }
+            return (string.Empty, deviceStatus);
+        }
+
         public override (decimal?, DeviceStatus) GetReceiptAmount()
         {
             decimal? receiptAmount = null;

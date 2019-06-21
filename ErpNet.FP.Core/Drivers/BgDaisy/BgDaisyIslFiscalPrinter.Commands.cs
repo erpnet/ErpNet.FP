@@ -1,4 +1,6 @@
-﻿namespace ErpNet.FP.Core.Drivers.BgDaisy
+﻿using System;
+
+namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
@@ -19,6 +21,13 @@
         public (string, DeviceStatus) GetRawDeviceConstants()
         {
             return Request(DaisyCommandGetDeviceConstants);
+        }
+
+
+        public override (string, DeviceStatus) GetTaxIdentificationNumber()
+        {
+            var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);
+            return (response.Trim().Trim(new Char[] { '-' }), deviceStatus);
         }
 
         public override string GetPaymentTypeText(PaymentType paymentType)
