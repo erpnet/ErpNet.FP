@@ -1,4 +1,4 @@
-namespace ErpNet.FP.Core.Drivers
+ï»¿namespace ErpNet.FP.Core.Drivers
 {
     /// <summary>
     /// Fiscal printer using the Zfp implementation of Tremol Bulgaria.
@@ -20,7 +20,7 @@ namespace ErpNet.FP.Core.Drivers
             ("E299", "Fiscal memory failure"),
             ("E408", "Incorrect password"),
             ("E105", "Missing external display"),
-            ("E502", "24hours block – missing Z report"),
+            ("E502", "24hours block â€“ missing Z report"),
             ("E304", "Overheated printer thermal head"),
             ("E305", "Interrupt power supply in fiscal receipt(one time until status is read)"),
             ("E206", "Overflow EJ"),
@@ -186,7 +186,7 @@ namespace ErpNet.FP.Core.Drivers
             38 Fiscal memory failure            
             39 Incorrect password
             3a Missing external display
-            3b 24hours block – missing Z report
+            3b 24hours block â€“ missing Z report
             3c Overheated printer thermal head.
             3d Interrupt power supply in fiscal receipt(one time until status is read)
             3e Overflow EJ

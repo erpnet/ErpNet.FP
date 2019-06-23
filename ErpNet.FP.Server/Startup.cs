@@ -1,4 +1,4 @@
-using ErpNet.FP.Core.Configuration;
+﻿using ErpNet.FP.Core.Configuration;
 using ErpNet.FP.Core.Service;
 using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;

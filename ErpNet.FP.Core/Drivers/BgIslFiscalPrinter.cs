@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers
@@ -23,7 +23,7 @@ namespace ErpNet.FP.Core.Drivers
             else
             {
                 statusEx.AddInfo("Error occured while reading current status");
-                statusEx.AddError("≈409", "Cannot read current date and time");
+                statusEx.AddError("E409", "Cannot read current date and time");
             }
             return statusEx;
         }
@@ -39,21 +39,21 @@ namespace ErpNet.FP.Core.Drivers
             switch (taxGroup)
             {
                 case TaxGroup.TaxGroup1:
-                    return "¿";
+                    return "–ê";
                 case TaxGroup.TaxGroup2:
-                    return "¡";
+                    return "–ë";
                 case TaxGroup.TaxGroup3:
-                    return "¬";
+                    return "–í";
                 case TaxGroup.TaxGroup4:
-                    return "√";
+                    return "–ì";
                 case TaxGroup.TaxGroup5:
-                    return "ƒ";
+                    return "–î";
                 case TaxGroup.TaxGroup6:
-                    return "≈";
+                    return "–ï";
                 case TaxGroup.TaxGroup7:
-                    return "∆";
+                    return "–ñ";
                 case TaxGroup.TaxGroup8:
-                    return "«";
+                    return "–ó";
                 default:
                     throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411");
             }
