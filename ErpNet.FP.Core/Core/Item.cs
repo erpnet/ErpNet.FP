@@ -93,7 +93,8 @@ namespace ErpNet.FP.Core
         /// <value>
         ///   <c>true</c> if this line is comment; otherwise, <c>false</c>.
         /// </value>
-        public bool IsComment {
+        public bool IsComment
+        {
 
             get
             {

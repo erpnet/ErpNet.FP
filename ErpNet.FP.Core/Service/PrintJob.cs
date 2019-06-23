@@ -52,7 +52,7 @@ namespace ErpNet.FP.Core.Service
                             else
                             {
                                 Result = validateStatus;
-                            }                            
+                            }
                         }
                         break;
                     case PrintJobAction.ReversalReceipt:
