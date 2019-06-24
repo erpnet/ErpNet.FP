@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <Content Remove="appsettings.Development.json" />
+    <Content Remove="wwwroot\debug\debug.log" />
+    <Content Remove="wwwroot\debug\debug.log.1.zip" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +58,8 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="appsettings.Development.json" />
+    <None Include="wwwroot\debug\debug.log" />
+    <None Include="wwwroot\debug\debug.log.1.zip" />
   </ItemGroup>
 
   <ItemGroup>

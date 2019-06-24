@@ -263,6 +263,11 @@ namespace ErpNet.FP.Core.Service
             int duplicateNumber = 0;
             while (PrintersInfo.ContainsKey(printerID))
             {
+                if (PrintersInfo[printerID].Uri == printer.DeviceInfo.Uri)
+                {
+                    // Do not add enumeration for duplicated Id and Uri
+                    return;
+                }
                 duplicateNumber++;
                 printerID = $"{baseID}_{duplicateNumber}";
             }

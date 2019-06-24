@@ -81,16 +81,17 @@ namespace ErpNet.FP.Server
 
         public static void Main()
         {
+            var debugLogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug", DebugLogFileName);
             FileStream traceStream;
             try
             {
                 EnsureDebugLogHistory();
-                traceStream = new FileStream(DebugLogFileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+                traceStream = new FileStream(debugLogFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error creating FileStream for trace file \"{0}\":" +
-                    "\r\n{1}", DebugLogFileName, ex.Message);
+                    "\r\n{1}", debugLogFilePath, ex.Message);
                 return;
             }
 
@@ -148,18 +149,19 @@ namespace ErpNet.FP.Server
 
         public static void EnsureDebugLogHistory()
         {
-            if (File.Exists(DebugLogFileName))
+            var debugLogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug", DebugLogFileName);
+            if (File.Exists(debugLogFilePath))
             {
                 for (var i = 9; i > 1; i--)
                 {
-                    if (File.Exists($"{DebugLogFileName}.{i - 1}.zip"))
+                    if (File.Exists($"{debugLogFilePath}.{i - 1}.zip"))
                     {
-                        File.Move($"{DebugLogFileName}.{i - 1}.zip", $"{DebugLogFileName}.{i}.zip", true);
+                        File.Move($"{debugLogFilePath}.{i - 1}.zip", $"{debugLogFilePath}.{i}.zip", true);
                     }
                 }
                 // Zip the file
-                using (var zip = ZipFile.Open($"{DebugLogFileName}.1.zip", ZipArchiveMode.Create))
-                    zip.CreateEntryFromFile(DebugLogFileName, DebugLogFileName);
+                using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
+                    zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
             }
         }
 

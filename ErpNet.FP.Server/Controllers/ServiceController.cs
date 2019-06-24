@@ -49,8 +49,8 @@ namespace ErpNet.FP.Server.Controllers
             return context.ConfiguredPrinters;
         }
 
-        // POST printers/add
-        [HttpPost("printers/add")]
+        // POST printers/configure
+        [HttpPost("printers/configure")]
         public ActionResult Configure(
             [FromBody] PrinterConfigWithId printerConfigWithId
         )

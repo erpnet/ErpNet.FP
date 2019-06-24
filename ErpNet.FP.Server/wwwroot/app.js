@@ -51,8 +51,14 @@ function showConfiguredPrinters() {
                 var ready = (printerId in availablePrinters && availablePrinters[printerId].uri === printer.uri)
                 var section =
                     '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
-                    '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark><small></label>' +
-                    '<div class="input-group vertical"><input id="' + printerId + '" value="' + printer.uri + '" /><div><button class="small secondary" onclick="deletePrinter(\'' + printer.uri + '\')">Delete printer</button></div></div>'
+                    '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark></small></label>' +
+                    '<div class="input-group vertical">'+
+                    '<label for="id-' + printerId + '">Id:</label><input id="id-' + printerId + '" value="'+printerId+'" />'+
+                    '<label for="uri-' + printerId + '">Uri:</label><input id="uri-' + printerId + '" value="' + printer.uri + '" />' +
+                    '<div class="input-group horizontal">' +
+                    '<button class="small primary" onclick="saveSettingsForPrinter(\'' + printerId + '\')">Save settings</button>' +
+                    '<button class="small secondary" onclick="deletePrinter(\'' + printerId + '\', \'' + printer.uri + '\')">Delete printer</button>' +
+                    '</div></div>'
                 this.append(section)
             }
             var printersCount = Object.keys(data).length
@@ -111,7 +117,7 @@ function configurePrinter() {
     $("#NewPrinterModal").prop('checked', false)
     $.ajax({
         type: 'POST',
-        url: '/service/printers/add',
+        url: '/service/printers/configure',
         data: JSON.stringify({
             "id": $("#NewPrinterId").val(),
             "uri": $("#NewPrinterUri").val()
@@ -128,12 +134,13 @@ function configurePrinter() {
     })
 }
 
-function deletePrinter(printerUri) {
+function deletePrinter(printerId, printerUri) {
     $.ajax({
         type: 'POST',
         url: '/service/printers/delete',
         data: JSON.stringify({
-            "id": printerUri
+            "id": printerId,
+            "uri": printerUri
         }),
         contentType: 'application/json',
         dataType: 'json',
@@ -143,6 +150,41 @@ function deletePrinter(printerUri) {
         },
         error: function (xhr, type) {
             showToastMessage("Cannot delete the printer.")
+        }
+    })
+}
+
+function saveSettingsForPrinter(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/service/printers/delete',
+        data: JSON.stringify({
+            "id": printerId
+        }),
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            $.ajax({
+                type: 'POST',
+                url: '/service/printers/configure',
+                data: JSON.stringify({
+                    "id": $("#id-" + printerId).val(),
+                    "uri": $("#uri-" + printerId).val(),
+                }),
+                contentType: 'application/json',
+                dataType: 'json',
+                timeout: 0,
+                success: function (data) {
+                    detectAvailablePrinters()
+                },
+                error: function (xhr, type) {
+                    showToastMessage("Cannot save the changes for the printer.")
+                }
+            })
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot delete the old settings.")
         }
     })
 }
