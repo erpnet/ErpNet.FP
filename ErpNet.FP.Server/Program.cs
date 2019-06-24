@@ -81,7 +81,9 @@ namespace ErpNet.FP.Server
 
         public static void Main()
         {
-            var debugLogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug", DebugLogFileName);
+            var debugLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug");
+            var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
+            Directory.CreateDirectory(debugLogFolder);
             FileStream traceStream;
             try
             {

@@ -14,8 +14,8 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.623.1757</AssemblyVersion>
-    <FileVersion>1.0.623.1757</FileVersion>
+    <AssemblyVersion>1.0.624.2301</AssemblyVersion>
+    <FileVersion>1.0.624.2301</FileVersion>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
@@ -23,6 +23,14 @@
     <Content Remove="appsettings.Development.json" />
     <Content Remove="wwwroot\debug\debug.log" />
     <Content Remove="wwwroot\debug\debug.log.1.zip" />
+    <Content Remove="wwwroot\debug\debug.log.2.zip" />
+    <Content Remove="wwwroot\debug\debug.log.3.zip" />
+    <Content Remove="wwwroot\debug\debug.log.4.zip" />
+    <Content Remove="wwwroot\debug\debug.log.5.zip" />
+    <Content Remove="wwwroot\debug\debug.log.6.zip" />
+    <Content Remove="wwwroot\debug\debug.log.7.zip" />
+    <Content Remove="wwwroot\debug\debug.log.8.zip" />
+    <Content Remove="wwwroot\debug\debug.log.9.zip" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +68,14 @@
     <None Include="appsettings.Development.json" />
     <None Include="wwwroot\debug\debug.log" />
     <None Include="wwwroot\debug\debug.log.1.zip" />
+    <None Include="wwwroot\debug\debug.log.2.zip" />
+    <None Include="wwwroot\debug\debug.log.3.zip" />
+    <None Include="wwwroot\debug\debug.log.4.zip" />
+    <None Include="wwwroot\debug\debug.log.5.zip" />
+    <None Include="wwwroot\debug\debug.log.6.zip" />
+    <None Include="wwwroot\debug\debug.log.7.zip" />
+    <None Include="wwwroot\debug\debug.log.8.zip" />
+    <None Include="wwwroot\debug\debug.log.9.zip" />
   </ItemGroup>
 
   <ItemGroup>
