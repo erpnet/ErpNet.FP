@@ -265,7 +265,7 @@ Contributing
 ----
 See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
 
-[Postman collection]: <https://documenter.getpostman.com/view/6751288/S1EJYMg5>
+[Postman collection]: <https://documenter.getpostman.com/view/6751288/S1a358Uz>
 [LICENSE.txt]: <LICENSE.txt>
 [Contributing]: <CONTRIBUTING.md>
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
