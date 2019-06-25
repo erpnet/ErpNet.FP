@@ -31,8 +31,8 @@ POST /printers/dt517985/receipt
 			"taxGroup": 2
 		},
 		{
-			"text": "Additional comment to the cheese...",
-			"type": "comment"
+			"type": "comment",
+			"text": "Additional comment to the cheese..."
 		},
 		{
 			"text": "Milk",
