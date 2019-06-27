@@ -258,8 +258,7 @@ You also need .Net Core 3.0 Preview 5 SDK (May 6th 2019).
 ----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
 
-Contributing
-----
+# Contributing
 See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
 
 [Postman collection]: <https://documenter.getpostman.com/view/6751288/S1a358Uz>
