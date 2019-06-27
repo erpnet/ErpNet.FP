@@ -32,13 +32,11 @@ The printer Uri is currently used only internally in the http server. Still, it 
 
 # Available requests
 
-**
-*Remark:* For all requests from now on, we will assume that, we are doing them on the local computer at: http://localhost:8001
-Of course, this is not a must, and you can substitute the address and port, with yours, as well as the protocol 
-that can be both http and https.
-**
+*Remark:* For all requests from now on, we will assume that, we are doing them on the local computer at: **http://localhost:8001**
 
-## *GET* Get The List Of Printers
+Of course, this is not a must, and you can substitute the address and port, with yours, as well as the protocol, it can be both http and https.
+
+## **GET** Get The List Of Printers
 This request gets the list of available printers. The available printers are either auto-detected, or created by a config file.
 
 ### Example request:
@@ -129,9 +127,9 @@ http://localhost:8001/printers
 }
 ```
 
-## *GET* Get Printer Info
+## **GET** Get Printer Info
 This request gets the information about the auto-detected or config-setup properties of one specific printer. 
-In this example *dy448967* is the printerId of a specific printer.
+In this example **dy448967** is the printerId of a specific printer.
 
 ### Example request:
 ```
@@ -153,9 +151,9 @@ http://localhost:8001/printers/dy448967
 }
 ```
 
-## *GET* Get Printer Status
+## **GET** Get Printer Status
 Contacts the specific fiscal printer and returns its current status and current printer date and time.
-In this example *dt525860* is the printerId of a specific printer.
+In this example **dt525860** is the printerId of a specific printer.
 
 ### Example request:
 ```
@@ -182,10 +180,10 @@ http://localhost:8001/printers/dt525860
 }
 ```
 
-## *POST * Print Fiscal Receipt
+## **POST** Print Fiscal Receipt
 Prints a fiscal receipt to the specific printer. The receipt is printed as a whole transaction. 
 If there is any error while printing, the printing is aborted and the receipt is voided.
-In this example *dt279013* is the printerId of a specific printer.
+In this example **dt279013** is the printerId of a specific printer.
 
 ### Example request:
 ```
@@ -194,23 +192,19 @@ http://localhost:8001/printers/dt279013/receipt
 
 ### JSON format of the input
 Root elements
-* "uniqueSaleNumber" - the government required unique sales number.
-* "items" - the line items, such as fiscal line items and comments.
-* "payments" - list of payments.
+* **"uniqueSaleNumber"** - the government required unique sales number.
+* **"items"** - the line items, such as fiscal line items and comments.
+* **"payments"** - list of payments.
 
 ### "items"
 Contains one entry for each fiscal or comment line items. The line items are printed in the same order on the fiscal printer. Comment lines can be intermixed with the fiscal line items.
-The fiscal line *items* can have the following fields set:
-* "text" - the name of the product
-* "quantiy" - the quantity sold
-* "unitPrice" - the unit price, not including any discounts/markups
-* "taxGroup" - the government regulated tax group. An integer from 1 to 8.
-* "priceModifierType" - can be one of:
-* "discount-percent"
-* "discount-amount"
-* "surcharge-percent"
-* "surcharge-amount"
-* "priceModifierValue" - modifies the total amount of the line according to the setting of "priceModifierType"
+The fiscal line **items** can have the following fields set:
+* **"text"** - the name of the product
+* **"quantiy"** - the quantity sold
+* **"unitPrice"** - the unit price, not including any discounts/markups
+* **"taxGroup"** - the government regulated tax group. An integer from 1 to 8.
+* **"priceModifierValue"** - modifies the total amount of the line according to the setting of "priceModifierType"
+* **"priceModifierType"** - can be one of: **"discount-percent"**, **"discount-amount"**, **"surcharge-percent"**, **"surcharge-amount"**
 
 ### "payments"
 This section contains the payment types and amounts for each payment.
@@ -218,15 +212,11 @@ This section contains the payment types and amounts for each payment.
 NOTE: Multiple different payment types and amounts are allowed for one receipt.
 
 Each element in this section can have the following properties:
-* "paymentType" - one of:
-- "cash" - this is the default payment type if no payment type is specified.
-- "card" - payment by debit or credit card.
-- "check"
-- "packaging"
-- "reserved1" - these are reserved payment types. Often used by government regulations for specific purposes (health reimbursment, etc.).
-- "reserved2"
-* "amount" - the amount paid. If this is skipped, the full amount of the receipt is allocated to this payment.
+* **"amount"** - the amount paid. If this is skipped, the full amount of the receipt is allocated to this payment.
 NOTE: If the whole section "payments" is not provided, then the whole amount of the receipt is printed as cash payment.
+
+* **"paymentType"** - one of: **"cash"** - this is the default payment type if no payment type is specified, **"card"** - payment by debit or credit card, **"check"**, **"packaging"**, **"reserved1"**- often used by government regulations for specific purposes (health reimbursment, etc.), **"reserved2"**
+
 
 ### Example request body:
 ```json
@@ -333,8 +323,8 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
 * "status" - The return format includes various messages, which are categorized as "statuses" (just normal messages), "warnings" and "errors". The messages can include some returned by the printer hardware or messages generated by the printing library.
 * "status"."ok" - The "ok" field contains "true" or "false" to allow easy differentiation between successful or unsuccessful printing operation.
 * "info" - This section contains information about the printed fiscal receipt:
-- "receiptNumber" - the printer internal consecutive number of the fiscal receipt.
-- "receiptDateTime" - the date and time when the receipt was printed, according to the printer internal date and time.
-- "receiptAmount" - the fiscal amount, as recorded by the fiscal printer.
-- "fiscalMemorySerialNumber" - the serial number of the fiscal memory module, recorded in the moment of the printing.
+"receiptNumber" - the printer internal consecutive number of the fiscal receipt,
+"receiptDateTime" - the date and time when the receipt was printed, according to the printer internal date and time, 
+"receiptAmount" - the fiscal amount, as recorded by the fiscal printer, 
+"fiscalMemorySerialNumber" - the serial number of the fiscal memory module, recorded in the moment of the printing.
 * "messages" - List of fiscal device or library response messages with "type", "text" and "code".
