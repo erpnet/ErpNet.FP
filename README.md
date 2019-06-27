@@ -271,4 +271,4 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.627.1617/osx-x64.zip>
 [ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.627.1617/linux-x64.zip>
 [ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.627.1617/linux-arm.zip>
-[download the binaries for ErpNet.FP.Server](https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.627.1617)
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.627.1617>
