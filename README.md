@@ -160,7 +160,7 @@ For convenience, create a systemd service config file, get more info how to do i
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 
 * Linux-Arm 64 bit - [ErpNet.FP.Server.zip - Linux Arm] - You can download and unzip the server. 
-This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+.
+This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
@@ -201,7 +201,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 - bg.dy.isl.com://COM3
 - bg.dt.x.isl.com://COM21
 - bg.zk.zfp.http://fp5.mycompany.com
-- bg.dt.p.isl.tcp://fp2000.myoffice.bg:4999
+- bg.dt.p.isl.tcp://192.168.1.77:9100
 - etc.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
@@ -231,14 +231,14 @@ If you want your device to be supported, please contact us, and we will try our 
 ## Tested on
 - Datecs DP-25, firmware: 263453 08Nov18 131, protocol: bg.dt.c.isl.com
 - Datecs WP-50, firmware: 261403 08Nov18 1050, protocol: bg.dt.c.isl.com
-- Datecs FP-2000, firmware: 1.00BG 23NOV18 1000, protocol: bg.dt.p.isl.com
-- Datecs FP-700X, firmware: 266207 29Jan19 1634, protocol: bg.dt.x.isl.com
+- Datecs FP-2000, firmware: 1.00BG 23NOV18 1000, protocols: bg.dt.p.isl.com, bg.dt.p.isl.tcp
+- Datecs FP-700X, firmware: 266207 29Jan19 1634, protocols: bg.dt.x.isl.com, bg.dt.x.isl.tcp
 - Daisy CompactM, firmware: ONL-4.01BG, protocol: bg.dy.isl.com
 - Daisy CompactM, firmware: ONL01-4.01BG, protocol: bg.dy.isl.com
 - Eltrade A1, firmware: KL5101.1811.0.3 15Nov18 15:49, protocol: bg.ed.isl.com
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
-- Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl
+- Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl.com
 
 ## Supported protocols and devices
 * bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
