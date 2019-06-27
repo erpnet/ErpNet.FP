@@ -21,35 +21,33 @@ POST /printers/dt517985/receipt
 
 ```json
 {
-	"uniqueSaleNumber": "DT279013-DD01-0000001",
-	"items" : 
-	[
-		{
-			"text": "Cheese",
-			"quantity": 1,
-			"unitPrice": 12,
-			"taxGroup": 2
-		},
-		{
-			"type": "comment",
-			"text": "Additional comment to the cheese..."
-		},
-		{
-			"text": "Milk",
-			"quantity": 2,
-			"unitPrice": 10,
-			"taxGroup": 2,
-			"priceModifierValue": 10,
-			"priceModifierType": "discount-percent"
-		}
-	],
-	"payments": 
-	[
-		{
-			"amount": 30,
-			"paymentType": "cash"
-		}
-	]
+  "uniqueSaleNumber": "DT279013-DD01-0000001",
+  "items": [
+    {
+      "text": "Cheese",
+      "quantity": 1,
+      "unitPrice": 12,
+      "taxGroup": 2
+    },
+    {
+      "type": "comment",
+      "text": "Additional comment to the cheese..."
+    },
+    {
+      "text": "Milk",
+      "quantity": 2,
+      "unitPrice": 10,
+      "taxGroup": 2,
+      "priceModifierValue": 10,
+      "priceModifierType": "discount-percent"
+    }
+  ],
+  "payments": [
+    {
+      "amount": 30,
+      "paymentType": "cash"
+    }
+  ]
 }
 ```
 ## For More Information
@@ -76,66 +74,66 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 ### Example Return JSON (No Problems) after printing receipt:
 ```json
 {
-	"ok": "true",
-	"messages": [
-		{
-			"type": "info",
-			"text": "Serial number and number of FM are set"
-		},
-		{
-			"type": "info",
-			"text": "FM is formatted"
-		}
-	],
-	"receiptNumber": "0000085",
-	"receiptDateTime": "2019-05-17T13:55:18",
-	"receiptAmount": 30,
-	"fiscalMemorySerialNumber": "02517985"
+  "ok": "true",
+  "messages": [
+    {
+      "type": "info",
+      "text": "Serial number and number of FM are set"
+    },
+    {
+      "type": "info",
+      "text": "FM is formatted"
+    }
+  ],
+  "receiptNumber": "0000085",
+  "receiptDateTime": "2019-05-17T13:55:18",
+  "receiptAmount": 30,
+  "fiscalMemorySerialNumber": "02517985"
 }
 ```
 
 ### Example Return JSON (Warning) while getting the status:
 ```json
 {
-	"ok": "true",
-	"messages": [
-		{ 
-			"type": "warning",
-			"code": "W201",
-			"text": "The fiscal memory almost full"
-		},
-		{
-			"type": "info",
-			"text": "Serial number and number of FM are set"
-		},
-		{
-			"type": "info",
-			"text": "FM is formatted"
-		}
-	],
-	"deviceDateTime": "2019-05-10T15:50:00"
+  "ok": "true",
+  "messages": [
+    {
+      "type": "warning",
+      "code": "W201",
+      "text": "The fiscal memory almost full"
+    },
+    {
+      "type": "info",
+      "text": "Serial number and number of FM are set"
+    },
+    {
+      "type": "info",
+      "text": "FM is formatted"
+    }
+  ],
+  "deviceDateTime": "2019-05-10T15:50:00"
 }
 ```
 
 ### Example Return JSON (Error):
 ```json
 {
-	"ok": "false",
-	"messages": [
-		{ 
-			"type": "error",
-			"code": "E201",
-			"text": "The fiscal memory is full"
-		},
-		{
-			"type": "info",
-			"text": "Serial number and number of FM are set"
-		},
-		{
-			"type": "info",
-			"text": "FM is formatted"
-		}
-	]
+  "ok": "false",
+  "messages": [
+    {
+      "type": "error",
+      "code": "E201",
+      "text": "The fiscal memory is full"
+    },
+    {
+      "type": "info",
+      "text": "Serial number and number of FM are set"
+    },
+    {
+      "type": "info",
+      "text": "FM is formatted"
+    }
+  ]
 }
 ```
 
