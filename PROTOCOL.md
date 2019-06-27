@@ -2,6 +2,28 @@
 The print server accepts documents for printing, using JSON based protocol. 
 For example, this would print the specified receipt to dt517985, which is the printerId of one of the detected printers, listed with GET /printers (see below for printerId explanation):
 
+# Contents
+
+## Concepts
+* [Printer Id](#printer-id)
+* [Printer Uri](#printer-uri)
+
+## Available Requests
+* **GET** [Get The List Of Printers](#get-get-the-list-of-printers)
+* **GET**[Get Printer Info](#get-get-printer-info)
+* **GET**[Get Printer Status](#get-get-printer-status)
+* **POST** [Print Fiscal Receipt](#post-print-fiscal-receipt)
+* **POST**[Print Fiscal Receipt With Operator Credentials](#post-print-fiscal-receipt-with-operator-credentials)
+* **POST**[Print Fiscal Receipt (Async)](#post-print-fiscal-receipt-async)
+* **GET**[Get Async Task Information](#get-get-async-task-information)
+* **POST**[Print Reversal Receipt](#post-print-reversal-receipt)
+* **POST**[Print Deposit Money Receipt](#post-print-deposit-money-receipt)
+* **POST**[Print Withdraw Money Receipt](#post-print-withdraw-money-receipt)
+* **POST**[Print X Report](#post-print-x-report)
+* **POST**[Print Z Report](#post-print-z-report)
+* **POST**[Set Printer Date And Time](#post-set-printer-date-and-time)
+
+
 # Concepts
 
 ## Printer Id
