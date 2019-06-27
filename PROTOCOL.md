@@ -484,9 +484,11 @@ Deposits the amount
 http://localhost:8001/printers/dt517985/deposit
 ```
 ### Example request body:
+```json
 {
 	"amount": 12.34
 }
+```
 
 ### Response
 The response is standard status response.
@@ -499,9 +501,11 @@ Withdraws the amount
 http://localhost:8001/printers/dt517985/withdraw
 ```
 ### Example request body:
+```json
 {
 	"amount": 12.34
 }
+```
 
 ### Response
 The response is standard status response.
@@ -538,9 +542,11 @@ http://localhost:8001/printers/zk126720/datetime
 ```
 
 ### Example request body:
+```json
 {
 	"deviceDateTime": "2019-05-31T18:06:00"
 }
+```
 
 ### Response
 The response is standard status response.
