@@ -14,8 +14,8 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.625.1700</AssemblyVersion>
-    <FileVersion>1.0.625.1700</FileVersion>
+    <AssemblyVersion>1.0.627.1617</AssemblyVersion>
+    <FileVersion>1.0.627.1617</FileVersion>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
@@ -34,21 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="debug.log.1.zip" />
-    <None Remove="debug.log.2.zip" />
-    <None Remove="debug.log.3.zip" />
-    <None Remove="debug.log.4.zip" />
-    <None Remove="debug.log.5.zip" />
-    <None Remove="debug.log.6.zip" />
-    <None Remove="debug.log.7.zip" />
-    <None Remove="debug.log.8.zip" />
-    <None Remove="debug.log.9.zip" />
     <None Remove="ErpNet.FP.ico" />
     <None Remove="ErpNet.FP.thumb.png" />
-    <None Remove="favicon.ico" />
-    <None Remove="index.css" />
-    <None Remove="index.html" />
-    <None Remove="index.js" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@ using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -39,7 +40,17 @@ namespace ErpNet.FP.Server
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            // Set up custom content types - associating file extension to MIME type
+            var customContentProvider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            customContentProvider.Mappings[".log"] = "text/plain";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                ContentTypeProvider = customContentProvider
+            });
 
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {

@@ -251,8 +251,9 @@ If you want your device to be supported, please contact us, and we will try our 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
 # Source Code
-To compile and run the source code, you need Visual Studio 2019, version 16.2 Preview 1 (May 21st 2019) or newer.
-You also need .Net Core 3.0 Preview 5 SDK (May 6th 2019).
+To compile and run the source code, you will need .Net Core 3.0 Preview 6 SDK.
+As IDE for Windows, you can use Visual Studio 2019, version 16.2 Preview 2 or newer. 
+For macOS, you can use Visual Studio for Mac 8.2 Preview.
 
 # License
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]

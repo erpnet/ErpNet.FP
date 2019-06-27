@@ -88,7 +88,7 @@ namespace ErpNet.FP.Server
             try
             {
                 EnsureDebugLogHistory();
-                traceStream = new FileStream(debugLogFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+                traceStream = new FileStream(debugLogFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             }
             catch (Exception ex)
             {
