@@ -53,8 +53,7 @@ POST /printers/dt517985/receipt
 }
 ```
 ## For More Information
-For more information, see the full documentation of the protocol in postman examples:
-- [Postman collection] of examples
+For more information, see the [full documentation of the protocol](https://github.com/erpnet/ErpNet.FP/blob/master/PROTOCOL.md).
 
 ## Response - Interpreting The Results
 The most important result is the "ok" field. It contains "true" when the POST operation was successful, otherwise - "false".
