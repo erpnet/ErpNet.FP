@@ -1,6 +1,5 @@
 # The ErpNet.FP JSON Protocol
-The print server accepts documents for printing, using JSON based protocol. 
-For example, this would print the specified receipt to dt517985, which is the printerId of one of the detected printers, listed with GET /printers (see below for printerId explanation):
+The print server accepts documents for printing, using JSON based protocol, which is the subject of this document.
 
 # Contents
 
