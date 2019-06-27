@@ -255,7 +255,6 @@ To compile and run the source code, you need Visual Studio 2019, version 16.2 Pr
 You also need .Net Core 3.0 Preview 5 SDK (May 6th 2019).
 
 # License
-----
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
 
 # Contributing
