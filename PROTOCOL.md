@@ -69,84 +69,83 @@ http://localhost:8001/printers
 ### Example response:
 ```json
 {
-	"dt525860": 
-	{
-	"uri": "bg.dt.x.isl.com://COM21",
-	"serialNumber": "DT525860",
-	"fiscalMemorySerialNumber": "02525860",
-	"company": "Datecs",
-	"model": "FP-700X",
-	"firmwareVersion": "266207 29Jan19 1634",
-	"itemTextMaxLength": 22,
-	"commentTextMaxLength": 42,
-	"operatorPasswordMaxLength": 8
-	},
-	"dt517985": {
-	"uri": "bg.dt.c.isl.com://COM11",
-	"serialNumber": "DT517985",
-	"fiscalMemorySerialNumber": "02517985",
-	"company": "Datecs",
-	"model": "DP-25",
-	"firmwareVersion": "263453 08Nov18 1312",
-	"itemTextMaxLength": 22,
-	"commentTextMaxLength": 42,
-	"operatorPasswordMaxLength": 8
-	},
-	"zk126720": {
-	"uri": "bg.zk.zfp.com://COM22",
-	"serialNumber": "ZK126720",
-	"fiscalMemorySerialNumber": "50163145",
-	"company": "Tremol",
-	"model": "M20",
-	"firmwareVersion": "Ver. 1.01 TRA20 C.S. 2541",
-	"itemTextMaxLength": 32,
-	"commentTextMaxLength": 30,
-	"operatorPasswordMaxLength": 6
-	},
-	"dt279013": {
-	"uri": "bg.dt.p.isl.com://COM15",
-	"serialNumber": "DT279013",
-	"fiscalMemorySerialNumber": "02279013",
-	"company": "Datecs",
-	"model": "FP-2000",
-	"firmwareVersion": "1.00BG 23NOV18 1000",
-	"itemTextMaxLength": 22,
-	"commentTextMaxLength": 42,
-	"operatorPasswordMaxLength": 8
-	},
-	"office1": {
-	"uri": "bg.dt.p.isl.tcp://10.10.1.77:9100",
-	"serialNumber": "DT279013",
-	"fiscalMemorySerialNumber": "02279013",
-	"company": "Datecs",
-	"model": "FP-2000",
-	"firmwareVersion": "1.00BG 23NOV18 1000",
-	"itemTextMaxLength": 22,
-	"commentTextMaxLength": 42,
-	"operatorPasswordMaxLength": 8
-	},
-	"ed311662": {
-	"uri": "bg.ed.isl.com://COM20",
-	"serialNumber": "ED311662",
-	"fiscalMemorySerialNumber": "44311662",
-	"company": "Eltrade",
-	"model": "A1",
-	"firmwareVersion": "KL5101.1811.0.3 15Nov18 15:49",
-	"itemTextMaxLength": 30,
-	"commentTextMaxLength": 46,
-	"operatorPasswordMaxLength": 8
-	},
-	"dy448967": {
-	"uri": "bg.dy.isl.com://COM7",
-	"serialNumber": "DY448967",
-	"fiscalMemorySerialNumber": "36607003",
-	"company": "Daisy",
-	"model": "CompactM",
-	"firmwareVersion": "ONL-4.01BG",
-	"itemTextMaxLength": 20,
-	"commentTextMaxLength": 28,
-	"operatorPasswordMaxLength": 6
-	}
+  "dt525860": {
+    "uri": "bg.dt.x.isl.com://COM21",
+    "serialNumber": "DT525860",
+    "fiscalMemorySerialNumber": "02525860",
+    "company": "Datecs",
+    "model": "FP-700X",
+    "firmwareVersion": "266207 29Jan19 1634",
+    "itemTextMaxLength": 22,
+    "commentTextMaxLength": 42,
+    "operatorPasswordMaxLength": 8
+  },
+  "dt517985": {
+    "uri": "bg.dt.c.isl.com://COM11",
+    "serialNumber": "DT517985",
+    "fiscalMemorySerialNumber": "02517985",
+    "company": "Datecs",
+    "model": "DP-25",
+    "firmwareVersion": "263453 08Nov18 1312",
+    "itemTextMaxLength": 22,
+    "commentTextMaxLength": 42,
+    "operatorPasswordMaxLength": 8
+  },
+  "zk126720": {
+    "uri": "bg.zk.zfp.com://COM22",
+    "serialNumber": "ZK126720",
+    "fiscalMemorySerialNumber": "50163145",
+    "company": "Tremol",
+    "model": "M20",
+    "firmwareVersion": "Ver. 1.01 TRA20 C.S. 2541",
+    "itemTextMaxLength": 32,
+    "commentTextMaxLength": 30,
+    "operatorPasswordMaxLength": 6
+  },
+  "dt279013": {
+    "uri": "bg.dt.p.isl.com://COM15",
+    "serialNumber": "DT279013",
+    "fiscalMemorySerialNumber": "02279013",
+    "company": "Datecs",
+    "model": "FP-2000",
+    "firmwareVersion": "1.00BG 23NOV18 1000",
+    "itemTextMaxLength": 22,
+    "commentTextMaxLength": 42,
+    "operatorPasswordMaxLength": 8
+  },
+  "office1": {
+    "uri": "bg.dt.p.isl.tcp://10.10.1.77:9100",
+    "serialNumber": "DT279013",
+    "fiscalMemorySerialNumber": "02279013",
+    "company": "Datecs",
+    "model": "FP-2000",
+    "firmwareVersion": "1.00BG 23NOV18 1000",
+    "itemTextMaxLength": 22,
+    "commentTextMaxLength": 42,
+    "operatorPasswordMaxLength": 8
+  },
+  "ed311662": {
+    "uri": "bg.ed.isl.com://COM20",
+    "serialNumber": "ED311662",
+    "fiscalMemorySerialNumber": "44311662",
+    "company": "Eltrade",
+    "model": "A1",
+    "firmwareVersion": "KL5101.1811.0.3 15Nov18 15:49",
+    "itemTextMaxLength": 30,
+    "commentTextMaxLength": 46,
+    "operatorPasswordMaxLength": 8
+  },
+  "dy448967": {
+    "uri": "bg.dy.isl.com://COM7",
+    "serialNumber": "DY448967",
+    "fiscalMemorySerialNumber": "36607003",
+    "company": "Daisy",
+    "model": "CompactM",
+    "firmwareVersion": "ONL-4.01BG",
+    "itemTextMaxLength": 20,
+    "commentTextMaxLength": 28,
+    "operatorPasswordMaxLength": 6
+  }
 }
 ```
 
