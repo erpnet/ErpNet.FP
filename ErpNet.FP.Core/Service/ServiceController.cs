@@ -116,7 +116,7 @@ namespace ErpNet.FP.Core.Service
                             {
                                 try
                                 {
-                                    var printer = Provider.Connect(printerSetting.Value.Uri, null);
+                                    var printer = Provider.Connect(printerSetting.Value.Uri, false, null);
                                     System.Diagnostics.Trace.WriteLine($"{logString}, OK");
                                     PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
                                     Printers.Add(printerSetting.Key, printer);

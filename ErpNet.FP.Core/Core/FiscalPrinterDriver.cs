@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+#nullable enable
 namespace ErpNet.FP.Core
 {
     /// <summary>
@@ -21,12 +22,14 @@ namespace ErpNet.FP.Core
         /// Throws exception if the connection is not successful.
         /// </summary>
         /// <param name="channel">The transport channel, which should be used to connect the printer.</param>
+        /// <param name="autoDetect">While parsing the raw device info, driver tries to autodetect the protocol compliance.</param>
         /// <param name="options">The options to pass to the driver.</param>
         /// <returns>
         /// New fiscal printer instance.
         /// </returns>
         public abstract IFiscalPrinter Connect(
             IChannel channel,
+            bool autoDetect = true,
             IDictionary<string, string>? options = null);
     }
 }

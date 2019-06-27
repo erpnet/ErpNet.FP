@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
     public class BgDatecsPIslFiscalPrinterDriver : FiscalPrinterDriver
@@ -7,17 +8,17 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected readonly string SerialNumberPrefix = "DT";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.p.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDatecsPIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)
         {
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 6)
@@ -25,17 +26,21 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 6 comma-separated items for '{DriverName}'");
             }
             var serialNumber = commaFields[4];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
-            {
-                throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
-            }
             var modelName = commaFields[0];
-            if (modelName.EndsWith("X") || (
-                !modelName.StartsWith("FP") &&
-                !modelName.StartsWith("FMP") &&
-                !modelName.StartsWith("SK")))
+            if (autoDetect)
             {
-                throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
+                if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix, System.StringComparison.Ordinal))
+                {
+                    throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                }
+
+                if (modelName.EndsWith("X", System.StringComparison.Ordinal) || (
+                    !modelName.StartsWith("FP", System.StringComparison.Ordinal) &&
+                    !modelName.StartsWith("FMP", System.StringComparison.Ordinal) &&
+                    !modelName.StartsWith("SK", System.StringComparison.Ordinal)))
+                {
+                    throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
+                }
             }
             var info = new DeviceInfo
             {

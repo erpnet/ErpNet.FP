@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     public class BgDaisyIslFiscalPrinterDriver : FiscalPrinterDriver
@@ -9,17 +10,17 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             try
             {
                 // Probing
-                ParseDeviceInfo(rawDeviceInfo);
+                ParseDeviceInfo(rawDeviceInfo, autoDetect);
                 // If there is no InvalidDeviceInfoException get the device info and constants
                 var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
-                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, rawDeviceConstants);
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
                 var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
                 fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             }
@@ -30,7 +31,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, string? rawDeviceConstants = null)
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect, string? rawDeviceConstants = null)
         {
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 6)
@@ -38,9 +39,12 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
                 throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 6 comma-separated items for '{DriverName}'");
             }
             var serialNumber = commaFields[4];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
+            if (autoDetect)
             {
-                throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix, System.StringComparison.Ordinal))
+                {
+                    throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                }
             }
             var spaceFields = commaFields[0].Split(' ');
             if (spaceFields.Length != 4)

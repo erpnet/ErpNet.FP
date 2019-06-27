@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+#nullable enable
 namespace ErpNet.FP.Core.Provider
 {
     /// <summary>
@@ -39,28 +40,28 @@ namespace ErpNet.FP.Core.Provider
             var fp = new Dictionary<string, IFiscalPrinter>();
             var transportDrivers = new Dictionary<Transport, List<FiscalPrinterDriver>>();
 
-            foreach (var driverAndTransport in protocols.Values)
+            foreach (var protocol in protocols.Values)
             {
-                if (!transportDrivers.ContainsKey(driverAndTransport.transport))
+                if (!transportDrivers.ContainsKey(protocol.transport))
                 {
-                    transportDrivers[driverAndTransport.transport] = new List<FiscalPrinterDriver>();
+                    transportDrivers[protocol.transport] = new List<FiscalPrinterDriver>();
                 }
-                transportDrivers[driverAndTransport.transport].Add(driverAndTransport.driver);
+                transportDrivers[protocol.transport].Add(protocol.driver);
             }
             foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers)
             {
                 var transport = td.Key;
                 var drivers = td.Value;
-                foreach (var addresDescription in transport.GetAvailableAddresses())
+                foreach (var availableAddress in transport.GetAvailableAddresses())
                 {
                     try
                     {
-                        var channel = transport.OpenChannel(addresDescription.address);
+                        var channel = transport.OpenChannel(availableAddress.address);
                         foreach (var driver in drivers)
                         {
                             try
                             {
-                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{addresDescription.address}... ");
+                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{availableAddress.address}... ");
                                 var p = driver.Connect(channel);
                                 var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
                                 p.DeviceInfo.Uri = uri;
@@ -91,6 +92,7 @@ namespace ErpNet.FP.Core.Provider
                     catch
                     {
                         // Cannot open channel
+                        break;
                     }
                 }
             }
@@ -111,12 +113,13 @@ namespace ErpNet.FP.Core.Provider
         /// </para>
         /// </summary>
         /// <param name="deviceUri">The URI of the fiscal printer device.</param>
+        /// <param name="autoDetect">While parsing the raw device info, driver tries to autodetect the protocol compliance.</param>
         /// <param name="options">Options for the printer.</param>
         /// <returns>
         /// The fiscal printer object.
         /// </returns>
         /// <exception cref="InvalidOperationException">When the printer is not found or the URI is not correctly formatted.</exception>
-        public IFiscalPrinter Connect(string deviceUri, IDictionary<string, string>? options = null)
+        public IFiscalPrinter Connect(string deviceUri, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var match = uriPattern.Match(deviceUri);
             if (!match.Success)
@@ -134,12 +137,12 @@ namespace ErpNet.FP.Core.Provider
             }
             catch
             {
-                throw new InvalidOperationException($"Protocol '{protocol}' not recognized.");
+                throw new InvalidOperationException($"Unknown protocol '{protocol}'.");
             }
 
             var channel = transport.OpenChannel(address);
             var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
-            var p = driver.Connect(channel, options);
+            var p = driver.Connect(channel, autoDetect, options);
             p.DeviceInfo.Uri = uri;
             return p;
         }

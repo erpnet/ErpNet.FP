@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
     public class BgEltradeIslFiscalPrinterDriver : FiscalPrinterDriver
@@ -7,17 +8,17 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected readonly string SerialNumberPrefix = "ED";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo);
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 
-        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo)
+        protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)
         {
             var commaFields = rawDeviceInfo.Split(',');
             if (commaFields.Length != 7)
@@ -25,9 +26,12 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                 throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 7 comma-separated items for '{DriverName}'");
             }
             var serialNumber = commaFields[5];
-            if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix))
+            if (autoDetect)
             {
-                throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix, System.StringComparison.Ordinal))
+                {
+                    throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                }
             }
             var info = new DeviceInfo
             {
