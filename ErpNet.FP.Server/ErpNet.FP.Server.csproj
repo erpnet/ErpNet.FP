@@ -17,6 +17,7 @@
     <AssemblyVersion>1.0.627.1617</AssemblyVersion>
     <FileVersion>1.0.627.1617</FileVersion>
     <Version>1.0.0</Version>
+	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
   </PropertyGroup>
 
   <ItemGroup>
