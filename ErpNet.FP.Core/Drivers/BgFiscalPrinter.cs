@@ -114,10 +114,6 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
                     }
-                    if (item.PriceModifierType == PriceModifierType.DiscountAmount && item.PriceModifierValue >= item.UnitPrice * item.Quantity)
-                    {
-                        status.AddError("E403", $"Item {row}: Discount amount, \"priceModifierValue\" should'nt be bigger than UnitPrice * Quantity");
-                    }
                     if (item.Quantity <= 0)
                     {
                         status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
@@ -133,10 +129,6 @@ namespace ErpNet.FP.Core.Drivers
                     catch (StandardizedStatusMessageException e)
                     {
                         status.AddError(e.Code, e.Message);
-                    }
-                    if (item.UnitPrice <= 0)
-                    {
-                        status.AddError("E403", $"Item {row}: \"unitPrice\" should be positive number");
                     }
                 }
 

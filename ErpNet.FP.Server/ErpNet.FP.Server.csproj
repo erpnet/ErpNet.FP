@@ -14,8 +14,8 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.624.2301</AssemblyVersion>
-    <FileVersion>1.0.624.2301</FileVersion>
+    <AssemblyVersion>1.0.625.1700</AssemblyVersion>
+    <FileVersion>1.0.625.1700</FileVersion>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
@@ -79,7 +79,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview5-19227-01" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview6.19307.2" />
   </ItemGroup>
 
   <ItemGroup>
