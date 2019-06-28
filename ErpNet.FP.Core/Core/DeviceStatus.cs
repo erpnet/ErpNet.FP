@@ -101,6 +101,17 @@ namespace ErpNet.FP.Core
         }
     }
 
+    public class DeviceStatusWithCashAmount : DeviceStatus
+    {
+        public decimal Amount { get; set; }
+
+        public DeviceStatusWithCashAmount(DeviceStatus status) : base()
+        {
+            Ok = status.Ok;
+            Messages = status.Messages;
+        }
+    }
+
     public class DeviceStatusWithReceiptInfo : DeviceStatus
     {
         /// <summary>

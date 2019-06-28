@@ -23,6 +23,7 @@ namespace ErpNet.FP.Core.Drivers
             CommandSetDateTime = 0x48,
             CommandReadLastReceiptQRCodeData = 0x72,
             CommandGetTaxIdentificationNumber = 0x61,
+            CommandReadDailyAvailableAmounts = 0x6E,
             CommandGSCommand = 0x1d;
         protected const byte
             // Protocol: 36 symbols for article's name. 34 symbols are printed on paper.

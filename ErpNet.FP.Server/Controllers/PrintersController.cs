@@ -60,6 +60,28 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
+        // GET {id}/cash
+        [HttpGet("{id}/cash")]
+        public async Task<IActionResult> Cash(
+            string id,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            {
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.Cash,
+                    null,
+                    asyncTimeout);
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
         // GET taskinfo
         [HttpGet("taskinfo")]
         public ActionResult<TaskInfoResult> TaskInfo([FromQuery]string id)

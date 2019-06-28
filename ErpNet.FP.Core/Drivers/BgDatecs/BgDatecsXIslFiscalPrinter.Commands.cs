@@ -54,6 +54,31 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
         }
 
+        public override DeviceStatusWithCashAmount Cash()
+        {
+            var (response, status) = Request(CommandMoneyTransfer, "0\t0\t");
+            var statusEx = new DeviceStatusWithCashAmount(status);
+            var tabFields = response.Split('\t');
+            if (tabFields.Length != 5)
+            {
+                statusEx.AddInfo("Error occured while reading cash amount");
+                statusEx.AddError("E409", "Invalid format");
+            }
+            else
+            {
+                var amountString = tabFields[1];
+                if (amountString.Contains("."))
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture) / 100m;
+                }
+            }
+            return statusEx;
+        }
+
         public override (string, DeviceStatus) GetTaxIdentificationNumber()
         {
             var (response, deviceStatus) = Request(CommandGetTaxIdentificationNumber);

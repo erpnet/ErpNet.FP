@@ -17,6 +17,11 @@
         DeviceStatusWithDateTime CheckStatus();
 
         /// <summary>
+        /// Gets the amount of cash available
+        /// </summary>
+        DeviceStatusWithCashAmount Cash();
+
+        /// <summary>
         /// Sets the device date and time
         /// </summary>
         DeviceStatus SetDateTime(CurrentDateTime currentDateTime);

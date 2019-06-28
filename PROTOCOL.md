@@ -21,6 +21,7 @@ The print server accepts documents for printing, using JSON based protocol, whic
 * `POST` [Print X Report](#post-print-x-report)
 * `POST` [Print Z Report](#post-print-z-report)
 * `POST` [Set Printer Date And Time](#post-set-printer-date-and-time)
+* `GET` [Get Current Cash Amount](#get-current-cash-amount)
 
 ---
 
@@ -548,3 +549,30 @@ http://localhost:8001/printers/zk126720/datetime
 
 ### Response
 The response is standard status response.
+
+
+## `GET` Get Current Cash Amount
+Gets the current cash amount registered in the fiscal printer. 
+
+### Example request uri:
+```
+http://localhost:8001/printers/dt525860/cash
+```
+
+### Example response 
+```json
+{
+    "amount": 12.34,
+    "ok": true,
+    "messages": [
+        {
+            "type": "info",
+            "text": "Serial number and number of FM are set"
+        },
+        {
+            "type": "info",
+            "text": "FM is formatted"
+        }
+    ]
+}
+```

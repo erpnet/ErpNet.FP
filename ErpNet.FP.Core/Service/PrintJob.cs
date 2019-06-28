@@ -5,6 +5,7 @@ namespace ErpNet.FP.Core.Service
     public enum PrintJobAction
     {
         None,
+        Cash,
         Receipt,
         ReversalReceipt,
         Withdraw,
@@ -39,6 +40,9 @@ namespace ErpNet.FP.Core.Service
             {
                 switch (Action)
                 {
+                    case PrintJobAction.Cash:
+                        Result = Printer.Cash();
+                        break;
                     case PrintJobAction.Receipt:
                         if (Document != null)
                         {

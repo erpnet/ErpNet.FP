@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -255,6 +256,31 @@ namespace ErpNet.FP.Core.Drivers
                 deviceStatus.AddError(e.Code, e.Message);
                 return deviceStatus;
             }
+        }
+
+        public override DeviceStatusWithCashAmount Cash()
+        {
+            var (response, status) = Request(CommandReadDailyAvailableAmounts, "0");
+            var statusEx = new DeviceStatusWithCashAmount(status);
+            var commaFields = response.Split(';');
+            if (commaFields.Length < 3)
+            {
+                statusEx.AddInfo("Error occured while reading cash amount");
+                statusEx.AddError("E409", "Invalid format");
+            }
+            else
+            {
+                var amountString = commaFields[1].Trim();
+                if (amountString.Contains("."))
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture) / 100m;
+                }
+            }
+            return statusEx;
         }
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)

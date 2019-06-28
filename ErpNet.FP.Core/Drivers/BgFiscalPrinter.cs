@@ -55,6 +55,8 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatusWithDateTime CheckStatus();
 
+        public abstract DeviceStatusWithCashAmount Cash();
+
         public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
         public abstract DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -24,6 +25,31 @@ namespace ErpNet.FP.Core.Drivers
             {
                 statusEx.AddInfo("Error occured while reading current status");
                 statusEx.AddError("E409", "Cannot read current date and time");
+            }
+            return statusEx;
+        }
+
+        public override DeviceStatusWithCashAmount Cash()
+        {
+            var (response, status) = Request(CommandMoneyTransfer, "0");
+            var statusEx = new DeviceStatusWithCashAmount(status);
+            var commaFields = response.Split(',');
+            if (commaFields.Length != 4)
+            {
+                statusEx.AddInfo("Error occured while reading cash amount");
+                statusEx.AddError("E409", "Invalid format");
+            }
+            else
+            {
+                var amountString = commaFields[1];
+                if (amountString.Contains("."))
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    statusEx.Amount = decimal.Parse(amountString, CultureInfo.InvariantCulture) / 100m;
+                }
             }
             return statusEx;
         }
