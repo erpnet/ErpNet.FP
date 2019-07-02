@@ -182,7 +182,7 @@ In this example **dt525860** is the printerId of a specific printer.
 
 ### Example request:
 ```
-http://localhost:8001/printers/dt525860
+http://localhost:8001/printers/dt525860/status
 ```
 
 ### Example response:
