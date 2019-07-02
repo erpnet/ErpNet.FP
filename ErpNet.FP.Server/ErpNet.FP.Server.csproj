@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <PublishTrimmed>true</PublishTrimmed>
     <AssemblyName>ErpNet.FP.Server</AssemblyName>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
@@ -19,6 +20,10 @@
     <Version>1.0.0</Version>
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <TrimmerRootAssembly Include="System.IO.FileSystem" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="appsettings.Development.json" />
