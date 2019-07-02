@@ -38,6 +38,11 @@ namespace ErpNet.FP.Core.Transports
             }
         }
 
+        public override void Drop(IChannel channel)
+        {
+            ((Channel)channel).Close();
+        }
+
         /// <summary>
         /// Returns all serial com port addresses, which can have connected fiscal printers. 
         /// The returned pairs are in the form <see cref="KeyValuePair{Address, Description}"/>.
@@ -54,7 +59,7 @@ namespace ErpNet.FP.Core.Transports
 
         public class Channel : IChannel
         {
-            private readonly SerialPort serialPort;
+            internal readonly SerialPort serialPort;
 
             public string Descriptor => serialPort.PortName;
 
@@ -76,7 +81,18 @@ namespace ErpNet.FP.Core.Transports
 
             public void Dispose()
             {
-                serialPort.Close();
+                Close();
+            }
+
+            public void Close()
+            {
+                if (serialPort.IsOpen)
+                {
+                    serialPort.DiscardInBuffer();
+                    serialPort.DiscardOutBuffer();
+                    serialPort.Close();
+                    serialPort.Dispose();
+                }
             }
 
             /// <summary>

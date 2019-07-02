@@ -31,5 +31,12 @@ namespace ErpNet.FP.Core
         /// <param name="address">The address.</param>
         /// <returns>The newly created channel.</returns>
         public abstract IChannel OpenChannel(string address);
+
+        /// <summary>
+        /// Drops a channel. If it is needed, then also closes it. 
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        /// <returns>The newly created channel.</returns>
+        public abstract void Drop(IChannel channel);
     }
 }

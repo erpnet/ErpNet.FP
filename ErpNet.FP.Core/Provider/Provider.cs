@@ -57,6 +57,7 @@ namespace ErpNet.FP.Core.Provider
                     try
                     {
                         var channel = transport.OpenChannel(availableAddress.address);
+                        var unknownDeviceConnectedToChannel = true;
                         foreach (var driver in drivers)
                         {
                             try
@@ -67,26 +68,31 @@ namespace ErpNet.FP.Core.Provider
                                 p.DeviceInfo.Uri = uri;
                                 fp.Add(uri, p);
                                 // We found our driver, so do not test more
+                                unknownDeviceConnectedToChannel = false;
                                 break;
                             }
-                            catch (InvalidResponseException)
+                            catch (Exception ex)
                             {
-                                // Autodetect probe not passed for this channel. No response.
+                                if (!(
+                                    ex is InvalidResponseException // Autodetect probe not passed for this channel. No response.
+                                    ||
+                                    ex is InvalidDeviceInfoException // Autodetect probe not passed for this channel. Invalid device.
+                                    ||
+                                    ex is TimeoutException // Timeout occured while connecting. Skip this transport address.
+                                ))
+                                { 
+                                    // Cannot connect to opened channel, possible incompatibility
+                                    Console.WriteLine($"*** {ex.Message}");
+                                    Console.WriteLine(ex.StackTrace);
+                                }
+
                             }
-                            catch (InvalidDeviceInfoException)
-                            {
-                                // Autodetect probe not passed for this channel. Invalid device.
-                            }
-                            catch (TimeoutException)
-                            {
-                                // Timeout occured while connecting. Skip this transport address.
-                            }
-                            catch (Exception e)
-                            {
-                                // Cannot connect to opened channel, possible incompatibility
-                                Console.WriteLine($"*** {e.Message}");
-                                Console.WriteLine(e.StackTrace);
-                            }
+                        }
+                        if (unknownDeviceConnectedToChannel)
+                        {
+                            // There is an unknown or undetected device connected 
+                            // on this channel. So drop the unknown device's channel
+                            transport.Drop(channel);
                         }
                     }
                     catch

@@ -14,8 +14,8 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.628.1543</AssemblyVersion>
-    <FileVersion>1.0.628.1543</FileVersion>
+    <AssemblyVersion>1.0.702.2022</AssemblyVersion>
+    <FileVersion>1.0.702.2022</FileVersion>
     <Version>1.0.0</Version>
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
   </PropertyGroup>

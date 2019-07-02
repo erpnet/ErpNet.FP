@@ -44,6 +44,11 @@ namespace ErpNet.FP.Core.Transports
             }
         }
 
+        public override void Drop(IChannel channel)
+        {
+            ((Channel)channel).Close();
+        }
+
         protected (string, int) ParseAddress(string address)
         {
             var parts = address.Split(':');
@@ -84,6 +89,11 @@ namespace ErpNet.FP.Core.Transports
             }
 
             public void Dispose()
+            {
+                Close();
+            }
+
+            public void Close()
             {
                 tcpClient.Close();
                 // Closing the tcpClient instance does not close the network stream.

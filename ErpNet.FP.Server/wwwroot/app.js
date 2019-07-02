@@ -13,14 +13,23 @@ function showAvailablePrinters() {
             this.html("")
             for (var printerId in data) {
                 var printer = data[printerId]
-                var characteristics = ""
+                var url = window.location.protocol +
+                    "//" +
+                    window.location.host +
+                    "/printers/" +
+                    printerId
+                var characteristics =
+                    '<li><strong><a target="blank_" href="'+url+'">' + url + '</a></strong></li>'
                 for (var characteristic in printer) {
-                    characteristics += '<li>' + characteristic + ': <strong>' + printer[characteristic] + '</strong></li>'
+                    characteristics += '<li>' + characteristic + ':&nbsp;<strong>' + printer[characteristic] + '</strong></li>'
                 }
                 var section =
                     '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
                     '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
-                    '<div><ul>' + characteristics + '</ul></div>'
+                    '<div><ul>' + characteristics + '</ul>' +
+                    '<button class="small primary" onclick="printZReport(\'' + printerId + '\')">Print Z-Report</button>' +
+                    '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">Print X-Report</button>' +
+                    '</div>'
                 this.append(section)
             }
             var printersCount = Object.keys(data).length
@@ -185,6 +194,40 @@ function saveSettingsForPrinter(printerId) {
         },
         error: function (xhr, type) {
             showToastMessage("Cannot delete the old settings.")
+        }
+    })
+}
+
+function printZReport(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/zreport',
+        data: {},
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            showToastMessage("The Z-Report printing is done.")
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot print the Z-Report.")
+        }
+    })
+}
+
+function printXReport(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/xreport',
+        data: {},
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            showToastMessage("The X-Report printing is done.")
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot print the X-Report.")
         }
     })
 }

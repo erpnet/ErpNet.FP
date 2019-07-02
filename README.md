@@ -141,9 +141,9 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 You can list and [download the binaries for ErpNet.FP.Server]:
 
 * Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
-Download and unzip the file in a folder. Inside the folder you will find two executable files: ErpNet.FP.Win.Manager.exe and ErpNet.FP.Server.exe.
-To start the printing service, run ErpNet.FP.Win.Manager.exe. It will start and show notification icon in the tray.
-Starting the manager also starts the service ErpNet.FP.Server.exe. Stopping the manager stops the service.
+Download and unzip the file in a folder. Inside the folder you will find executable file: ErpNet.FP.Server.exe.
+To start the printing service, run ErpNet.FP.Server.exe. 
+In the default configuration, you can browse the Admin page at http://localhost:8001.
 
 * OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - macOS] - You can download and unzip the server in a folder. 
 Inside the unzipped folder, run it from console/terminal with:
@@ -267,9 +267,9 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.628.1543/win-x86.zip>
-[ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.628.1543/win-x64.zip>
-[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.628.1543/osx-x64.zip>
-[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.628.1543/linux-x64.zip>
-[ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.628.1543/linux-arm.zip>
-[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.628.1543>
+[ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.702.2022/win-x86.zip>
+[ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.702.2022/win-x64.zip>
+[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.702.2022/osx-x64.zip>
+[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.702.2022/linux-x64.zip>
+[ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.702.2022/linux-arm.zip>
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.702.2022>
