@@ -2,6 +2,7 @@
 using ErpNet.FP.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -13,11 +14,13 @@ namespace ErpNet.FP.Server.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IServiceController context;
+        private readonly IHostApplicationLifetime serviceLifeTime;
         private readonly ServerVariables serverVariables = new ServerVariables();
 
-        public ServiceController(IServiceController context)
+        public ServiceController(IServiceController context, IHostApplicationLifetime serviceLifeTime)
         {
             this.context = context;
+            this.serviceLifeTime = serviceLifeTime;
 
             var assembly = Assembly.GetExecutingAssembly();
             serverVariables.Version = assembly.GetName().Version.ToString();
@@ -40,6 +43,21 @@ namespace ErpNet.FP.Server.Controllers
                 return StatusCode(StatusCodes.Status200OK);
             }
             return StatusCode(StatusCodes.Status423Locked);
+        }
+
+        // GET stop
+        [HttpGet("stop")]
+        public ActionResult Stop()
+        {
+            try
+            {
+                serviceLifeTime.StopApplication();
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
         }
 
         // GET printers

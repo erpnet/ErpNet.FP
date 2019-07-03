@@ -82,8 +82,7 @@ namespace ErpNet.FP.Core.Provider
                                 ))
                                 { 
                                     // Cannot connect to opened channel, possible incompatibility
-                                    Console.WriteLine($"*** {ex.Message}");
-                                    Console.WriteLine(ex.StackTrace);
+                                    Console.WriteLine($"Cannot connect to opened channel: {ex.Message}");
                                 }
 
                             }
@@ -95,10 +94,10 @@ namespace ErpNet.FP.Core.Provider
                             transport.Drop(channel);
                         }
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         // Cannot open channel
-                        break;
+                        Console.WriteLine($"Cannot open channel: {ex.Message}");
                     }
                 }
             }

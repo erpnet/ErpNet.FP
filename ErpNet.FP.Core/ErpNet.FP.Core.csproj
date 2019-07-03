@@ -8,7 +8,12 @@
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
     <NullableReferenceTypes>true</NullableReferenceTypes>
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
+
+    <ItemGroup>
+        <TrimmerRootAssembly Include="System.IO.FileSystem" />
+    </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />

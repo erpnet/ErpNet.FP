@@ -47,7 +47,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                         operatorId,
                     uniqueSaleNumber
                 });
-            return Request(CommandOpenFiscalReceipt, header);
+            return Request(EltradeCommandOpenFiscalReceipt, header);
         }
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
@@ -88,7 +88,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
                     receiptNumber,
                     receiptDateTime.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)
                 });
-            return Request(CommandOpenFiscalReceipt, header);
+            return Request(EltradeCommandOpenFiscalReceipt, header);
         }
 
         // 6 Bytes x 8 bits

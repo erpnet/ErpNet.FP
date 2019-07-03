@@ -72,89 +72,98 @@ http://localhost:8001/printers
 ### Example response:
 ```json
 {
-  "dt525860": {
-    "uri": "bg.dt.x.isl.com://COM21",
-    "serialNumber": "DT525860",
-    "fiscalMemorySerialNumber": "02525860",
-    "company": "Datecs",
-    "model": "FP-700X",
-    "firmwareVersion": "266207 29Jan19 1634",
-    "itemTextMaxLength": 22,
-    "commentTextMaxLength": 42,
-    "operatorPasswordMaxLength": 8
-  },
-  "dt517985": {
-    "uri": "bg.dt.c.isl.com://COM11",
-    "serialNumber": "DT517985",
-    "fiscalMemorySerialNumber": "02517985",
-    "company": "Datecs",
-    "model": "DP-25",
-    "firmwareVersion": "263453 08Nov18 1312",
-    "itemTextMaxLength": 22,
-    "commentTextMaxLength": 42,
-    "operatorPasswordMaxLength": 8
-  },
-  "zk126720": {
-    "uri": "bg.zk.zfp.com://COM22",
-    "serialNumber": "ZK126720",
-    "fiscalMemorySerialNumber": "50163145",
-    "company": "Tremol",
-    "model": "M20",
-    "firmwareVersion": "Ver. 1.01 TRA20 C.S. 2541",
-    "itemTextMaxLength": 32,
-    "commentTextMaxLength": 30,
-    "operatorPasswordMaxLength": 6
-  },
-  "dt279013": {
-    "uri": "bg.dt.p.isl.com://COM15",
-    "serialNumber": "DT279013",
-    "fiscalMemorySerialNumber": "02279013",
-    "company": "Datecs",
-    "model": "FP-2000",
-    "firmwareVersion": "1.00BG 23NOV18 1000",
-    "itemTextMaxLength": 22,
-    "commentTextMaxLength": 42,
-    "operatorPasswordMaxLength": 8
-  },
-  "office1": {
-    "uri": "bg.dt.p.isl.tcp://10.10.1.77:9100",
-    "serialNumber": "DT279013",
-    "fiscalMemorySerialNumber": "02279013",
-    "company": "Datecs",
-    "model": "FP-2000",
-    "firmwareVersion": "1.00BG 23NOV18 1000",
-    "itemTextMaxLength": 22,
-    "commentTextMaxLength": 42,
-    "operatorPasswordMaxLength": 8
-  },
-  "ed311662": {
-    "uri": "bg.ed.isl.com://COM20",
-    "serialNumber": "ED311662",
-    "fiscalMemorySerialNumber": "44311662",
-    "company": "Eltrade",
-    "model": "A1",
-    "firmwareVersion": "KL5101.1811.0.3 15Nov18 15:49",
-    "itemTextMaxLength": 30,
-    "commentTextMaxLength": 46,
-    "operatorPasswordMaxLength": 8
-  },
-  "dy448967": {
-    "uri": "bg.dy.isl.com://COM7",
-    "serialNumber": "DY448967",
-    "fiscalMemorySerialNumber": "36607003",
-    "company": "Daisy",
-    "model": "CompactM",
-    "firmwareVersion": "ONL-4.01BG",
-    "itemTextMaxLength": 20,
-    "commentTextMaxLength": 28,
-    "operatorPasswordMaxLength": 6
-  }
+    "dt525860": {
+        "uri": "bg.dt.x.isl.com://COM21",
+        "serialNumber": "DT525860",
+        "fiscalMemorySerialNumber": "02525860",
+        "manufacturer": "Datecs",
+        "model": "FP-700X",
+        "firmwareVersion": "266207 29Jan19 1634",
+        "itemTextMaxLength": 22,
+        "commentTextMaxLength": 42,
+        "operatorPasswordMaxLength": 8,
+        "taxIdentificationNumber": ""
+    },
+    "zk970105": {
+        "uri": "bg.zk.v2.zfp.com://COM23",
+        "serialNumber": "ZK970105",
+        "fiscalMemorySerialNumber": "50970105",
+        "manufacturer": "Tremol",
+        "model": "FP01-KL-V2",
+        "firmwareVersion": "\ufffd.\ufffd.99C4",
+        "itemTextMaxLength": 32,
+        "commentTextMaxLength": 30,
+        "operatorPasswordMaxLength": 6,
+        "taxIdentificationNumber": "104593442"
+    },
+    "dt517985": {
+        "uri": "bg.dt.c.isl.com://COM11",
+        "serialNumber": "DT517985",
+        "fiscalMemorySerialNumber": "02517985",
+        "manufacturer": "Datecs",
+        "model": "DP-25",
+        "firmwareVersion": "263453 08Nov18 1312",
+        "itemTextMaxLength": 22,
+        "commentTextMaxLength": 42,
+        "operatorPasswordMaxLength": 8,
+        "taxIdentificationNumber": "000713391"
+    },
+    "dt279013": {
+        "uri": "bg.dt.p.isl.com://COM15",
+        "serialNumber": "DT279013",
+        "fiscalMemorySerialNumber": "02279013",
+        "manufacturer": "Datecs",
+        "model": "FP-2000",
+        "firmwareVersion": "1.00BG 23NOV18 1000",
+        "itemTextMaxLength": 22,
+        "commentTextMaxLength": 42,
+        "operatorPasswordMaxLength": 8,
+        "taxIdentificationNumber": "000713391"
+    },
+    "in015013": {
+        "uri": "bg.in.isl.com://COM24",
+        "serialNumber": "IN015013",
+        "fiscalMemorySerialNumber": "54015013",
+        "manufacturer": "Incotex",
+        "model": "EFD",
+        "firmwareVersion": "2.11 Jan 22 2019 14:00",
+        "itemTextMaxLength": 38,
+        "commentTextMaxLength": 34,
+        "operatorPasswordMaxLength": 6,
+        "taxIdentificationNumber": "131405396"
+    },
+    "dy448967": {
+        "uri": "bg.dy.isl.com://COM7",
+        "serialNumber": "DY448967",
+        "fiscalMemorySerialNumber": "36607003",
+        "manufacturer": "Daisy",
+        "model": "CompactM",
+        "firmwareVersion": "ONL-4.01BG",
+        "itemTextMaxLength": 20,
+        "commentTextMaxLength": 28,
+        "operatorPasswordMaxLength": 6,
+        "taxIdentificationNumber": ""
+    },
+    "zk126720": {
+        "uri": "bg.zk.zfp.com://COM22",
+        "serialNumber": "ZK126720",
+        "fiscalMemorySerialNumber": "50163145",
+        "manufacturer": "Tremol",
+        "model": "M20",
+        "firmwareVersion": "Ver. 1.01 TRA20 C.S. 2541",
+        "itemTextMaxLength": 32,
+        "commentTextMaxLength": 30,
+        "operatorPasswordMaxLength": 6,
+        "taxIdentificationNumber": ""
+    }
 }
 ```
 
 ## `GET` Get Printer Info
 This request gets the information about the auto-detected or config-setup properties of one specific printer. 
-In this example **dy448967** is the printerId of a specific printer.
+In this example **dy448967** is the printerId of a specific printer. 
+"taxIdentificationNumber" is the Fiscal Subject Identification Number of the registered owner of the fiscal device.
+If "taxIdentificationNumber" is empty string, means that it is not set.
 
 ### Example request:
 ```
@@ -164,15 +173,16 @@ http://localhost:8001/printers/dy448967
 ### Example response:
 ```json
 {
-  "uri": "bg.dy.isl.com://COM7",
-  "serialNumber": "DY448967",
-  "fiscalMemorySerialNumber": "36607003",
-  "company": "Daisy",
-  "model": "CompactM",
-  "firmwareVersion": "ONL-4.01BG",
-  "itemTextMaxLength": 20,
-  "commentTextMaxLength": 28,
-  "operatorPasswordMaxLength": 6
+    "uri": "bg.dy.isl.com://COM7",
+    "serialNumber": "DY448967",
+    "fiscalMemorySerialNumber": "36607003",
+    "manufacturer": "Daisy",
+    "model": "CompactM",
+    "firmwareVersion": "ONL-4.01BG",
+    "itemTextMaxLength": 20,
+    "commentTextMaxLength": 28,
+    "operatorPasswordMaxLength": 6,
+    "taxIdentificationNumber": ""
 }
 ```
 

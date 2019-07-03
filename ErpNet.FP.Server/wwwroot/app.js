@@ -80,6 +80,23 @@ function showConfiguredPrinters() {
     })
 }
 
+function stopService() {
+    $.ajax({
+        type: 'GET',
+        url: '/service/stop',
+        data: {},
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            showToastMessage("Service stopped.")
+            $("#Container").html("<h3>The service is stopped.</h3>")
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot stop the service.")
+        }
+    })
+}
+
 function getServerVariables() {
     $.ajax({
         type: 'GET',

@@ -17,7 +17,7 @@
             <small id="Version"></small>
         </a>
     </header>
-    <div class="container responsive-padding">
+    <div id="Container" class="container responsive-padding">
         <div class="row">
             <div class="col-sm-8 input-group horizontal">
                 <button id="DetectButton" class="primary" onclick="detectAvailablePrinters()">
@@ -57,7 +57,16 @@
                 <div class="spinner primary"></div>Loading...
             </div>
         </fieldset>
-    </div>
+
+        <div class="row">
+            <div class="col-sm-8 input-group horizontal">
+                <button id="StopService" class="secondary" onclick="stopService()">
+                    <span class="icon-alert inverse"></span>
+                    &nbsp;Stop the Service!
+                </button>
+            </div>
+        </div>
+    </div>    
 
     <footer class="responsive-padding">
         <a target="_blank" href="https://github.com/erpnet/ErpNet.FP">&nbsp;Source</a> •
