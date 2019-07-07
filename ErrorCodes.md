@@ -21,6 +21,7 @@ However, the "originalCode" might not always be available or it might change due
 * **E105** RAM failure
 * **E106** External display required
 * **E107** Invalid device response
+* **E108** Device busy with another connection
 * **E199** Device general error
 
 ## Fiscal memory and journal error codes

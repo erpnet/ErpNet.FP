@@ -17,6 +17,16 @@ namespace ErpNet.FP.Core.Drivers
             MarkerETX = 0x0A;
         protected const byte
             PingAnswerDeviceReady = 0x40,
+            PingAnswerDeviceBusy = 0x41,
+            PingAnswerErrorOutOfPaper = 0x42,
+            PingAnswerErrorOutOfPaperAndBusy = 0x43,
+            PingAnswerErrorOverheated = 0x44,
+            PingAnswerErrorOverheatedAndBusy = 0x45,
+            PingAnswerErrorMissingExternalDisplay = 0x48,
+            PingAnswerErrorMissingExternalDisplayAndBusy = 0x49,
+            PingAnswerErrorWaitingForPassword = 0x50,
+            PingAnswerErrorBusyWithAnotherConnection = 0x60,
+            PingAnswerErrorWrongPassword = 0x70,
             SpecialCommandPing = 0x09;
         protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
         protected const byte MaxWriteRetries = 3;
@@ -94,10 +104,31 @@ namespace ErpNet.FP.Core.Drivers
                 }
                 var b = buffer[0];
                 System.Diagnostics.Trace.Write($"{b:X} ");
-                if (b == PingAnswerDeviceReady)
+                switch (b)
                 {
-                    System.Diagnostics.Trace.WriteLine("Ready!");
-                    return;
+                    case PingAnswerDeviceReady:
+                        System.Diagnostics.Trace.WriteLine("Ready!");
+                        return;
+                    case PingAnswerDeviceBusy:
+                        continue; // continue with the loop waiting to be Ready
+                    case PingAnswerErrorOutOfPaper:
+                    case PingAnswerErrorOutOfPaperAndBusy:
+                        throw new StandardizedStatusMessageException("Out of paper", "E301");
+                    case PingAnswerErrorOverheated:
+                    case PingAnswerErrorOverheatedAndBusy:
+                        throw new StandardizedStatusMessageException("Overheated", "E304");
+                    case PingAnswerErrorMissingExternalDisplay:
+                    case PingAnswerErrorMissingExternalDisplayAndBusy:
+                        throw new StandardizedStatusMessageException("External display is required and missing", "E106");
+                    case PingAnswerErrorBusyWithAnotherConnection:
+                        throw new StandardizedStatusMessageException("Busy with another connection", "E108");
+                    case PingAnswerErrorWaitingForPassword:
+                        throw new StandardizedStatusMessageException("Waiting for password", "E408");
+                    case PingAnswerErrorWrongPassword:
+                        throw new StandardizedStatusMessageException("Wrong password", "E408");
+                    default:
+                        // Unknown ping reply code. Break the loop.
+                        throw new InvalidResponseException("invalid ping reply code");
                 }
             }
             throw new TimeoutException("ping timeout");
@@ -265,6 +296,12 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
                     return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
+                }
+                catch (StandardizedStatusMessageException e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError(e.Code, e.Message);
+                    return (string.Empty, deviceStatus);
                 }
                 catch (InvalidResponseException e)
                 {

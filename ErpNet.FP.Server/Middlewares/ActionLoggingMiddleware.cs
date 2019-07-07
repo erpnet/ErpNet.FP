@@ -36,7 +36,7 @@ namespace ErpNet.FP.Server
             await request.Body.ReadAsync(buffer, 0, buffer.Length);
             var bodyAsText = Encoding.UTF8.GetString(buffer);
             request.Body.Position = 0;
-            System.Diagnostics.Trace.WriteLine($"-- HTTP Request -- {request.Method}: {request.Scheme}:/{request.Host}{request.Path}{request.QueryString}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
+            System.Diagnostics.Trace.WriteLine($"-- HTTP Request -- {request.Method}: {request.Scheme}://{request.Host}{request.Path}{request.QueryString}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
         }
 
         private async Task LogResponse(HttpResponse response)
