@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -92,6 +93,7 @@ namespace ErpNet.FP.Core.Drivers
                 status.AddError("E405", "Invalid format of UniqueSaleNumber");
                 return status;
             }
+            var itemsTotalAmount = 0.00m;
             var row = 0;
             foreach (var item in receipt.Items)
             {
@@ -132,6 +134,23 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         status.AddError(e.Code, e.Message);
                     }
+                    var itemPrice = (item.Quantity * item.UnitPrice);
+                    switch(item.PriceModifierType)
+                    {
+                        case PriceModifierType.DiscountAmount:
+                            itemPrice -= item.PriceModifierValue;
+                            break;
+                        case PriceModifierType.DiscountPercent:
+                            itemPrice -= itemPrice * (item.PriceModifierValue / 100.0m);
+                            break;
+                        case PriceModifierType.SurchargeAmount:
+                            itemPrice += item.PriceModifierValue;
+                            break;
+                        case PriceModifierType.SurchargePercent:
+                            itemPrice += itemPrice * (item.PriceModifierValue / 100.0m);
+                            break;
+                    }
+                    itemsTotalAmount += itemPrice;
                 }
 
                 if (!status.Ok)
@@ -141,6 +160,7 @@ namespace ErpNet.FP.Core.Drivers
             }
             if (receipt.Payments?.Count > 0)
             {
+                var paymentAmount = 0.00m;
                 row = 0;
                 foreach (var payment in receipt.Payments)
                 {
@@ -162,8 +182,13 @@ namespace ErpNet.FP.Core.Drivers
                         status.AddInfo($"Error occured at Payment {row}");
                         return status;
                     }
+                    paymentAmount += payment.Amount;
                 }
-            }
+                if (Math.Abs(paymentAmount - itemsTotalAmount) / itemsTotalAmount > 0.00001m)
+                {
+                    status.AddError("E403", $"Payment total amount ({paymentAmount.ToString(CultureInfo.InvariantCulture)}) should be the same as the items total amount ({itemsTotalAmount.ToString(CultureInfo.InvariantCulture)})");
+                }
+            } 
             return status;
         }
 
