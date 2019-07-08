@@ -140,23 +140,23 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 # Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
-* Windows 32/64 bit - [ErpNet.FP.Server.zip - Windows 32 bit], [ErpNet.FP.Server.zip - Windows 64 bit] -  
+* Windows 32/64 bit - [win-x86.zip - Windows 32 bit], [win-x64.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find executable file: ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Server.exe. 
 In the default configuration, you can browse the Admin page at http://localhost:8001.
 
-* OSX 10.10 and up, 64 bit - [ErpNet.FP.Server.zip - macOS] - You can download and unzip the server in a folder. 
+* OSX 10.10 and up, 64 bit - [osx-x64.zip - macOS] - You can download and unzip the server in a folder. 
 Inside the unzipped folder, run it from console/terminal with:
 ```bash
 ./ErpNet.FP.Server
 ```
 
-* Linux 64 bit - [ErpNet.FP.Server.zip - Linux x64] - You can download and unzip the server. 
+* Linux 64 bit - [linux-x64.zip - Linux x64] - You can download and unzip the server. 
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd: Service File Examples].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 
-* Linux-Arm 64 bit - [ErpNet.FP.Server.zip - Linux Arm] - You can download and unzip the server. 
+* Linux-Arm 64 bit - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
 This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
@@ -267,9 +267,9 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[ErpNet.FP.Server.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x86.zip>
-[ErpNet.FP.Server.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x64.zip>
-[ErpNet.FP.Server.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/osx-x64.zip>
-[ErpNet.FP.Server.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-x64.zip>
-[ErpNet.FP.Server.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-arm.zip>
+[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x86.zip>
+[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x64.zip>
+[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/osx-x64.zip>
+[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-x64.zip>
+[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-arm.zip>
 [download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.708.1935>
