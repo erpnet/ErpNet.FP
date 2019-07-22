@@ -12,7 +12,8 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
-# The JSON Protocol
+# The Net.FP Protocol
+All communication with the ErpNet.FP print server is based on the Net.FP (Net Fiscal Protocol).
 ## Requests
 The print server accepts documents for printing, using JSON based protocol. 
 For example, this would print the specified receipt to dt517985, which is the printerId of one of the detected printers, listed with GET /printers (see below for printerId explanation):
