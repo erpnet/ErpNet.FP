@@ -1,5 +1,5 @@
-# The ErpNet.FP JSON Protocol
-The print server accepts documents for printing, using JSON based protocol, which is the subject of this document.
+# The Net.FP Protocol
+The ErpNet.FP print server accepts documents for printing, using the JSON based **Net.FP** - Net Fiscal Protocol.
 
 # Contents
 
@@ -250,7 +250,9 @@ Each element in this section can have the following properties:
 * **"amount"** - the amount paid. If this is skipped, the full amount of the receipt is allocated to this payment.
 NOTE: If the whole section "payments" is not provided, then the whole amount of the receipt is printed as cash payment.
 
-* **"paymentType"** - one of: **"cash"** - this is the default payment type if no payment type is specified, **"card"** - payment by debit or credit card, **"check"**, **"packaging"**, **"reserved1"**- often used by government regulations for specific purposes (health reimbursment, etc.), **"reserved2"**
+* **"paymentType"** - one of: 
+* * **"cash"** - this is the default payment type if no payment type is specified
+* * **"card"** - payment by debit or credit card, **"check"**, **"packaging"**, **"reserved1"**- often used by government regulations for specific purposes (health reimbursment, etc.), **"reserved2"**
 
 
 ### Example request body:
