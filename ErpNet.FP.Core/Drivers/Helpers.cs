@@ -19,7 +19,7 @@ namespace ErpNet.FP.Core.Drivers
             return result;
         }
 
-        public static string WithMaxLength(this string text, int maxLength)
+        public static string WithMaxLength(this string text, int maxLength = 72)
         {
             if (text.Length <= maxLength)
             {

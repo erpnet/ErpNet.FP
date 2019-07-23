@@ -222,7 +222,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public virtual (string, DeviceStatus) AddComment(string text)
         {
-            return Request(CommandFreeText, text.WithMaxLength(Info.CommentTextMaxLength));
+            return Request(CommandFreeText, text.WithMaxLength(/* Info.CommentTextMaxLength */));
         }
 
         public virtual (string, DeviceStatus) CloseReceipt()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Timers;
 
 namespace ErpNet.FP.Core.Transports
 {
@@ -60,6 +61,7 @@ namespace ErpNet.FP.Core.Transports
         public class Channel : IChannel
         {
             internal readonly SerialPort serialPort;
+            protected Timer idleTimer;
 
             public string Descriptor => serialPort.PortName;
 
@@ -76,12 +78,25 @@ namespace ErpNet.FP.Core.Transports
                     WriteTimeout = timeout
                 };
 
-                serialPort.Open();
+                idleTimer = new Timer
+                {
+                    Interval = 5000, // if there is no data received from the device for 5 seconds, close the port
+                    AutoReset = false
+                };
+
+                idleTimer.Elapsed += IdleTimerElapsed;
             }
 
-            public void Dispose()
+            private void IdleTimerElapsed(object sender, ElapsedEventArgs e)
             {
+                System.Diagnostics.Trace.WriteLine($"Idle timer elapsed. Closing the com port {serialPort.PortName}");
                 Close();
+            }
+
+            public void Open()
+            {
+                System.Diagnostics.Trace.WriteLine($"Opening the com port {serialPort.PortName}");
+                serialPort.Open();
             }
 
             public void Close()
@@ -93,6 +108,12 @@ namespace ErpNet.FP.Core.Transports
                     serialPort.Close();
                     serialPort.Dispose();
                 }
+            }
+
+            public void Dispose()
+            {
+                System.Diagnostics.Trace.WriteLine($"Closing the com port {serialPort.PortName}");
+                Close();
             }
 
             /// <summary>
@@ -107,6 +128,7 @@ namespace ErpNet.FP.Core.Transports
                 {
                     var result = new byte[task.Result];
                     Array.Copy(buffer, result, task.Result);
+                    idleTimer.Enabled = true;
                     return result;
                 }
                 var errorMessage = $"Timeout occured while reading from com port '{serialPort.PortName}'";
@@ -122,7 +144,7 @@ namespace ErpNet.FP.Core.Transports
             {
                 if (!serialPort.IsOpen)
                 {
-                    serialPort.Open();
+                    Open();
                 }
                 serialPort.DiscardInBuffer();
                 var bytesToWrite = data.Length;

@@ -250,7 +250,10 @@ namespace ErpNet.FP.Core.Service
                 .Replace("+", "-");
             Tasks[taskId] = printJob;
             TaskQueue.Enqueue(taskId);
+
+            // Ensure that there is a running ConsumerThread, that will process the queue
             EnsureConsumer();
+
             return taskId;
         }
 

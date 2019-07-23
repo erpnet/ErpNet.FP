@@ -264,7 +264,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public virtual (string, DeviceStatus) AddComment(string text)
         {
-            return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength));
+            return Request(CommandFiscalReceiptComment, text.WithMaxLength(/* Info.CommentTextMaxLength */));
         }
 
         public virtual (string, DeviceStatus) CloseReceipt()
