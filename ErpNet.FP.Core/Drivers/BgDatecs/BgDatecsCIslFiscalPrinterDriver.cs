@@ -34,7 +34,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
                 }
 
-                if (modelName.EndsWith("X", System.StringComparison.Ordinal)|| (
+                if (modelName.EndsWith("X", System.StringComparison.Ordinal) || (
                     !modelName.StartsWith("DP", System.StringComparison.Ordinal) &&
                     !modelName.StartsWith("WP", System.StringComparison.Ordinal)))
                 {
@@ -48,7 +48,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 Model = modelName,
                 FirmwareVersion = commaFields[1],
                 Manufacturer = "Datecs",
-                CommentTextMaxLength = 42, // Set by Datecs protocol
+                CommentTextMaxLength = 40, // Set by Datecs protocol
                 ItemTextMaxLength = 22, // Set by Datecs protocol
                 OperatorPasswordMaxLength = 8 // Set by Datecs protocol
             };

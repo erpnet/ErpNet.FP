@@ -248,8 +248,18 @@ If you want your device to be supported, please contact us, and we will try our 
 * bg.dy.isl - Daisy Compact S, Daisy Compact M
 * bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, INCOTEX 300S KL-Q
 
-
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
+
+## Default passwords we use in the library.
+This is a list of default credentials we use in the library, when there is no exclusive override of the values in the Json fields "operator" and "operatorPassword", while you make a Json requests to the fiscal device.
+* bg.dt.c.isl - "operator" : "1", "operatorPassword": "1"
+* bg.dt.p.isl - "operator" : "1", "operatorPassword": "0000"
+* bg.dt.x.isl - "operator" : "1", "operatorPassword": "0000"
+* bg.zk.zfp - "operator" : "1", "operatorPassword": "0000"
+* bg.zk.v2.zfp - "operator" : "1", "operatorPassword": "0000"
+* bg.ed.isl - "operator" : "1", "operatorPassword": N/A
+* bg.dy.isl - For receipts: "operator" : "1", "operatorPassword": "1", and for reversalReceipts: "operator" : "20", "operatorPassword": "9999"
+* bg.in.isl - "operator" : "1", "operatorPassword": "1"
 
 # Source Code
 To compile and run the source code, you will need .Net Core 3.0 Preview 6 SDK.
