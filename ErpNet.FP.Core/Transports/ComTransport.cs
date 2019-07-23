@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using System.Timers;
+using System.Threading;
 
 namespace ErpNet.FP.Core.Transports
 {
@@ -78,18 +78,12 @@ namespace ErpNet.FP.Core.Transports
                     WriteTimeout = timeout
                 };
 
-                idleTimer = new Timer
-                {
-                    Interval = 5000, // if there is no data received from the device for 5 seconds, close the port
-                    AutoReset = false
-                };
-
-                idleTimer.Elapsed += IdleTimerElapsed;
+                idleTimer = new Timer(IdleTimerElapsed);
             }
 
-            private void IdleTimerElapsed(object sender, ElapsedEventArgs e)
+            private void IdleTimerElapsed(object state)
             {
-                System.Diagnostics.Trace.WriteLine($"Idle timer elapsed. Closing the com port {serialPort.PortName}");
+                System.Diagnostics.Trace.WriteLine($"Idle timer elapsed for the com port {serialPort.PortName}");
                 Close();
             }
 
@@ -103,6 +97,7 @@ namespace ErpNet.FP.Core.Transports
             {
                 if (serialPort.IsOpen)
                 {
+                    System.Diagnostics.Trace.WriteLine($"Closing the com port {serialPort.PortName}");
                     serialPort.DiscardInBuffer();
                     serialPort.DiscardOutBuffer();
                     serialPort.Close();
@@ -112,7 +107,7 @@ namespace ErpNet.FP.Core.Transports
 
             public void Dispose()
             {
-                System.Diagnostics.Trace.WriteLine($"Closing the com port {serialPort.PortName}");
+                idleTimer.Dispose();
                 Close();
             }
 
@@ -128,7 +123,7 @@ namespace ErpNet.FP.Core.Transports
                 {
                     var result = new byte[task.Result];
                     Array.Copy(buffer, result, task.Result);
-                    idleTimer.Enabled = true;
+                    idleTimer.Change(1000, 0);
                     return result;
                 }
                 var errorMessage = $"Timeout occured while reading from com port '{serialPort.PortName}'";
