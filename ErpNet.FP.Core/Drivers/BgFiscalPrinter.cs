@@ -102,10 +102,6 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     status.AddError("E407", $"Item {row}: \"text\" is empty");
                 }
-                if (item.IsComment)
-                {
-                    status.AddWarning("W401", $"Item {row}: \"isComment\" is deprecated in Item {row}. Use \"type\" : \"comment\" instead");
-                }
 
                 // Validation of "type" : "sale"
                 if (item.Type == ItemType.Sale)
@@ -135,7 +131,7 @@ namespace ErpNet.FP.Core.Drivers
                         status.AddError(e.Code, e.Message);
                     }
                     var itemPrice = (item.Quantity * item.UnitPrice);
-                    switch(item.PriceModifierType)
+                    switch (item.PriceModifierType)
                     {
                         case PriceModifierType.DiscountAmount:
                             itemPrice -= item.PriceModifierValue;
@@ -188,7 +184,7 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     status.AddError("E403", $"Payment total amount ({paymentAmount.ToString(CultureInfo.InvariantCulture)}) should be the same as the items total amount ({itemsTotalAmount.ToString(CultureInfo.InvariantCulture)})");
                 }
-            } 
+            }
             return status;
         }
 

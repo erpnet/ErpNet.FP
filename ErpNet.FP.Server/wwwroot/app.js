@@ -19,7 +19,7 @@ function showAvailablePrinters() {
                     "/printers/" +
                     printerId
                 var characteristics =
-                    '<li><strong><a target="blank_" href="'+url+'">' + url + '</a></strong></li>'
+                    '<li><strong><a target="blank_" href="' + url + '">' + url + '</a></strong></li>'
                 for (var characteristic in printer) {
                     characteristics += '<li>' + characteristic + ':&nbsp;<strong>' + printer[characteristic] + '</strong></li>'
                 }
@@ -57,12 +57,11 @@ function showConfiguredPrinters() {
             this.html("")
             for (var printerId in data) {
                 var printer = data[printerId]
-                var ready = (printerId in availablePrinters && availablePrinters[printerId].uri === printer.uri)
                 var section =
                     '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
-                    '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong>&nbsp;<small><mark class="' + (ready ? "tertiary" : "secondary") + ' tag">' + (ready ? "Ready" : "Not found") + '</mark></small></label>' +
-                    '<div class="input-group vertical">'+
-                    '<label for="id-' + printerId + '">Id:</label><input id="id-' + printerId + '" value="'+printerId+'" />'+
+                    '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
+                    '<div class="input-group vertical">' +
+                    '<label for="id-' + printerId + '">Id:</label><input id="id-' + printerId + '" value="' + printerId + '" />' +
                     '<label for="uri-' + printerId + '">Uri:</label><input id="uri-' + printerId + '" value="' + printer.uri + '" />' +
                     '<div class="input-group horizontal">' +
                     '<button class="small primary" onclick="saveSettingsForPrinter(\'' + printerId + '\')">Save settings</button>' +
@@ -76,23 +75,6 @@ function showConfiguredPrinters() {
         error: function (xhr, type) {
             showToastMessage("Cannot get configured printers list.")
             this.html("")
-        }
-    })
-}
-
-function stopService() {
-    $.ajax({
-        type: 'GET',
-        url: '/service/stop',
-        data: {},
-        dataType: 'json',
-        timeout: 0,
-        success: function (data) {
-            showToastMessage("Service stopped.")
-            $("#Container").html("<h3>The service is stopped.</h3>")
-        },
-        error: function (xhr, type) {
-            showToastMessage("Cannot stop the service.")
         }
     })
 }
@@ -115,6 +97,7 @@ function getServerVariables() {
 }
 
 function detectAvailablePrinters() {
+    availablePrinters = {}
     $("#DetectButton").attr("disabled", "disabled")
     $('#PrintersList').html('<div class="spinner primary"></div>Detecting...')
     $('#ConfiguredPrintersList').html('<div class="spinner primary"></div>Loading...')
@@ -175,7 +158,7 @@ function deletePrinter(printerId, printerUri) {
             detectAvailablePrinters()
         },
         error: function (xhr, type) {
-            showToastMessage("Cannot delete the printer.")
+            showToastMessage("Cannot delete the printer configuration.")
         }
     })
 }
@@ -224,7 +207,18 @@ function printZReport(printerId) {
         dataType: 'json',
         timeout: 0,
         success: function (data) {
-            showToastMessage("The Z-Report printing is done.")
+            if (data.ok) {
+                showToastMessage("The Z-Report printing is done.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot print the Z-Report: " + errors.trim())
+            }
         },
         error: function (xhr, type) {
             showToastMessage("Cannot print the Z-Report.")
@@ -241,7 +235,18 @@ function printXReport(printerId) {
         dataType: 'json',
         timeout: 0,
         success: function (data) {
-            showToastMessage("The X-Report printing is done.")
+            if (data.ok) {
+                showToastMessage("The X-Report printing is done.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot print the X-Report: " + errors.trim())
+            }
         },
         error: function (xhr, type) {
             showToastMessage("Cannot print the X-Report.")

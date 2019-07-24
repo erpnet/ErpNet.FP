@@ -92,6 +92,9 @@ namespace ErpNet.FP.Core.Service
                 {
                     isReady = false;
 
+                    PrintersInfo.Clear();
+                    Printers.Clear();
+
                     // Autodetecting
                     var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
                     if (forceAutoDetect || configOptions.AutoDetect)
@@ -129,12 +132,14 @@ namespace ErpNet.FP.Core.Service
                             }
                         }
 
+                        /*
                         // Auto save to config all listed printers, for future use
                         // It is possible to have aliases, i.e. different PrinterId with the same Uri
                         foreach (var printer in Printers)
                         {
                             configOptions.Printers[printer.Key] = new PrinterConfig { Uri = printer.Value.DeviceInfo.Uri };
                         }
+                        */
                     }
 
                     // configOptions.AutoDetect = Printers.Count == 0;

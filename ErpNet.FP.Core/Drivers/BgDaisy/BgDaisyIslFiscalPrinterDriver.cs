@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDaisy
@@ -14,20 +15,13 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            try
-            {
-                // Probing
-                ParseDeviceInfo(rawDeviceInfo, autoDetect);
-                // If there is no InvalidDeviceInfoException get the device info and constants
-                var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
-                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
-                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
-                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
-            }
-            catch (InvalidDeviceInfoException e)
-            {
-                throw e;
-            }
+            // Probing
+            ParseDeviceInfo(rawDeviceInfo, autoDetect);
+            // If there is no InvalidDeviceInfoException get the device info and constants
+            var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
+            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 

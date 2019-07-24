@@ -14,20 +14,13 @@ namespace ErpNet.FP.Core.Drivers.BgIncotex
         {
             var fiscalPrinter = new BgIncotexIslFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            try
-            {
-                // Probing
-                ParseDeviceInfo(rawDeviceInfo, autoDetect);
-                // If there is no InvalidDeviceInfoException get the device info and constants
-                var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
-                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
-                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
-                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
-            }
-            catch (InvalidDeviceInfoException e)
-            {
-                throw e;
-            }
+            // Probing
+            ParseDeviceInfo(rawDeviceInfo, autoDetect);
+            // If there is no InvalidDeviceInfoException get the device info and constants
+            var (rawDeviceConstants, _) = fiscalPrinter.GetRawDeviceConstants();
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
+            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             return fiscalPrinter;
         }
 

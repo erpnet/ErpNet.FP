@@ -83,32 +83,6 @@ namespace ErpNet.FP.Core
         public string Text { get; set; } = "";
 
         /// <summary>
-        /// Gets or sets a value indicating whether this line is comment.
-        /// </summary>
-        /// <remarks>
-        /// Comment lines are printed using '#'.
-        /// Comment lines contain only Text.
-        /// The other attributes are not printed.
-        /// </remarks>
-        /// <value>
-        ///   <c>true</c> if this line is comment; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsComment
-        {
-
-            get
-            {
-                return Type == ItemType.Comment;
-            }
-
-            set
-            {
-                Type = value ? ItemType.Comment : ItemType.Sale;
-            }
-
-        }
-
-        /// <summary>
         /// Gets or sets the tax group. 
         /// </summary>
         /// <value>
