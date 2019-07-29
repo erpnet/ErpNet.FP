@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.IO;
 using System.Text;
@@ -31,7 +30,7 @@ namespace ErpNet.FP.Server
 
         private async Task LogRequest(HttpRequest request)
         {
-            request.EnableRewind();
+            request.EnableBuffering();
             var buffer = new byte[Convert.ToInt32(request.ContentLength)];
             await request.Body.ReadAsync(buffer, 0, buffer.Length);
             var bodyAsText = Encoding.UTF8.GetString(buffer);

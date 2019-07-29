@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,24 +33,38 @@ namespace ErpNet.FP.Server
         public static string GetVersion()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return assembly.GetName().Version.ToString();
+            var version = assembly.GetName().Version;
+            return (version != null) ? version.ToString() : "unknown";
         }
 
-        public static void Main()
+        public static void Main(string[] args)
         {
-            var debugLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug");
-            var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
-            Directory.CreateDirectory(debugLogFolder);
+            var pathToContentRoot = Directory.GetCurrentDirectory();
+
+            if (!(Debugger.IsAttached))
+            {
+                var location = Assembly.GetExecutingAssembly().Location;
+                pathToContentRoot = Path.GetDirectoryName(location) ?? pathToContentRoot;
+                Directory.SetCurrentDirectory(pathToContentRoot);
+            }
+
+            var builder = CreateHostBuilder(
+                pathToContentRoot,
+                args.Where(arg => arg != "--console").ToArray());
+
+            var host = builder.Build();
+
+
+            // Setup debug logs
             FileStream traceStream;
             try
             {
-                EnsureDebugLogHistory();
+                var debugLogFilePath = EnsureDebugLogHistory(pathToContentRoot);
                 traceStream = new FileStream(debugLogFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error creating FileStream for trace file \"{0}\":" +
-                    "\r\n{1}", debugLogFilePath, ex.Message);
+                Trace.WriteLine($"Error while creating debug.log file: {ex.Message}");
                 return;
             }
 
@@ -61,9 +76,33 @@ namespace ErpNet.FP.Server
 
             Trace.WriteLine($"Starting the application, version {GetVersion()}...");
 
-            var webHost = new WebHostBuilder()
+            var logger = host.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Starting the service...");
+
+            host.Run();
+
+            logger.LogInformation("Service stopped.");
+
+            Trace.WriteLine("Stopping the application.");
+            Trace.Flush();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
+            Host.CreateDefaultBuilder(args)
+#if Windows
+            .UseWindowsService()
+#endif
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                var env = hostingContext.HostingEnvironment;
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                config.AddEnvironmentVariables();
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder
                 .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseContentRoot(pathToContentRoot)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var env = hostingContext.HostingEnvironment;
@@ -81,29 +120,15 @@ namespace ErpNet.FP.Server
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                 })
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
+            });
+            
 
-            var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogInformation("Starting the service...");
-
-            try
-            {
-                webHost.Run();
-                logger.LogInformation("Service stopped.");
-            }
-            catch
-            {
-                logger.LogCritical("Starting the service failed.");
-            }
-
-            Trace.WriteLine("Stopping the application.");
-            Trace.Flush();
-        }
-
-        public static void EnsureDebugLogHistory()
+        public static string EnsureDebugLogHistory(string pathToContentRoot)
         {
-            var debugLogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "debug", DebugLogFileName);
+            var debugLogFolder = Path.Combine(pathToContentRoot, "wwwroot", "debug");
+            var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
+            Directory.CreateDirectory(debugLogFolder);
             if (File.Exists(debugLogFilePath))
             {
                 for (var i = 9; i > 1; i--)
@@ -117,6 +142,7 @@ namespace ErpNet.FP.Server
                 using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
                     zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
             }
+            return debugLogFilePath;
         }
 
     }

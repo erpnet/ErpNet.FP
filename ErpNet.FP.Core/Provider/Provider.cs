@@ -80,7 +80,7 @@ namespace ErpNet.FP.Core.Provider
                                     ||
                                     ex is TimeoutException // Timeout occured while connecting. Skip this transport address.
                                 ))
-                                { 
+                                {
                                     // Cannot connect to opened channel, possible incompatibility
                                     Console.WriteLine($"Cannot connect to opened channel: {ex.Message}");
                                 }
@@ -94,7 +94,7 @@ namespace ErpNet.FP.Core.Provider
                             transport.Drop(channel);
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         // Cannot open channel
                         Console.WriteLine($"Cannot open channel: {ex.Message}");

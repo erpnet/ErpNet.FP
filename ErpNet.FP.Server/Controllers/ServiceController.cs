@@ -23,9 +23,11 @@ namespace ErpNet.FP.Server.Controllers
             this.serviceLifeTime = serviceLifeTime;
 
             var assembly = Assembly.GetExecutingAssembly();
-            serverVariables.Version = assembly.GetName().Version.ToString();
+            var version = assembly.GetName().Version;
+            serverVariables.Version = (version != null) ? version.ToString() : "unknown";
             serverVariables.ServerId = context.ServerId;
         }
+
 
         // GET vars
         [HttpGet("vars")]

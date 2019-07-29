@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="ErpNet.FP Setup" Language="1033" Version="1.0.726.1726"
+             Manufacturer="Erp.Net and Contributors"
+             UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
+        
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+        
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        
+        <!-- Cab file to be embedded in the .msi file -->
+        <MediaTemplate EmbedCab="yes" />
+        
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <!-- Id and the name of the folder in Program Files -->
+                <Directory Id="INSTALLFOLDER" Name="ErpNet.FP" />
+            </Directory>
+        </Directory>
+        <Feature Id="ProductFeature" Title="ErpNet.FP.Setup" Level="1">
+            <!-- ComponentGroupRef Id="ProductFilesComponentGroup" /-->
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Product>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <Component Id="PdbFile" Guid="*">
+                <!-- Install service executable pdf file -->
+                <File Id="ErpNet.FP.Server.pdb" 
+                      KeyPath="yes" 
+                      Source="$(var.OUTPUT)\ErpNet.FP.Server.pdb" />
+            </Component>
+            <Component Id="ExeFile" Guid="*">
+                <!-- Install service executable -->
+                <File
+                  Id="ErpNet.FP.Server"
+                  Source="$(var.OUTPUT)\ErpNet.FP.Server.exe"
+                  KeyPath="yes" />
+                <!-- Install service -->
+                <ServiceInstall 
+                        Id="ServiceInstaller" 
+                        Type="ownProcess" 
+                        Name="ErpNetFPServer"
+                        DisplayName="ErpNet Fiscal Printing Service"
+                        Description="Http server for printing to fiscal printers through simple JSON Api."
+                        Start="auto"
+                        Account="LocalSystem"
+                        ErrorControl="normal" />
+                <!-- Set start/stop/remove options -->
+                <ServiceControl 
+                        Id="StartService"
+                        Name="ErpNetFPServer" 
+                        Stop="both" 
+                        Start="install" 
+                        Remove="uninstall"
+                        Wait="yes" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

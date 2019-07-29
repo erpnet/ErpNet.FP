@@ -38,7 +38,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.PrintersInfo.TryGetValue(id, out DeviceInfo deviceInfo))
+            if (context.PrintersInfo.TryGetValue(id, out DeviceInfo? deviceInfo))
             {
                 return deviceInfo;
             }
@@ -53,7 +53,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 return printer.CheckStatus();
             }
@@ -70,7 +70,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -100,7 +100,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -123,7 +123,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -146,7 +146,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -169,7 +169,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -192,7 +192,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -214,7 +214,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,
@@ -236,7 +236,7 @@ namespace ErpNet.FP.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status405MethodNotAllowed);
             }
-            if (context.Printers.TryGetValue(id, out IFiscalPrinter printer))
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
                     printer,

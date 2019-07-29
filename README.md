@@ -262,9 +262,9 @@ This is a list of default credentials we use in the library, when there is no ex
 * bg.in.isl - "operator" : "1", "operatorPassword": "1"
 
 # Source Code
-To compile and run the source code, you will need .Net Core 3.0 Preview 6 SDK.
-As IDE for Windows, you can use Visual Studio 2019, version 16.2 Preview 2 or newer. 
-For macOS, you can use Visual Studio for Mac 8.2 Preview.
+To compile and run the source code, you will need .Net Core 3.0 Preview 7 SDK.
+As IDE for Windows, you can use Visual Studio 2019, version 16.3 Preview 1 or newer. 
+For macOS, you can use Visual Studio for Mac 8.3 Preview 1 or newer.
 
 # License
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
@@ -278,9 +278,9 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x86.zip>
-[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/win-x64.zip>
-[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/osx-x64.zip>
-[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-x64.zip>
-[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.708.1935/linux-arm.zip>
-[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.708.1935>
+[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/win-x86.zip>
+[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/win-x64.zip>
+[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/osx-x64.zip>
+[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/linux-x64.zip>
+[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/linux-arm.zip>
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.724.1724>
