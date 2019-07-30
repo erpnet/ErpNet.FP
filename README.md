@@ -141,7 +141,7 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 # Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
-* Windows 32/64 ** New **
+* Windows 32/64 Installer (.MSI) ** New **
 
 Download: [Installer for Windows]
 
@@ -149,7 +149,7 @@ The Windows installer setups or updates the ErpNet.FP Fiscal Print Server on a W
 
 In the default configuration, you can browse the Admin page at http://localhost:8001.
 
-* Windows 32/64 bit 
+* Windows 32/64 bit folder install
 
 Download 32 bit (x86): [win-x86.zip - Windows 32 bit]
 
