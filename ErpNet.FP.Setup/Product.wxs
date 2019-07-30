@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix
     xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" Name="ErpNet.FP Setup" Language="1033" Version="1.0.726.1726"
-             Manufacturer="Erp.Net and Contributors"
+    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.726.1726"
+             Manufacturer="Erp.Net And Contributors"
              UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
         
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
@@ -42,8 +42,8 @@
                         Id="ServiceInstaller" 
                         Type="ownProcess" 
                         Name="ErpNetFPServer"
-                        DisplayName="ErpNet Fiscal Printing Service"
-                        Description="Http server for printing to fiscal printers through simple JSON Api."
+                        DisplayName="ErpNet.FP - Fiscal Print Server"
+                        Description="Http server for printing to fiscal printers through simple JSON Api (https://github.com/erpnet/erpnet.fp)."
                         Start="auto"
                         Account="LocalSystem"
                         ErrorControl="normal" />
