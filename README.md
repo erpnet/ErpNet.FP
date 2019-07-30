@@ -141,9 +141,14 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 # Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
-** New: [Installer for Windows] **
+* Windows 32/64 ** New **
+Download: [Installer for Windows]
+The Windows installer setups or updates the ErpNet.FP Fiscal Print Server on a Windows 32 or 64 bit OS. The installer unpacks and installs a Windows service, called "ErpNet.FP". There is no UI.
+In the default configuration, you can browse the Admin page at http://localhost:8001.
 
-* Windows 32/64 bit - [win-x86.zip - Windows 32 bit], [win-x64.zip - Windows 64 bit] -  
+* Windows 32/64 bit 
+Download 32 bit (x86): [win-x86.zip - Windows 32 bit]
+Download 64 bit (x64): [win-x64.zip - Windows 64 bit]
 Download and unzip the file in a folder. Inside the folder you will find executable file: ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Server.exe. 
 In the default configuration, you can browse the Admin page at http://localhost:8001.
