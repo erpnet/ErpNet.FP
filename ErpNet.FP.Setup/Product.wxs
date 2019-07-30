@@ -11,7 +11,18 @@
         
         <!-- Cab file to be embedded in the .msi file -->
         <MediaTemplate EmbedCab="yes" />
-        
+
+        <!-- Add CheckBox UI to your installer for running application on exit-->
+        <UI>
+            <UIRef Id="WixUI_Minimal" />
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="ExitDialog" Order="3">1</Publish>
+            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+        </UI>
+
+        <CustomAction Id="LaunchApplication" Directory="INSTALLFOLDER" ExeCommand="explorer.exe http://localhost:8001" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Show Admin (http://localhost:8001)" />
+
+        <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="ProgramFilesFolder">
                 <!-- Id and the name of the folder in Program Files -->
