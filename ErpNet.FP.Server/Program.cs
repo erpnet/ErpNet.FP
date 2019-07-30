@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -47,6 +48,8 @@ namespace ErpNet.FP.Server
                 pathToContentRoot = Path.GetDirectoryName(location) ?? pathToContentRoot;
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
+
+            EnsureAppSettingsJson(pathToContentRoot);
 
             var builder = CreateHostBuilder(
                 pathToContentRoot,
@@ -122,7 +125,7 @@ namespace ErpNet.FP.Server
                 })
                 .UseStartup<Startup>();
             });
-            
+
 
         public static string EnsureDebugLogHistory(string pathToContentRoot)
         {
@@ -145,5 +148,15 @@ namespace ErpNet.FP.Server
             return debugLogFilePath;
         }
 
+        public static void EnsureAppSettingsJson(string pathToContentRoot)
+        {
+            var appSettingsJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.json");
+
+            if (!File.Exists(appSettingsJsonFilePath))
+            {
+                var appSettingsDevelopmentJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.Development.json");
+                File.Copy(appSettingsDevelopmentJsonFilePath, appSettingsJsonFilePath);
+            }
+        }
     }
 }

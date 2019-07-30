@@ -7,3 +7,4 @@ debug.log.*
 *.user
 Published/
 .DS_Store
+ErpNet.FP.Server/appsettings.json

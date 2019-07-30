@@ -40,7 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="appsettings.Development.json" />
+        <Content Remove="appsettings.json" />
         <Content Remove="wwwroot\debug\debug.log" />
         <Content Remove="wwwroot\debug\debug.log.1.zip" />
         <Content Remove="wwwroot\debug\debug.log.2.zip" />
@@ -72,7 +72,9 @@
             <Pack>True</Pack>
             <PackagePath></PackagePath>
         </None>
-        <None Include="appsettings.Development.json" />
+        <None Include="appsettings.json">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
         <None Include="wwwroot\debug\debug.log" />
         <None Include="wwwroot\debug\debug.log.1.zip" />
         <None Include="wwwroot\debug\debug.log.2.zip" />
@@ -97,9 +99,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <Content Update="wwwroot\ErpNet.FP.thumb.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
