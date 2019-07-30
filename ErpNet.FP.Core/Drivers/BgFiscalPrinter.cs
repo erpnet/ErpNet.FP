@@ -180,7 +180,8 @@ namespace ErpNet.FP.Core.Drivers
                     }
                     paymentAmount += payment.Amount;
                 }
-                if (Math.Abs(paymentAmount - itemsTotalAmount) / itemsTotalAmount > 0.00001m)
+                var difference = Math.Abs(paymentAmount - itemsTotalAmount);
+                if (difference >= 0.01m && difference / itemsTotalAmount > 0.00001m)
                 {
                     status.AddError("E403", $"Payment total amount ({paymentAmount.ToString(CultureInfo.InvariantCulture)}) should be the same as the items total amount ({itemsTotalAmount.ToString(CultureInfo.InvariantCulture)})");
                 }
