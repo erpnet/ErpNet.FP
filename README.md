@@ -141,6 +141,8 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 # Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
+** New: [Installer for Windows] **
+
 * Windows 32/64 bit - [win-x86.zip - Windows 32 bit], [win-x64.zip - Windows 64 bit] -  
 Download and unzip the file in a folder. Inside the folder you will find executable file: ErpNet.FP.Server.exe.
 To start the printing service, run ErpNet.FP.Server.exe. 
@@ -278,9 +280,10 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/win-x86.zip>
-[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/win-x64.zip>
-[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/osx-x64.zip>
-[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/linux-x64.zip>
-[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.724.1724/linux-arm.zip>
-[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.724.1724>
+[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/win-x86.zip>
+[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/win-x64.zip>
+[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/osx-x64.zip>
+[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/linux-x64.zip>
+[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/linux-arm.zip>
+[Installer for Windows]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/ErpNet.FP.Setup.msi>
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.726.1726>
