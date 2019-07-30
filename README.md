@@ -138,7 +138,8 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 }
 ```
 
-# Eager to try? 
+# Download
+Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
 * Windows 32/64 Installer (.MSI) ** New **
