@@ -142,40 +142,53 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
-* [Windows 32/64 Installer (.MSI)] ** New **
+### Windows 32/64 Service Installer (.MSI) ** New **
 
-Download: [Installer for Windows]
+Download: [Installer for Windows 32/64]
 
-The Windows installer setups or updates the ErpNet.FP Fiscal Print Server on a Windows 32 or 64 bit OS. The installer unpacks and installs a Windows service, called "ErpNet.FP". There is no UI.
+The Windows installer setups or updates the ErpNet.FP Fiscal Print Server on a Windows 32 or 64 bit OS. 
+The installer unpacks and installs a Windows service, called "ErpNet.FP". 
+There is no UI, but when the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
-In the default configuration, you can browse the Admin page at http://localhost:8001.
-
-* Windows 32/64 bit folder install
+### Windows 32/64 bit, folder install
 
 Download 32 bit (x86): [win-x86.zip - Windows 32 bit]
 
 Download 64 bit (x64): [win-x64.zip - Windows 64 bit]
 
-Download and unzip the file in a folder. Inside the folder you will find executable file: ErpNet.FP.Server.exe. To start the printing service, run ErpNet.FP.Server.exe. 
+Download and unzip the file in a folder. 
+Inside the folder you will find executable file: ErpNet.FP.Server.exe. 
+To start the printing service, run ErpNet.FP.Server.exe. 
+When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
-In the default configuration, you can browse the Admin page at http://localhost:8001.
+### OSX 10.10 and up, 64 bit folder install
 
-* OSX 10.10 and up, 64 bit - [osx-x64.zip - macOS] - You can download and unzip the server in a folder. 
+Download 64 bit - [osx-x64.zip - macOS] - You can download and unzip the server in a folder. 
+
 Inside the unzipped folder, run it from console/terminal with:
 ```bash
 ./ErpNet.FP.Server
 ```
+When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
-* Linux 64 bit - [linux-x64.zip - Linux x64] - You can download and unzip the server. 
+### Linux 64 bit, folder install
+
+Download 64 bit - [linux-x64.zip - Linux x64] - You can download and unzip the server. 
+
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd: Service File Examples].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
+When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
-* Linux-Arm 64 bit - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
+### Linux-Arm 64 bit, folder install
+
+Download - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
+
 This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
+When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
 ## Debug information 
 
@@ -300,6 +313,5 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/osx-x64.zip>
 [linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-x64.zip>
 [linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-arm.zip>
-[Installer for Windows]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
-[Windows 32/64 Installer (.MSI)]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
+[Installer for Windows 32/64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
 [download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.731.1731>
