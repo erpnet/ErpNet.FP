@@ -142,7 +142,7 @@ Messages with "type": "info", have no codes, because they cannot be standardized
 Eager to try? 
 You can list and [download the binaries for ErpNet.FP.Server]:
 
-* Windows 32/64 Installer (.MSI) ** New **
+* [Windows 32/64 Installer (.MSI)] ** New **
 
 Download: [Installer for Windows]
 
@@ -301,4 +301,5 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-x64.zip>
 [linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-arm.zip>
 [Installer for Windows]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
+[Windows 32/64 Installer (.MSI)]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
 [download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.731.1731>
