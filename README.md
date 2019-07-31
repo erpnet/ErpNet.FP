@@ -191,11 +191,14 @@ The other way is to run it from non-root user, but that user should have permiss
 When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
 ## Debug information 
-
-After you stop the service ErpNet.FP.Server, you can examine the debug.log file. It contains debug information for every event that occured while using the service. 
+For debugging purposes, there is a link to debug.log and it's folder in the Admin page. 
+It contains debug information for every event that occured while using the service. 
 
 ## Server Configuration
-The server configuration options are located in a file, called "appsettings.json". For more information, see [Configuration](https://github.com/erpnet/ErpNet.FP/blob/master/Config.md).
+The server configuration options are located in a file, called "appsettings.json". 
+For more information, see [Configuration](https://github.com/erpnet/ErpNet.FP/blob/master/Config.md).
+It is preferable that you use the Àdmin page to edit the settings in this file rather than edit it directly.
+
 
 ## Fiscal Printer Setup
 Most fiscal printers or cash register should be in "Fiscal Printer" mode in order to accept commands from the PC through the serial interface. Refer to your printer manual how to setup the fiscal printer mode.
