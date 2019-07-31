@@ -197,8 +197,7 @@ It contains debug information for every event that occured while using the servi
 ## Server Configuration
 The server configuration options are located in a file, called "appsettings.json". 
 For more information, see [Configuration](https://github.com/erpnet/ErpNet.FP/blob/master/Config.md).
-It is preferable that you use the Àdmin page to edit the settings in this file rather than edit it directly.
-
+It is recommended that you use the Admin page, or through /service API to edit the settings in this file rather than edit it directly.
 
 ## Fiscal Printer Setup
 Most fiscal printers or cash register should be in "Fiscal Printer" mode in order to accept commands from the PC through the serial interface. Refer to your printer manual how to setup the fiscal printer mode.
