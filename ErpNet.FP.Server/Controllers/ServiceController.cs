@@ -26,6 +26,7 @@ namespace ErpNet.FP.Server.Controllers
             var version = assembly.GetName().Version;
             serverVariables.Version = (version != null) ? version.ToString() : "unknown";
             serverVariables.ServerId = context.ServerId;
+            serverVariables.AutoDetect = context.AutoDetect;
         }
 
 
@@ -33,6 +34,15 @@ namespace ErpNet.FP.Server.Controllers
         [HttpGet("vars")]
         public ActionResult<ServerVariables> Vars()
         {
+            return serverVariables;
+        }
+
+        // GET toggleautodetect
+        [HttpGet("toggleautodetect")]
+        public ActionResult<ServerVariables> ToggleAutoDetect()
+        {
+            context.AutoDetect = !context.AutoDetect;
+            serverVariables.AutoDetect = context.AutoDetect;
             return serverVariables;
         }
 

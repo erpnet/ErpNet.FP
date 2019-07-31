@@ -133,9 +133,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             {
                 case PaymentType.Cash:
                     return "P";
-                case PaymentType.Card:
+                case PaymentType.Check:
                     return "C";
-                case PaymentType.Reserved1:
+                case PaymentType.Card:
                     return "D";
                 default:
                     throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");

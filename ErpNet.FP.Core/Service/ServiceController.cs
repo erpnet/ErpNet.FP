@@ -29,6 +29,8 @@ namespace ErpNet.FP.Core.Service
 
         string ServerId { get; }
 
+        bool AutoDetect { get; set; }
+
         bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
 
         bool DeletePrinter(PrinterConfigWithId printerConfigWithId);
@@ -57,6 +59,16 @@ namespace ErpNet.FP.Core.Service
         public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string>();
         public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
         public bool IsReady { get => isReady; set => isReady = value; }
+
+        public bool AutoDetect {
+            get => configOptions.AutoDetect;
+
+            set
+            {
+                configOptions.AutoDetect = value;
+                WriteOptions();
+            }
+        }
 
         protected abstract void SetupProvider();
         protected abstract void WriteOptions();

@@ -234,9 +234,10 @@ However, versions for mobile platforms are planned:
 The library supports printers from the following manufacturers:
 * Datecs (http://www.datecs.bg)
 * Tremol (https://www.tremol.bg)
-* Daisy (https://daisy.bg/)
+* Daisy (https://daisy.bg)
 * Eltrade (https://www.eltrade.com)
-* Incotex (http://www.incotex.bg/) 
+* Incotex (http://www.incotex.bg) 
+* ISL (http://isl.bg) in progress...
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
@@ -251,6 +252,7 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 - Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl.com
+- ISL5011S-KL, protocol: bg.is.icp.com in progress...
 
 ## Supported protocols and devices
 * bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
@@ -261,6 +263,7 @@ If you want your device to be supported, please contact us, and we will try our 
 * bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL 
 * bg.dy.isl - Daisy Compact S, Daisy Compact M
 * bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, INCOTEX 300S KL-Q
+* bg.is.icp - ISL5011S-KL in progress...
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
@@ -274,6 +277,7 @@ This is a list of default credentials we use in the library, when there is no ex
 * bg.ed.isl - "operator" : "1", "operatorPassword": N/A
 * bg.dy.isl - For receipts: "operator" : "1", "operatorPassword": "1", and for reversalReceipts: "operator" : "20", "operatorPassword": "9999"
 * bg.in.isl - "operator" : "1", "operatorPassword": "1"
+* bg.is.icp - "operator" : "1", "operatorPassword": "0000"
 
 # Source Code
 To compile and run the source code, you will need .Net Core 3.0 Preview 7 SDK.
@@ -286,16 +290,15 @@ For macOS, you can use Visual Studio for Mac 8.3 Preview 1 or newer.
 # Contributing
 See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
 
-[Postman collection]: <https://documenter.getpostman.com/view/6751288/S1a358Uz>
 [LICENSE.txt]: <LICENSE.txt>
 [Contributing]: <CONTRIBUTING.md>
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/win-x86.zip>
-[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/win-x64.zip>
-[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/osx-x64.zip>
-[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/linux-x64.zip>
-[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/linux-arm.zip>
-[Installer for Windows]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.726.1726/ErpNet.FP.Setup.msi>
-[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.726.1726>
+[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/win-x86.zip>
+[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/win-x64.zip>
+[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/osx-x64.zip>
+[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-x64.zip>
+[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/linux-arm.zip>
+[Installer for Windows]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.731.1731/ErpNet.FP.Setup.msi>
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.731.1731>

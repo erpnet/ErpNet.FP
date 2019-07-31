@@ -45,6 +45,25 @@ function showAvailablePrinters() {
     })
 }
 
+function autoDetectChanged() {
+    $.ajax({
+        type: 'GET',
+        url: '/service/toggleautodetect',
+        data: {},
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            $("#Version").html('ver.' + data.version)
+            $("#ServerId").html('Server Id: ' + data.serverId)
+            $("#AutoDetect").attr('checked', data.autoDetect ? 'checked' : null)
+            showToastMessage("Auto detect is " + (data.autoDetect ? 'turned ON' : 'turned OFF'))
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot change auto detect mode.")
+        }
+    })
+}
+
 function showConfiguredPrinters() {
     $.ajax({
         type: 'GET',
@@ -87,8 +106,10 @@ function getServerVariables() {
         dataType: 'json',
         timeout: 0,
         success: function (data) {
+            console.log(data)
             $("#Version").html('ver.' + data.version)
             $("#ServerId").html('Server Id: ' + data.serverId)
+            $("#AutoDetect").attr('checked', data.autoDetect ? 'checked' : null)
         },
         error: function (xhr, type) {
             showToastMessage("Cannot get server variables.")
