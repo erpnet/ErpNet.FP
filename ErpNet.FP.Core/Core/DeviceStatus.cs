@@ -100,6 +100,16 @@ namespace ErpNet.FP.Core
             Messages = status.Messages;
         }
     }
+    public class DeviceStatusWithRawResponse : DeviceStatus
+    {
+        public string RawResponse { get; set; } = string.Empty;
+
+        public DeviceStatusWithRawResponse(DeviceStatus status) : base()
+        {
+            Ok = status.Ok;
+            Messages = status.Messages;
+        }
+    }
 
     public class DeviceStatusWithCashAmount : DeviceStatus
     {

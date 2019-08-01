@@ -535,3 +535,74 @@ http://localhost:8001/printers/dt525860/cash
     ]
 }
 ```
+
+## `POST` Post Raw Request
+Post raw request to the fiscal device and expects device status and raw response.
+
+### Example for FP-2000, singing Ode of Joy
+
+The first character "P" is the code for the command. Next charaters are the request data.
+
+```json
+{
+    "rawRequest": "PB02B02C02D02D02C02B02A02G02G02A02B02B03A01A02 02B02B02C02D02D02C02B02A02G02G02A02B02A03G01G02"
+}
+```
+
+### Example for FP-2000
+Command
+58H (88) Obtain the Date of the last record in fiscal memory
+0x58 is the ASCII code for "V"
+T is the parameter for command, which gives not only Date, but also the Time of the last record in FM.
+
+```json
+{
+	"rawRequest": "VT"
+}
+```
+
+### Example response for FP-2000
+
+The answer is here: "rawResponse": "25-06-2019 11:15:26".
+
+```json
+{
+    "rawResponse": "25-06-2019 11:15:26",
+    "ok": true,
+    "messages": [
+        {
+            "type": "info",
+            "text": "No customer display is connected"
+        },
+        {
+            "type": "warning",
+            "code": "W301",
+            "text": "Low paper"
+        },
+        {
+            "type": "info",
+            "text": "SW7=ON, SW6=ON, SW5=OFF, SW4=ON, SW3=OFF, SW2=ON, SW1=OFF"
+        },
+        {
+            "type": "info",
+            "text": "Unique Printer ID and Fiscal Memory ID are set"
+        },
+        {
+            "type": "info",
+            "text": "BULSTAT UIC is set"
+        },
+        {
+            "type": "info",
+            "text": "The tax rates are set at least once"
+        },
+        {
+            "type": "info",
+            "text": "The printer is in fiscal mode"
+        },
+        {
+            "type": "info",
+            "text": "The fiscal memory is formatted"
+        }
+    ]
+}
+```

@@ -115,6 +115,10 @@ namespace ErpNet.FP.Server
                 .ConfigureKestrel((hostingContext, options) =>
                 {
                     options.Configure(hostingContext.Configuration.GetSection("Kestrel"));
+
+                    // Overriding some of the config values 
+                    options.AllowSynchronousIO = false;
+                    options.Limits.MaxRequestBodySize = 500 * 1024; 
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {

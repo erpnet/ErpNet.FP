@@ -89,6 +89,29 @@ namespace ErpNet.FP.Server.Controllers
             return context.GetTaskInfo(id);
         }
 
+        // POST {id}/rawrequest
+        [HttpPost("{id}/rawrequest")]
+        public async Task<IActionResult> RawRequest(
+            string id,
+            [FromBody] RequestFrame requestFrame,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
+            {
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.RawRequest,
+                    requestFrame,
+                    asyncTimeout);
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
         // POST {id}/receipt
         [HttpPost("{id}/receipt")]
         public async Task<IActionResult> PrintReceipt(

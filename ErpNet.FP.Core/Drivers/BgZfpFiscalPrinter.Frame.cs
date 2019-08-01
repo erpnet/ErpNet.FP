@@ -288,6 +288,22 @@ namespace ErpNet.FP.Core.Drivers
             throw new InvalidResponseException("The response is invalid. Checksum does not match.");
         }
 
+        public override DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame)
+        {
+            if (requestFrame.RawRequest.Length == 0)
+            {
+                var deviceStatus = new DeviceStatus();
+                deviceStatus.AddError("E401", "Request length must be at least 1 character");
+                return new DeviceStatusWithRawResponse(deviceStatus);
+            }
+            var cmd = PrinterEncoding.GetBytes(requestFrame.RawRequest.Substring(0, 1))[0];
+            var data = requestFrame.RawRequest.Substring(1);
+            var (rawResponse, status) = Request(cmd, data);
+            var deviceStatusWithRawResponse = new DeviceStatusWithRawResponse(status);
+            deviceStatusWithRawResponse.RawResponse = rawResponse;
+            return deviceStatusWithRawResponse;
+        }
+
         protected (string, DeviceStatus) Request(byte command, string? data = null)
         {
             lock (frameSyncLock)

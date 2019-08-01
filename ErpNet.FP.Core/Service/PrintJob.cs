@@ -6,6 +6,7 @@ namespace ErpNet.FP.Core.Service
     {
         None,
         Cash,
+        RawRequest,
         Receipt,
         ReversalReceipt,
         Withdraw,
@@ -42,6 +43,12 @@ namespace ErpNet.FP.Core.Service
                 {
                     case PrintJobAction.Cash:
                         Result = Printer.Cash();
+                        break;
+                    case PrintJobAction.RawRequest:
+                        if (Document != null)
+                        {
+                            Result = Printer.RawRequest((RequestFrame)Document);                            
+                        }
                         break;
                     case PrintJobAction.Receipt:
                         if (Document != null)

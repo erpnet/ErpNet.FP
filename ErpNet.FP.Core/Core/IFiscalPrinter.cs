@@ -81,5 +81,10 @@
         /// Prints a xreport.
         /// </summary>
         DeviceStatus PrintXReport(Credentials credentials);
+
+        /// <summary>
+        /// Raw request.
+        /// </summary>
+        DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
     }
 }
