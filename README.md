@@ -182,7 +182,7 @@ When the service is running in the default configuration, you can browse the Adm
 
 ### Linux-Arm 64 bit, folder install
 
-Download - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
+Download 64 bit - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
 
 This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
