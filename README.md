@@ -182,13 +182,15 @@ When the service is running in the default configuration, you can browse the Adm
 
 ### Linux-Arm 64 bit, folder install
 
-Download - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
+Download 64 bit - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
 
 This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd - Raspberry Pi Documentation].
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
+
+Important: The requirement for running ARM CPUs is to support at least the vfpv4d32 floating point feature. This is why we prefer to support only 64 bit CPUs, because they support that feature and more... For reference see: [Issue 17043 at dotnet/coreclr](https://github.com/dotnet/coreclr/issues/17043).
 
 ## Debug information 
 For debugging purposes, there is a link to debug.log and it's folder in the Admin page. 
@@ -233,7 +235,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
 
-# Future plans
+# Supported devices and operating systems
 
 Currently, the http server is available for:
 - Windows 32/64 bit
@@ -241,11 +243,6 @@ Currently, the http server is available for:
 - Linux x64
 - Linux Arm
 
-However, versions for mobile platforms are planned:
-- Android
-- iOS
-
-# Currently supported
 The library supports printers from the following manufacturers:
 * Datecs (http://www.datecs.bg)
 * Tremol (https://www.tremol.bg)
