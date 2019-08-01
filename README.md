@@ -190,6 +190,8 @@ For convenience, create a systemd service config file, get more info how to do i
 The other way is to run it from non-root user, but that user should have permissions to read and write to serial ports.
 When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
+Important: The requirement for running ARM CPUs is to support at least the vfpv4d32 floating point feature. This is why we prefer to support only 64 bit CPUs, because they support that feature and more... For reference see: [Issue 17043 at dotnet/coreclr](https://github.com/dotnet/coreclr/issues/17043).
+
 ## Debug information 
 For debugging purposes, there is a link to debug.log and it's folder in the Admin page. 
 It contains debug information for every event that occured while using the service. 
