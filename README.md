@@ -233,7 +233,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
 
-# Future plans
+# Supported devices and operating systems
 
 Currently, the http server is available for:
 - Windows 32/64 bit
@@ -241,11 +241,6 @@ Currently, the http server is available for:
 - Linux x64
 - Linux Arm
 
-However, versions for mobile platforms are planned:
-- Android
-- iOS
-
-# Currently supported
 The library supports printers from the following manufacturers:
 * Datecs (http://www.datecs.bg)
 * Tremol (https://www.tremol.bg)
