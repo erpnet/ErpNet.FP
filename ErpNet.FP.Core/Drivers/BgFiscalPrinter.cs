@@ -132,7 +132,9 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         status.AddError(e.Code, e.Message);
                     }
-                    var itemPrice = (item.Quantity * item.UnitPrice);
+                    var quantity = Math.Round(item.Quantity, 3, MidpointRounding.AwayFromZero);
+                    var unitPrice = Math.Round(item.UnitPrice, 2, MidpointRounding.AwayFromZero);
+                    var itemPrice = quantity * unitPrice;
                     switch (item.PriceModifierType)
                     {
                         case PriceModifierType.DiscountAmount:
@@ -148,7 +150,7 @@ namespace ErpNet.FP.Core.Drivers
                             itemPrice += itemPrice * (item.PriceModifierValue / 100.0m);
                             break;
                     }
-                    itemsTotalAmount += itemPrice;
+                    itemsTotalAmount += Math.Round(itemPrice, 2, MidpointRounding.AwayFromZero);
                 }
 
                 if (!status.Ok)
