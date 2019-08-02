@@ -269,12 +269,12 @@ If you want your device to be supported, please contact us, and we will try our 
 ## Supported protocols and devices
 * bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
 * bg.dt.p.isl - Datecs FP-650, Datecs FP-800, Datecs FP-2000, Datecs FMP-10, Datecs SK1-21F, Datecs SK1-31F
-* bg.dt.x.isl - Datecs DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, Datecs FMP-55X, Datecs WP-50X, Datecs FP-700X, DATECS DP-150X, DATECS WP-25X, DATECS FP-700XE
-* bg.zk.zfp - Tremol A19Plus, Tremol S21, Tremol M23, Tremol M20, Tremol FP15, TREMOL SB, TREMOL S25, TREMOL FP24 
-* bg.zk.v2.zfp - Tremol Z-KL-V2, Tremol ZM-KL-V2, Tremol ZS-KL-V2, Tremol FP01-KL V2, Tremol FP05-KL V2, Tremol M-KL-V2, Tremol S-KL-V2, Tremol FP15 KL V2, Tremol FP03-KL V2, Tremol FP07-KL V2, TREMOL FP01, TREMOL FP21
+* bg.dt.x.isl - Datecs DP-25X, Datecs FMP-350X, Datecs FP-700X, Datecs WP-500X, Datecs FMP-55X, Datecs WP-50X, Datecs FP-700X, Datecs DP-150X, Datecs WP-25X, Datecs FP-700XE
+* bg.zk.zfp - Tremol A19Plus, Tremol S21, Tremol M23, Tremol M20, Tremol FP15, Tremol SB, Tremol S25, Tremol FP24 
+* bg.zk.v2.zfp - Tremol Z-KL-V2, Tremol ZM-KL-V2, Tremol ZS-KL-V2, Tremol FP01-KL V2, Tremol FP05-KL V2, Tremol M-KL-V2, Tremol S-KL-V2, Tremol FP15 KL V2, Tremol FP03-KL V2, Tremol FP07-KL V2, Tremol FP01, Tremol FP21
 * bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL, EPSON TM - T810F KL модел 01, EPSON TM - T81F KL модел 03, ELTRADE PRP 250F KL
-* bg.dy.isl - Daisy Compact S, Daisy Compact M, eXpert SX 01, eXpert SX, Compact M 02, Compact S 01, Perfect M 01, MICRO C 01, Compact M 01, eXpert 01, Perfect S 01, FX 1300, FX 1200C, Perfect SA, FX 21 01 
-* bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, INCOTEX 300S KL-Q
+* bg.dy.isl - Daisy Compact S, Daisy Compact M, Daisy eXpert SX 01, Daisy eXpert SX, Daisy Compact M 02, Daisy Compact S 01, Daisy Perfect M 01, Daisy MICRO C 01, Daisy Compact M 01, Daisy eXpert 01, Daisy Perfect S 01, Daisy FX 1300, Daisy FX 1200C, Daisy Perfect SA, Daisy FX 21 01 
+* bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, Incotex 300S KL-Q
 * bg.is.icp - ISL5011S-KL in progress...
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
