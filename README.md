@@ -307,10 +307,10 @@ See our [Contributing] document and our [Code of Conduct] document, to learn how
 [Code of Conduct]: <CODE_OF_CONDUCT.md>
 [Systemd: Service File Examples]: https://www.shellhacks.com/systemd-service-file-example/
 [Systemd - Raspberry Pi Documentation]: https://www.raspberrypi.org/documentation/linux/usage/systemd.md
-[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/win-x86.zip>
-[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/win-x64.zip>
-[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/osx-x64.zip>
-[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/linux-x64.zip>
-[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/linux-arm.zip>
-[Installer for Windows 32/64]: <https://github.com/erpnet/ErpNet.FP/releases/download/v.1.0.802.1802/ErpNet.FP.Setup.msi>
-[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/tag/v.1.0.802.1802>
+[win-x86.zip - Windows 32 bit]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/win-x86.zip>
+[win-x64.zip - Windows 64 bit]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/win-x64.zip>
+[osx-x64.zip - macOS]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/osx-x64.zip>
+[linux-x64.zip - Linux x64]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/linux-x64.zip>
+[linux-arm.zip - Linux Arm]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/linux-arm.zip>
+[Installer for Windows 32/64]: <https://github.com/erpnet/ErpNet.FP/releases/latest/download/ErpNet.FP.Setup.msi>
+[download the binaries for ErpNet.FP.Server]: <https://github.com/erpnet/ErpNet.FP/releases/latest>
