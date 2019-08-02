@@ -363,7 +363,8 @@ http://localhost:8001/printers/dt525860/receipt?asyncTimeout=0
 ```
 
 ### Async Execution
-Asynchronous execution of print tasks allows the server to continue processing a print task after it has returned result to the caller. When a print task is executed asynchronously, the task is placed in a queue and the server only returns **"taskId"** to the caller.
+Asynchronous execution of print tasks allows the server to continue processing a print task after it has returned result to the caller. 
+When a print task is executed asynchronously, the task is placed in a queue and the server only returns **"taskId"** to the caller.
 
 To activate asynchronous execution, the caller should specify **"asyncTimeout"** parameter.
 

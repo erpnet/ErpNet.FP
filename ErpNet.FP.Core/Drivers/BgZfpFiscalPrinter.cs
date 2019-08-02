@@ -175,6 +175,12 @@ namespace ErpNet.FP.Core.Drivers
                 foreach (var payment in receipt.Payments)
                 {
                     paymentNumber++;
+
+                    if (payment.PaymentType == PaymentType.Change)
+                    {
+                        continue;
+                    }
+
                     try
                     {
                         (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
@@ -184,6 +190,7 @@ namespace ErpNet.FP.Core.Drivers
                         deviceStatus = new DeviceStatus();
                         deviceStatus.AddError(e.Code, e.Message);
                     }
+
                     if (!deviceStatus.Ok)
                     {
                         AbortReceipt();

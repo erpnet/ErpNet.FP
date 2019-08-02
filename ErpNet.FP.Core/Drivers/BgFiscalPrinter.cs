@@ -165,24 +165,37 @@ namespace ErpNet.FP.Core.Drivers
                 foreach (var payment in receipt.Payments)
                 {
                     row++;
-                    if (payment.Amount <= 0)
+
+                    if (payment.Amount <= 0 && payment.PaymentType != PaymentType.Change)
                     {
                         status.AddError("E403", $"Payment {row}: \"amount\" should be positive number");
                     }
+                    if (payment.Amount >= 0 && payment.PaymentType == PaymentType.Change)
+                    {
+                        status.AddError("E403", $"Change {row}: \"amount\" should be negative number");
+                    }
+
                     try
                     {
-                        GetPaymentTypeText(payment.PaymentType);
+                        if (payment.PaymentType != PaymentType.Change)
+                        {
+                            // Check if the payment type is supported
+                            GetPaymentTypeText(payment.PaymentType);
+                        }
                     }
                     catch (StandardizedStatusMessageException e)
                     {
                         status.AddError(e.Code, e.Message);
                     }
+                    
                     if (!status.Ok)
                     {
                         status.AddInfo($"Error occured at Payment {row}");
                         return status;
                     }
-                    paymentAmount += payment.Amount;
+
+                    var amount = Math.Round(payment.Amount, 2, MidpointRounding.AwayFromZero);
+                    paymentAmount += amount;
                 }
                 var difference = Math.Abs(paymentAmount - itemsTotalAmount);
                 if (difference >= 0.01m && difference / itemsTotalAmount > 0.00001m)

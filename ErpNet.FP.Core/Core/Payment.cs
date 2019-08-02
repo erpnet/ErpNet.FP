@@ -19,7 +19,10 @@ namespace ErpNet.FP.Core
         [EnumMember(Value = "reserved1")]
         Reserved1 = 5,
         [EnumMember(Value = "reserved2")]
-        Reserved2 = 6
+        Reserved2 = 6,
+
+        [EnumMember(Value = "change")]
+        Change = -1
     }
 
     /// <summary>
