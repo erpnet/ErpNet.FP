@@ -143,6 +143,9 @@ Eager to try?
 You can list and [download the binaries for ErpNet.FP.Server]:
 
 ### Windows 32/64 Service Installer (.MSI) ** New **
+- All Windows versions, from Windows XP SP2 and up are supported. 
+- There is no need for .Net installation. 
+- Everything that is needed is included in the MSI installer. 
 
 Download: [Installer for Windows 32/64]
 
@@ -151,6 +154,9 @@ The installer unpacks and installs a Windows service, called "ErpNet.FP".
 There is no UI, but when the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
 ### Windows 32/64 bit, folder install
+- All Windows versions from Windows XP SP2 and up are supported. 
+- There is no need for .Net installation. 
+- Everything that is needed is included in the Zip files below. 
 
 Download 32 bit (x86): [win-x86.zip - Windows 32 bit]
 
@@ -158,7 +164,7 @@ Download 64 bit (x64): [win-x64.zip - Windows 64 bit]
 
 Download and unzip the file in a folder. 
 Inside the folder you will find executable file: ErpNet.FP.Server.exe. 
-To start the printing service, run ErpNet.FP.Server.exe. 
+To start the printing service, run ErpNet.FP.Server.exe, or register the executable as a Windows service.
 When the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
 ### OSX 10.10 and up, 64 bit folder install
