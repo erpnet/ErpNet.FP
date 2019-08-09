@@ -12,6 +12,8 @@ The http server receives input through the REST API and uses different transport
 * TCP/IP
 * etc.
 
+## Shortcut to [**Downloads**](https://github.com/erpnet/ErpNet.FP#download) 
+
 # The Net.FP Protocol
 All communication with the ErpNet.FP print server is based on the Net.FP (Net Fiscal Protocol).
 ## Requests
