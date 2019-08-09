@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix
-    xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.802.1802"
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.809.1809"
              Manufacturer="Erp.Net And Contributors"
              UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
         
@@ -28,6 +28,10 @@
                 <!-- Id and the name of the folder in Program Files -->
                 <Directory Id="INSTALLFOLDER" Name="ErpNet.FP" />
             </Directory>
+            <Directory Id="ProgramMenuFolder">
+            </Directory>
+            <Directory Id="DesktopFolder">
+            </Directory>
         </Directory>
         <Feature Id="ProductFeature" Title="ErpNet.FP.Setup" Level="1">
             <!-- ComponentGroupRef Id="ProductFilesComponentGroup" /-->
@@ -43,6 +47,21 @@
                       Source="$(var.OUTPUT)\ErpNet.FP.Server.pdb" />
             </Component>
             <Component Id="ExeFile" Guid="*">
+                <File Source="$(var.OUTPUT)\..\..\wwwroot\favicon.ico" />
+                <!-- Install shortcut on Start Menu -->
+                <util:InternetShortcut 
+                    Id="ShortcutAtProgramMenuFolder" 
+                    Directory="ProgramMenuFolder" 
+                    Name="ErpNet.FP Admin Page" 
+                    Target="http://localhost:8001/" 
+                    IconFile="file://[#favicon.ico]" />
+                <!-- Install shortcut on Desktop -->
+                <util:InternetShortcut
+                    Id="ShortcutAtDesktopFolder"
+                    Directory="DesktopFolder"
+                    Name="ErpNet.FP Admin Page"
+                    Target="http://localhost:8001/"
+                    IconFile="file://[#favicon.ico]" />
                 <!-- Install service executable -->
                 <File
                   Id="ErpNet.FP.Server"

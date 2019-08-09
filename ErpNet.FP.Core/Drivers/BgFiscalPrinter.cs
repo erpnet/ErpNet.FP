@@ -74,7 +74,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
 
-        protected abstract DeviceStatus ParseStatus(byte[]? status);        
+        protected abstract DeviceStatus ParseStatus(byte[]? status);
 
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
         {
@@ -187,7 +187,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         status.AddError(e.Code, e.Message);
                     }
-                    
+
                     if (!status.Ok)
                     {
                         status.AddInfo($"Error occured at Payment {row}");
@@ -226,7 +226,7 @@ namespace ErpNet.FP.Core.Drivers
             return status;
         }
 
-       
+
 
         public virtual DeviceStatus ValidateTransferAmount(TransferAmount transferAmount)
         {

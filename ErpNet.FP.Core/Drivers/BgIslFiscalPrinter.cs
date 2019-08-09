@@ -122,7 +122,6 @@ namespace ErpNet.FP.Core.Drivers
                     (_, deviceStatus) = AddComment(item.Text);
                     if (!deviceStatus.Ok)
                     {
-                        AbortReceipt();
                         deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
                         return deviceStatus;
                     }
@@ -154,7 +153,6 @@ namespace ErpNet.FP.Core.Drivers
                     }
                     if (!deviceStatus.Ok)
                     {
-                        AbortReceipt();
                         deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
                         return deviceStatus;
                     }
@@ -167,7 +165,6 @@ namespace ErpNet.FP.Core.Drivers
                 (_, deviceStatus) = FullPayment();
                 if (!deviceStatus.Ok)
                 {
-                    AbortReceipt();
                     deviceStatus.AddInfo($"Error occurred while making full payment in cash");
                     return deviceStatus;
                 }
@@ -183,7 +180,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         continue;
                     }
-                    
+
                     try
                     {
                         (_, deviceStatus) = AddPayment(payment.Amount, payment.PaymentType);
@@ -196,7 +193,6 @@ namespace ErpNet.FP.Core.Drivers
 
                     if (!deviceStatus.Ok)
                     {
-                        AbortReceipt();
                         deviceStatus.AddInfo($"Error occurred in Payment {paymentNumber}");
                         return deviceStatus;
                     }
@@ -293,7 +289,7 @@ namespace ErpNet.FP.Core.Drivers
             (receiptAmount, deviceStatus) = GetReceiptAmount();
             if (!receiptAmount.HasValue || !deviceStatus.Ok)
             {
-                (_, deviceStatus) = AbortReceipt();
+                AbortReceipt();
                 return (receiptInfo, deviceStatus);
             }
             receiptInfo.ReceiptAmount = receiptAmount.Value;
@@ -333,7 +329,7 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(false);
-            System.Diagnostics.Trace.WriteLine("PrintZReport: {0}", response);
+            System.Diagnostics.Trace.WriteLine("PrintXReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
         }

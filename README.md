@@ -26,7 +26,7 @@ POST /printers/dt517985/receipt
 
 ```json
 {
-  "uniqueSaleNumber": "DT279013-DD01-0000001",
+  "uniqueSaleNumber": "DT279013-0001-0000001",
   "items": [
     {
       "text": "Cheese",

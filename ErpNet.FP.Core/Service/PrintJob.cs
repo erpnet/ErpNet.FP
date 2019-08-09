@@ -47,7 +47,7 @@ namespace ErpNet.FP.Core.Service
                     case PrintJobAction.RawRequest:
                         if (Document != null)
                         {
-                            Result = Printer.RawRequest((RequestFrame)Document);                            
+                            Result = Printer.RawRequest((RequestFrame)Document);
                         }
                         break;
                     case PrintJobAction.Receipt:

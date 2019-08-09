@@ -68,5 +68,29 @@ namespace ErpNet.FP.Core.Drivers
             string key,
             string defaultValue) =>
             options.TryGetValue(key, out string value) ? value : defaultValue;
+
+        public static string[] Split(this string str, int[] chunkSizes)
+        {
+            var listOfStrings = new List<string>();
+            int ix = 0;
+            foreach (var chunkSize in chunkSizes)
+            {
+                if (ix + chunkSize > str.Length)
+                {
+                    break;
+                }
+                listOfStrings.Add(str.Substring(ix, chunkSize));
+                ix += chunkSize;
+            }
+            return listOfStrings.ToArray();
+        }
+        public static int IntPow(this int a, int b)
+        {
+            int result = 1;
+            for (int i = 0; i < b; i++)
+                result *= a;
+            return result;
+        }
+
     }
 }

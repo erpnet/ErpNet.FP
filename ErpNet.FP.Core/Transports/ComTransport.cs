@@ -10,6 +10,9 @@ namespace ErpNet.FP.Core.Transports
     {
         public override string TransportName => "com";
 
+        protected const int DefaultBaudRate = 115200;
+        protected const int DefaultTimeout = 1000;
+
         private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
             new Dictionary<string, ComTransport.Channel?>();
 
@@ -27,7 +30,8 @@ namespace ErpNet.FP.Core.Transports
             {
                 try
                 {
-                    channel = new Channel(address);
+                    var (comPort, baudRate) = ParseAddress(address);
+                    channel = new Channel(comPort, baudRate);
                     openedChannels.Add(address, channel);
                     return channel;
                 }
@@ -37,6 +41,15 @@ namespace ErpNet.FP.Core.Transports
                     throw e;
                 }
             }
+        }
+
+        protected (string, int) ParseAddress(string address)
+        {
+            var parts = address.Split(':');
+            if (parts.Length == 1) return (address, DefaultBaudRate);
+            var hostName = parts[0];
+            var baudRate = parts.Length > 1 ? int.Parse(parts[1]) : DefaultBaudRate;
+            return (hostName, baudRate);
         }
 
         public override void Drop(IChannel channel)
@@ -63,9 +76,16 @@ namespace ErpNet.FP.Core.Transports
             internal readonly SerialPort serialPort;
             protected Timer idleTimer;
 
-            public string Descriptor => serialPort.PortName;
+            public string Descriptor
+            {
+                get
+                {
+                    return serialPort.PortName +
+                        (serialPort.BaudRate == DefaultBaudRate ? "" : $":{serialPort.BaudRate}");
+                }
+            }
 
-            public Channel(string portName, int baudRate = 115200, int timeout = 600)
+            public Channel(string portName, int baudRate = DefaultBaudRate, int timeout = DefaultTimeout)
             {
                 serialPort = new SerialPort
                 {

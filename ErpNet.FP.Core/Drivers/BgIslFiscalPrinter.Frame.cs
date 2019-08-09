@@ -188,35 +188,6 @@ namespace ErpNet.FP.Core.Drivers
             throw new InvalidResponseException("The response is invalid. Checksum does not match.");
         }
 
-        protected override DeviceStatus ParseStatus(byte[]? status)
-        {
-            if (status == null)
-            {
-                return new DeviceStatus();
-            }
-            // For debugging purposes only (to view status bits)    
-            var deviceID = (Info == null ? "" : Info.SerialNumber);
-            System.Diagnostics.Trace.WriteLine($"Status of device {deviceID}");
-            for (var i = 0; i < status.Length; i++)
-            {
-                byte mask = 0b10000000;
-                byte b = status[i];
-                // Ignore j==0 because bit 7 is always reserved and 1
-                for (var j = 1; j < 8; j++)
-                {
-                    mask >>= 1;
-                    if ((mask & b) == mask)
-                    {
-                        System.Diagnostics.Trace.Write($"{i}.{7 - j} ");
-                    }
-                }
-            }
-            System.Diagnostics.Trace.WriteLine("");
-
-            // TODO: fill the device status
-            return new DeviceStatus();
-        }
-
         public override DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame)
         {
             if (requestFrame.RawRequest.Length == 0)

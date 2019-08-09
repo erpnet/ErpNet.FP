@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -118,7 +116,7 @@ namespace ErpNet.FP.Server
 
                     // Overriding some of the config values 
                     options.AllowSynchronousIO = false;
-                    options.Limits.MaxRequestBodySize = 500 * 1024; 
+                    options.Limits.MaxRequestBodySize = 500 * 1024;
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {

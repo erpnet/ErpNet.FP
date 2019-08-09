@@ -204,7 +204,7 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
 ### Example request body:
 ```json
 {
-  "uniqueSaleNumber": "DT279013-DD01-0000001",
+  "uniqueSaleNumber": "DT279013-0001-0000001",
   "items": [
     {
       "text": "Cheese",
@@ -227,8 +227,12 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
   ],
   "payments": [
     {
-      "amount": 30,
+      "amount": 50,
       "paymentType": "cash"
+    },
+    {
+      "amount": -20,
+      "paymentType": "change"
     }
   ]
 }
@@ -319,7 +323,7 @@ http://localhost:8001/printers/dt279013/receipt
 ### Example request body:
 ```json
 {
-  "uniqueSaleNumber": "DT279013-DD01-0000001",
+  "uniqueSaleNumber": "DT279013-0001-0000001",
   "operator": "1",
   "operatorPassword": "1",
   "items": [

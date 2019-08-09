@@ -2,6 +2,7 @@
 using ErpNet.FP.Core.Drivers.BgDaisy;
 using ErpNet.FP.Core.Drivers.BgDatecs;
 using ErpNet.FP.Core.Drivers.BgEltrade;
+using ErpNet.FP.Core.Drivers.BgIcp;
 using ErpNet.FP.Core.Drivers.BgIncotex;
 using ErpNet.FP.Core.Drivers.BgTremol;
 using ErpNet.FP.Core.Provider;
@@ -44,6 +45,7 @@ namespace ErpNet.FP.Server.Contexts
             var eltradeIsl = new BgEltradeIslFiscalPrinterDriver();
             var daisyIsl = new BgDaisyIslFiscalPrinterDriver();
             var incotexIsl = new BgIncotexIslFiscalPrinterDriver();
+            var islIcp = new BgIslIcpFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
             var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
 
@@ -64,6 +66,9 @@ namespace ErpNet.FP.Server.Contexts
                 .Register(daisyIsl, tcpTransport)
                 .Register(incotexIsl, comTransport)
                 .Register(incotexIsl, tcpTransport)
+                // Icp Frame
+                .Register(islIcp, comTransport)
+                .Register(islIcp, tcpTransport)
                 // Zfp Frame
                 .Register(tremolZfp, comTransport)
                 .Register(tremolZfp, tcpTransport)

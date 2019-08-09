@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?define OUTPUT = "$(sys.CURRENTDIR)..\ErpNet.FP.Server\Published\win-x86" ?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" 
+         DefaultTargets="Build" 
+         InitialTargets="EnsureWixToolsetInstalled" 
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -27,6 +30,10 @@
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixToolPath)WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+        <HintPath>$(WixToolPath)WixUtilExtension.dll</HintPath>
+        <Name>WixUtilExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>

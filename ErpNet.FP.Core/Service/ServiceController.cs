@@ -60,7 +60,8 @@ namespace ErpNet.FP.Core.Service
         public ConcurrentDictionary<string, PrintJob> Tasks { get; } = new ConcurrentDictionary<string, PrintJob>();
         public bool IsReady { get => isReady; set => isReady = value; }
 
-        public bool AutoDetect {
+        public bool AutoDetect
+        {
             get => configOptions.AutoDetect;
 
             set
