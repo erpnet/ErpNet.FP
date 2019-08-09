@@ -264,7 +264,7 @@ The library supports printers from the following manufacturers:
 * Daisy (https://daisy.bg)
 * Eltrade (https://www.eltrade.com)
 * Incotex (http://www.incotex.bg) 
-* ISL (http://isl.bg) in progress...
+* ISL (http://isl.bg)
 
 If you want your device to be supported, please contact us, and we will try our best to help you!
 
@@ -279,7 +279,7 @@ If you want your device to be supported, please contact us, and we will try our 
 - Tremol FP01-KL-V2, firmware: 99C4, protocol: bg.zk.v2.zfp.com
 - Tremol M20, firmware: Ver. 1.01 TRA20 C.S. 25411, protocol: bg.zk.zfp.com
 - Incotex 300SM KL-Q, firmware: 2.11 Jan 22 2019 14:00, protocol: bg.in.isl.com
-- ISL5011S-KL, protocol: bg.is.icp.com in progress...
+- ISL5011S-KL, firmware: BG R1 21.01.201948, protocol: bg.is.icp.com
 
 ## Supported protocols and devices
 * bg.dt.c.isl - Datecs WP-50, Datecs DP-05, Datecs DP-05B, Datecs DP-05C, Datecs DP-25, Datecs DP-35, Datecs DP-150, Datecs DP-15
@@ -290,7 +290,7 @@ If you want your device to be supported, please contact us, and we will try our 
 * bg.ed.isl - Eltrade A1 KL, Eltrade A1 KL, Eltrade A3 KL, Eltrade B1 KL, Eltrade PRP 250F KL, Eltrade A6 KL, Eltrade B3 KL, EPSON TM - T810F KL модел 01, EPSON TM - T81F KL модел 03, ELTRADE PRP 250F KL
 * bg.dy.isl - Daisy Compact S, Daisy Compact M, Daisy eXpert SX 01, Daisy eXpert SX, Daisy Compact M 02, Daisy Compact S 01, Daisy Perfect M 01, Daisy MICRO C 01, Daisy Compact M 01, Daisy eXpert 01, Daisy Perfect S 01, Daisy FX 1300, Daisy FX 1200C, Daisy Perfect SA, Daisy FX 21 01 
 * bg.in.isl - Incotex 133 KL-Q, Incotex 181 KL-Q, Incotex 777, Incotex 300SM KL-Q, Incotex 300S KL-Q
-* bg.is.icp - ISL5011S-KL in progress...
+* bg.is.icp - ISL5011S-KL
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
@@ -304,7 +304,7 @@ This is a list of default credentials we use in the library, when there is no ex
 * bg.ed.isl - "operator" : "1", "operatorPassword": N/A
 * bg.dy.isl - For receipts: "operator" : "1", "operatorPassword": "1", and for reversalReceipts: "operator" : "20", "operatorPassword": "9999"
 * bg.in.isl - "operator" : "1", "operatorPassword": "1"
-* bg.is.icp - "operator" : "1", "operatorPassword": "0000"
+* bg.is.icp - "operator" : "1", "operatorPassword": N/A
 
 # Source Code
 To compile and run the source code, you will need .Net Core 3.0 Preview 7 SDK.
