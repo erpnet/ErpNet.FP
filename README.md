@@ -148,7 +148,7 @@ You can list and [download the binaries for ErpNet.FP.Server]:
 
 ### Windows 32/64 Service Installer (.MSI) ** New **
 - All Windows versions, from Windows XP SP2 and up are supported. 
-- [Prerequisites for ErpNet.FP on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites)
+- [Prerequisites for ErpNet.FP on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites).
 - There is no need for .Net installation. 
 - Everything that is needed is included in the MSI installer. 
 
@@ -160,6 +160,7 @@ There is no UI, but when the service is running in the default configuration, yo
 
 ### Windows 32/64 bit, folder install
 - All Windows versions from Windows XP SP2 and up are supported. 
+- [Prerequisites for ErpNet.FP on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites).
 - There is no need for .Net installation. 
 - Everything that is needed is included in the Zip files below. 
 
@@ -175,7 +176,7 @@ When the service is running in the default configuration, you can browse the Adm
 ### OSX 10.10 and up, 64 bit folder install
 
 Download 64 bit - [osx-x64.zip - macOS] - You can download and unzip the server in a folder. 
-- [Prerequisites for ErpNet.FP on macOS](https://docs.microsoft.com/en-us/dotnet/core/macos-prerequisites)
+- [Prerequisites for ErpNet.FP on macOS](https://docs.microsoft.com/en-us/dotnet/core/macos-prerequisites).
 
 Inside the unzipped folder, run it from console/terminal with:
 ```bash
@@ -186,7 +187,7 @@ When the service is running in the default configuration, you can browse the Adm
 ### Linux 64 bit, folder install
 
 Download 64 bit - [linux-x64.zip - Linux x64] - You can download and unzip the server. 
-- [Prerequisites for ErpNet.FP on Linux](https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites)
+- [Prerequisites for ErpNet.FP on Linux](https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites).
 
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
 For convenience, create a systemd service config file, get more info how to do it here [Systemd: Service File Examples].
@@ -196,7 +197,7 @@ When the service is running in the default configuration, you can browse the Adm
 ### Linux-Arm 64 bit, folder install
 
 Download 64 bit - [linux-arm.zip - Linux Arm] - You can download and unzip the server. 
-- [Prerequisites for ErpNet.FP on Linux](https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites)
+- [Prerequisites for ErpNet.FP on Linux](https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites).
 
 This version is compatible with Raspberry PI OS, Raspbian, and 64 bit Arm devices like Raspberry PI 3B+, Raspberry PI 2 and up.
 Because of the serial ports default permissions, run it from sudoer, with sudo, or in the root user context. 
