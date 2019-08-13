@@ -137,6 +137,7 @@ namespace ErpNet.FP.Core.Transports
             /// <returns>The data which was read.</returns>
             public byte[] Read()
             {
+                idleTimer.Change(-1, 0);
                 var buffer = new byte[serialPort.ReadBufferSize];
                 var task = serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
                 if (task.Wait(serialPort.ReadTimeout))
@@ -157,6 +158,7 @@ namespace ErpNet.FP.Core.Transports
             /// <param name="data">The data to write.</param>
             public void Write(byte[] data)
             {
+                idleTimer.Change(-1, 0);
                 if (!serialPort.IsOpen)
                 {
                     Open();

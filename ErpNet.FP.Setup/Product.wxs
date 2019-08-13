@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.809.1809"
+    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.813.1813"
              Manufacturer="Erp.Net And Contributors"
              UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
         
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
         
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+        <Property Id="MSIFASTINSTALL" Value="7" />
         
         <!-- Cab file to be embedded in the .msi file -->
         <MediaTemplate EmbedCab="yes" />
@@ -27,6 +29,7 @@
             <Directory Id="ProgramFilesFolder">
                 <!-- Id and the name of the folder in Program Files -->
                 <Directory Id="INSTALLFOLDER" Name="ErpNet.FP" />
+                <Directory Id="ProductFilesComponentGroup" />
             </Directory>
             <Directory Id="ProgramMenuFolder">
             </Directory>
@@ -34,18 +37,12 @@
             </Directory>
         </Directory>
         <Feature Id="ProductFeature" Title="ErpNet.FP.Setup" Level="1">
-            <!-- ComponentGroupRef Id="ProductFilesComponentGroup" /-->
+            <ComponentGroupRef Id="ProductFilesComponentGroup" />
             <ComponentGroupRef Id="ProductComponents" />
         </Feature>
     </Product>
     <Fragment>
-        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-            <Component Id="PdbFile" Guid="*">
-                <!-- Install service executable pdf file -->
-                <File Id="ErpNet.FP.Server.pdb" 
-                      KeyPath="yes" 
-                      Source="$(var.OUTPUT)\ErpNet.FP.Server.pdb" />
-            </Component>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">            
             <Component Id="ExeFile" Guid="*">
                 <File Source="$(var.OUTPUT)\..\..\wwwroot\favicon.ico" />
                 <!-- Install shortcut on Start Menu -->
