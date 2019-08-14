@@ -1,9 +1,6 @@
 ﻿namespace ErpNet.FP.Core
 {
-    /// <summary>
-    /// Represents one Receipt, which can be printed on a fiscal printer.
-    /// </summary>
-    public class Credentials
+    public class Credentials : FiscalTask
     {
         /// <summary>
         /// Operator Name or Operator ID.

@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="reversalReceipt">The reversal receipt.</param>
         /// <returns></returns>
-        DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt);
+        (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
         /// <summary>
         /// Validates the reversal receipt object

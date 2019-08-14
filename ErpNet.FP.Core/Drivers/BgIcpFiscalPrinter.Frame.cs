@@ -11,7 +11,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
     /// <seealso cref="ErpNet.FP.Drivers.BgIcpFiscalPrinter" />
     public partial class BgIcpFiscalPrinter : BgFiscalPrinter
     {
-        public byte[] DeviceNo = null;
+        public byte[]? DeviceNo = null;
 
         protected const byte
             MarkerWAIT = 0x05,

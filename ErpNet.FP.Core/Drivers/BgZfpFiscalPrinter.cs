@@ -100,40 +100,29 @@ namespace ErpNet.FP.Core.Drivers
             return status;
         }
 
-        protected virtual DeviceStatus PrintReceiptBody(Receipt receipt)
+        protected virtual (ReceiptInfo, DeviceStatus) PrintReceiptBody(Receipt receipt)
         {
-            if (receipt.Items == null || receipt.Items.Count == 0)
+            var receiptInfo = new ReceiptInfo();
+
+            var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
+            if (!deviceStatus.Ok)
             {
-                throw new StandardizedStatusMessageException("Receipt.Items must be not null or empty", "E410");
+                return (receiptInfo, deviceStatus);
             }
 
-            DeviceStatus deviceStatus;
+            receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
 
             uint itemNumber = 0;
             // Receipt items
-            foreach (var item in receipt.Items)
+            if (receipt.Items != null) foreach(var item in receipt.Items)
             {
                 itemNumber++;
                 if (item.Type == ItemType.Comment)
                 {
                     (_, deviceStatus) = AddComment(item.Text);
-                    if (!deviceStatus.Ok)
-                    {
-                        AbortReceipt();
-                        deviceStatus.AddInfo($"Error occurred in the comment of Item {itemNumber}");
-                        return deviceStatus;
-                    }
                 }
                 else
                 {
-                    if (item.PriceModifierValue < 0m)
-                    {
-                        throw new StandardizedStatusMessageException("PriceModifierValue amount must be positive number", "E403");
-                    }
-                    if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
-                    {
-                        throw new StandardizedStatusMessageException("PriceModifierValue must be 0 if priceModifierType is None", "E403");
-                    }
                     try
                     {
                         (_, deviceStatus) = AddItem(
@@ -148,13 +137,13 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         deviceStatus = new DeviceStatus();
                         deviceStatus.AddError(e.Code, e.Message);
-                    }
-                    if (!deviceStatus.Ok)
-                    {
-                        AbortReceipt();
-                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
-                        return deviceStatus;
-                    }
+                    }                    
+                }
+                if (!deviceStatus.Ok)
+                {
+                    AbortReceipt();
+                    deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                    return (receiptInfo, deviceStatus);
                 }
             }
 
@@ -166,7 +155,7 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     AbortReceipt();
                     deviceStatus.AddInfo($"Error occurred while making full payment in cash and closing the receipt");
-                    return deviceStatus;
+                    return (receiptInfo, deviceStatus);
                 }
             }
             else
@@ -195,7 +184,7 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         AbortReceipt();
                         deviceStatus.AddInfo($"Error occurred in Payment {paymentNumber}");
-                        return deviceStatus;
+                        return (receiptInfo, deviceStatus);
                     }
                 }
                 (_, deviceStatus) = CloseReceipt();
@@ -203,11 +192,11 @@ namespace ErpNet.FP.Core.Drivers
                 {
                     AbortReceipt();
                     deviceStatus.AddInfo($"Error occurred while closing the receipt");
-                    return deviceStatus;
+                    return (receiptInfo, deviceStatus);
                 }
             }
 
-            return deviceStatus;
+            return GetLastReceiptInfo();
         }
 
         protected virtual (ReceiptInfo, DeviceStatus) GetLastReceiptInfo()
@@ -231,7 +220,7 @@ namespace ErpNet.FP.Core.Drivers
             }, deviceStatus);
         }
 
-        public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
+        public override (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
             // Abort all unfinished or erroneus receipts
             AbortReceipt();
@@ -249,20 +238,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 AbortReceipt();
                 deviceStatus.AddInfo($"Error occured while opening new fiscal reversal receipt");
-                return deviceStatus;
+                return (new ReceiptInfo(), deviceStatus);
             }
 
-            try
-            {
-                return PrintReceiptBody(reversalReceipt);
-            }
-            catch (StandardizedStatusMessageException e)
-            {
-                AbortReceipt();
-                deviceStatus = new DeviceStatus();
-                deviceStatus.AddError(e.Code, e.Message);
-                return deviceStatus;
-            }
+            return PrintReceiptBody(reversalReceipt);
         }
 
         public override DeviceStatusWithCashAmount Cash()
@@ -292,21 +271,11 @@ namespace ErpNet.FP.Core.Drivers
 
         public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
         {
-            var receiptInfo = new ReceiptInfo();
-
             // Abort all unfinished or erroneus receipts
             AbortReceipt();
 
-            var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
-            if (!deviceStatus.Ok)
-            {
-                return (receiptInfo, deviceStatus);
-            }
-
-            receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
-
             // Receipt header
-            (_, deviceStatus) = OpenReceipt(
+            var (_, deviceStatus) = OpenReceipt(
                 receipt.UniqueSaleNumber,
                 receipt.Operator,
                 receipt.OperatorPassword
@@ -315,26 +284,10 @@ namespace ErpNet.FP.Core.Drivers
             {
                 AbortReceipt();
                 deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
-                return (receiptInfo, deviceStatus);
+                return (new ReceiptInfo(), deviceStatus);
             }
 
-            try
-            {
-                deviceStatus = PrintReceiptBody(receipt);
-                if (!deviceStatus.Ok)
-                {
-                    return (receiptInfo, deviceStatus);
-                }
-            }
-            catch (StandardizedStatusMessageException e)
-            {
-                AbortReceipt();
-                deviceStatus = new DeviceStatus();
-                deviceStatus.AddError(e.Code, e.Message);
-                return (receiptInfo, deviceStatus);
-            }
-
-            return GetLastReceiptInfo();
+            return PrintReceiptBody(receipt);
         }
 
         public override DeviceStatus PrintZReport(Credentials credentials)

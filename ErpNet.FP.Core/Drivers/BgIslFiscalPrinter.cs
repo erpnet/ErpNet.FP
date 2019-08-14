@@ -103,39 +103,29 @@ namespace ErpNet.FP.Core.Drivers
             return status;
         }
 
-        public virtual DeviceStatus PrintReceiptBody(Receipt receipt)
+        public virtual (ReceiptInfo, DeviceStatus) PrintReceiptBody(Receipt receipt)
         {
-            if (receipt.Items == null || receipt.Items.Count == 0)
+            var receiptInfo = new ReceiptInfo();
+
+            var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
+            if (!deviceStatus.Ok)
             {
-                throw new StandardizedStatusMessageException("Receipt.Items must be not null or empty", "E410");
+                return (receiptInfo, deviceStatus);
             }
 
-            var deviceStatus = new DeviceStatus();
+            receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
 
             uint itemNumber = 0;
             // Receipt items
-            foreach (var item in receipt.Items)
+            if (receipt.Items != null) foreach(var item in receipt.Items)
             {
                 itemNumber++;
                 if (item.Type == ItemType.Comment)
                 {
                     (_, deviceStatus) = AddComment(item.Text);
-                    if (!deviceStatus.Ok)
-                    {
-                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
-                        return deviceStatus;
-                    }
                 }
                 else
                 {
-                    if (item.PriceModifierValue < 0m)
-                    {
-                        throw new StandardizedStatusMessageException("PriceModifierValue amount must be positive number", "E403");
-                    }
-                    if (item.PriceModifierValue != 0m && item.PriceModifierType == PriceModifierType.None)
-                    {
-                        throw new StandardizedStatusMessageException("PriceModifierValue must be 0 if priceModifierType is None", "E403");
-                    }
                     try
                     {
                         (_, deviceStatus) = AddItem(
@@ -150,12 +140,13 @@ namespace ErpNet.FP.Core.Drivers
                     {
                         deviceStatus = new DeviceStatus();
                         deviceStatus.AddError(e.Code, e.Message);
-                    }
-                    if (!deviceStatus.Ok)
-                    {
-                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
-                        return deviceStatus;
-                    }
+                        break;
+                    }                    
+                }
+                if (!deviceStatus.Ok)
+                {
+                    deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                    return (receiptInfo, deviceStatus);
                 }
             }
 
@@ -166,7 +157,7 @@ namespace ErpNet.FP.Core.Drivers
                 if (!deviceStatus.Ok)
                 {
                     deviceStatus.AddInfo($"Error occurred while making full payment in cash");
-                    return deviceStatus;
+                    return (receiptInfo, deviceStatus);
                 }
             }
             else
@@ -178,6 +169,9 @@ namespace ErpNet.FP.Core.Drivers
 
                     if (payment.PaymentType == PaymentType.Change)
                     {
+                        // PaymentType.Change is abstract payment, 
+                        // used only for computing the total sum of the payments.
+                        // So we will skip it.
                         continue;
                     }
 
@@ -194,84 +188,9 @@ namespace ErpNet.FP.Core.Drivers
                     if (!deviceStatus.Ok)
                     {
                         deviceStatus.AddInfo($"Error occurred in Payment {paymentNumber}");
-                        return deviceStatus;
+                        return (receiptInfo, deviceStatus);
                     }
                 }
-            }
-
-            return deviceStatus;
-        }
-
-
-        public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
-        {
-            // Abort all unfinished or erroneus receipts
-            AbortReceipt();
-
-            // Receipt header
-            var (_, deviceStatus) = OpenReversalReceipt(
-                reversalReceipt.Reason,
-                reversalReceipt.ReceiptNumber,
-                reversalReceipt.ReceiptDateTime,
-                reversalReceipt.FiscalMemorySerialNumber,
-                reversalReceipt.UniqueSaleNumber,
-                reversalReceipt.Operator,
-                reversalReceipt.OperatorPassword);
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.AddInfo($"Error occured while opening new fiscal reversal receipt");
-                return deviceStatus;
-            }
-
-            deviceStatus = PrintReceiptBody(reversalReceipt);
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.AddInfo($"Error occured while printing receipt items");
-                return deviceStatus;
-            }
-
-            // Receipt finalization
-            (_, deviceStatus) = CloseReceipt();
-            return deviceStatus;
-        }
-
-        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
-        {
-            var receiptInfo = new ReceiptInfo();
-
-            // Abort all unfinished or erroneus receipts
-            AbortReceipt();
-
-            var (fiscalMemorySerialNumber, deviceStatus) = GetFiscalMemorySerialNumber();
-            if (!deviceStatus.Ok)
-            {
-                return (receiptInfo, deviceStatus);
-            }
-
-            receiptInfo.FiscalMemorySerialNumber = fiscalMemorySerialNumber;
-
-            // Opening receipt
-            (_, deviceStatus) = OpenReceipt(
-                receipt.UniqueSaleNumber,
-                receipt.Operator,
-                receipt.OperatorPassword
-            );
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
-                return (receiptInfo, deviceStatus);
-            }
-
-            // Printing receipt's body
-            deviceStatus = PrintReceiptBody(receipt);
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.AddInfo($"Error occured while printing receipt items");
-                return (receiptInfo, deviceStatus);
             }
 
             // Get the receipt date and time (current fiscal device date and time)
@@ -314,6 +233,71 @@ namespace ErpNet.FP.Core.Drivers
                 return (receiptInfo, deviceStatus);
             }
             receiptInfo.ReceiptNumber = lastDocumentNumberResponse;
+
+            return (receiptInfo, deviceStatus);
+        }
+
+
+        public override (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt)
+        {
+            var receiptInfo = new ReceiptInfo();
+
+            // Abort all unfinished or erroneus receipts
+            AbortReceipt();
+
+            // Receipt header
+            var (_, deviceStatus) = OpenReversalReceipt(
+                reversalReceipt.Reason,
+                reversalReceipt.ReceiptNumber,
+                reversalReceipt.ReceiptDateTime,
+                reversalReceipt.FiscalMemorySerialNumber,
+                reversalReceipt.UniqueSaleNumber,
+                reversalReceipt.Operator,
+                reversalReceipt.OperatorPassword);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while opening new fiscal reversal receipt");
+                return (receiptInfo, deviceStatus);
+            }
+
+            (receiptInfo, deviceStatus) = PrintReceiptBody(reversalReceipt);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+            }
+
+            return (receiptInfo, deviceStatus);
+        }
+
+        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
+        {
+            var receiptInfo = new ReceiptInfo();
+
+            // Abort all unfinished or erroneus receipts
+            AbortReceipt();
+
+            // Opening receipt
+            var (_, deviceStatus) = OpenReceipt(
+                receipt.UniqueSaleNumber,
+                receipt.Operator,
+                receipt.OperatorPassword
+            );
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
+                return (receiptInfo, deviceStatus);
+            }
+
+            // Printing receipt's body
+            (receiptInfo, deviceStatus) = PrintReceiptBody(receipt);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+            }
 
             return (receiptInfo, deviceStatus);
         }

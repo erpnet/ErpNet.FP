@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -146,7 +147,7 @@ namespace ErpNet.FP.Core.Service
                         }
 
                         /*
-                        // Auto save to config all listed printers, for future use
+                        // Auto cache to config all listed printers, for future use
                         // It is possible to have aliases, i.e. different PrinterId with the same Uri
                         foreach (var printer in Printers)
                         {
@@ -194,17 +195,27 @@ namespace ErpNet.FP.Core.Service
             object? document,
             int asyncTimeout)
         {
-            var taskId = Enqueue(new PrintJob
+            try
             {
-                Printer = printer,
-                Document = document,
-                Action = action
-            });
-            if (asyncTimeout == 0)
+                var taskId = Enqueue(new PrintJob
+                {
+                    Printer = printer,
+                    Document = document,
+                    Action = action
+                });
+
+                if (asyncTimeout == 0)
+                {
+                    return new TaskIdResult { TaskId = taskId };
+                }
+                return await Task.Run(() => RunTask(taskId, asyncTimeout));
+            } 
+            catch (StandardizedStatusMessageException e) 
             {
-                return new TaskIdResult { TaskId = taskId };
+                var status = new DeviceStatus();
+                status.AddError(e.Code, e.Message);
+                return status;
             }
-            return await Task.Run(() => RunTask(taskId, asyncTimeout));
         }
 
         public object? RunTask(string taskId, int asyncTimeout)
@@ -258,14 +269,47 @@ namespace ErpNet.FP.Core.Service
 
         public string Enqueue(PrintJob printJob)
         {
-            // CASE: Clearing Expired Tasks?
+            // CASE: Clearing Expired Tasks
             // ClearExpiredTasks();
+
+            var document = printJob.Document;
 
             // taskId is RFC7515 Guid
             var taskId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
                 .Substring(0, 22)
                 .Replace("/", "_")
                 .Replace("+", "-");
+
+            if (document != null && document.GetType().IsSubclassOf(typeof(FiscalTask)))
+            {
+                var fiscalTask = (document as FiscalTask);
+                if (fiscalTask != null && fiscalTask.TaskId != string.Empty)
+                {
+                    // override generated taskId with user supplied taskId
+                    taskId = fiscalTask.TaskId;
+
+                    // maximum length of 60 characters validation
+                    if (taskId.Length > 60)
+                    {
+                        throw new StandardizedStatusMessageException($"Task Id is too long", "E110");
+                    }
+
+                    // printable characters validation
+                    var nonPrintableCharactersPattern = @"[\x01-\x1F]"; 
+                    Match match = Regex.Match(taskId, nonPrintableCharactersPattern, RegexOptions.IgnoreCase);
+                    if (match.Success)
+                    {
+                        throw new StandardizedStatusMessageException($"Use only printable charaters for Task Id", "E110");
+                    }
+                }
+            }
+
+
+            if (Tasks.ContainsKey(taskId))
+            {
+                throw new StandardizedStatusMessageException($"Task Id \"{taskId}\" is already used", "E109");
+            }
+
             Tasks[taskId] = printJob;
             TaskQueue.Enqueue(taskId);
 

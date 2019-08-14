@@ -225,8 +225,10 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             return (receiptInfo, deviceStatus);
         }
 
-        public override DeviceStatus PrintReversalReceipt(ReversalReceipt reversalReceipt)
+        public override (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {
+            var receiptInfo = new ReceiptInfo();
+
             // Receipt header
             var (_, deviceStatus) = OpenReversalReceipt(
                 reversalReceipt.Reason,
@@ -240,18 +242,18 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             {
                 AbortReceipt();
                 deviceStatus.AddInfo($"Error occured while opening new fiscal reversal receipt");
-                return deviceStatus;
+                return (receiptInfo, deviceStatus);
             }
 
-            (_, deviceStatus) = PrintReceiptBody(reversalReceipt, true);
+            (receiptInfo, deviceStatus) = PrintReceiptBody(reversalReceipt, true);
             if (!deviceStatus.Ok)
             {
                 AbortReceipt();
                 deviceStatus.AddInfo($"Error occured while printing reversal receipt body");
-                return deviceStatus;
+                return (receiptInfo, deviceStatus);
             }
 
-            return deviceStatus;
+            return (receiptInfo, deviceStatus);
         }
 
         public override DeviceStatus PrintZReport(Credentials credentials)

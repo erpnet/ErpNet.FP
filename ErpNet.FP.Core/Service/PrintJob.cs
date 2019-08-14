@@ -73,7 +73,8 @@ namespace ErpNet.FP.Core.Service
                             var validateStatus = Printer.ValidateReversalReceipt(reversalReceipt);
                             if (validateStatus.Ok)
                             {
-                                Result = Printer.PrintReversalReceipt(reversalReceipt);
+                                var (info, status) = Printer.PrintReversalReceipt(reversalReceipt);
+                                Result = new DeviceStatusWithReceiptInfo(status, info);
                             }
                             else
                             {
