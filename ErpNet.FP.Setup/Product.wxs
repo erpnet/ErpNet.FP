@@ -75,13 +75,20 @@
                         Account="LocalSystem"
                         ErrorControl="normal" />
                 <!-- Set start/stop/remove options -->
-                <ServiceControl 
+                <ServiceControl
                         Id="StartService"
-                        Name="ErpNetFPServer" 
-                        Stop="both" 
-                        Start="install" 
+                        Name="ErpNetFPServer"
+                        Stop="both"
+                        Start="install"
                         Remove="uninstall"
-                        Wait="yes" />
+                        Wait="yes" />                    
+                <util:ServiceConfig 
+                    ServiceName="ErpNetFPServer"
+                    FirstFailureActionType="restart"
+                    SecondFailureActionType="restart"
+                    ThirdFailureActionType="restart"
+                    ResetPeriodInDays="1"
+                    RestartServiceDelayInSeconds="60" />
             </Component>
         </ComponentGroup>
     </Fragment>
