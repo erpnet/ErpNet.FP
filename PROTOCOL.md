@@ -72,29 +72,74 @@ http://localhost:8001/printers
 ### Example response:
 ```json
 {
-    "dt525860": {
-        "uri": "bg.dt.x.isl.com://COM21",
-        "serialNumber": "DT525860",
-        "fiscalMemorySerialNumber": "02525860",
+    "dt517985": {
+        "uri": "bg.dt.c.isl.com://COM6",
+        "serialNumber": "DT517985",
+        "fiscalMemorySerialNumber": "02517985",
         "manufacturer": "Datecs",
-        "model": "FP-700X",
-        "firmwareVersion": "266207 29Jan19 1634",
+        "model": "DP-25",
+        "firmwareVersion": "263453 08Nov18 1312",
         "itemTextMaxLength": 22,
+        "commentTextMaxLength": 40,
+        "operatorPasswordMaxLength": 8,
+        "taxIdentificationNumber": "000713391",
+        "supportedPaymentTypes": [
+            "cash",
+            "coupons",
+            "ext-coupons",
+            "card",
+            "reserved1"
+        ]
+    },
+    "dt279013": {
+        "uri": "bg.dt.p.isl.com://COM15",
+        "serialNumber": "DT279013",
+        "fiscalMemorySerialNumber": "02279013",
+        "manufacturer": "Datecs",
+        "model": "FP-2000",
+        "firmwareVersion": "1.00BG 23NOV18 1000",
+        "itemTextMaxLength": 36,
         "commentTextMaxLength": 42,
         "operatorPasswordMaxLength": 8,
-        "taxIdentificationNumber": ""
+        "taxIdentificationNumber": "000713391",
+        "supportedPaymentTypes": [
+            "cash",
+            "check",
+            "coupons",
+            "ext-coupons",
+            "packaging",
+            "internal-usage",
+            "damage",
+            "card",
+            "bank",
+            "reserved1",
+            "reserved2"
+        ]
     },
-    "zk970105": {
-        "uri": "bg.zk.v2.zfp.com://COM23",
-        "serialNumber": "ZK970105",
-        "fiscalMemorySerialNumber": "50970105",
-        "manufacturer": "Tremol",
-        "model": "FP01-KL-V2",
-        "firmwareVersion": "\ufffd.\ufffd.99C4",
-        "itemTextMaxLength": 32,
-        "commentTextMaxLength": 30,
-        "operatorPasswordMaxLength": 6,
-        "taxIdentificationNumber": "104593442"
+    "is017220": {
+        "uri": "bg.is.icp.com://COM3",
+        "serialNumber": "IS017220",
+        "fiscalMemorySerialNumber": "12022490",
+        "manufacturer": "ISL",
+        "model": "ISL5011S-KL",
+        "firmwareVersion": "BG R1 21.01.201948",
+        "itemTextMaxLength": 40,
+        "commentTextMaxLength": 45,
+        "operatorPasswordMaxLength": 0,
+        "taxIdentificationNumber": "121108681",
+        "supportedPaymentTypes": [
+            "cash",
+            "check",
+            "coupons",
+            "ext-coupons",
+            "packaging",
+            "internal-usage",
+            "damage",
+            "card",
+            "bank",
+            "reserved1",
+            "reserved2"
+        ]
     }
 }
 ```
@@ -113,16 +158,23 @@ http://localhost:8001/printers/dy448967
 ### Example response:
 ```json
 {
-    "uri": "bg.dy.isl.com://COM7",
-    "serialNumber": "DY448967",
-    "fiscalMemorySerialNumber": "36607003",
-    "manufacturer": "Daisy",
-    "model": "CompactM",
-    "firmwareVersion": "ONL-4.01BG",
-    "itemTextMaxLength": 20,
-    "commentTextMaxLength": 28,
-    "operatorPasswordMaxLength": 6,
-    "taxIdentificationNumber": ""
+    "uri": "bg.dt.c.isl.com://COM6",
+    "serialNumber": "DT517985",
+    "fiscalMemorySerialNumber": "02517985",
+    "manufacturer": "Datecs",
+    "model": "DP-25",
+    "firmwareVersion": "263453 08Nov18 1312",
+    "itemTextMaxLength": 22,
+    "commentTextMaxLength": 40,
+    "operatorPasswordMaxLength": 8,
+    "taxIdentificationNumber": "000713391",
+    "supportedPaymentTypes": [
+        "cash",
+        "coupons",
+        "ext-coupons",
+        "card",
+        "reserved1"
+    ]
 }
 ```
 
