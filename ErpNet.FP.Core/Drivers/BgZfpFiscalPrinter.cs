@@ -114,38 +114,38 @@ namespace ErpNet.FP.Core.Drivers
 
             uint itemNumber = 0;
             // Receipt items
-            if (receipt.Items != null) foreach(var item in receipt.Items)
-            {
-                itemNumber++;
-                if (item.Type == ItemType.Comment)
+            if (receipt.Items != null) foreach (var item in receipt.Items)
                 {
-                    (_, deviceStatus) = AddComment(item.Text);
-                }
-                else
-                {
-                    try
+                    itemNumber++;
+                    if (item.Type == ItemType.Comment)
                     {
-                        (_, deviceStatus) = AddItem(
-                            item.Text,
-                            item.UnitPrice,
-                            item.TaxGroup,
-                            item.Quantity,
-                            item.PriceModifierValue,
-                            item.PriceModifierType);
+                        (_, deviceStatus) = AddComment(item.Text);
                     }
-                    catch (StandardizedStatusMessageException e)
+                    else
                     {
-                        deviceStatus = new DeviceStatus();
-                        deviceStatus.AddError(e.Code, e.Message);
-                    }                    
+                        try
+                        {
+                            (_, deviceStatus) = AddItem(
+                                item.Text,
+                                item.UnitPrice,
+                                item.TaxGroup,
+                                item.Quantity,
+                                item.PriceModifierValue,
+                                item.PriceModifierType);
+                        }
+                        catch (StandardizedStatusMessageException e)
+                        {
+                            deviceStatus = new DeviceStatus();
+                            deviceStatus.AddError(e.Code, e.Message);
+                        }
+                    }
+                    if (!deviceStatus.Ok)
+                    {
+                        AbortReceipt();
+                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
                 }
-                if (!deviceStatus.Ok)
-                {
-                    AbortReceipt();
-                    deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
-                    return (receiptInfo, deviceStatus);
-                }
-            }
 
             // Receipt payments
             if (receipt.Payments == null || receipt.Payments.Count == 0)
@@ -244,7 +244,7 @@ namespace ErpNet.FP.Core.Drivers
             return PrintReceiptBody(reversalReceipt);
         }
 
-        public override DeviceStatusWithCashAmount Cash()
+        public override DeviceStatusWithCashAmount Cash(Credentials credentials)
         {
             var (response, status) = Request(CommandReadDailyAvailableAmounts, "0");
             var statusEx = new DeviceStatusWithCashAmount(status);
@@ -302,6 +302,13 @@ namespace ErpNet.FP.Core.Drivers
             var (response, status) = PrintDailyReport(false);
             System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
             return status;
+        }
+
+        public override DeviceStatusWithDateTime Reset(Credentials credentials)
+        {
+            AbortReceipt();
+            FullPaymentAndCloseReceipt();
+            return CheckStatus();
         }
     }
 }

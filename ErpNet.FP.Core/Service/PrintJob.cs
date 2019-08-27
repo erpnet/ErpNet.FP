@@ -13,7 +13,8 @@ namespace ErpNet.FP.Core.Service
         Deposit,
         XReport,
         ZReport,
-        SetDateTime
+        SetDateTime,
+        Reset
     }
 
     public delegate object Run(object document);
@@ -42,7 +43,11 @@ namespace ErpNet.FP.Core.Service
                 switch (Action)
                 {
                     case PrintJobAction.Cash:
-                        Result = Printer.Cash();
+                        if (Document == null)
+                        {
+                            Document = new Credentials();
+                        }
+                        Result = Printer.Cash((Credentials)Document);
                         break;
                     case PrintJobAction.RawRequest:
                         if (Document != null)
@@ -131,6 +136,13 @@ namespace ErpNet.FP.Core.Service
                         {
                             Result = Printer.SetDateTime((CurrentDateTime)Document);
                         };
+                        break;
+                    case PrintJobAction.Reset:
+                        if (Document == null)
+                        {
+                            Document = new Credentials();
+                        }
+                        Result = Printer.Reset((Credentials)Document);
                         break;
                     default:
                         break;

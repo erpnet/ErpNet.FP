@@ -209,8 +209,8 @@ namespace ErpNet.FP.Core.Service
                     return new TaskIdResult { TaskId = taskId };
                 }
                 return await Task.Run(() => RunTask(taskId, asyncTimeout));
-            } 
-            catch (StandardizedStatusMessageException e) 
+            }
+            catch (StandardizedStatusMessageException e)
             {
                 var status = new DeviceStatus();
                 status.AddError(e.Code, e.Message);
@@ -295,7 +295,7 @@ namespace ErpNet.FP.Core.Service
                     }
 
                     // printable characters validation
-                    var nonPrintableCharactersPattern = @"[\x01-\x1F]"; 
+                    var nonPrintableCharactersPattern = @"[\x01-\x1F]";
                     Match match = Regex.Match(taskId, nonPrintableCharactersPattern, RegexOptions.IgnoreCase);
                     if (match.Success)
                     {

@@ -30,7 +30,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             return statusEx;
         }
 
-        public override DeviceStatusWithCashAmount Cash()
+        public override DeviceStatusWithCashAmount Cash(Credentials credentials)
         {
             var (response, status) = Request("F80D");
             var statusEx = new DeviceStatusWithCashAmount(status);
@@ -282,6 +282,13 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             var deviceStatusWithRawResponse = new DeviceStatusWithRawResponse(status);
             deviceStatusWithRawResponse.RawResponse = rawResponse;
             return deviceStatusWithRawResponse;
+        }
+
+        public override DeviceStatusWithDateTime Reset(Credentials credentials)
+        {
+            AbortReceipt();
+            FullPayment();
+            return CheckStatus();
         }
     }
 }

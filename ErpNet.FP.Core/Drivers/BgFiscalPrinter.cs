@@ -56,7 +56,7 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatusWithDateTime CheckStatus();
 
-        public abstract DeviceStatusWithCashAmount Cash();
+        public abstract DeviceStatusWithCashAmount Cash(Credentials credentials);
 
         public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
@@ -74,7 +74,10 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
 
+        public abstract DeviceStatusWithDateTime Reset(Credentials credentials);
+
         protected abstract DeviceStatus ParseStatus(byte[]? status);
+        
 
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
         {

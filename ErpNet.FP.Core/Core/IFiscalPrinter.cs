@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets the amount of cash available
         /// </summary>
-        DeviceStatusWithCashAmount Cash();
+        DeviceStatusWithCashAmount Cash(Credentials credentials);
 
         /// <summary>
         /// Sets the device date and time
@@ -86,5 +86,10 @@
         /// Raw request.
         /// </summary>
         DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
+
+        /// <summary>
+        /// Tries to fix the erroneous state of the device to the normal - ready for printing state
+        /// </summary>
+        DeviceStatusWithDateTime Reset(Credentials credentials);
     }
 }

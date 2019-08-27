@@ -54,7 +54,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
         }
 
-        public override DeviceStatusWithCashAmount Cash()
+        public override DeviceStatusWithCashAmount Cash(Credentials credentials)
         {
             var (response, status) = Request(CommandMoneyTransfer, "0\t0\t");
             var statusEx = new DeviceStatusWithCashAmount(status);

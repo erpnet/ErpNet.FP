@@ -60,8 +60,8 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // GET {id}/cash
-        [HttpGet("{id}/cash")]
+        // POST {id}/cash
+        [HttpPost("{id}/cash")]
         public async Task<IActionResult> Cash(
             string id,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
@@ -264,6 +264,28 @@ namespace ErpNet.FP.Server.Controllers
                 var result = await context.RunAsync(
                     printer,
                     PrintJobAction.XReport,
+                    null,
+                    asyncTimeout);
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
+        // POST {id}/reset
+        [HttpPost("{id}/reset")]
+        public async Task<IActionResult> Reset(
+            string id,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
+            {
+                var result = await context.RunAsync(
+                    printer,
+                    PrintJobAction.Reset,
                     null,
                     asyncTimeout);
                 return Ok(result);

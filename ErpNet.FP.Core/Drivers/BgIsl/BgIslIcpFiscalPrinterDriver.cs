@@ -12,7 +12,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         {
             var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);            
+            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             return fiscalPrinter;
         }
 
@@ -55,7 +55,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 throw new InvalidDeviceInfoException();
             }
 
-            var fields = tabFields[0].Split(new int[] { 8, 8, 14, 4, 10, 1, 1});
+            var fields = tabFields[0].Split(new int[] { 8, 8, 14, 4, 10, 1, 1 });
             if (fields.Length != 7)
             {
                 throw new InvalidDeviceInfoException();
@@ -84,9 +84,9 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 Model = modelName,
                 FirmwareVersion = spaceFields[1],
                 Manufacturer = "ISL",
-                CommentTextMaxLength = printColumns - 2, 
+                CommentTextMaxLength = printColumns - 2,
                 ItemTextMaxLength = 40, // Set by Icp protocol
-                OperatorPasswordMaxLength = 0, 
+                OperatorPasswordMaxLength = 0,
                 TaxIdentificationNumber = fields[2].Trim()
             };
 

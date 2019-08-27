@@ -27,8 +27,9 @@ function showAvailablePrinters() {
                     '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
                     '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
                     '<div><ul>' + characteristics + '</ul>' +
-                    '<button class="small primary" onclick="printZReport(\'' + printerId + '\')">Print Z-Report</button>' +
-                    '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">Print X-Report</button>' +
+                    '<button class="small primary" onclick="printZReport(\'' + printerId + '\')">Z-Report</button>' +
+                    '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">X-Report</button>' +
+                    '<button class="small primary" onclick="resetPrinter(\'' + printerId + '\')">Reset</button>' +
                     '</div>'
                 this.append(section)
             }
@@ -274,6 +275,35 @@ function printXReport(printerId) {
         }
     })
 }
+
+function resetPrinter(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/reset',
+        data: {},
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            if (data.ok) {
+                showToastMessage("Printer is reset.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot reset the printer: " + errors.trim())
+            }
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot reset the printer.")
+        }
+    })
+}
+
 
 function showToastMessage(msg) {
     var toastArea = $("#ToastArea")

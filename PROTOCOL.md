@@ -227,12 +227,8 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
   ],
   "payments": [
     {
-      "amount": 50,
+      "amount": 30,
       "paymentType": "cash"
-    },
-    {
-      "amount": -20,
-      "paymentType": "change"
     }
   ]
 }
@@ -515,8 +511,9 @@ http://localhost:8001/printers/zk126720/datetime
 The response is standard status response.
 
 
-## `GET` Get Current Cash Amount
+## `POST` Get Current Cash Amount
 Gets the current cash amount registered in the fiscal printer. 
+The request is `POST` because you are allowed to provide "taskId" in the body of the request.
 
 ### Example request uri:
 ```

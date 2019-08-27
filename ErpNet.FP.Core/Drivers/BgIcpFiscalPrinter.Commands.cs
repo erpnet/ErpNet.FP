@@ -117,7 +117,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 {
                     var receiptNumber = fields[0];
                     try
-                    { 
+                    {
                         var receiptAmount = decimal.Parse(fields[1], CultureInfo.InvariantCulture) / 100m;
                         return (receiptNumber, receiptAmount, status);
                     }
@@ -176,7 +176,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         {
             var tranferData = new StringBuilder()
                 .Append("61")
-                .Append(amount > 0 ? '0' : '1') 
+                .Append(amount > 0 ? '0' : '1')
                 .Append('0') // In cash
                 .Append(IcpDecimal(Math.Abs(amount), 12, 2));
             return Request(tranferData.ToString());
@@ -189,11 +189,11 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             TaxGroup taxGroup,
             decimal quantity = 0m,
             decimal priceModifierValue = 0m,
-            PriceModifierType priceModifierType = PriceModifierType.None, 
+            PriceModifierType priceModifierType = PriceModifierType.None,
             bool reversalReceipt = false)
         {
             var itemData = new StringBuilder()
-                .Append(reversalReceipt ? "24": "44")
+                .Append(reversalReceipt ? "24" : "44")
                 .Append(uniqueSaleNumber)
                 .Append(IcpDecimal(quantity, 8, 3))
                 .Append(IcpDecimal(999, 8, 0))
@@ -219,7 +219,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
             var priceModifierData = new StringBuilder()
                 .Append(priceModifierIsPercent ? "47" : "46")
-                .Append(priceModifierIsDiscount ? "0": "1")
+                .Append(priceModifierIsDiscount ? "0" : "1")
                 .Append(IcpDecimal(priceModifierValue, priceModifierIsPercent ? 4 : 8, 2));
             return Request(priceModifierData.ToString());
         }

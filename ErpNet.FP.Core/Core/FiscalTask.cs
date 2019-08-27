@@ -1,6 +1,6 @@
 ﻿namespace ErpNet.FP.Core
 {
-    public class FiscalTask 
+    public class FiscalTask
     {
         /// <summary>
         /// TaskId that is predefined by the user.

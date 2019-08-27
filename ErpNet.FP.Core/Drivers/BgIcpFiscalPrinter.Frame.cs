@@ -231,7 +231,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 byte lo4 = (byte)(rawStatus[i * 2 + 1] - 0x30);
                 status[i] = (byte)(hi4 + lo4);
             }
-            
+
             for (var i = 0; i < status.Length; i++)
             {
                 byte mask = 0b10000000;

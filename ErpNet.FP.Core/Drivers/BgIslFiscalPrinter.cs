@@ -29,7 +29,7 @@ namespace ErpNet.FP.Core.Drivers
             return statusEx;
         }
 
-        public override DeviceStatusWithCashAmount Cash()
+        public override DeviceStatusWithCashAmount Cash(Credentials credentials)
         {
             var (response, status) = Request(CommandMoneyTransfer, "0");
             var statusEx = new DeviceStatusWithCashAmount(status);
@@ -117,38 +117,38 @@ namespace ErpNet.FP.Core.Drivers
 
             uint itemNumber = 0;
             // Receipt items
-            if (receipt.Items != null) foreach(var item in receipt.Items)
-            {
-                itemNumber++;
-                if (item.Type == ItemType.Comment)
+            if (receipt.Items != null) foreach (var item in receipt.Items)
                 {
-                    (_, deviceStatus) = AddComment(item.Text);
-                }
-                else
-                {
-                    try
+                    itemNumber++;
+                    if (item.Type == ItemType.Comment)
                     {
-                        (_, deviceStatus) = AddItem(
-                            item.Text,
-                            item.UnitPrice,
-                            item.TaxGroup,
-                            item.Quantity,
-                            item.PriceModifierValue,
-                            item.PriceModifierType);
+                        (_, deviceStatus) = AddComment(item.Text);
                     }
-                    catch (StandardizedStatusMessageException e)
+                    else
                     {
-                        deviceStatus = new DeviceStatus();
-                        deviceStatus.AddError(e.Code, e.Message);
-                        break;
-                    }                    
+                        try
+                        {
+                            (_, deviceStatus) = AddItem(
+                                item.Text,
+                                item.UnitPrice,
+                                item.TaxGroup,
+                                item.Quantity,
+                                item.PriceModifierValue,
+                                item.PriceModifierType);
+                        }
+                        catch (StandardizedStatusMessageException e)
+                        {
+                            deviceStatus = new DeviceStatus();
+                            deviceStatus.AddError(e.Code, e.Message);
+                            break;
+                        }
+                    }
+                    if (!deviceStatus.Ok)
+                    {
+                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
                 }
-                if (!deviceStatus.Ok)
-                {
-                    deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
-                    return (receiptInfo, deviceStatus);
-                }
-            }
 
             // Receipt payments
             if (receipt.Payments == null || receipt.Payments.Count == 0)
@@ -218,7 +218,7 @@ namespace ErpNet.FP.Core.Drivers
             (closeReceiptResponse, deviceStatus) = CloseReceipt();
             if (!deviceStatus.Ok)
             {
-                (_, deviceStatus) = AbortReceipt();
+                AbortReceipt();
                 deviceStatus.AddInfo($"Error occurred while closing the receipt");
                 return (receiptInfo, deviceStatus);
             }
@@ -228,7 +228,7 @@ namespace ErpNet.FP.Core.Drivers
             (lastDocumentNumberResponse, deviceStatus) = GetLastDocumentNumber(closeReceiptResponse);
             if (!deviceStatus.Ok)
             {
-                (_, deviceStatus) = AbortReceipt();
+                AbortReceipt();
                 deviceStatus.AddInfo($"Error occurred while reading last document number");
                 return (receiptInfo, deviceStatus);
             }
@@ -316,6 +316,14 @@ namespace ErpNet.FP.Core.Drivers
             System.Diagnostics.Trace.WriteLine("PrintXReport: {0}", response);
             // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
+        }
+
+        public override DeviceStatusWithDateTime Reset(Credentials credentials)
+        {
+            AbortReceipt();
+            FullPayment();
+            CloseReceipt();
+            return CheckStatus();
         }
     }
 }
