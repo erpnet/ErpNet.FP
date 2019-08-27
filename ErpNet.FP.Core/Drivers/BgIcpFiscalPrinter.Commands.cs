@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -10,25 +11,21 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
     /// <seealso cref="ErpNet.FP.Drivers.BgIcpFiscalPrinter" />
     public partial class BgIcpFiscalPrinter : BgFiscalPrinter
     {
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "0";
-                case PaymentType.Card:
-                    return "7";
-                case PaymentType.Check:
-                    return "1";
-                case PaymentType.Packaging:
-                    return "4";
-                case PaymentType.Reserved1:
-                    return "9";
-                case PaymentType.Reserved2:
-                    return "A";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,          "0" },
+                { PaymentType.Check,         "1" },
+                { PaymentType.Coupons,       "2" },
+                { PaymentType.ExtCoupons,    "3" },
+                { PaymentType.Packaging,     "4" },
+                { PaymentType.InternalUsage, "5" },
+                { PaymentType.Damage,        "6" },
+                { PaymentType.Card,          "7" },
+                { PaymentType.Bank,          "8" },
+                { PaymentType.Reserved1,     "9" },
+                { PaymentType.Reserved2,     "A" }
+            };
         }
 
         public override string GetTaxGroupText(TaxGroup taxGroup)

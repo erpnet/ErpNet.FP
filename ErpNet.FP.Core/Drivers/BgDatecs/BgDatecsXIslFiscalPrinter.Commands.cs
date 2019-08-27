@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
@@ -12,21 +13,15 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected const byte
            DatecsXCommandOpenStornoDocument = 0x2b;
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "0";
-                case PaymentType.Card:
-                    return "1";
-                case PaymentType.Reserved1:
-                    return "3";
-                case PaymentType.Reserved2:
-                    return "4";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,          "0" },
+                { PaymentType.Check,         "3" },
+                { PaymentType.Coupons,       "5" },
+                { PaymentType.ExtCoupons,    "4" },
+                { PaymentType.Card,          "1" }
+            };
         }
 
         public override string GetTaxGroupText(TaxGroup taxGroup)

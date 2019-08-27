@@ -1,4 +1,8 @@
-﻿namespace ErpNet.FP.Core
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
+
+namespace ErpNet.FP.Core
 {
     public class DeviceInfo
     {
@@ -42,5 +46,9 @@
         /// Tax Number is Fiscal Subject Identification Number
         /// </summary>
         public string TaxIdentificationNumber = string.Empty;
+        /// <summary>
+        /// List of supported payment types by the device
+        /// </summary>        
+        public ICollection<PaymentType> SupportedPaymentTypes = new PaymentType[] { };
     }
 }

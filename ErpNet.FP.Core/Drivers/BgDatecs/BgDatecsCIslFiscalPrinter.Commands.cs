@@ -130,19 +130,15 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandDatecsOpenReversalReceipt, header);
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "P";
-                case PaymentType.Card:
-                    return "C";
-                case PaymentType.Reserved1:
-                    return "D";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,          "P" },
+                { PaymentType.Coupons,       "J" },
+                { PaymentType.ExtCoupons,    "I" },
+                { PaymentType.Card,          "C" },
+                { PaymentType.Reserved1,     "D" }
+            };
         }
 
         // 6 Bytes x 8 bits

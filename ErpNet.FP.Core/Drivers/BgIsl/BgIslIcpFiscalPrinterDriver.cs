@@ -13,6 +13,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, options);
             var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
+            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
             return fiscalPrinter;
         }
 

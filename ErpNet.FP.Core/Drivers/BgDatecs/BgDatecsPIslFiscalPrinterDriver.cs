@@ -15,6 +15,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
+            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
             return fiscalPrinter;
         }
 

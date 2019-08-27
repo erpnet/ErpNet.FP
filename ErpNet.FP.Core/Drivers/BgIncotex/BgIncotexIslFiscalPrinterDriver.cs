@@ -21,6 +21,7 @@ namespace ErpNet.FP.Core.Drivers.BgIncotex
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect, rawDeviceConstants);
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
+            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
             return fiscalPrinter;
         }
 

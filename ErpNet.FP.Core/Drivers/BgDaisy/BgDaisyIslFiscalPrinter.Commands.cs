@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
@@ -30,21 +31,14 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             return (response.Trim().Trim(new Char[] { '-' }), deviceStatus);
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "P";
-                case PaymentType.Card:
-                    return "C";
-                case PaymentType.Check:
-                    return "N";
-                case PaymentType.Reserved1:
-                    return "D";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,       "P" },
+                { PaymentType.Card,       "C" },
+                { PaymentType.Check,      "N" },
+                { PaymentType.Reserved1,  "D" }
+            };
         }
 
         // 6 Bytes x 8 bits

@@ -199,14 +199,14 @@
             <Component Id="cmp521A61C1834D10D45464D67212347AEA" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil43F2E8D3767129784BCAAB51CDD2CAEB" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Authorization.Policy.dll" />
             </Component>
-            <Component Id="cmpDF632281D52679840EC6A493074F266A" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil3D1EF7C2D14008FFCA086D0E3680DE24" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Browser.dll" />
-            </Component>
             <Component Id="cmp6D6CC90C40E2F632C9128346BA7F188F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filB3A561B406C5673062D93CEAB4C5FBA3" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.dll" />
             </Component>
             <Component Id="cmp5254CCA3FBBB0FD808EFF449E5448325" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil0CC47860D3798B5EA8BEC8973830ABA5" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Server.dll" />
+            </Component>
+            <Component Id="cmp17959BADF0C2D7B7AB4867F09DA031B8" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filBCB8CB727FBD0C042A3E896A50A0013A" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Web.dll" />
             </Component>
             <Component Id="cmp9936F7D00150BAD506646EAACFC257CE" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil972FD3CEF8CB8F155464106ED4BD3517" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Connections.Abstractions.dll" />
@@ -559,11 +559,14 @@
             <Component Id="cmp3E4F3E4686A9B425B5812E5171CCDEEF" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil24DC60A8CFEFE326A0444D71C66806C1" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Win32.Registry.dll" />
             </Component>
+            <Component Id="cmp16861E24C897764CA922EC062BA74EC9" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filD8E300ACBEFE74B5C24D4D06DCE96AAC" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Win32.SystemEvents.dll" />
+            </Component>
             <Component Id="cmpE35DDB3C925C83E74C7DAAE6FEA6C156" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filEAEAE1CB9E8AC1FF00B05453ABEE2ADF" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore.dll" />
             </Component>
-            <Component Id="cmpC65F6BC48882D9A19F27F949A20F7F0E" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="filC4D0DB1D277F6B4A6EC4FA0DCB3AFAF0" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.32702.dll" />
+            <Component Id="cmp68F62040B8207D467AEB08273D2DA273" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil3A18FB01D371E5EB55FEBA7AEBF56C67" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.37902.dll" />
             </Component>
             <Component Id="cmpA5ABEAD31F33B1E5825EC6F159ABFB0F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1A6B0EBD5A5BF8DD0582A2665D3492F1" KeyPath="yes" Source="$(var.OUTPUT)\mscordbi.dll" />
@@ -604,6 +607,9 @@
             <Component Id="cmp912EE5CA7F0C138422055A3D0C240C38" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil8084AE81753074831DC96EB13423F40D" KeyPath="yes" Source="$(var.OUTPUT)\System.ComponentModel.dll" />
             </Component>
+            <Component Id="cmp9DD02050EE6C7C34C1B0689DE491114C" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil1E5C558F899E13FD4A03E9ACF14B5065" KeyPath="yes" Source="$(var.OUTPUT)\System.ComponentModel.EventBasedAsync.dll" />
+            </Component>
             <Component Id="cmp0E07B6458918A72AFC17E557DDF86BE9" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil757C2B539CEF8E96C5DAF1634B560D0F" KeyPath="yes" Source="$(var.OUTPUT)\System.ComponentModel.Primitives.dll" />
             </Component>
@@ -636,6 +642,9 @@
             </Component>
             <Component Id="cmpBDFBFA929E7957E9AB4B89B1C6BBCD7A" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil51DF554AB19C81BD826675A139E6342C" KeyPath="yes" Source="$(var.OUTPUT)\System.Diagnostics.TraceSource.dll" />
+            </Component>
+            <Component Id="cmp08EBD8C605FF27A4F0FCEC5A1317087B" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil01C46D7B4C6F372B6DD0D0DC961DAE47" KeyPath="yes" Source="$(var.OUTPUT)\System.Drawing.Common.dll" />
             </Component>
             <Component Id="cmp08477E3E9CCCB3373C6D6B557560F00D" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filB3F994E499D6B2658F4935DB290BBD4C" KeyPath="yes" Source="$(var.OUTPUT)\System.Drawing.Primitives.dll" />
@@ -804,6 +813,12 @@
             </Component>
             <Component Id="cmp0184D18E528218AEE24F1BA5ADE5F6DE" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filCE5E95E53290025E921DE807F2B82032" KeyPath="yes" Source="$(var.OUTPUT)\System.Threading.Channels.dll" />
+            </Component>
+            <Component Id="cmpC0197A786E74E0C6CC67B1F2BF47A69D" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil36048FD39C076898D35F88983802BDEF" KeyPath="yes" Source="$(var.OUTPUT)\System.Threading.dll" />
+            </Component>
+            <Component Id="cmp7A71D580195DAAACCB57D588C484657A" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil00EFB213307938756EDF494BE5BB3249" KeyPath="yes" Source="$(var.OUTPUT)\System.Windows.Extensions.dll" />
             </Component>
             <Component Id="cmpB67698E8021557AB8B9CC56808EA4FD2" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil4632E4BAE83C5DDA6408E46C4A1F0259" KeyPath="yes" Source="$(var.OUTPUT)\ucrtbase.dll" />

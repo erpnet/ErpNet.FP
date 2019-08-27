@@ -127,23 +127,24 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return Request(CommandDatecsOpenReversalReceipt, header);
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "P";
-                case PaymentType.Check:
-                    return "C";
-                case PaymentType.Card:
-                    return "D";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,          "P" },
+                { PaymentType.Check,         "C" },
+                { PaymentType.Coupons,       "m" },
+                { PaymentType.ExtCoupons,    "n" },
+                { PaymentType.Packaging,     "o" },
+                { PaymentType.InternalUsage, "p" },
+                { PaymentType.Damage,        "q" },
+                { PaymentType.Card,          "D" },
+                { PaymentType.Bank,          "r" },
+                { PaymentType.Reserved1,     "I" },
+                { PaymentType.Reserved2,     "L" }
+            };
         }
 
         // 6 Bytes x 8 bits
-
         protected static readonly (string?, string, StatusMessageType)[] StatusBitsStrings = new (string?, string, StatusMessageType)[] {
             ("E401", "Syntax error in the received data", StatusMessageType.Error),
             ("E402", "Invalid command code received", StatusMessageType.Error),

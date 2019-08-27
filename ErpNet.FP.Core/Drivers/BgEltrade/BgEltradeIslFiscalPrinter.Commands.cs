@@ -13,25 +13,17 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         protected const byte
             EltradeCommandOpenFiscalReceipt = 0x90;
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "P";
-                case PaymentType.Card:
-                    return "L";
-                case PaymentType.Check:
-                    return "N";
-                case PaymentType.Packaging:
-                    return "I";
-                case PaymentType.Reserved1:
-                    return "Q";
-                case PaymentType.Reserved2:
-                    return "R";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,       "P" },
+                { PaymentType.Card,       "L" },
+                { PaymentType.Check,      "N" },
+                { PaymentType.Packaging,  "I" },
+                { PaymentType.Reserved1,  "Q" },
+                { PaymentType.Reserved2,  "R" }
+            };
         }
 
         public override (string, DeviceStatus) OpenReceipt(

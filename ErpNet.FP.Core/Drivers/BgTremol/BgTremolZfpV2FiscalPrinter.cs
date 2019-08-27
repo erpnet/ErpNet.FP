@@ -23,19 +23,13 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
             };
         }
 
-        public override string GetPaymentTypeText(PaymentType paymentType)
+        public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            switch (paymentType)
-            {
-                case PaymentType.Cash:
-                    return "0";
-                case PaymentType.Card:
-                    return "1";
-                case PaymentType.Check:
-                    return "2";
-                default:
-                    throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-            }
+            return new Dictionary<PaymentType, string> {
+                { PaymentType.Cash,       "0" },
+                { PaymentType.Card,       "1" },
+                { PaymentType.Check,      "2" }
+            };
         }
 
     }

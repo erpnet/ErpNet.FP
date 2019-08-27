@@ -16,8 +16,8 @@
         <Authors>ErpNet and Contributors</Authors>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <Copyright>(c) ErpNet and Contributors</Copyright>
-        <AssemblyVersion>1.0.827.1827</AssemblyVersion>
-        <FileVersion>1.0.827.1827</FileVersion>
+        <AssemblyVersion>1.0.827.1927</AssemblyVersion>
+        <FileVersion>1.0.827.1927</FileVersion>
         <Version>1.0.0</Version>
         <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
         <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>

@@ -18,6 +18,8 @@ namespace ErpNet.FP.Core.Drivers
 
         public DeviceInfo Info = new DeviceInfo();
 
+        public IDictionary<PaymentType, string> PaymentTypeMappings;
+
         protected static readonly object frameSyncLock = new object();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
@@ -28,6 +30,7 @@ namespace ErpNet.FP.Core.Drivers
                 .MergeWith(GetDefaultOptions())
                 .MergeWith(options);
             Channel = channel;
+            PaymentTypeMappings = GetPaymentTypeMappings();
         }
 
         public virtual IDictionary<string, string>? GetDefaultOptions()
@@ -37,7 +40,24 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract string GetTaxGroupText(TaxGroup taxGroup);
 
-        public abstract string GetPaymentTypeText(PaymentType paymentType);
+        public abstract IDictionary<PaymentType, string> GetPaymentTypeMappings();
+
+        public string GetPaymentTypeText(PaymentType paymentType)
+        {
+            if (PaymentTypeMappings.TryGetValue(paymentType, out string? value))
+            {
+                if (value != null)
+                {
+                    return value;
+                }                
+            }
+            throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
+        }
+
+        public ICollection<PaymentType> GetSupportedPaymentTypes()
+        {
+            return PaymentTypeMappings.Keys;
+        }
 
         public virtual string GetReversalReasonText(ReversalReason reversalReason)
         {
