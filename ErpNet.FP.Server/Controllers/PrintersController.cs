@@ -60,10 +60,11 @@ namespace ErpNet.FP.Server.Controllers
             return NotFound();
         }
 
-        // POST {id}/cash
-        [HttpPost("{id}/cash")]
+        // Get {id}/cash
+        [HttpGet("{id}/cash")]
         public async Task<IActionResult> Cash(
             string id,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -73,10 +74,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.Cash,
-                    null,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Cash,
+                        Document = null,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -94,6 +99,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> RawRequest(
             string id,
             [FromBody] RequestFrame requestFrame,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -103,10 +109,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.RawRequest,
-                    requestFrame,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.RawRequest,
+                        Document = requestFrame,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -117,6 +127,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintReceipt(
             string id,
             [FromBody] Receipt receipt,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -126,10 +137,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.Receipt,
-                    receipt,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Receipt,
+                        Document = receipt,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -140,6 +155,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintReversalReceipt(
             string id,
             [FromBody] ReversalReceipt reversalReceipt,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -149,10 +165,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.ReversalReceipt,
-                    reversalReceipt,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.ReversalReceipt,
+                        Document = reversalReceipt,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -163,6 +183,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintWithdraw(
             string id,
             [FromBody] TransferAmount withdraw,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -172,10 +193,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.Withdraw,
-                    withdraw,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Withdraw,
+                        Document = withdraw,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -186,6 +211,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> PrintDeposit(
             string id,
             [FromBody] TransferAmount deposit,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -195,10 +221,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.Deposit,
-                    deposit,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Deposit,
+                        Document = deposit,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -209,6 +239,7 @@ namespace ErpNet.FP.Server.Controllers
         public async Task<IActionResult> SetDateTime(
             string id,
             [FromBody] CurrentDateTime datetime,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -218,10 +249,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.SetDateTime,
-                    datetime,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.SetDateTime,
+                        Document = datetime,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -231,6 +266,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpPost("{id}/zreport")]
         public async Task<IActionResult> PrintZReport(
             string id,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -240,10 +276,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.ZReport,
-                    null,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.ZReport,
+                        Document = null,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -253,6 +293,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpPost("{id}/xreport")]
         public async Task<IActionResult> PrintXReport(
             string id,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -262,10 +303,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.XReport,
-                    null,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.XReport,
+                        Document = null,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();
@@ -275,6 +320,7 @@ namespace ErpNet.FP.Server.Controllers
         [HttpPost("{id}/reset")]
         public async Task<IActionResult> Reset(
             string id,
+            [FromQuery] string? taskId,
             [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
         {
             if (!context.IsReady)
@@ -284,10 +330,14 @@ namespace ErpNet.FP.Server.Controllers
             if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
             {
                 var result = await context.RunAsync(
-                    printer,
-                    PrintJobAction.Reset,
-                    null,
-                    asyncTimeout);
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Reset,
+                        Document = null,
+                        AsyncTimeout = asyncTimeout,
+                        TaskId = taskId
+                    });
                 return Ok(result);
             }
             return NotFound();

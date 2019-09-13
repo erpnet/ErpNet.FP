@@ -16,11 +16,7 @@ namespace ErpNet.FP.Core.Service
 
         Dictionary<string, PrinterConfig> ConfiguredPrinters { get; }
 
-        Task<object> RunAsync(
-            IFiscalPrinter printer,
-            PrintJobAction action,
-            object? document,
-            int asyncTimeout);
+        Task<object> RunAsync(PrintJob printJob);
 
         TaskInfoResult GetTaskInfo(string taskId);
 
@@ -189,26 +185,17 @@ namespace ErpNet.FP.Core.Service
             }
         }
 
-        public async Task<object> RunAsync(
-            IFiscalPrinter printer,
-            PrintJobAction action,
-            object? document,
-            int asyncTimeout)
+        public async Task<object> RunAsync(PrintJob printJob)
         {
             try
             {
-                var taskId = Enqueue(new PrintJob
-                {
-                    Printer = printer,
-                    Document = document,
-                    Action = action
-                });
+                var taskId = Enqueue(printJob);
 
-                if (asyncTimeout == 0)
+                if (printJob.AsyncTimeout == 0)
                 {
                     return new TaskIdResult { TaskId = taskId };
                 }
-                return await Task.Run(() => RunTask(taskId, asyncTimeout));
+                return await Task.Run(() => RunTask(taskId, printJob.AsyncTimeout));
             }
             catch (StandardizedStatusMessageException e)
             {
@@ -272,38 +259,31 @@ namespace ErpNet.FP.Core.Service
             // CASE: Clearing Expired Tasks
             // ClearExpiredTasks();
 
-            var document = printJob.Document;
-
             // taskId is RFC7515 Guid
             var taskId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
                 .Substring(0, 22)
                 .Replace("/", "_")
                 .Replace("+", "-");
 
-            if (document != null && document.GetType().IsSubclassOf(typeof(FiscalTask)))
+            if (!string.IsNullOrEmpty(printJob.TaskId))
             {
-                var fiscalTask = (document as FiscalTask);
-                if (fiscalTask != null && fiscalTask.TaskId != string.Empty)
+                // override generated taskId with user supplied taskId
+                taskId = printJob.TaskId;
+
+                // maximum length of 60 characters validation
+                if (taskId.Length > 60)
                 {
-                    // override generated taskId with user supplied taskId
-                    taskId = fiscalTask.TaskId;
+                    throw new StandardizedStatusMessageException($"Task Id is too long", "E110");
+                }
 
-                    // maximum length of 60 characters validation
-                    if (taskId.Length > 60)
-                    {
-                        throw new StandardizedStatusMessageException($"Task Id is too long", "E110");
-                    }
-
-                    // printable characters validation
-                    var nonPrintableCharactersPattern = @"[\x01-\x1F]";
-                    Match match = Regex.Match(taskId, nonPrintableCharactersPattern, RegexOptions.IgnoreCase);
-                    if (match.Success)
-                    {
-                        throw new StandardizedStatusMessageException($"Use only printable charaters for Task Id", "E110");
-                    }
+                // printable characters validation
+                var nonPrintableCharactersPattern = @"[\x01-\x1F]";
+                Match match = Regex.Match(taskId, nonPrintableCharactersPattern, RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    throw new StandardizedStatusMessageException($"Use only printable charaters for Task Id", "E110");
                 }
             }
-
 
             if (Tasks.ContainsKey(taskId))
             {

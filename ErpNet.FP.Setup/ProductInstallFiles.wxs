@@ -199,8 +199,14 @@
             <Component Id="cmp521A61C1834D10D45464D67212347AEA" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil43F2E8D3767129784BCAAB51CDD2CAEB" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Authorization.Policy.dll" />
             </Component>
+            <Component Id="cmp130D2E30E7E9959EAC95058FAB5F8614" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil239804F5138DAE635B2F75070B7690AA" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Authorization.dll" />
+            </Component>
             <Component Id="cmp6D6CC90C40E2F632C9128346BA7F188F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filB3A561B406C5673062D93CEAB4C5FBA3" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.dll" />
+            </Component>
+            <Component Id="cmpA76C6CFFA9DCB201D0EEDB226B0B9E25" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil509B74670E6E3BBFDDC3F98EFB8E8C1D" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Forms.dll" />
             </Component>
             <Component Id="cmp5254CCA3FBBB0FD808EFF449E5448325" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil0CC47860D3798B5EA8BEC8973830ABA5" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Components.Server.dll" />
@@ -303,9 +309,6 @@
             </Component>
             <Component Id="cmpB96734D463EA4C5736E06AE945588003" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filD616F4CC3137C4F7D42C8B7891000233" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Mvc.ApiExplorer.dll" />
-            </Component>
-            <Component Id="cmpA1941358D87AB7287A80CBB94C982399" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil0F4D489FC1C140D87E010FFD8DD6A3FD" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Mvc.Components.Prerendering.dll" />
             </Component>
             <Component Id="cmp8576B6156BF671E44DCA87480DF7B468" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filDC7FCE00EEEEC0868E0C660A5196286A" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.AspNetCore.Mvc.Core.dll" />
@@ -565,8 +568,8 @@
             <Component Id="cmpE35DDB3C925C83E74C7DAAE6FEA6C156" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filEAEAE1CB9E8AC1FF00B05453ABEE2ADF" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore.dll" />
             </Component>
-            <Component Id="cmp68F62040B8207D467AEB08273D2DA273" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil3A18FB01D371E5EB55FEBA7AEBF56C67" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.37902.dll" />
+            <Component Id="cmpEDAC1B07C05F6ECDE8DA126DAD0F83AE" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil86E454B5569E028676DE78A101C7FDBD" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.42102.dll" />
             </Component>
             <Component Id="cmpA5ABEAD31F33B1E5825EC6F159ABFB0F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1A6B0EBD5A5BF8DD0582A2665D3492F1" KeyPath="yes" Source="$(var.OUTPUT)\mscordbi.dll" />

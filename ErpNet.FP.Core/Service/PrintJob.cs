@@ -32,6 +32,8 @@ namespace ErpNet.FP.Core.Service
         public TaskStatus TaskStatus = TaskStatus.Unknown;
         public object? Document;
         public object? Result;
+        public string? TaskId;
+        public int AsyncTimeout = DefaultTimeout;
 
         public void Run()
         {

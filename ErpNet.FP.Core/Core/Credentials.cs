@@ -1,6 +1,6 @@
 ﻿namespace ErpNet.FP.Core
 {
-    public class Credentials : FiscalTask
+    public class Credentials
     {
         /// <summary>
         /// Operator Name or Operator ID.

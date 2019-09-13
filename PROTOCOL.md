@@ -245,12 +245,17 @@ Each element in this section can have the following properties:
 NOTE: If the whole section "payments" is not provided, then the whole amount of the receipt is printed as cash payment.
 
 * **"paymentType"** - one of: 
-* * **"cash"** - this is the default payment type if no payment type is specified
-* * **"card"** - payment by debit or credit card
-* * **"check"**
-* * **"packaging"**
-* * **"reserved1"** - often used by government regulations for specific purposes (health reimbursment, etc.)
-* * **"reserved2"**
+* * **"cash"** - this is the default payment type if no payment type is specified, NRA mapping "SCash"
+* * **"check"** - payment with check, NRA mapping "SChecks"
+* * **"card"** - payment by debit or credit card, NRA mapping "SCards"
+* * **"coupons"** - payment with coupons, NRA mapping "ST"
+* * **"ext-coupons"** - payment with external for the organization coupons, NRA mapping "SOT"
+* * **"packaging"** - payment with returning the packaging, NRA mapping "SP"
+* * **"internal-usage"** - payment for the internal usage of goods or services, NRA mapping "SSelf"
+* * **"damage"** - payments about the damage, NRA mapping "SDmg"
+* * **"bank"** - payment with bank transfer, NRA mapping "SW"
+* * **"reserved1"** - often used by government regulations for specific purposes (health reimbursment, etc.), NRA mapping "SR1"
+* * **"reserved2"** - another reserved payment, NRA mapping "SR2"
 
 
 ### Example request body:
@@ -563,7 +568,7 @@ http://localhost:8001/printers/zk126720/datetime
 The response is standard status response.
 
 
-## `POST` Get Current Cash Amount
+## `GET` Get Current Cash Amount
 Gets the current cash amount registered in the fiscal printer. 
 The request is `POST` because you are allowed to provide "taskId" in the body of the request.
 
