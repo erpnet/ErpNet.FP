@@ -17,12 +17,17 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
             return new Dictionary<PaymentType, string> {
-                { PaymentType.Cash,       "P" },
-                { PaymentType.Card,       "L" },
-                { PaymentType.Check,      "N" },
-                { PaymentType.Packaging,  "I" },
-                { PaymentType.Reserved1,  "Q" },
-                { PaymentType.Reserved2,  "R" }
+                { PaymentType.Cash,          "P" },
+                { PaymentType.Check,         "N" },
+                { PaymentType.Coupons,       "C" },
+                { PaymentType.ExtCoupons,    "D" },
+                { PaymentType.Packaging,     "I" },
+                { PaymentType.InternalUsage, "J" },
+                { PaymentType.Damage,        "K" },
+                { PaymentType.Card,          "L" },
+                { PaymentType.Bank,          "M" },
+                { PaymentType.Reserved1,     "Q" },
+                { PaymentType.Reserved2,     "R" }
             };
         }
 
