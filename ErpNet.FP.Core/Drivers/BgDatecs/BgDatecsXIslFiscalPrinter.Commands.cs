@@ -49,6 +49,11 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             }
         }
 
+        public override (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
+        {
+            return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss\t", CultureInfo.InvariantCulture));
+        }
+
         public override DeviceStatusWithCashAmount Cash(Credentials credentials)
         {
             var (response, status) = Request(CommandMoneyTransfer, "0\t0\t");

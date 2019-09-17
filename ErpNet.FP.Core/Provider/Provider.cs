@@ -1,4 +1,5 @@
 ﻿using ErpNet.FP.Core.Drivers;
+using ErpNet.FP.Core.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -62,7 +63,7 @@ namespace ErpNet.FP.Core.Provider
                         {
                             try
                             {
-                                System.Diagnostics.Trace.WriteLine($"Probing {driver.DriverName}.{transport.TransportName}://{availableAddress.address}... ");
+                                Log.Information($"Probing {driver.DriverName}.{transport.TransportName}://{availableAddress.address}... ");
                                 var p = driver.Connect(channel);
                                 var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
                                 p.DeviceInfo.Uri = uri;
@@ -71,20 +72,24 @@ namespace ErpNet.FP.Core.Provider
                                 unknownDeviceConnectedToChannel = false;
                                 break;
                             }
+                            catch(TimeoutException ex)
+                            {
+                                // Timeout occured while connecting. Skip this transport address.
+                                Log.Error($"Timeout occured: {ex.Message}");
+                            }
+                            catch (InvalidResponseException ex)
+                            {
+                                // Autodetect probe not passed for this channel. No response.
+                                Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                            }
+                            catch (InvalidDeviceInfoException ex)
+                            {
+                                // Autodetect probe not passed for this channel. Invalid device.
+                                Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                            }
                             catch (Exception ex)
                             {
-                                if (!(
-                                    ex is InvalidResponseException // Autodetect probe not passed for this channel. No response.
-                                    ||
-                                    ex is InvalidDeviceInfoException // Autodetect probe not passed for this channel. Invalid device.
-                                    ||
-                                    ex is TimeoutException // Timeout occured while connecting. Skip this transport address.
-                                ))
-                                {
-                                    // Cannot connect to opened channel, possible incompatibility
-                                    Console.WriteLine($"Cannot connect to opened channel: {ex.Message}");
-                                }
-
+                                Log.Error($"Unexpected error: {ex.Message}");
                             }
                         }
                         if (unknownDeviceConnectedToChannel)
@@ -97,7 +102,7 @@ namespace ErpNet.FP.Core.Provider
                     catch (Exception ex)
                     {
                         // Cannot open channel
-                        Console.WriteLine($"Cannot open channel: {ex.Message}");
+                        Log.Error($"Cannot open channel: {ex.Message}");
                     }
                 }
             }

@@ -88,7 +88,6 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount)
         {
             var (response, status) = MoneyTransfer(transferAmount.Amount);
-            System.Diagnostics.Trace.WriteLine("PrintMoneyDeposit: {0}", response);
             return status;
         }
 
@@ -99,7 +98,6 @@ namespace ErpNet.FP.Core.Drivers
                 throw new StandardizedStatusMessageException("Withdraw amount must be positive number", "E403");
             }
             var (response, status) = MoneyTransfer(-transferAmount.Amount);
-            System.Diagnostics.Trace.WriteLine("PrintMoneyWithdraw: {0}", response);
             return status;
         }
 
@@ -305,16 +303,12 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintZReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(true);
-            System.Diagnostics.Trace.WriteLine("PrintZReport: {0}", response);
-            // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
         }
 
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(false);
-            System.Diagnostics.Trace.WriteLine("PrintXReport: {0}", response);
-            // 0000,0.00,273.60,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
             return status;
         }
 

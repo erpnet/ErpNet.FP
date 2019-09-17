@@ -11,14 +11,19 @@
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
+    <PropertyGroup>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+    </PropertyGroup>
+
     <ItemGroup>
         <TrimmerRootAssembly Include="System.IO.FileSystem" />
     </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0-rc1.19456.10" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3-beta1" />
-    <PackageReference Include="System.IO.Ports" Version="4.6.0-preview8.19405.3" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview8.19405.3" />
+    <PackageReference Include="System.IO.Ports" Version="4.6.0-rc1.19456.4" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-rc1.19456.4" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties BuildVersion_StartDate="2000/1/1" /></VisualStudio></ProjectExtensions>

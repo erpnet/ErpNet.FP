@@ -43,7 +43,7 @@ namespace ErpNet.FP.Server.Configuration
             var physicalPath = fileInfo.PhysicalPath;
 
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
-            var sectionObject = jObject.TryGetValue(section, out JToken sectionToken) ?
+            var sectionObject = jObject.TryGetValue(section, out JToken? sectionToken) ?
                 JsonConvert.DeserializeObject<T>(sectionToken.ToString()) : (Value ?? new T());
 
             applyChanges(sectionObject);

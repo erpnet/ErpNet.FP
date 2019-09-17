@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers.BgIcp
 {
@@ -54,16 +55,14 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
         protected virtual byte[]? RawRequest(byte[]? data)
         {
+            var deviceDescriptor = string.IsNullOrEmpty(DeviceInfo.Uri) ? Channel.Descriptor : DeviceInfo.Uri;
+
             var request = BuildHostFrame(data);
             for (var w = 0; w < MaxWriteRetries; w++)
             {
+
                 // Write request frame
-                System.Diagnostics.Trace.Write(">>>");
-                foreach (var b in request)
-                {
-                    System.Diagnostics.Trace.Write($"{b:X} ");
-                }
-                System.Diagnostics.Trace.WriteLine("");
+                Log.Information($"{deviceDescriptor} <<< {BitConverter.ToString(request)}");
                 Channel.Write(request);
 
                 // Read response frames.
@@ -72,13 +71,9 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 {
                     var buffer = Channel.Read();
 
-                    // For debugging purposes only.
-                    System.Diagnostics.Trace.Write("<<<");
-                    foreach (var b in buffer)
-                    {
-                        System.Diagnostics.Trace.Write($"{b:X} ");
-                    }
-                    System.Diagnostics.Trace.WriteLine("");
+                    // For debugging purposes only.  
+                    
+                    Log.Information($"{deviceDescriptor} >>> {BitConverter.ToString(buffer)}");
 
                     // Parse frames
                     var readFrames = new List<List<byte>>();
@@ -140,7 +135,6 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             }
 
             var response = Encoding.UTF8.GetString(data);
-            System.Diagnostics.Trace.WriteLine($"Response({data.Length}): {response}");
 
             return response;
         }
@@ -153,7 +147,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             }
             if (rawResponse.Length == 1 && rawResponse[0] == MarkerACK)
             {
-                System.Diagnostics.Trace.WriteLine($"Response(ACK)");
+                Log.Information($"Response(ACK)");
                 return null;
             }
             var (stxPos, etxPos) = (0u, 0u);
@@ -191,7 +185,6 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             {
                 try
                 {
-                    System.Diagnostics.Trace.WriteLine($"Request: '{data}'");
                     var response = ParseResponse(RawRequest(data == null ? null : PrinterEncoding.GetBytes(data)));
                     if (data == "00")
                     {

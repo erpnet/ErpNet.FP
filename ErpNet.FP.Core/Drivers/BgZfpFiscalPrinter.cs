@@ -80,7 +80,6 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount)
         {
             var (_, status) = MoneyTransfer(transferAmount);
-            System.Diagnostics.Trace.WriteLine($"PrintMoneyDeposit: {transferAmount}");
             return status;
         }
 
@@ -92,7 +91,6 @@ namespace ErpNet.FP.Core.Drivers
             }
             transferAmount.Amount = -transferAmount.Amount;
             var (response, status) = MoneyTransfer(transferAmount);
-            System.Diagnostics.Trace.WriteLine($"PrintMoneyWithdraw: {response}");
             return status;
         }
 
@@ -289,14 +287,12 @@ namespace ErpNet.FP.Core.Drivers
         public override DeviceStatus PrintZReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(true);
-            System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
             return status;
         }
 
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(false);
-            System.Diagnostics.Trace.WriteLine($"PrintDailyReport: {response}");
             return status;
         }
 

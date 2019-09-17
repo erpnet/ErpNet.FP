@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
@@ -70,7 +71,6 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 if (bcc.SequenceEqual(computedBcc))
                 {
                     var response = Encoding.UTF8.GetString(data);
-                    System.Diagnostics.Trace.WriteLine($"Response({data.Length}): {response}");
 
                     return (response, ParseStatus(status));
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Transports
 {
@@ -11,7 +12,7 @@ namespace ErpNet.FP.Core.Transports
         public override string TransportName => "com";
 
         protected const int DefaultBaudRate = 115200;
-        protected const int DefaultTimeout = 1000;
+        protected const int DefaultTimeout = 800;
 
         private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
             new Dictionary<string, ComTransport.Channel?>();
@@ -103,13 +104,13 @@ namespace ErpNet.FP.Core.Transports
 
             private void IdleTimerElapsed(object state)
             {
-                System.Diagnostics.Trace.WriteLine($"Idle timer elapsed for the com port {serialPort.PortName}");
+                Log.Information($"Idle timer elapsed for the com port {serialPort.PortName}");
                 Close();
             }
 
             public void Open()
             {
-                System.Diagnostics.Trace.WriteLine($"Opening the com port {serialPort.PortName}");
+                Log.Information($"Opening the com port {serialPort.PortName}");
                 serialPort.Open();
             }
 
@@ -117,7 +118,7 @@ namespace ErpNet.FP.Core.Transports
             {
                 if (serialPort.IsOpen)
                 {
-                    System.Diagnostics.Trace.WriteLine($"Closing the com port {serialPort.PortName}");
+                    Log.Information($"Closing the com port {serialPort.PortName}");
                     serialPort.DiscardInBuffer();
                     serialPort.DiscardOutBuffer();
                     serialPort.Close();
@@ -148,7 +149,7 @@ namespace ErpNet.FP.Core.Transports
                     return result;
                 }
                 var errorMessage = $"Timeout occured while reading from com port '{serialPort.PortName}'";
-                System.Diagnostics.Trace.WriteLine(errorMessage);
+                Log.Error(errorMessage);
                 throw new TimeoutException(errorMessage);
             }
 
@@ -180,7 +181,7 @@ namespace ErpNet.FP.Core.Transports
                     else
                     {
                         var errorMessage = $"Timeout occured while writing to com port '{serialPort.PortName}'";
-                        System.Diagnostics.Trace.WriteLine(errorMessage);
+                        Log.Error(errorMessage);
                         throw new TimeoutException(errorMessage);
                     }
                 }

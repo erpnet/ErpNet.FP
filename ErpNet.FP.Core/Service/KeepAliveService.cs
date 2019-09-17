@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Server.Services
 {
@@ -24,7 +25,7 @@ namespace ErpNet.FP.Server.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            System.Diagnostics.Trace.WriteLine("Keep Alive Background Service is starting.");
+            Log.Information("Keep Alive Background Service is starting.");
 
             // Get Status every 120 seconds, for keeping alive the connection
             Timer = new Timer(KeepAliveWithGetStatus, null, TimeSpan.Zero,
@@ -35,24 +36,24 @@ namespace ErpNet.FP.Server.Services
 
         private void KeepAliveWithGetStatus(object state)
         {
-            System.Diagnostics.Trace.WriteLine("Keep Alive Background Service running...");
+            Log.Information("Keep Alive Background Service running...");
             try
             {
                 foreach (var printer in Context.Printers)
                 {
                     if (Context.IsReady) printer.Value.CheckStatus();
                 }
-                System.Diagnostics.Trace.WriteLine("Keep Alive Background Service done.");
+                Log.Information("Keep Alive Background Service done.");
             }
             catch (Exception e)
             {
-                System.Diagnostics.Trace.WriteLine($"Error occured while keeping alive with get status: {e.Message}");
+                Log.Information($"Error occured while keeping alive with get status: {e.Message}");
             }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            System.Diagnostics.Trace.WriteLine("Keep Alive Background Service is stopping.");
+            Log.Information("Keep Alive Background Service is stopping.");
 
             Timer?.Change(Timeout.Infinite, 0);
 

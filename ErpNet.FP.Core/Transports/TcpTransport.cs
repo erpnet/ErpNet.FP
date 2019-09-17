@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Transports
 {
@@ -84,7 +85,7 @@ namespace ErpNet.FP.Core.Transports
                     return tcpClient.GetStream();
                 }
                 var errorMessage = $"Timeout occured while connecting to {HostName}:{Port}";
-                System.Diagnostics.Trace.WriteLine(errorMessage);
+                Log.Error(errorMessage);
                 throw new TimeoutException(errorMessage);
             }
 
@@ -115,7 +116,7 @@ namespace ErpNet.FP.Core.Transports
                     return result;
                 }
                 var errorMessage = $"Timeout occured while reading from tcp connection {HostName}:{Port}";
-                System.Diagnostics.Trace.WriteLine(errorMessage);
+                Log.Error(errorMessage);
                 throw new TimeoutException(errorMessage);
             }
 
@@ -145,7 +146,7 @@ namespace ErpNet.FP.Core.Transports
                     else
                     {
                         var errorMessage = $"Timeout occured while writing to tcp connection {HostName}:{Port}";
-                        System.Diagnostics.Trace.WriteLine(errorMessage);
+                        Log.Error(errorMessage);
                         throw new TimeoutException(errorMessage);
                     }
                 }

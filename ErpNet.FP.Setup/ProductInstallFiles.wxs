@@ -568,8 +568,8 @@
             <Component Id="cmpE35DDB3C925C83E74C7DAAE6FEA6C156" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filEAEAE1CB9E8AC1FF00B05453ABEE2ADF" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore.dll" />
             </Component>
-            <Component Id="cmpEDAC1B07C05F6ECDE8DA126DAD0F83AE" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil86E454B5569E028676DE78A101C7FDBD" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.42102.dll" />
+            <Component Id="cmpFF084BC26F9AAFA7FB335E61A512D922" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil2E0E5E496E8EB3C64EC94D366780F8BC" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.45506.dll" />
             </Component>
             <Component Id="cmpA5ABEAD31F33B1E5825EC6F159ABFB0F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1A6B0EBD5A5BF8DD0582A2665D3492F1" KeyPath="yes" Source="$(var.OUTPUT)\mscordbi.dll" />
@@ -844,6 +844,14 @@
             <Component Id="cmpACD76D623D74B9E5C5D954D38DDD51D7" Directory="dir3D83A529A2122889D4016E7D784625D5" Guid="*">
                 <File Id="fil9EBAEDECA67458F0FA02476E2023B4BF" KeyPath="yes" Source="$(var.OUTPUT)\wwwroot\index.js" />
             </Component>
+            <Component Id="cmp74E81DD0493211D7BBA96D084DBFC071" Directory="dirBCECA8B74D36FAE1502D4592773E7D96" Guid="*">
+                <File Id="filA1A6C30B290A95444319B8F171575B95" KeyPath="yes" Source="$(var.OUTPUT)\wwwroot\debug\debug.log" />
+            </Component>
         </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir3D83A529A2122889D4016E7D784625D5">
+            <Directory Id="dirBCECA8B74D36FAE1502D4592773E7D96" Name="debug" />
+        </DirectoryRef>
     </Fragment>
 </Wix>

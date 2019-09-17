@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
+using ErpNet.FP.Core.Logging;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,11 +39,11 @@ namespace ErpNet.FP.Server
                 await request.Body.ReadAsync(buffer, 0, buffer.Length);
                 var bodyAsText = Encoding.UTF8.GetString(buffer);
                 request.Body.Position = 0;
-                System.Diagnostics.Trace.WriteLine($"-- HTTP Request -- {request.Method}: {request.Scheme}://{request.Host}{request.Path}{request.QueryString}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
+                Log.Information($"-- HTTP Request -- {request.Method}: {request.Scheme}://{request.Host}{request.Path}{request.QueryString}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
             } 
             catch
             {
-                System.Diagnostics.Trace.WriteLine($"-- HTTP Request -- {request.Method}: {request.Scheme}://{request.Host}{request.Path}{request.QueryString}");
+                Log.Information($"-- HTTP Request -- {request.Method}: {request.Scheme}://{request.Host}{request.Path}{request.QueryString}");
             }
         }
 
@@ -52,11 +54,11 @@ namespace ErpNet.FP.Server
                 response.Body.Seek(0, SeekOrigin.Begin);
                 string bodyAsText = await new StreamReader(response.Body).ReadToEndAsync();
                 response.Body.Seek(0, SeekOrigin.Begin);
-                System.Diagnostics.Trace.WriteLine($"-- HTTP Response -- Code: {response.StatusCode}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
+                Log.Information($"-- HTTP Response -- Code: {response.StatusCode}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? "" : Environment.NewLine)}{bodyAsText}");
             } 
             catch
             {
-                System.Diagnostics.Trace.WriteLine($"-- HTTP Response -- Code: {response.StatusCode}");
+                Log.Information($"-- HTTP Response -- Code: {response.StatusCode}");
             }
         }
     }

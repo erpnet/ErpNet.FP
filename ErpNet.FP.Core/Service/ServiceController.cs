@@ -1,5 +1,6 @@
 ﻿using ErpNet.FP.Core.Configuration;
 using System;
+using ErpNet.FP.Core.Logging;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -109,7 +110,7 @@ namespace ErpNet.FP.Core.Service
                     var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
                     if (forceAutoDetect || configOptions.AutoDetect)
                     {
-                        System.Diagnostics.Trace.WriteLine("Autodetecting local printers...");
+                        Log.Information("Autodetecting local printers...");
                         var printers = Provider.DetectAvailablePrinters();
                         foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                         {
@@ -118,7 +119,7 @@ namespace ErpNet.FP.Core.Service
                     }
 
                     // Detecting configured printers
-                    System.Diagnostics.Trace.WriteLine("Detecting configured printers...");
+                    Log.Information("Detecting configured printers...");
                     if (configOptions.Printers != null)
                     {
                         foreach (var printerSetting in configOptions.Printers)
@@ -130,13 +131,13 @@ namespace ErpNet.FP.Core.Service
                                 try
                                 {
                                     var printer = Provider.Connect(printerSetting.Value.Uri, false, null);
-                                    System.Diagnostics.Trace.WriteLine($"{logString}, OK");
+                                    Log.Information($"{logString}, OK");
                                     PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
                                     Printers.Add(printerSetting.Key, printer);
                                 }
                                 catch
                                 {
-                                    System.Diagnostics.Trace.WriteLine($"{logString}, failed");
+                                    Log.Information($"{logString}, failed");
                                     // Do not add this printer, it fails to connect.
                                 }
                             }
@@ -156,7 +157,7 @@ namespace ErpNet.FP.Core.Service
 
                     WriteOptions();
 
-                    System.Diagnostics.Trace.WriteLine($"Detecting done. Found {Printers.Count} available printer(s).");
+                    Log.Information($"Detecting done. Found {Printers.Count} available printer(s).");
 
                     isReady = true;
 
@@ -318,7 +319,7 @@ namespace ErpNet.FP.Core.Service
             }
             PrintersInfo.Add(printerID, printer.DeviceInfo);
             Printers.Add(printerID, printer);
-            System.Diagnostics.Trace.WriteLine($"Found {printerID}: {printer.DeviceInfo.Uri}");
+            Log.Information($"Found {printerID}: {printer.DeviceInfo.Uri}");
         }
 
         public bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId)

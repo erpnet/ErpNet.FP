@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers
 {
@@ -75,13 +76,13 @@ namespace ErpNet.FP.Core.Drivers
 
         protected void WaitForDeviceToBeReady()
         {
-            System.Diagnostics.Trace.Write(">>> Ping ");
+            Log.Information(">>> Ping ");
             for (; ; )
             {
                 byte[]? buffer = null;
                 for (var w = 0; w < MaxWriteRetries; w++)
                 {
-                    System.Diagnostics.Trace.Write($">>> {SpecialCommandPing:X} <<< ");
+                    Log.Information($">>> {SpecialCommandPing:X} <<< ");
                     Channel.Write(new byte[] { SpecialCommandPing });
                     try
                     {
@@ -93,8 +94,8 @@ namespace ErpNet.FP.Core.Drivers
                         // When the device is too busy and cannot even answer ping
                         // It could be read timeout, so we will ping again, until
                         // MaxWriteRetries is exausted.
-                        System.Diagnostics.Trace.WriteLine("Timeout, try again!");
-                        System.Diagnostics.Trace.Write(">>> Ping ");
+                        Log.Information("Timeout, try again!");
+                        Log.Information(">>> Ping ");
                         continue;
                     }
                 }
@@ -103,11 +104,11 @@ namespace ErpNet.FP.Core.Drivers
                     throw new TimeoutException("ping timeout");
                 }
                 var b = buffer[0];
-                System.Diagnostics.Trace.Write($"{b:X} ");
+                Log.Information($"{b:X} ");
                 switch (b)
                 {
                     case PingAnswerDeviceReady:
-                        System.Diagnostics.Trace.WriteLine("Ready!");
+                        Log.Information("Ready!");
                         return;
                     case PingAnswerDeviceBusy:
                         continue; // continue with the loop waiting to be Ready
@@ -136,6 +137,8 @@ namespace ErpNet.FP.Core.Drivers
 
         protected virtual byte[]? RawRequest(byte command, byte[]? data)
         {
+            var deviceDescriptor = string.IsNullOrEmpty(DeviceInfo.Uri) ? Channel.Descriptor : DeviceInfo.Uri;
+
             FrameSequenceNumber++;
             if (FrameSequenceNumber > MaxSequenceNumber)
             {
@@ -148,12 +151,7 @@ namespace ErpNet.FP.Core.Drivers
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
-                System.Diagnostics.Trace.Write(">>>");
-                foreach (var b in request)
-                {
-                    System.Diagnostics.Trace.Write($"{b:X} ");
-                }
-                System.Diagnostics.Trace.WriteLine("");
+                Log.Information($"{deviceDescriptor} <<< {BitConverter.ToString(request)}");
                 Channel.Write(request);
 
                 // Read response frames.
@@ -163,12 +161,7 @@ namespace ErpNet.FP.Core.Drivers
                     var buffer = Channel.Read();
 
                     // For debugging purposes only.
-                    System.Diagnostics.Trace.Write("<<<");
-                    foreach (var b in buffer)
-                    {
-                        System.Diagnostics.Trace.Write($"{b:X} ");
-                    }
-                    System.Diagnostics.Trace.WriteLine("");
+                    Log.Information($"{deviceDescriptor} >>> {BitConverter.ToString(buffer)}");
 
                     var readFrames = new List<List<byte>>();
                     foreach (var b in buffer)
@@ -310,7 +303,6 @@ namespace ErpNet.FP.Core.Drivers
             {
                 try
                 {
-                    System.Diagnostics.Trace.WriteLine($"Request({command:X}): '{data}'");
                     return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
                 }
                 catch (StandardizedStatusMessageException e)

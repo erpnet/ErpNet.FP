@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers.BgIcp
 {
@@ -63,14 +64,12 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         public override DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount)
         {
             var (response, status) = MoneyTransfer(transferAmount.Amount);
-            System.Diagnostics.Trace.WriteLine("PrintMoneyDeposit: {0}", response);
             return status;
         }
 
         public override DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount)
         {
             var (response, status) = MoneyTransfer(-transferAmount.Amount);
-            System.Diagnostics.Trace.WriteLine("PrintMoneyDeposit: {0}", response);
             return status;
         }
 
@@ -259,14 +258,12 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         public override DeviceStatus PrintZReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(true);
-            System.Diagnostics.Trace.WriteLine("PrintZReport: {0}", response);
             return status;
         }
 
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (response, status) = PrintDailyReport(false);
-            System.Diagnostics.Trace.WriteLine("PrintXReport: {0}", response);
             return status;
         }
 
