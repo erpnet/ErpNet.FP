@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using ErpNet.FP.Core.Logging;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ErpNet.FP.Core.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,8 +39,6 @@ namespace ErpNet.FP.Server
 
         public static void Main(string[] args)
         {
-            Console.Title = "ErpNet.FP Service";
-
             var pathToContentRoot = Directory.GetCurrentDirectory();
 
             if (!(Debugger.IsAttached))
@@ -55,41 +53,44 @@ namespace ErpNet.FP.Server
             // Setup debug logs
             try
             {
-                var debugLogFilePath = EnsureDebugLogHistory(pathToContentRoot);
-                var traceStream = new FileStream(debugLogFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
-
-                // Create a TextWriterTraceListener object that takes a stream.
-                TextWriterTraceListener textListener;
-                textListener = new TextWriterTraceListener(traceStream);
-                Trace.Listeners.Add(textListener);
-                Trace.AutoFlush = true;
-
                 var builder = CreateHostBuilder(
                 pathToContentRoot,
                 args.Where(arg => arg != "--console").ToArray());
 
                 var host = builder.Build();
 
-                var logger = host.Services.GetRequiredService<ILogger<Service>>();
-                Log.Setup(logger);
+                var logStream = new FileStream(
+                        EnsureDebugLogHistory(pathToContentRoot),
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.Read);
+
+                if (Debugger.IsAttached)
+                {
+                    Log.Setup(host.Services.GetRequiredService<ILogger<Service>>());
+
+                    // Create a TextWriterTraceListener object that takes a stream.
+                    TextWriterTraceListener textListener;
+                    textListener = new TextWriterTraceListener(logStream);
+                    Trace.Listeners.Add(textListener);
+                    Trace.AutoFlush = true;
+                } 
+                else
+                {
+                    Log.Setup(new StreamWriter(logStream));
+                }
 
                 Log.Information($"Starting the service, version {GetVersion()}...");
 
                 host.Run();
 
                 Log.Information("Stopping the service.");
-
-                Trace.Flush();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while creating debug.log file: {ex.Message}");
                 return;
             }
-
-            
-
-            
         }
 
         public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
@@ -124,13 +125,10 @@ namespace ErpNet.FP.Server
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
-                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole(c =>
-                    {
-                        c.TimestampFormat = "[yyyy-MM-dd HH:mm:ss] ";
-                    });
-                    logging.AddDebug();
-                    logging.AddEventSourceLogger();
+                    logging
+                        .AddConfiguration(hostingContext.Configuration.GetSection("Logging"))
+                        .AddDebug()
+                        .AddEventSourceLogger();
                 })
                 .UseStartup<Startup>();
             });

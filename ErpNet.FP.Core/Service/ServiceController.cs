@@ -77,7 +77,7 @@ namespace ErpNet.FP.Core.Service
             ReadOptions();
             SetupProvider();
             isReady = true;
-            Detect();
+            Task.Run(() => Detect());
         }
 
         protected virtual void ReadOptions()

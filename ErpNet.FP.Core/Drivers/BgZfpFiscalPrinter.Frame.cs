@@ -76,17 +76,27 @@ namespace ErpNet.FP.Core.Drivers
 
         protected void WaitForDeviceToBeReady()
         {
-            Log.Information(">>> Ping ");
+            var deviceDescriptor = string.IsNullOrEmpty(DeviceInfo.Uri) ? Channel.Descriptor : DeviceInfo.Uri;
+
             for (; ; )
             {
                 byte[]? buffer = null;
                 for (var w = 0; w < MaxWriteRetries; w++)
                 {
-                    Log.Information($">>> {SpecialCommandPing:X} <<< ");
-                    Channel.Write(new byte[] { SpecialCommandPing });
+                    Log.Information($"{deviceDescriptor} <<< Ping: {SpecialCommandPing:X}");
+                    try
+                    {
+                        Channel.Write(new byte[] { SpecialCommandPing });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
+                        continue;
+                    }
                     try
                     {
                         buffer = Channel.Read();
+                        Log.Information($"{deviceDescriptor} >>> Pong: {BitConverter.ToString(buffer)}");
                         break;
                     }
                     catch (TimeoutException)
@@ -95,7 +105,11 @@ namespace ErpNet.FP.Core.Drivers
                         // It could be read timeout, so we will ping again, until
                         // MaxWriteRetries is exausted.
                         Log.Information("Timeout, try again!");
-                        Log.Information(">>> Ping ");
+                        continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Information($"{deviceDescriptor} Cannot read from channel: {ex.Message}");
                         continue;
                     }
                 }
@@ -104,11 +118,10 @@ namespace ErpNet.FP.Core.Drivers
                     throw new TimeoutException("ping timeout");
                 }
                 var b = buffer[0];
-                Log.Information($"{b:X} ");
                 switch (b)
                 {
                     case PingAnswerDeviceReady:
-                        Log.Information("Ready!");
+                        // Device is ready to receive commands, so we will return
                         return;
                     case PingAnswerDeviceBusy:
                         continue; // continue with the loop waiting to be Ready
@@ -146,19 +159,46 @@ namespace ErpNet.FP.Core.Drivers
             }
             // Wait for device to be ready
             // It will generate exception if there is read timeout
-            WaitForDeviceToBeReady();
+            try
+            {
+                WaitForDeviceToBeReady();
+            }
+            catch (Exception ex)
+            {
+                Log.Information($"{deviceDescriptor} Error while waiting device to be ready: {ex.Message}");
+                return null;
+            }
+
             var request = BuildHostFrame(command, data);
             for (var w = 0; w < MaxWriteRetries; w++)
             {
                 // Write request frame
                 Log.Information($"{deviceDescriptor} <<< {BitConverter.ToString(request)}");
-                Channel.Write(request);
+                try
+                {
+                    Channel.Write(request);
+                } 
+                catch(Exception ex)
+                {
+                    Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
+                    continue;
+                }
 
                 // Read response frames.
                 var currentFrame = new List<byte>();
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
-                    var buffer = Channel.Read();
+                    byte[] buffer;
+
+                    try
+                    {
+                        buffer = Channel.Read();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Information($"{deviceDescriptor} Cannot read from channel: {ex.Message}");
+                        return null;
+                    }
 
                     // For debugging purposes only.
                     Log.Information($"{deviceDescriptor} >>> {BitConverter.ToString(buffer)}");

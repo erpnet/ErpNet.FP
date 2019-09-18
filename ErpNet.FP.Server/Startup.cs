@@ -32,6 +32,7 @@ namespace ErpNet.FP.Server
 
             // KeepAliveHostedService will warm up ServiceSingleton context at start
             services.AddHostedService<KeepAliveHostedService>();
+            services.AddHostedService<SimpleDiscoveryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

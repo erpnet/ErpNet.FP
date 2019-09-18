@@ -1,41 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.Core.Logging
 {
     public static class Log
     {
-        private static ILogger? _logger;
+        private static ILogger? Logger;
+        private static TextWriter? LogWriter;
+        private static Timer? Timer;
+
+        private static string FormatLogMessage(string message)
+        {
+            var timeStamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff", CultureInfo.InvariantCulture);
+            return $"[{timeStamp}] {message}";
+        }
 
         public static void Information(string message)
         {
-            if (_logger != null)
+            if (Logger != null)
             {
-                _logger.LogInformation(message);
+                Logger.LogInformation(FormatLogMessage(message));
+            } 
+            if (LogWriter != null)
+            {
+                LogWriter.WriteLine($"info: {FormatLogMessage(message)}");
+                LogWriter.Flush();
             }
         }
 
         public static void Warning(string message)
         {
-            if (_logger != null)
+            if (Logger != null)
             {
-                _logger.LogWarning(message);
+                Logger.LogWarning(FormatLogMessage(message));
+            }
+            if (LogWriter != null)
+            {
+                LogWriter.WriteLine($"warn: {FormatLogMessage(message)}");
+                LogWriter.Flush();
             }
         }
 
         public static void Error(string message)
         {
-            if (_logger != null)
+            if (Logger != null)
             {
-                _logger.LogError(message);
+                Logger.LogError(FormatLogMessage(message));
+            }
+            if (LogWriter != null)
+            {
+                LogWriter.WriteLine($"fail: {FormatLogMessage(message)}");
+                LogWriter.Flush();
             }
         }
 
         public static void Setup(ILogger logger)
         {
-            _logger = logger;
+            Logger = logger;
+        }
+
+        private static void AutoFlushLogWriter(object state)
+        {
+            if (LogWriter != null)
+            {
+                LogWriter.Flush();
+            }
+        }
+
+        public static void Setup(TextWriter logWriter)
+        {
+            Timer = new Timer(AutoFlushLogWriter, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+            LogWriter = logWriter;
         }
     }
 }

@@ -2,6 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
+            <Directory Id="dirA12032DA762A41968FE7D3C4F9E77C80" Name="Published" />
             <Directory Id="dir3D83A529A2122889D4016E7D784625D5" Name="wwwroot" />
         </DirectoryRef>
     </Fragment>
@@ -826,6 +827,276 @@
             <Component Id="cmpB67698E8021557AB8B9CC56808EA4FD2" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil4632E4BAE83C5DDA6408E46C4A1F0259" KeyPath="yes" Source="$(var.OUTPUT)\ucrtbase.dll" />
             </Component>
+            <Component Id="cmp19ABD27606184CB6E43BF8DA747FCE65" Directory="dir7AF4EBE69E355E4D364384ECD0DF2325" Guid="*">
+                <File Id="fil13773F981A77E3C3CAA80BA9ACF44A49" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp1A4543CC58B985FECB8C13B7CCB15EF2" Directory="dir7AF4EBE69E355E4D364384ECD0DF2325" Guid="*">
+                <File Id="fil0D59DF28066D02562D2957BE367650B8" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpC56BD298E77054721F247A7622CB8D12" Directory="dir7AF4EBE69E355E4D364384ECD0DF2325" Guid="*">
+                <File Id="fil4F9D41FFC7A8B1CAED65ECBF03C4A02A" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpE84075ABB53A02DF80BD08D40D229B60" Directory="dir6792FFDED41100C935AAFD861B245206" Guid="*">
+                <File Id="fil146DB2029AB19CE1F35308613516EC18" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp4FE36B5DC8846CA000546943E2C6D87D" Directory="dir6792FFDED41100C935AAFD861B245206" Guid="*">
+                <File Id="fil374ADB5F437EE6EB543EFE64406D8DCF" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpAA9D03F647C85CBA41735E1D3DBFE55E" Directory="dir6792FFDED41100C935AAFD861B245206" Guid="*">
+                <File Id="fil3DD55C0A4ECE14688286955E2674CFA7" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpB4ECD0B23A3CD0A4A2C84C59856B382A" Directory="dir538677D74AB53693D40DFC0E80C8B0A8" Guid="*">
+                <File Id="filBD276BFB3218F7D2B5CAE38F8B46039D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp1A2B8EE7597547E2349077492B3BCD5C" Directory="dir538677D74AB53693D40DFC0E80C8B0A8" Guid="*">
+                <File Id="filF601FEB709A2C9EC179A1FD438EC88B1" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpFDED8A9EA97D05410F86C7EEE7F692C1" Directory="dir538677D74AB53693D40DFC0E80C8B0A8" Guid="*">
+                <File Id="fil13BE456FC64E2D408E4E8ED2C963BE54" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpBCB6B93ABD7005275994AFE2B9CC80A5" Directory="dir0060539356D4F3D71DC1A4F6AA5A94D5" Guid="*">
+                <File Id="filE975A64E38C9618AEF665550525CDA52" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp8AA2F150AD90B2B1041B454E53151F59" Directory="dir0060539356D4F3D71DC1A4F6AA5A94D5" Guid="*">
+                <File Id="filEA94E18829200CCC6B877A812BA8E71A" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp373E8C0ABB957E8363EEDF7E56EF5914" Directory="dir0060539356D4F3D71DC1A4F6AA5A94D5" Guid="*">
+                <File Id="filAF7348E07EBB90458BCBA68109A52C88" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp9323DC81C07C64A8683A4A78C51FC52A" Directory="dirE48BB4993C660A29C99A8239D1F6A15C" Guid="*">
+                <File Id="filCC96BC6B8C3E15E256C5C9802B1F6B00" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp671F5CF25B6137B1819391E0F080E88E" Directory="dirE48BB4993C660A29C99A8239D1F6A15C" Guid="*">
+                <File Id="fil0D7139A0D2B2FDEEF70C6A7799E30C6E" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp1F3318C1E91B3208EDD4B87B168E966B" Directory="dirE48BB4993C660A29C99A8239D1F6A15C" Guid="*">
+                <File Id="filA87F76333E4A0A49210453C0F915D78D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpC644F1997C5276267476948EE5A546AE" Directory="dir5625ED6BF6E910EEE2DB8573D7A8970E" Guid="*">
+                <File Id="filD25B72BD3A695D28DB140141DE57BE41" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp5D38619288264443E0057A4D39FC62DA" Directory="dir5625ED6BF6E910EEE2DB8573D7A8970E" Guid="*">
+                <File Id="fil18F09BBA1FA8DA0B4718ACA12D29C178" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp10FC0FAC87A5AAB544BBC3C855BF2A1C" Directory="dir5625ED6BF6E910EEE2DB8573D7A8970E" Guid="*">
+                <File Id="fil192D2E43B46785B00EC5703182DE53C2" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp3DE537A451171BB1FC6991B754A00A38" Directory="dir873DEFA23A3BD9CCF0165C3274C309BE" Guid="*">
+                <File Id="fil3061901A835AFB88969BDF6CE74371A6" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp39DA07E001DE6352287666BAB2C55AED" Directory="dir873DEFA23A3BD9CCF0165C3274C309BE" Guid="*">
+                <File Id="fil52CD55279510331117BC5B31DA617E74" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp9A2D129045F49CBF1228EE2A4B4CEE11" Directory="dir873DEFA23A3BD9CCF0165C3274C309BE" Guid="*">
+                <File Id="filC9C867CE688C576DB472C3747CA73F0E" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp8BD8CBE596792BB07D49CCBED5A2FA4C" Directory="dirD2BAD4E3A72B0381FB53D0D6563DA9A0" Guid="*">
+                <File Id="fil41A587A50E4B9FC55B821CBBF0D94A08" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp7037A366E9E52EFD34D0E794C09880B3" Directory="dirD2BAD4E3A72B0381FB53D0D6563DA9A0" Guid="*">
+                <File Id="filFCE52540DEE8DCFE1CCBF5372DEE6F40" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpE8C51B204484E146C29BE9721920E23F" Directory="dirD2BAD4E3A72B0381FB53D0D6563DA9A0" Guid="*">
+                <File Id="filA073DC2C7E6F8383A482A2295E8A0799" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp8DF387330BEBBEA37A6DA9DD3A698D80" Directory="dirDE9A5CA7280C52D5C0CFE707469B557B" Guid="*">
+                <File Id="fil1DE5822F50A574340FBFF765AABA364D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpEE2607E7BF4BB8B42BE6FD4F783E3E52" Directory="dirDE9A5CA7280C52D5C0CFE707469B557B" Guid="*">
+                <File Id="filB0C9488CD5624AF9EF4F81C8764E656E" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp0C8A8F894AB9311FDF2A25B4E45DF597" Directory="dirDE9A5CA7280C52D5C0CFE707469B557B" Guid="*">
+                <File Id="fil1C13BD728373F65A0E4495668BA27D7E" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\linux-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp8B258B561A8F32085ED4E87A36D6ACA3" Directory="dir42E6AA7FF4B4D019E61D7DE8DB6F676F" Guid="*">
+                <File Id="filC5137DED8AFB261EDCA57B9F842D0293" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp6F7667750E04B85B40D8A237443178A1" Directory="dir42E6AA7FF4B4D019E61D7DE8DB6F676F" Guid="*">
+                <File Id="fil5508C640C7310E705C707AFBEBD00EAF" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp7AE5B6065F3FB3DE5BF434BDB3A64944" Directory="dir42E6AA7FF4B4D019E61D7DE8DB6F676F" Guid="*">
+                <File Id="fil6D19EC267F0D60469C4AEADCB913CDBA" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpD4C4C8E2C7F5990D0D238194BB3657AD" Directory="dirDA7263AC2F9D6FE089B9C0C590C5C6E8" Guid="*">
+                <File Id="fil3F640C4B438BADA0521AC024E5B2C072" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp264395B72F9987B1080B1A95ED96AAF2" Directory="dirDA7263AC2F9D6FE089B9C0C590C5C6E8" Guid="*">
+                <File Id="fil34F179D8FB576AC0C799A19FA0E2FEA6" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp20F0ECC5FFC5498AAA0A70609FD00EAC" Directory="dirDA7263AC2F9D6FE089B9C0C590C5C6E8" Guid="*">
+                <File Id="filA80A7DBEAF9F11E3275A2614779D98E0" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp50F1C9B45B3781C06BE1925CE66F9926" Directory="dir6E986B9DBE0A38ED305DB6EDFEB881AF" Guid="*">
+                <File Id="fil798E5C937DA3D5F1B2C079750B2CEF20" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp09DEC9B8BE6C76784F59270286B8F17C" Directory="dir6E986B9DBE0A38ED305DB6EDFEB881AF" Guid="*">
+                <File Id="filEA8BEAF6ADED60DCF5835851FF1D62D0" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp384B3EEC4B0083BA829ED0CF83F99D31" Directory="dir6E986B9DBE0A38ED305DB6EDFEB881AF" Guid="*">
+                <File Id="fil1693F4A3865821113D4DF2DEE46C210B" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpF0FE89DD95FB701A9F5831C95C87CA8A" Directory="dir4F9EAF3706B0AAAFC3B12DA9CF59D6D0" Guid="*">
+                <File Id="filF5514129FB9F18CE4BC9E95F9BC280C8" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpD6FEFE0408817457CB6D1D4F672C0B0C" Directory="dir4F9EAF3706B0AAAFC3B12DA9CF59D6D0" Guid="*">
+                <File Id="filD9B8693D12D83C4DF8318881666E5FFB" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpC11AFB933E2EB0C1AEC2933CE9DC30FF" Directory="dir4F9EAF3706B0AAAFC3B12DA9CF59D6D0" Guid="*">
+                <File Id="filE9A5A3506FFA8C80C5DA3215035E7A3C" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpF198306907FFD035E489B887B450F1E1" Directory="dir4D811C70D71DE092005230E7E6DAA390" Guid="*">
+                <File Id="filC28745D000F2926E909419E1866CADF1" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp410AAC3CE9C117461A1A3FE4DF510B02" Directory="dir4D811C70D71DE092005230E7E6DAA390" Guid="*">
+                <File Id="fil89097CB9DF3C3996A22F0EDB1521CBCF" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp80EE745186083BEEC741AF6C789E27FE" Directory="dir4D811C70D71DE092005230E7E6DAA390" Guid="*">
+                <File Id="fil87E64A70F84E0EE4D5EFB946E77506C8" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp251D9172DFCD30C8BD6929B17803655A" Directory="dirAAD0408EDA6E7209FAE1CE074F42A268" Guid="*">
+                <File Id="fil9CCAE8FAC86117E0475A41165410D74E" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp324BC437F67FC1CD721D046A6BB77AC0" Directory="dirAAD0408EDA6E7209FAE1CE074F42A268" Guid="*">
+                <File Id="filBD2B657A714D08DE0A7895F0A645B58D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpF158273FEEA72E0BAE59AB513E1EB5F4" Directory="dirAAD0408EDA6E7209FAE1CE074F42A268" Guid="*">
+                <File Id="filCE2000690B5E8A3CAF132EDCF6B6674C" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp243700B555B82D27DBE858773B956231" Directory="dir10FE13032FA6EE5C2DC52AC6CA2C5CA2" Guid="*">
+                <File Id="fil1E08970F75C9FA62B942AD7A9A3F686A" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpAD2F5D0E0B7ECCFC293A241D5C9354CA" Directory="dir10FE13032FA6EE5C2DC52AC6CA2C5CA2" Guid="*">
+                <File Id="fil5E9FD87DEC2BB34E5A0B891996D079A5" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp333CA2F5909B95776B9ED644448856E7" Directory="dir10FE13032FA6EE5C2DC52AC6CA2C5CA2" Guid="*">
+                <File Id="filF8D6C63AC94E1CE4CEC1B34CC3A18E9C" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-arm\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp88D81F5DD63074E570A918C8C0802BFA" Directory="dir1D24EA9AD857F14E21996E22B0F167BB" Guid="*">
+                <File Id="fil3968B8451216E5E30E4B022E2612F15D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp2E8478F037C4F6257DEE2D4752BF651D" Directory="dir1D24EA9AD857F14E21996E22B0F167BB" Guid="*">
+                <File Id="fil5A23B1208CC79BFCD61F25DB0904EFC6" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpB635A716D3F13D10C66EAA1177C8ADC6" Directory="dir1D24EA9AD857F14E21996E22B0F167BB" Guid="*">
+                <File Id="filCD014F9D981990A9AB23CF65B4884F05" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp3F4A716C67932214791AD749FC38FF98" Directory="dirA476E1E8C0A5DC9F451195D5D3577F1D" Guid="*">
+                <File Id="fil497D1719F75F2A3C80AE6C450CD8248B" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpAF09943BE660999D1075BD20A24C5FDC" Directory="dirA476E1E8C0A5DC9F451195D5D3577F1D" Guid="*">
+                <File Id="fil7B36ED4EA421C0D42DBC158E0CFD3619" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp5EE0C898097D4F203A07764A9EB4CA3B" Directory="dirA476E1E8C0A5DC9F451195D5D3577F1D" Guid="*">
+                <File Id="filA0555F0C40444192FE34B3D018CE23E9" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp579FBD637163C7877C893349FA56FED5" Directory="dirD0D8D61ECE2835E7EB8CDF90C6099A62" Guid="*">
+                <File Id="filEFD2227FFA32721129CE3CB3AEEDC572" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp248F058F7CB6253E4E8F9487F3DE1904" Directory="dirD0D8D61ECE2835E7EB8CDF90C6099A62" Guid="*">
+                <File Id="filF741C68B586D8EBB9D7B11BC6EB0E06A" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp31F5107F5FC023171363EE7150356CF9" Directory="dirD0D8D61ECE2835E7EB8CDF90C6099A62" Guid="*">
+                <File Id="filD8CBCE7F9E37E37CC668743699EBD57B" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmpD1D2A171CFB07C472E8343FF376A7035" Directory="dir834F1D5F42B1D995BA8C2270B6D32E2B" Guid="*">
+                <File Id="filF4865C5D0E93D9C406E5B0035719BFE6" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpD67866A2BB62846783A4D9CD655D3FE5" Directory="dir834F1D5F42B1D995BA8C2270B6D32E2B" Guid="*">
+                <File Id="filB6B06E914D971E3D4494A28E960F0D5D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpD7A361D3244955BA0FEEE6542C70441A" Directory="dir834F1D5F42B1D995BA8C2270B6D32E2B" Guid="*">
+                <File Id="fil4C438173099BC355FC0D16EE3774C74B" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp3C111F52FE5635E88024427D3D7DB3C6" Directory="dirB78E529C904A538073F33B65F7698221" Guid="*">
+                <File Id="filE6B57483F388CE2C0C9DE9FC75101AAD" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpBEA96E81731B272198F5D36716A3A69A" Directory="dirB78E529C904A538073F33B65F7698221" Guid="*">
+                <File Id="fil3D3BB529BFD4FE2543DE058B1FF1A693" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp8369EF7B86B2D1011920A5FC35634474" Directory="dirB78E529C904A538073F33B65F7698221" Guid="*">
+                <File Id="fil407913F6A7123DA38A64EF1E616FDCEB" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp63BFA44192E5E3E1F3C9D4B2E404DD76" Directory="dir6F58EAE2618DC773427671FDB079AADD" Guid="*">
+                <File Id="filBDDE25682F1A60E735CB62FC63F6C755" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpD40BE145D20E791AB9064D7884CCB9C9" Directory="dir6F58EAE2618DC773427671FDB079AADD" Guid="*">
+                <File Id="filEAA94AB4BF9B2C471E5FC5EF52BCACEB" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp5FB19110983D66E7BD90F22EBB43AB8E" Directory="dir6F58EAE2618DC773427671FDB079AADD" Guid="*">
+                <File Id="filE3904058C44634B2A0660AD8A1E9F610" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp9E244E1682C3BA56D8DBD72086FB650C" Directory="dir36B87AFEABFEC76F9C1FC105D395DA25" Guid="*">
+                <File Id="filD3782CD871986B7EE970C15A2401F8B3" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp07F2EE45BE4CFC6CC5C09CDEA2EA28B0" Directory="dir36B87AFEABFEC76F9C1FC105D395DA25" Guid="*">
+                <File Id="filDA874AF0930E67AA6B7557DD80530BA2" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpAA9E671E1B91E1E455F710F5BC44877B" Directory="dir36B87AFEABFEC76F9C1FC105D395DA25" Guid="*">
+                <File Id="fil2ADBA9582FBE800D5720405A5982B3ED" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp203A0BF8BB7F00582C85924A027D2007" Directory="dir06D8C3C5A3B47F9B713A3BA5F11B90E2" Guid="*">
+                <File Id="filB17E8966EC70CB22648C58F9274D200D" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp96708D7E5EB6C6BCBB3C5801FE67AF75" Directory="dir06D8C3C5A3B47F9B713A3BA5F11B90E2" Guid="*">
+                <File Id="fil098ECEBB3BF2BC03F6866E64E072AD80" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpDCA636827E2B3B9AE9032749BCA7451E" Directory="dir06D8C3C5A3B47F9B713A3BA5F11B90E2" Guid="*">
+                <File Id="fil627B3347C5120E8904395081CCFDA7B9" KeyPath="yes" Source="$(var.OUTPUT)\Published\linux-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp45597589E9A2AE030E66EDCB17D574C1" Directory="dir67FD3825DDC5B66A307088CA439287DF" Guid="*">
+                <File Id="filFCB60485D7AEB7666F924A75DE8234D0" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp7E48F52FDE0441F255FBDF72D43957BD" Directory="dir67FD3825DDC5B66A307088CA439287DF" Guid="*">
+                <File Id="fil664A1A1CDAFA859779D0D43DF5F039DC" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp4473F31A5EA9DBED92DEF8F36DA5921E" Directory="dir67FD3825DDC5B66A307088CA439287DF" Guid="*">
+                <File Id="filEA07734409C01324FFCF1C016C823205" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp46DC26851BC47E6245BD68C4D63D9876" Directory="dirF9D1C14A9B68FA20709CBEB898346F22" Guid="*">
+                <File Id="fil076EB08320FDFE65916557E4FDA37E29" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpB61B7359F074CB78BE4FFC991D0B2BCE" Directory="dirF9D1C14A9B68FA20709CBEB898346F22" Guid="*">
+                <File Id="filE05E2ACDB77D1E94E8941D03FD23A4C5" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpEF111B3F5C90EA2E1F11A21F642CE155" Directory="dirF9D1C14A9B68FA20709CBEB898346F22" Guid="*">
+                <File Id="filFD0BA9BF6CA52D595EE407D18605A5CA" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp6691E4BAD00147425F76170AD17F90DD" Directory="dir1DC15950B21DBACA1115D00998549706" Guid="*">
+                <File Id="fil0FF52F68369ED5087F31EA3EE00CCB1B" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp8DEA0DF5895C93E9FBC1FC58B1AE0584" Directory="dir1DC15950B21DBACA1115D00998549706" Guid="*">
+                <File Id="fil7DF61CA48B29D34EE22390288FCEBCB2" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpCD123E17CAABBE5928AA1493948FAE9A" Directory="dir1DC15950B21DBACA1115D00998549706" Guid="*">
+                <File Id="fil47DB03197A16F036CAED809E39656B12" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp80A4390573E4901B9BB647F892405A93" Directory="dir2EABFE691DEB556F02EE40702AA23D46" Guid="*">
+                <File Id="fil8180BFBBE356C24FAF7A6580C3D50786" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmpEF86D9653AE3DB2643C7AAC8EFF1ED2F" Directory="dir2EABFE691DEB556F02EE40702AA23D46" Guid="*">
+                <File Id="fil588D33CC3702C7FED3E69B2A72F1BE87" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp63D33E2307C2A7FD4DA515F162EF0356" Directory="dir2EABFE691DEB556F02EE40702AA23D46" Guid="*">
+                <File Id="filF6548A2CB85E7AA088BA975BE4E48E6C" KeyPath="yes" Source="$(var.OUTPUT)\Published\osx-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp87AEB9D3564D5F1367E151D63AC528D2" Directory="dir4F472123D0BEFA6A14774C40EC36FA8E" Guid="*">
+                <File Id="filF7388F19DE33C4F3AFD7DE2EC63D4131" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp7E72318CBC7A4C30FE7BE08182471FB6" Directory="dir4F472123D0BEFA6A14774C40EC36FA8E" Guid="*">
+                <File Id="fil434F3CDAA7318BBBC38D8B88C0709065" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmp5AB9A77BF779A832204E61159F93B44A" Directory="dir4F472123D0BEFA6A14774C40EC36FA8E" Guid="*">
+                <File Id="filCFC8F90BA64F233A9EFDC334EEDB2541" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp128F8112B035AEF9536135A80886930D" Directory="dir23D0F99BD7E4BC0C7F592D7F6F88D8F5" Guid="*">
+                <File Id="fil6B0FE0ADF83159BD467F22078248BB30" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\Published\win-x86\appsettings.Development.json" />
+            </Component>
+            <Component Id="cmp6D452BBA0618F8723FE0C5A45E291F26" Directory="dir23D0F99BD7E4BC0C7F592D7F6F88D8F5" Guid="*">
+                <File Id="filF43E1EC5387D03BCBB7BC1221FA172F6" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\Published\win-x86\ErpNet.FP.Server.deps.json" />
+            </Component>
+            <Component Id="cmpBD0E0B202A886AD1F091DEDCE269F745" Directory="dir23D0F99BD7E4BC0C7F592D7F6F88D8F5" Guid="*">
+                <File Id="fil534D952A30C92F3898EF808023B7B72A" KeyPath="yes" Source="$(var.OUTPUT)\Published\win-x64\Published\win-x86\ErpNet.FP.Server.runtimeconfig.json" />
+            </Component>
             <Component Id="cmp0AEDE6DCDC2F5C2D3B02F7BCF96C7A4E" Directory="dir3D83A529A2122889D4016E7D784625D5" Guid="*">
                 <File Id="filFAAF8488FB04F8D69EDC618CD5BDD0FA" KeyPath="yes" Source="$(var.OUTPUT)\wwwroot\app.js" />
             </Component>
@@ -844,14 +1115,231 @@
             <Component Id="cmpACD76D623D74B9E5C5D954D38DDD51D7" Directory="dir3D83A529A2122889D4016E7D784625D5" Guid="*">
                 <File Id="fil9EBAEDECA67458F0FA02476E2023B4BF" KeyPath="yes" Source="$(var.OUTPUT)\wwwroot\index.js" />
             </Component>
-            <Component Id="cmp74E81DD0493211D7BBA96D084DBFC071" Directory="dirBCECA8B74D36FAE1502D4592773E7D96" Guid="*">
-                <File Id="filA1A6C30B290A95444319B8F171575B95" KeyPath="yes" Source="$(var.OUTPUT)\wwwroot\debug\debug.log" />
-            </Component>
         </ComponentGroup>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="dir3D83A529A2122889D4016E7D784625D5">
-            <Directory Id="dirBCECA8B74D36FAE1502D4592773E7D96" Name="debug" />
+        <DirectoryRef Id="dir41522D7B80B5ED92766B98BAB074B802">
+            <Directory Id="dir0060539356D4F3D71DC1A4F6AA5A94D5" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD22CA9780F32A2BDE76A3E9B499979A4">
+            <Directory Id="dir06D8C3C5A3B47F9B713A3BA5F11B90E2" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir0060539356D4F3D71DC1A4F6AA5A94D5">
+            <Directory Id="dir0A06A0B8C5565537494B11B309818AE7" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir3482E664F27CC0FF25613534098B3D07">
+            <Directory Id="dir10FE13032FA6EE5C2DC52AC6CA2C5CA2" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirA12032DA762A41968FE7D3C4F9E77C80">
+            <Directory Id="dir1D24EA9AD857F14E21996E22B0F167BB" Name="linux-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir2E3DC91AF8E525FC7EAF05BBF5DE2F06">
+            <Directory Id="dir1DC15950B21DBACA1115D00998549706" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir873DEFA23A3BD9CCF0165C3274C309BE">
+            <Directory Id="dir238C7D482560F57CCE1196525AB3B603" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirEDCFE9AD4E6BB6E4AEA4ECFE3CEF31BF">
+            <Directory Id="dir23D0F99BD7E4BC0C7F592D7F6F88D8F5" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirF9D1C14A9B68FA20709CBEB898346F22">
+            <Directory Id="dir2E3DC91AF8E525FC7EAF05BBF5DE2F06" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir9524138EC1EBFF3768465D2B72FB81EE">
+            <Directory Id="dir2EABFE691DEB556F02EE40702AA23D46" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir7AF4EBE69E355E4D364384ECD0DF2325">
+            <Directory Id="dir3482E664F27CC0FF25613534098B3D07" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirE18D62149C7E3B66360D58799F37A10B">
+            <Directory Id="dir36B87AFEABFEC76F9C1FC105D395DA25" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir538677D74AB53693D40DFC0E80C8B0A8">
+            <Directory Id="dir41522D7B80B5ED92766B98BAB074B802" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir3482E664F27CC0FF25613534098B3D07">
+            <Directory Id="dir42E6AA7FF4B4D019E61D7DE8DB6F676F" Name="osx-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir3482E664F27CC0FF25613534098B3D07">
+            <Directory Id="dir4D811C70D71DE092005230E7E6DAA390" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirA12032DA762A41968FE7D3C4F9E77C80">
+            <Directory Id="dir4F472123D0BEFA6A14774C40EC36FA8E" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir5E1FD0347C214627D2D471B9A8888FA2">
+            <Directory Id="dir4F9EAF3706B0AAAFC3B12DA9CF59D6D0" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir89A97AABA9C06A6761B22B749C46FE4D">
+            <Directory Id="dir538677D74AB53693D40DFC0E80C8B0A8" Name="osx-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir41522D7B80B5ED92766B98BAB074B802">
+            <Directory Id="dir5625ED6BF6E910EEE2DB8573D7A8970E" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir42E6AA7FF4B4D019E61D7DE8DB6F676F">
+            <Directory Id="dir5E1FD0347C214627D2D471B9A8888FA2" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirA476E1E8C0A5DC9F451195D5D3577F1D">
+            <Directory Id="dir5E371775E46DDAC43AA88616BE3D6EDB" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir3482E664F27CC0FF25613534098B3D07">
+            <Directory Id="dir6792FFDED41100C935AAFD861B245206" Name="linux-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirA12032DA762A41968FE7D3C4F9E77C80">
+            <Directory Id="dir67FD3825DDC5B66A307088CA439287DF" Name="osx-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirE840A4183273D8C4D0A4AAE51461EE3D">
+            <Directory Id="dir6E986B9DBE0A38ED305DB6EDFEB881AF" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD22CA9780F32A2BDE76A3E9B499979A4">
+            <Directory Id="dir6F58EAE2618DC773427671FDB079AADD" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirA12032DA762A41968FE7D3C4F9E77C80">
+            <Directory Id="dir7AF4EBE69E355E4D364384ECD0DF2325" Name="linux-arm" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir9A5F6F40C581D33D73F07BE43C1EAE54">
+            <Directory Id="dir834F1D5F42B1D995BA8C2270B6D32E2B" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir89A97AABA9C06A6761B22B749C46FE4D">
+            <Directory Id="dir873DEFA23A3BD9CCF0165C3274C309BE" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6792FFDED41100C935AAFD861B245206">
+            <Directory Id="dir89A97AABA9C06A6761B22B749C46FE4D" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir67FD3825DDC5B66A307088CA439287DF">
+            <Directory Id="dir9524138EC1EBFF3768465D2B72FB81EE" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD0D8D61ECE2835E7EB8CDF90C6099A62">
+            <Directory Id="dir9A5F6F40C581D33D73F07BE43C1EAE54" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD22CA9780F32A2BDE76A3E9B499979A4">
+            <Directory Id="dirA476E1E8C0A5DC9F451195D5D3577F1D" Name="osx-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCF580414F05A98C7FF6A9FD56EB091BB">
+            <Directory Id="dirAAD0408EDA6E7209FAE1CE074F42A268" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir5E371775E46DDAC43AA88616BE3D6EDB">
+            <Directory Id="dirB78E529C904A538073F33B65F7698221" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir4D811C70D71DE092005230E7E6DAA390">
+            <Directory Id="dirCF580414F05A98C7FF6A9FD56EB091BB" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir5E371775E46DDAC43AA88616BE3D6EDB">
+            <Directory Id="dirD0D8D61ECE2835E7EB8CDF90C6099A62" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir1D24EA9AD857F14E21996E22B0F167BB">
+            <Directory Id="dirD22CA9780F32A2BDE76A3E9B499979A4" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir238C7D482560F57CCE1196525AB3B603">
+            <Directory Id="dirD2BAD4E3A72B0381FB53D0D6563DA9A0" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir5E1FD0347C214627D2D471B9A8888FA2">
+            <Directory Id="dirDA7263AC2F9D6FE089B9C0C590C5C6E8" Name="win-x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir89A97AABA9C06A6761B22B749C46FE4D">
+            <Directory Id="dirDE9A5CA7280C52D5C0CFE707469B557B" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6F58EAE2618DC773427671FDB079AADD">
+            <Directory Id="dirE18D62149C7E3B66360D58799F37A10B" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir0A06A0B8C5565537494B11B309818AE7">
+            <Directory Id="dirE48BB4993C660A29C99A8239D1F6A15C" Name="win-x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirDA7263AC2F9D6FE089B9C0C590C5C6E8">
+            <Directory Id="dirE840A4183273D8C4D0A4AAE51461EE3D" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir4F472123D0BEFA6A14774C40EC36FA8E">
+            <Directory Id="dirEDCFE9AD4E6BB6E4AEA4ECFE3CEF31BF" Name="Published" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir9524138EC1EBFF3768465D2B72FB81EE">
+            <Directory Id="dirF9D1C14A9B68FA20709CBEB898346F22" Name="win-x64" />
         </DirectoryRef>
     </Fragment>
 </Wix>

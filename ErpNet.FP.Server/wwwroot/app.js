@@ -35,13 +35,10 @@ function showAvailablePrinters() {
             }
             var printersCount = Object.keys(data).length
             this.append('<p>Available ' + printersCount + ' printer(s).</p>')
-
-            showConfiguredPrinters()
         },
-        error: function (xhr, type) {
-            showToastMessage("Cannot get available printers list.")
-            this.html("")
-            $('#ConfiguredPrintersList').html("")
+        error: function(xhr, type) {
+            // wait more time
+            setTimeout(function() { showAvailablePrinters() }, 3000);
         }
     })
 }
@@ -93,8 +90,8 @@ function showConfiguredPrinters() {
             this.append('<p>Configured ' + printersCount + ' printer(s).</p>')
         },
         error: function (xhr, type) {
-            showToastMessage("Cannot get configured printers list.")
-            this.html("")
+            // wait more time
+            setTimeout(function() { showConfiguredPrinters() }, 3000);
         }
     })
 }
@@ -142,6 +139,7 @@ function detectAvailablePrinters() {
 
 function showPrinters() {
     showAvailablePrinters()
+    showConfiguredPrinters()
 }
 
 function configurePrinter() {

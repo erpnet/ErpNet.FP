@@ -79,13 +79,31 @@ namespace ErpNet.FP.Core.Drivers
             {
                 // Write request frame
                 Log.Information($"{deviceDescriptor} <<< {BitConverter.ToString(request)}");
-                Channel.Write(request);
+                try
+                {
+                    Channel.Write(request);
+                }
+                catch (Exception ex)
+                {
+                    Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
+                    continue;
+                }
 
                 // Read response frames.
                 var currentFrame = new List<byte>();
                 for (var r = 0; r < MaxReadRetries; r++)
                 {
-                    var buffer = Channel.Read();
+                    byte[] buffer;
+
+                    try
+                    {
+                        buffer = Channel.Read();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Information($"{deviceDescriptor} Cannot read from channel: {ex.Message}");
+                        return null;
+                    }
 
                     // For debugging purposes only.
                     Log.Information($"{deviceDescriptor} >>> {BitConverter.ToString(buffer)}");

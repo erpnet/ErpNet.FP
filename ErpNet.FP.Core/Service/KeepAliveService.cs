@@ -25,11 +25,11 @@ namespace ErpNet.FP.Server.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Log.Information("Keep Alive Background Service is starting.");
-
             // Get Status every 120 seconds, for keeping alive the connection
-            Timer = new Timer(KeepAliveWithGetStatus, null, TimeSpan.Zero,
+            Timer = new Timer(KeepAliveWithGetStatus, null, TimeSpan.FromSeconds(120),
                 TimeSpan.FromSeconds(120));
+
+            Log.Information("Keep Alive Background Service is started.");
 
             return Task.CompletedTask;
         }
@@ -53,9 +53,9 @@ namespace ErpNet.FP.Server.Services
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            Log.Information("Keep Alive Background Service is stopping.");
-
             Timer?.Change(Timeout.Infinite, 0);
+
+            Log.Information("Keep Alive Background Service is stopped.");
 
             return Task.CompletedTask;
         }
