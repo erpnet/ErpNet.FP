@@ -1,16 +1,13 @@
 ﻿using ErpNet.FP.Core.Logging;
-using Microsoft.AspNetCore.Hosting;
+using ErpNet.FP.Core.Service;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,12 +21,16 @@ namespace ErpNet.FP.Server.Services
     /// </summary>
     public class SimpleDiscoveryService : IDisposable, IHostedService
     {
-        private const int UdpBeaconPort = 8001;
-
         private Timer? Timer;
         private List<Uri>? UriList;
+        private readonly IServiceController context;
 
         public static IServerAddressesFeature? ServerAddresses;
+
+        public SimpleDiscoveryService(IServiceController context)
+        {
+            this.context = context;
+        }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -66,7 +67,7 @@ namespace ErpNet.FP.Server.Services
                                     if (uip.Address.AddressFamily == AddressFamily.InterNetwork)
                                     {
                                         IPEndPoint local = new IPEndPoint(uip.Address, 0);
-                                        IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip.Address, uip.IPv4Mask), UdpBeaconPort);
+                                        IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip), context.UdpBeaconPort);
 
                                         var sb = new StringBuilder();
                                         foreach (var uri in UriList)

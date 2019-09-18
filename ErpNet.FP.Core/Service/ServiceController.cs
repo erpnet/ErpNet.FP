@@ -29,6 +29,8 @@ namespace ErpNet.FP.Core.Service
 
         bool AutoDetect { get; set; }
 
+        int UdpBeaconPort { get; set; }
+
         bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
 
         bool DeletePrinter(PrinterConfigWithId printerConfigWithId);
@@ -65,6 +67,17 @@ namespace ErpNet.FP.Core.Service
             set
             {
                 configOptions.AutoDetect = value;
+                WriteOptions();
+            }
+        }
+
+        public int UdpBeaconPort
+        {
+            get => configOptions.UdpBeaconPort;
+
+            set
+            {
+                configOptions.UdpBeaconPort = value;
                 WriteOptions();
             }
         }
