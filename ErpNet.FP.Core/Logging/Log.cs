@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.Core.Logging
@@ -29,7 +30,6 @@ namespace ErpNet.FP.Core.Logging
             if (LogWriter != null)
             {
                 LogWriter.WriteLine($"info: {FormatLogMessage(message)}");
-                LogWriter.Flush();
             }
         }
 
@@ -42,7 +42,6 @@ namespace ErpNet.FP.Core.Logging
             if (LogWriter != null)
             {
                 LogWriter.WriteLine($"warn: {FormatLogMessage(message)}");
-                LogWriter.Flush();
             }
         }
 
@@ -55,7 +54,6 @@ namespace ErpNet.FP.Core.Logging
             if (LogWriter != null)
             {
                 LogWriter.WriteLine($"fail: {FormatLogMessage(message)}");
-                LogWriter.Flush();
             }
         }
 
