@@ -86,15 +86,15 @@ namespace ErpNet.FP.Server.Services
                                     if (uip.Address.AddressFamily == AddressFamily.InterNetwork)
                                     {
                                         IPEndPoint local = new IPEndPoint(uip.Address, 0);
-                                        using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
-                                        udpc.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-                                        udpc.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
+
                                         var sb = new StringBuilder();
                                         foreach (var uri in UriList)
                                         {
                                             sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
                                         }
                                         var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
+
+                                        using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
                                         udpc.Send(ServiceDescription, ServiceDescription.Length, BroadcastEndPoint);
                                     }
                                 }
