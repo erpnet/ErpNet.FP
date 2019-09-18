@@ -45,49 +45,41 @@ namespace ErpNet.FP.Server.Services
 
         private void BeaconServiceDescription(object? state)
         {
-            if (ServerAddresses != null)
+            if (ServerAddresses == null) return;
+
+            if (UriList == null)
             {
-                if (UriList == null)
+                UriList = new List<Uri>();
+                foreach (var address in ServerAddresses.Addresses) UriList.Add(new Uri(address));
+            }
+
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.OperationalStatus == OperationalStatus.Up &&
+                    ni.SupportsMulticast &&
+                    ni.GetIPProperties().GetIPv4Properties() != null &&
+                    ni.GetIPProperties().GetIPv4Properties().Index != NetworkInterface.LoopbackInterfaceIndex)
                 {
-                    UriList = new List<Uri>();
-                    foreach (var address in ServerAddresses.Addresses)
+                    foreach (UnicastIPAddressInformation uip in ni.GetIPProperties().UnicastAddresses)
                     {
-                        UriList.Add(new Uri(address));
-                    }
-                } else {
-                    foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-                    {
-                        if (ni.OperationalStatus == OperationalStatus.Up && ni.SupportsMulticast && ni.GetIPProperties().GetIPv4Properties() != null)
+                        if (uip.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+
+                        IPEndPoint local = new IPEndPoint(uip.Address, 0);
+                        IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip), context.UdpBeaconPort);
+
+                        var sb = new StringBuilder();
+                        foreach (var uri in UriList) sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
+                        
+                        var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
+
+                        try
                         {
-                            int id = ni.GetIPProperties().GetIPv4Properties().Index;
-                            if (NetworkInterface.LoopbackInterfaceIndex != id)
-                            {
-                                foreach (UnicastIPAddressInformation uip in ni.GetIPProperties().UnicastAddresses)
-                                {
-                                    if (uip.Address.AddressFamily == AddressFamily.InterNetwork)
-                                    {
-                                        IPEndPoint local = new IPEndPoint(uip.Address, 0);
-                                        IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip), context.UdpBeaconPort);
-
-                                        var sb = new StringBuilder();
-                                        foreach (var uri in UriList)
-                                        {
-                                            sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
-                                        }
-                                        var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
-
-                                        try
-                                        {
-                                            using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
-                                            udpc.Send(ServiceDescription, ServiceDescription.Length, bcast);
-                                        }
-                                        catch(Exception ex)
-                                        {
-                                            Log.Error($"Problem while sending the service discovery beacon: {ex.Message}");
-                                        }
-                                    }
-                                }
-                            }
+                            using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
+                            udpc.Send(ServiceDescription, ServiceDescription.Length, bcast);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error($"Problem while sending the service discovery beacon: {ex.Message}");
                         }
                     }
                 }

@@ -27,6 +27,7 @@ namespace ErpNet.FP.Server.Controllers
             serverVariables.Version = (version != null) ? version.ToString() : "unknown";
             serverVariables.ServerId = context.ServerId;
             serverVariables.AutoDetect = context.AutoDetect;
+            serverVariables.UdpBeaconPort = context.UdpBeaconPort;
         }
 
 
