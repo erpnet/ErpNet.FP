@@ -16,27 +16,7 @@ using System.Threading.Tasks;
 
 namespace ErpNet.FP.Server.Services
 {
-    public class BroadcastUdpClient : UdpClient
-    {
-        public BroadcastUdpClient() : base()
-        {
-            // Calls the protected Client property belonging to the UdpClient base class.
-            Socket s = this.Client;
-            // Uses the Socket returned by Client to set an option that is not available using UdpClient.
-            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
-        }
-
-        public BroadcastUdpClient(IPEndPoint ipLocalEndPoint) : base(ipLocalEndPoint)
-        {
-            //Calls the protected Client property belonging to the UdpClient base class.
-            Socket s = this.Client;
-            //Uses the Socket returned by Client to set an option that is not available using UdpClient.
-            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
-        }
-    }
-
+    
     /// <summary>
     /// SimpleDiscoveryService is created for zero-configuration 
     /// setup for the clients of the ErpNet.FP service instances in the LAN
@@ -44,8 +24,8 @@ namespace ErpNet.FP.Server.Services
     /// </summary>
     public class SimpleDiscoveryService : IDisposable, IHostedService
     {
-        private const int UdpPort = 8001;
-        private readonly IPEndPoint BroadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, UdpPort);
+        private const int UdpBeaconPort = 8001;
+
         private Timer? Timer;
         private List<Uri>? UriList;
 
@@ -86,6 +66,7 @@ namespace ErpNet.FP.Server.Services
                                     if (uip.Address.AddressFamily == AddressFamily.InterNetwork)
                                     {
                                         IPEndPoint local = new IPEndPoint(uip.Address, 0);
+                                        IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip.Address, uip.IPv4Mask), UdpBeaconPort);
 
                                         var sb = new StringBuilder();
                                         foreach (var uri in UriList)
@@ -94,8 +75,15 @@ namespace ErpNet.FP.Server.Services
                                         }
                                         var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
 
-                                        using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
-                                        udpc.Send(ServiceDescription, ServiceDescription.Length, BroadcastEndPoint);
+                                        try
+                                        {
+                                            using BroadcastUdpClient udpc = new BroadcastUdpClient(local);
+                                            udpc.Send(ServiceDescription, ServiceDescription.Length, bcast);
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            Log.Error($"Problem while sending the service discovery beacon: {ex.Message}");
+                                        }
                                     }
                                 }
                             }
@@ -114,9 +102,37 @@ namespace ErpNet.FP.Server.Services
             return Task.CompletedTask;
         }
 
+        private static IPAddress GetBroadcastAddress(UnicastIPAddressInformation unicastAddress)
+        {
+            return GetBroadcastAddress(unicastAddress.Address, unicastAddress.IPv4Mask);
+        }
+
+        private static IPAddress GetBroadcastAddress(IPAddress address, IPAddress mask)
+        {
+            uint ipAddress = BitConverter.ToUInt32(address.GetAddressBytes(), 0);
+            uint ipMaskV4 = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);
+            uint broadCastIpAddress = ipAddress | ~ipMaskV4;
+
+            return new IPAddress(BitConverter.GetBytes(broadCastIpAddress));
+        }
+
         public void Dispose()
         {
             Timer?.Dispose();
         }
     }
+
+    public class BroadcastUdpClient : UdpClient
+    {
+        public BroadcastUdpClient(IPEndPoint ipLocalEndPoint) : base(ipLocalEndPoint)
+        {
+            EnableBroadcast = true;
+            //Calls the protected Client property belonging to the UdpClient base class.
+            Socket s = this.Client;
+            //Uses the Socket returned by Client to set an option that is not available using UdpClient.
+            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+            s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
+        }
+    }
+
 }

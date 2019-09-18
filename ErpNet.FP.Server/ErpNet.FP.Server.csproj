@@ -40,10 +40,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootAssembly Include="System.IO.FileSystem" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Remove="appsettings.json" />
         <Content Remove="wwwroot\debug\debug.log" />
         <Content Remove="wwwroot\debug\debug.log.1.zip" />
@@ -77,7 +73,6 @@
             <PackagePath></PackagePath>
         </None>
         <None Include="appsettings.json">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
         <None Include="wwwroot\debug\debug.log" />
         <None Include="wwwroot\debug\debug.log.1.zip" />
