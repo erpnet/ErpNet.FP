@@ -5,6 +5,7 @@ using ErpNet.FP.Server.Contexts;
 using ErpNet.FP.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,8 @@ namespace ErpNet.FP.Server
             {
                 endpoints.MapControllers();
             });
+
+            SimpleDiscoveryService.ServerAddresses = app.ServerFeatures.Get<IServerAddressesFeature>();
         }
     }
 }
