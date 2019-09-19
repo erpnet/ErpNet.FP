@@ -1,8 +1,8 @@
-﻿using ErpNet.FP.Core.Service;
+﻿using ErpNet.FP.Core.Logging;
+using ErpNet.FP.Core.Service;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Server.Services
 {

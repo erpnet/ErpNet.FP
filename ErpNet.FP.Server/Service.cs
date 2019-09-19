@@ -74,7 +74,7 @@ namespace ErpNet.FP.Server
                     textListener = new TextWriterTraceListener(logStream);
                     Trace.Listeners.Add(textListener);
                     Trace.AutoFlush = true;
-                } 
+                }
                 else
                 {
                     Log.Setup(new StreamWriter(logStream));

@@ -3,7 +3,7 @@
     /// <summary>
     /// RawRequest 
     /// </summary>
-    public class RequestFrame 
+    public class RequestFrame
     {
         /// <summary>
         /// The Raw request, including the command prefix

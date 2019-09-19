@@ -49,7 +49,7 @@ namespace ErpNet.FP.Core.Drivers
                 if (value != null)
                 {
                     return value;
-                }                
+                }
             }
             throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
         }
@@ -97,7 +97,7 @@ namespace ErpNet.FP.Core.Drivers
         public abstract DeviceStatusWithDateTime Reset(Credentials credentials);
 
         protected abstract DeviceStatus ParseStatus(byte[]? status);
-        
+
 
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
         {

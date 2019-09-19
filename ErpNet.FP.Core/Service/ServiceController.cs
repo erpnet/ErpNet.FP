@@ -1,6 +1,6 @@
 ﻿using ErpNet.FP.Core.Configuration;
-using System;
 using ErpNet.FP.Core.Logging;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

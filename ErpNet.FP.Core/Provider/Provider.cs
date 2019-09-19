@@ -70,9 +70,10 @@ namespace ErpNet.FP.Core.Provider
                                 fp.Add(uri, p);
                                 // We found our driver, so do not test more
                                 unknownDeviceConnectedToChannel = false;
+                                Log.Information($"Successfully detected {uri}.");
                                 break;
                             }
-                            catch(TimeoutException ex)
+                            catch (TimeoutException ex)
                             {
                                 // Timeout occured while connecting. Skip this transport address.
                                 Log.Error($"Timeout occured: {ex.Message}");

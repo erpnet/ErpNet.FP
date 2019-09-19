@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers.BgIcp
 {

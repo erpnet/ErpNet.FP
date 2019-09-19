@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ErpNet.FP.Server.Services
 {
-    
+
     /// <summary>
     /// SimpleDiscoveryService is created for zero-configuration 
     /// setup for the clients of the ErpNet.FP service instances in the LAN
@@ -69,7 +69,7 @@ namespace ErpNet.FP.Server.Services
 
                         var sb = new StringBuilder();
                         foreach (var uri in UriList) sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
-                        
+
                         var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
 
                         try

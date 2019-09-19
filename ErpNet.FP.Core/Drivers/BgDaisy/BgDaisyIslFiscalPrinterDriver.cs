@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDaisy
@@ -13,7 +14,13 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
-            var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+            var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}";
+            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+            if (rawDeviceInfo == null)
+            {
+                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+            }
             // Probing
             ParseDeviceInfo(rawDeviceInfo, autoDetect);
             // If there is no InvalidDeviceInfoException get the device info and constants

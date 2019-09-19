@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace ErpNet.FP.Core.Logging
 {
@@ -26,7 +23,7 @@ namespace ErpNet.FP.Core.Logging
             if (Logger != null)
             {
                 Logger.LogInformation(FormatLogMessage(message));
-            } 
+            }
             if (LogWriter != null)
             {
                 LogWriter.WriteLine($"info: {FormatLogMessage(message)}");

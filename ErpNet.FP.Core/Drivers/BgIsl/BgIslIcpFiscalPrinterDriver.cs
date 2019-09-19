@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable enable
 namespace ErpNet.FP.Core.Drivers.BgIcp
@@ -11,7 +12,13 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, options);
-            var (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+            var rawDeviceInfoCacheKey = $"icp.{channel.Descriptor}";
+            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+            if (rawDeviceInfo == null)
+            {
+                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+            }
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
             return fiscalPrinter;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ErpNet.FP.Core.Helpers;
+using System.Collections.Generic;
 
 #nullable enable
 namespace ErpNet.FP.Core
@@ -31,5 +32,7 @@ namespace ErpNet.FP.Core
             IChannel channel,
             bool autoDetect = true,
             IDictionary<string, string>? options = null);
+
+        public static ExpiringCache<string, string> Cache = new ExpiringCache<string, string>();
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ErpNet.FP.Core.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers.BgIcp
 {
@@ -66,8 +66,8 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 try
                 {
                     Channel.Write(request);
-                } 
-                catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
                     continue;

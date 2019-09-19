@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ErpNet.FP.Core.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ErpNet.FP.Core.Logging;
 
 namespace ErpNet.FP.Core.Drivers
 {
