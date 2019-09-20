@@ -2,7 +2,9 @@
 using ErpNet.FP.Core.Logging;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 #nullable enable
 namespace ErpNet.FP.Core.Provider
@@ -28,83 +30,98 @@ namespace ErpNet.FP.Core.Provider
             return this;
         }
 
+        public async Task<IFiscalPrinter?> DetectPrinterAsync(IChannel channel, Transport transport, List<FiscalPrinterDriver> drivers)
+        {
+            IFiscalPrinter? printer = null;
+            var unknownDeviceConnectedToChannel = true;
+            foreach (var driver in drivers)
+            {
+                var uri = $"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}";
+                Log.Information($"Probing {uri}...");
+                try
+                {
+                    printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel));
+                    printer.DeviceInfo.Uri = uri;
+
+                    // We found our driver, so do not test more
+                    unknownDeviceConnectedToChannel = false;
+                    Log.Information($"Successfully detected {uri}.");
+                    break;
+                }
+                catch (TimeoutException ex)
+                {
+                    // Timeout occured while connecting. Skip this transport address.
+                    Log.Error($"Timeout occured: {ex.Message}");
+                }
+                catch (InvalidResponseException ex)
+                {
+                    // Autodetect probe not passed for this channel. No response.
+                    Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                }
+                catch (InvalidDeviceInfoException ex)
+                {
+                    // Autodetect probe not passed for this channel. Invalid device.
+                    Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Unexpected error: {ex.Message}");
+                }
+            }
+            if (unknownDeviceConnectedToChannel)
+            {
+                transport.Drop(channel);
+            }
+            return printer;
+        }
+    
+
+
         /// <summary>
         /// Returns the available fiscal printers.
         /// </summary>
         /// <returns>The available fiscal printers.</returns>
         public IDictionary<string, IFiscalPrinter> DetectAvailablePrinters()
         {
-            // This is naive implementation, which serializes the whole detection process.
-            // It can be optimized with parallelism. 
-            // However, port contention issues must be resolved in a more elaborate implementation.
-
             var fp = new Dictionary<string, IFiscalPrinter>();
             var transportDrivers = new Dictionary<Transport, List<FiscalPrinterDriver>>();
 
-            foreach (var protocol in protocols.Values)
+            foreach (var (driver, transport) in protocols.Values)
             {
-                if (!transportDrivers.ContainsKey(protocol.transport))
+                if (!transportDrivers.ContainsKey(transport))
                 {
-                    transportDrivers[protocol.transport] = new List<FiscalPrinterDriver>();
+                    transportDrivers[transport] = new List<FiscalPrinterDriver>();
                 }
-                transportDrivers[protocol.transport].Add(protocol.driver);
+                transportDrivers[transport].Add(driver);
             }
+
+            List<Task<IFiscalPrinter?>> listOfTasks = new List<Task<IFiscalPrinter?>>();
             foreach (KeyValuePair<Transport, List<FiscalPrinterDriver>> td in transportDrivers)
             {
                 var transport = td.Key;
                 var drivers = td.Value;
-                foreach (var availableAddress in transport.GetAvailableAddresses())
+                foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
                     try
                     {
-                        var channel = transport.OpenChannel(availableAddress.address);
-                        var unknownDeviceConnectedToChannel = true;
-                        foreach (var driver in drivers)
-                        {
-                            try
-                            {
-                                Log.Information($"Probing {driver.DriverName}.{transport.TransportName}://{availableAddress.address}... ");
-                                var p = driver.Connect(channel);
-                                var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
-                                p.DeviceInfo.Uri = uri;
-                                fp.Add(uri, p);
-                                // We found our driver, so do not test more
-                                unknownDeviceConnectedToChannel = false;
-                                Log.Information($"Successfully detected {uri}.");
-                                break;
-                            }
-                            catch (TimeoutException ex)
-                            {
-                                // Timeout occured while connecting. Skip this transport address.
-                                Log.Error($"Timeout occured: {ex.Message}");
-                            }
-                            catch (InvalidResponseException ex)
-                            {
-                                // Autodetect probe not passed for this channel. No response.
-                                Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
-                            }
-                            catch (InvalidDeviceInfoException ex)
-                            {
-                                // Autodetect probe not passed for this channel. Invalid device.
-                                Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error($"Unexpected error: {ex.Message}");
-                            }
-                        }
-                        if (unknownDeviceConnectedToChannel)
-                        {
-                            // There is an unknown or undetected device connected 
-                            // on this channel. So drop the unknown device's channel
-                            transport.Drop(channel);
-                        }
+                        var channel = transport.OpenChannel(address);
+                        listOfTasks.Add(DetectPrinterAsync(channel, transport, drivers));  
                     }
                     catch (Exception ex)
                     {
                         // Cannot open channel
                         Log.Error($"Cannot open channel: {ex.Message}");
                     }
+                }
+            }
+
+            var task = (Task.WhenAll<IFiscalPrinter?>(listOfTasks));
+            task.Wait();
+            foreach (var printer in task.Result)
+            {
+                if (printer != null)
+                {
+                    fp.Add(printer.DeviceInfo.Uri, printer);
                 }
             }
             return fp;
