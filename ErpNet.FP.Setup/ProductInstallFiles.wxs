@@ -586,6 +586,15 @@
             <Component Id="cmpBC4FC00A26E7D32479D42D3411317FC5" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil90A8AAD9FC612906D405476D61CEA3F4" KeyPath="yes" Source="$(var.OUTPUT)\Newtonsoft.Json.dll" />
             </Component>
+            <Component Id="cmp74A2C73F11C177073B0A672936A0D5EB" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil1CF141D24266A4E5F331DDFE02166A27" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.dll" />
+            </Component>
+            <Component Id="cmp539EB192BE11EA8C5B17EFB0CC1DDCEB" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filB637049630FB5D2AC00236DBD60DD2BE" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Sinks.Console.dll" />
+            </Component>
+            <Component Id="cmp49818C715FF04B8E95F7B53BDDD323EF" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil1A12B15365165DDBE60433B150808BEE" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Sinks.File.dll" />
+            </Component>
             <Component Id="cmp4A3650BF9490F28818DA214BCC72C248" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil29DAF6E2B9B4ACF67EB0C784127C1B4F" KeyPath="yes" Source="$(var.OUTPUT)\SOS_README.md" />
             </Component>
@@ -636,9 +645,6 @@
             </Component>
             <Component Id="cmpB3E27F13800A8FF984F132723F98897C" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filDBF3A4F1AEA58FEDB0007DD546ADD630" KeyPath="yes" Source="$(var.OUTPUT)\System.Diagnostics.StackTrace.dll" />
-            </Component>
-            <Component Id="cmp36E12B3A84F72D19A05AB3898848297D" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil21EE5D64D21C91238861B7873377CB07" KeyPath="yes" Source="$(var.OUTPUT)\System.Diagnostics.TextWriterTraceListener.dll" />
             </Component>
             <Component Id="cmp167D1C5C6A974604FBBFEDD39E2FDF84" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil589087C30E15FFAD786A80C79F228C31" KeyPath="yes" Source="$(var.OUTPUT)\System.Diagnostics.Tools.dll" />
