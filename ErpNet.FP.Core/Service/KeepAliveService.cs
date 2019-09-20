@@ -1,5 +1,5 @@
-﻿using ErpNet.FP.Core.Logging;
-using ErpNet.FP.Core.Service;
+﻿using ErpNet.FP.Core.Service;
+using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

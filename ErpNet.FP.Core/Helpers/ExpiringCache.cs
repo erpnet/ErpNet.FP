@@ -5,7 +5,7 @@ namespace ErpNet.FP.Core.Helpers
 {
     public class ExpiringCache<TKey, TValue> where TValue : class
     {
-        private readonly Dictionary<TKey, ExpiringCacheItem<TValue>> cacheDictionary = new Dictionary<TKey, ExpiringCacheItem<TValue>>();
+        private readonly IDictionary<TKey, ExpiringCacheItem<TValue>> cacheDictionary = new Dictionary<TKey, ExpiringCacheItem<TValue>>();
 
         public void Store(TKey key, TValue value, TimeSpan expiresAfter)
         {

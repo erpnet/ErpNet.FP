@@ -1,7 +1,7 @@
-﻿using ErpNet.FP.Core.Logging;
-using ErpNet.FP.Core.Service;
+﻿using ErpNet.FP.Core.Service;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -68,9 +68,12 @@ namespace ErpNet.FP.Server.Services
                         IPEndPoint bcast = new IPEndPoint(GetBroadcastAddress(uip), context.UdpBeaconPort);
 
                         var sb = new StringBuilder();
-                        foreach (var uri in UriList) sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
+                        foreach (var uri in UriList)
+                        {
+                            sb.Append($"{uri.Scheme}://{local.Address}:{uri.Port};");
+                        }
 
-                        var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP: {sb}");
+                        var ServiceDescription = Encoding.UTF8.GetBytes($"ErpNet.FP[{context.ServerId}]: {sb}");
 
                         try
                         {

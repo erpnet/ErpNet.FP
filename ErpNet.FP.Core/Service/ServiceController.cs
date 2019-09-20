@@ -1,5 +1,5 @@
 ﻿using ErpNet.FP.Core.Configuration;
-using ErpNet.FP.Core.Logging;
+using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -132,9 +132,9 @@ namespace ErpNet.FP.Core.Service
                     }
 
                     // Detecting configured printers
-                    Log.Information("Detecting configured printers...");
-                    if (configOptions.Printers != null)
+                    if (configOptions.Printers != null && configOptions.Printers.Count != 0)
                     {
+                        Log.Information("Detecting configured printers...");
                         foreach (var printerSetting in configOptions.Printers)
                         {
                             string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";

@@ -1,9 +1,8 @@
-﻿using ErpNet.FP.Core.Logging;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +16,7 @@ using System.Reflection;
 
 namespace ErpNet.FP.Server
 {
-    public class Service
+    public class Program
     {
         private static readonly string DebugLogFileName = @"debug.log";
 
@@ -59,32 +58,24 @@ namespace ErpNet.FP.Server
 
                 var host = builder.Build();
 
-                var logStream = new FileStream(
+                var logOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .WriteTo.Console(outputTemplate: logOutputTemplate)
+                    .WriteTo.File(
                         EnsureDebugLogHistory(pathToContentRoot),
-                        FileMode.Create,
-                        FileAccess.Write,
-                        FileShare.Read);
-
-                if (Debugger.IsAttached)
-                {
-                    Log.Setup(host.Services.GetRequiredService<ILogger<Service>>());
-
-                    // Create a TextWriterTraceListener object that takes a stream.
-                    TextWriterTraceListener textListener;
-                    textListener = new TextWriterTraceListener(logStream);
-                    Trace.Listeners.Add(textListener);
-                    Trace.AutoFlush = true;
-                }
-                else
-                {
-                    Log.Setup(new StreamWriter(logStream));
-                }
+                        rollingInterval: RollingInterval.Infinite,
+                        outputTemplate: logOutputTemplate)
+                    .CreateLogger();
 
                 Log.Information($"Starting the service, version {GetVersion()}...");
 
                 host.Run();
 
                 Log.Information("Stopping the service.");
+
+                Log.CloseAndFlush();
             }
             catch (Exception ex)
             {
@@ -126,6 +117,7 @@ namespace ErpNet.FP.Server
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging
+                        .ClearProviders()
                         .AddConfiguration(hostingContext.Configuration.GetSection("Logging"))
                         .AddDebug()
                         .AddEventSourceLogger();
@@ -151,6 +143,7 @@ namespace ErpNet.FP.Server
                 // Zip the file
                 using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
                     zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
+                File.Delete(debugLogFilePath);
             }
             return debugLogFilePath;
         }
