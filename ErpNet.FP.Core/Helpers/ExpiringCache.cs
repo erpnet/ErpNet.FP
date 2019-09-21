@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ErpNet.FP.Core.Helpers
 {
     public class ExpiringCache<TKey, TValue> where TValue : class
     {
-        private readonly IDictionary<TKey, ExpiringCacheItem<TValue>> cacheDictionary = new Dictionary<TKey, ExpiringCacheItem<TValue>>();
+        private readonly IDictionary<TKey, ExpiringCacheItem<TValue>> 
+            cacheDictionary = new ConcurrentDictionary<TKey, ExpiringCacheItem<TValue>>();
 
         public void Store(TKey key, TValue value, TimeSpan expiresAfter)
         {

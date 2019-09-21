@@ -29,7 +29,7 @@ namespace ErpNet.FP.Core.Provider
             return this;
         }
 
-        public IFiscalPrinter? DetectPrinter(IChannel channel, Transport transport, List<FiscalPrinterDriver> drivers)
+        public async Task<IFiscalPrinter?> DetectPrinter(IChannel channel, Transport transport, List<FiscalPrinterDriver> drivers)
         {
             IFiscalPrinter? printer = null;
             var unknownDeviceConnectedToChannel = true;
@@ -39,7 +39,7 @@ namespace ErpNet.FP.Core.Provider
                 Log.Information($"Probing {uri}...");
                 try
                 {
-                    printer = driver.Connect(channel);
+                    printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel));
                     printer.DeviceInfo.Uri = uri;
 
                     // We found our driver, so do not test more
@@ -69,6 +69,8 @@ namespace ErpNet.FP.Core.Provider
             }
             if (unknownDeviceConnectedToChannel)
             {
+                // We did not recognize the device, so drop that channel 
+                // and leave it available for others
                 transport.Drop(channel);
             }
             return printer;
@@ -103,17 +105,23 @@ namespace ErpNet.FP.Core.Provider
                     try
                     {
                         var channel = transport.OpenChannel(address);
-                        var printer = DetectPrinter(channel, transport, drivers);
-                        if (printer != null)
-                        {
-                            fp.Add(printer.DeviceInfo.Uri, printer);
-                        }
+                        listOfTasks.Add(DetectPrinter(channel, transport, drivers));
                     }
                     catch (Exception ex)
                     {
                         // Cannot open channel
                         Log.Error($"Cannot open channel: {ex.Message}");
                     }
+                }
+            }
+
+            var task = (Task.WhenAll<IFiscalPrinter?>(listOfTasks));
+            task.Wait();
+            foreach (var printer in task.Result)
+            {
+                if (printer != null)
+                {
+                    fp.Add(printer.DeviceInfo.Uri, printer);
                 }
             }
             return fp;
