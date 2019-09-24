@@ -2,6 +2,7 @@ bin/
 obj/
 .vs/
 .vscode/
+.cr/
 debug.log
 debug.log.*
 *.user

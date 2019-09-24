@@ -22,20 +22,6 @@ namespace ErpNet.FP.Server
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
-            services.AddSingleton<IServiceController, ServiceSingleton>();
-            services.AddControllers().AddNewtonsoftJson();
-
-            // KeepAliveHostedService will warm up ServiceSingleton context at start
-            services.AddHostedService<KeepAliveHostedService>();
-            services.AddHostedService<SimpleDiscoveryService>();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -82,5 +68,19 @@ namespace ErpNet.FP.Server
 
             SimpleDiscoveryService.ServerAddresses = app.ServerFeatures.Get<IServerAddressesFeature>();
         }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
+            services.AddSingleton<IServiceController, ServiceSingleton>();
+            services.AddControllers().AddNewtonsoftJson();
+
+            // KeepAliveHostedService will warm up ServiceSingleton context at start
+            services.AddHostedService<KeepAliveHostedService>();
+            services.AddHostedService<SimpleDiscoveryService>();
+        }
+
+        public IConfiguration Configuration { get; }
     }
 }

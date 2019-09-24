@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
@@ -76,6 +77,7 @@ namespace ErpNet.FP.Core.Transports
         {
             internal readonly SerialPort serialPort;
             protected Timer idleTimer;
+            protected const int MinimalBaudRate = 9600;
 
             public string Descriptor
             {
@@ -111,7 +113,26 @@ namespace ErpNet.FP.Core.Transports
             public void Open()
             {
                 Log.Information($"Opening the com port {serialPort.PortName}");
-                serialPort.Open();
+                try
+                {
+                    serialPort.Open();
+                }
+                catch (FileNotFoundException ex)
+                {
+                    throw ex;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    Log.Information($"Access denied for {serialPort.PortName}: {ex.Message}. Maybe the port is already open from another application or driver.");
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    Log.Information($"Error while opening {serialPort.PortName}: {ex.Message}. Trying baudrate {MinimalBaudRate}...");
+                    // Trying to open the port at minimal baudrate
+                    serialPort.BaudRate = MinimalBaudRate;
+                    serialPort.Open();
+                }
             }
 
             public void Close()

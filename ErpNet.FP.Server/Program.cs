@@ -29,6 +29,81 @@ namespace ErpNet.FP.Server
                    select address.Address;
         }
 
+        public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
+            Host.CreateDefaultBuilder(args)
+#if Windows
+            .UseWindowsService()
+#endif
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                var env = hostingContext.HostingEnvironment;
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                config.AddEnvironmentVariables();
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder
+                .UseKestrel()
+                .UseContentRoot(pathToContentRoot)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    config.AddEnvironmentVariables();
+                })
+                .ConfigureKestrel((hostingContext, options) =>
+                {
+                    options.Configure(hostingContext.Configuration.GetSection("Kestrel"));
+
+                    // Overriding some of the config values 
+                    options.AllowSynchronousIO = false;
+                    options.Limits.MaxRequestBodySize = 500 * 1024;
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging
+                        .ClearProviders()
+                        .AddConfiguration(hostingContext.Configuration.GetSection("Logging"))
+                        .AddDebug()
+                        .AddEventSourceLogger();
+                })
+                .UseStartup<Startup>();
+            });
+
+        public static void EnsureAppSettingsJson(string pathToContentRoot)
+        {
+            var appSettingsJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.json");
+
+            if (!File.Exists(appSettingsJsonFilePath))
+            {
+                var appSettingsDevelopmentJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.Development.json");
+                File.Copy(appSettingsDevelopmentJsonFilePath, appSettingsJsonFilePath);
+            }
+        }
+
+
+        public static string EnsureDebugLogHistory(string pathToContentRoot)
+        {
+            var debugLogFolder = Path.Combine(pathToContentRoot, "wwwroot", "debug");
+            var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
+            Directory.CreateDirectory(debugLogFolder);
+            if (File.Exists(debugLogFilePath))
+            {
+                for (var i = 9; i > 1; i--)
+                {
+                    if (File.Exists($"{debugLogFilePath}.{i - 1}.zip"))
+                    {
+                        File.Move($"{debugLogFilePath}.{i - 1}.zip", $"{debugLogFilePath}.{i}.zip", true);
+                    }
+                }
+                // Zip the file
+                using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
+                    zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
+                File.Delete(debugLogFilePath);
+            }
+            return debugLogFilePath;
+        }
+
         public static string GetVersion()
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -81,81 +156,6 @@ namespace ErpNet.FP.Server
             {
                 Console.WriteLine($"Error while creating debug.log file: {ex.Message}");
                 return;
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
-            Host.CreateDefaultBuilder(args)
-#if Windows
-            .UseWindowsService()
-#endif
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                var env = hostingContext.HostingEnvironment;
-                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                config.AddEnvironmentVariables();
-            })
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder
-                .UseKestrel()
-                .UseContentRoot(pathToContentRoot)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureKestrel((hostingContext, options) =>
-                {
-                    options.Configure(hostingContext.Configuration.GetSection("Kestrel"));
-
-                    // Overriding some of the config values 
-                    options.AllowSynchronousIO = false;
-                    options.Limits.MaxRequestBodySize = 500 * 1024;
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging
-                        .ClearProviders()
-                        .AddConfiguration(hostingContext.Configuration.GetSection("Logging"))
-                        .AddDebug()
-                        .AddEventSourceLogger();
-                })
-                .UseStartup<Startup>();
-            });
-
-
-        public static string EnsureDebugLogHistory(string pathToContentRoot)
-        {
-            var debugLogFolder = Path.Combine(pathToContentRoot, "wwwroot", "debug");
-            var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
-            Directory.CreateDirectory(debugLogFolder);
-            if (File.Exists(debugLogFilePath))
-            {
-                for (var i = 9; i > 1; i--)
-                {
-                    if (File.Exists($"{debugLogFilePath}.{i - 1}.zip"))
-                    {
-                        File.Move($"{debugLogFilePath}.{i - 1}.zip", $"{debugLogFilePath}.{i}.zip", true);
-                    }
-                }
-                // Zip the file
-                using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
-                    zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
-                File.Delete(debugLogFilePath);
-            }
-            return debugLogFilePath;
-        }
-
-        public static void EnsureAppSettingsJson(string pathToContentRoot)
-        {
-            var appSettingsJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.json");
-
-            if (!File.Exists(appSettingsJsonFilePath))
-            {
-                var appSettingsDevelopmentJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.Development.json");
-                File.Copy(appSettingsDevelopmentJsonFilePath, appSettingsJsonFilePath);
             }
         }
     }

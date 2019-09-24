@@ -21,7 +21,7 @@ namespace ErpNet.FP.Server.Contexts
     public class ServiceSingleton : ServiceControllerContext
     {
 
-        private IWritableOptions<ServiceOptions> writableConfigOptions;
+        private readonly IWritableOptions<ServiceOptions> writableConfigOptions;
 
         public ServiceSingleton(
             IWritableOptions<ServiceOptions> writableConfigOptions)

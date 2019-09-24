@@ -307,9 +307,10 @@ This is a list of default credentials we use in the library, when there is no ex
 * bg.is.icp - "operator" : "1", "operatorPassword": N/A
 
 # Source Code
-To compile and run the source code, you will need .Net Core 3.0 Preview 8 SDK.
-As IDE for Windows, you can use Visual Studio 2019, version 16.3 Preview 2 or newer. 
-For macOS, you can use Visual Studio for Mac 8.3 Preview 2 or newer.
+To compile and run the source code, you will need .Net Core 3.0 SDK installed.
+As IDE for Windows, you can use Visual Studio 2019. 
+For macOS, you can use Visual Studio for Mac 8.3.
+For Linux, or as alternative for Windows and macOs, you can use Visual Studio Code and dotnet CLI.
 
 # License
 "Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]

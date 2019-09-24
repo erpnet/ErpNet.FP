@@ -12,17 +12,14 @@ namespace ErpNet.FP.Core.Drivers
     /// <seealso cref="ErpNet.FP.IFiscalPrinter" />
     public abstract class BgFiscalPrinter : IFiscalPrinter
     {
-        public DeviceInfo DeviceInfo => Info;
-        protected IDictionary<string, string> Options { get; }
-        protected IChannel Channel { get; }
-
-        public DeviceInfo Info = new DeviceInfo();
-
-        public IDictionary<PaymentType, string> PaymentTypeMappings;
 
         protected static readonly object frameSyncLock = new object();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
+
+        public DeviceInfo Info = new DeviceInfo();
+
+        public IDictionary<PaymentType, string> PaymentTypeMappings;
 
         protected BgFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
         {
@@ -33,12 +30,25 @@ namespace ErpNet.FP.Core.Drivers
             PaymentTypeMappings = GetPaymentTypeMappings();
         }
 
+        protected abstract DeviceStatus ParseStatus(byte[]? status);
+
+        protected virtual string WithPrinterEncoding(string text)
+        {
+            return PrinterEncoding.GetString(
+                Encoding.Convert(Encoding.Default, PrinterEncoding, Encoding.Default.GetBytes(text)));
+        }
+
+        protected IChannel Channel { get; }
+        protected IDictionary<string, string> Options { get; }
+
+        public abstract DeviceStatusWithCashAmount Cash(Credentials credentials);
+
+        public abstract DeviceStatusWithDateTime CheckStatus();
+
         public virtual IDictionary<string, string>? GetDefaultOptions()
         {
             return null;
         }
-
-        public abstract string GetTaxGroupText(TaxGroup taxGroup);
 
         public abstract IDictionary<PaymentType, string> GetPaymentTypeMappings();
 
@@ -52,11 +62,6 @@ namespace ErpNet.FP.Core.Drivers
                 }
             }
             throw new StandardizedStatusMessageException($"Payment type {paymentType} unsupported", "E406");
-        }
-
-        public ICollection<PaymentType> GetSupportedPaymentTypes()
-        {
-            return PaymentTypeMappings.Keys;
         }
 
         public virtual string GetReversalReasonText(ReversalReason reversalReason)
@@ -74,11 +79,12 @@ namespace ErpNet.FP.Core.Drivers
             }
         }
 
-        public abstract DeviceStatusWithDateTime CheckStatus();
+        public ICollection<PaymentType> GetSupportedPaymentTypes()
+        {
+            return PaymentTypeMappings.Keys;
+        }
 
-        public abstract DeviceStatusWithCashAmount Cash(Credentials credentials);
-
-        public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
+        public abstract string GetTaxGroupText(TaxGroup taxGroup);
 
         public abstract DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount);
 
@@ -88,15 +94,15 @@ namespace ErpNet.FP.Core.Drivers
 
         public abstract (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt);
 
-        public abstract DeviceStatus PrintZReport(Credentials credentials);
-
         public abstract DeviceStatus PrintXReport(Credentials credentials);
+
+        public abstract DeviceStatus PrintZReport(Credentials credentials);
 
         public abstract DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
 
         public abstract DeviceStatusWithDateTime Reset(Credentials credentials);
 
-        protected abstract DeviceStatus ParseStatus(byte[]? status);
+        public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
 
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
@@ -261,10 +267,6 @@ namespace ErpNet.FP.Core.Drivers
             return status;
         }
 
-        protected virtual string WithPrinterEncoding(string text)
-        {
-            return PrinterEncoding.GetString(
-                Encoding.Convert(Encoding.Default, PrinterEncoding, Encoding.Default.GetBytes(text)));
-        }
+        public DeviceInfo DeviceInfo => Info;
     }
 }

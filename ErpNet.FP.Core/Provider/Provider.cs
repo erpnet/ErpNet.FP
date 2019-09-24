@@ -29,7 +29,10 @@ namespace ErpNet.FP.Core.Provider
             return this;
         }
 
-        public async Task<IFiscalPrinter?> DetectPrinter(IChannel channel, Transport transport, List<FiscalPrinterDriver> drivers)
+        public async Task<IFiscalPrinter?> DetectPrinterAsync(
+            IChannel channel,
+            Transport transport,
+            List<FiscalPrinterDriver> drivers)
         {
             IFiscalPrinter? printer = null;
             var unknownDeviceConnectedToChannel = true;
@@ -55,12 +58,12 @@ namespace ErpNet.FP.Core.Provider
                 catch (InvalidResponseException ex)
                 {
                     // Autodetect probe not passed for this channel. No response.
-                    Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                    Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: {ex.Message}");
                 }
-                catch (InvalidDeviceInfoException ex)
+                catch (InvalidDeviceInfoException)
                 {
                     // Autodetect probe not passed for this channel. Invalid device.
-                    Log.Information($"Autodetect probe not passed for this channel: {ex.Message}");
+                    Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: invalid device info returned.");
                 }
                 catch (Exception ex)
                 {
@@ -105,24 +108,30 @@ namespace ErpNet.FP.Core.Provider
                     try
                     {
                         var channel = transport.OpenChannel(address);
-                        listOfTasks.Add(DetectPrinter(channel, transport, drivers));
+                        listOfTasks.Add(DetectPrinterAsync(channel, transport, drivers));
                     }
                     catch (Exception ex)
                     {
-                        // Cannot open channel
-                        Log.Error($"Cannot open channel: {ex.Message}");
+                        Log.Error($"Cannot open channel {address}: {ex.Message}");
                     }
                 }
             }
 
-            var task = (Task.WhenAll<IFiscalPrinter?>(listOfTasks));
-            task.Wait();
-            foreach (var printer in task.Result)
+            try
             {
-                if (printer != null)
+                var task = (Task.WhenAll<IFiscalPrinter?>(listOfTasks));
+                task.Wait();
+                foreach (var printer in task.Result)
                 {
-                    fp.Add(printer.DeviceInfo.Uri, printer);
+                    if (printer != null)
+                    {
+                        fp.Add(printer.DeviceInfo.Uri, printer);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Probing error: {ex.Message}");
             }
             return fp;
         }
