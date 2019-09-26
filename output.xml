@@ -15,7 +15,7 @@
     
     <Target Name="PublishToOutputPath">
         <Message Text="Performing cleanup for the $(OutputPath) and $(OutputType) folder..." Importance="high" />
-		<RemoveDir
+        <RemoveDir
             Directories="$(OutputPath);$(OutputType)" />
 
         <MakeDir Directories="$(OutputPath);$(OutputType);"/>
