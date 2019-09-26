@@ -130,9 +130,6 @@
             <Component Id="cmp21CF0447C915302F93234E31801A67A7" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil76FEC3CFC3B4E7E1F7410458BFA45411" KeyPath="yes" Source="$(var.OUTPUT)\api-ms-win-crt-utility-l1-1-0.dll" />
             </Component>
-            <Component Id="cmpA0863526952F7834E7C922F065E4C8A8" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="filC04B02D0CCC2D5CCC1013B35DE86DB29" KeyPath="yes" Source="$(var.OUTPUT)\appsettings.Development.json" />
-            </Component>
             <Component Id="cmp07CAF59AC988C09B0D7F8E87284AAFCA" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil3EF99912535F209EA7FB64BE64AEF7EF" KeyPath="yes" Source="$(var.OUTPUT)\aspnetcorev2_inprocess.dll" />
             </Component>
@@ -150,6 +147,9 @@
             </Component>
             <Component Id="cmp5DC61834042D8A563B1B0F5CEE7AD1E7" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filE07135178784FB8052BC2470B2BD2D1F" KeyPath="yes" Source="$(var.OUTPUT)\dbgshim.dll" />
+            </Component>
+            <Component Id="cmpA56AF3E00F1586EBEA3CCC965E15D97D" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil3C5079BCDE963C8B1114CBF38C4530CF" KeyPath="yes" Source="$(var.OUTPUT)\ErpNet.FP.Core.deps.json" />
             </Component>
             <Component Id="cmp814B039A2C4EBCAC386DF012A07F046C" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filE665EDB5CC9CABF908553EE6D2DF0BC5" KeyPath="yes" Source="$(var.OUTPUT)\ErpNet.FP.Core.dll" />
@@ -568,8 +568,8 @@
             <Component Id="cmpE35DDB3C925C83E74C7DAAE6FEA6C156" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filEAEAE1CB9E8AC1FF00B05453ABEE2ADF" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore.dll" />
             </Component>
-            <Component Id="cmpFF084BC26F9AAFA7FB335E61A512D922" Directory="INSTALLFOLDER" Guid="*">
-                <File Id="fil2E0E5E496E8EB3C64EC94D366780F8BC" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.45506.dll" />
+            <Component Id="cmp7038FE283418F0F5E3D939DC5905EEF2" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil1B8838EC8D0C664A65490A35A427DFED" KeyPath="yes" Source="$(var.OUTPUT)\mscordaccore_x86_x86_4.700.19.46205.dll" />
             </Component>
             <Component Id="cmpA5ABEAD31F33B1E5825EC6F159ABFB0F" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1A6B0EBD5A5BF8DD0582A2665D3492F1" KeyPath="yes" Source="$(var.OUTPUT)\mscordbi.dll" />
@@ -597,6 +597,9 @@
             </Component>
             <Component Id="cmp4A3650BF9490F28818DA214BCC72C248" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil29DAF6E2B9B4ACF67EB0C784127C1B4F" KeyPath="yes" Source="$(var.OUTPUT)\SOS_README.md" />
+            </Component>
+            <Component Id="cmpA748C45814948C0E47F0962CF5A9E2C5" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filAF63FF48A59E0E5E7F49BFD1CBBB0CC3" KeyPath="yes" Source="$(var.OUTPUT)\System.Buffers.dll" />
             </Component>
             <Component Id="cmp602E8F2B93FE6578A846F762EC68A1D9" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil8A8EC4001DD8F96250E301ED6A1E3783" KeyPath="yes" Source="$(var.OUTPUT)\System.Collections.Concurrent.dll" />
@@ -720,6 +723,9 @@
             </Component>
             <Component Id="cmpA3D72A47568CFB72A8579DA365A9694A" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil21106B04138595285E4063BA0375F731" KeyPath="yes" Source="$(var.OUTPUT)\System.Net.WebSockets.dll" />
+            </Component>
+            <Component Id="cmp89AE5ECEB789ECF60BE6CC568D60B2F9" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil07CC506FCE6F39AF87379627460A5FFB" KeyPath="yes" Source="$(var.OUTPUT)\System.Numerics.Vectors.dll" />
             </Component>
             <Component Id="cmpF02258D9C1CDC79ADE6BED7D7E27B7F8" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil9A7CC4FBC706133927299AE792CF930C" KeyPath="yes" Source="$(var.OUTPUT)\System.ObjectModel.dll" />

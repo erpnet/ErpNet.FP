@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <OutputPath>../Published/Build</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PublishTrimmed>true</PublishTrimmed>
         <AssemblyName>ErpNet.FP.Server</AssemblyName>
         <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -16,8 +18,8 @@
         <Authors>ErpNet and Contributors</Authors>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <Copyright>(c) ErpNet and Contributors</Copyright>
-        <AssemblyVersion>1.0.924.1700</AssemblyVersion>
-        <FileVersion>1.0.924.1700</FileVersion>
+        <AssemblyVersion>1.0.926.1900</AssemblyVersion>
+        <FileVersion>1.0.926.1900</FileVersion>
         <Version>1.0.0</Version>
         <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
         <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
@@ -40,17 +42,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Remove="appsettings.json" />
-        <Content Remove="wwwroot\debug\debug.log" />
-        <Content Remove="wwwroot\debug\debug.log.1.zip" />
-        <Content Remove="wwwroot\debug\debug.log.2.zip" />
-        <Content Remove="wwwroot\debug\debug.log.3.zip" />
-        <Content Remove="wwwroot\debug\debug.log.4.zip" />
-        <Content Remove="wwwroot\debug\debug.log.5.zip" />
-        <Content Remove="wwwroot\debug\debug.log.6.zip" />
-        <Content Remove="wwwroot\debug\debug.log.7.zip" />
-        <Content Remove="wwwroot\debug\debug.log.8.zip" />
-        <Content Remove="wwwroot\debug\debug.log.9.zip" />
+        <Content Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -72,25 +64,14 @@
             <Pack>True</Pack>
             <PackagePath></PackagePath>
         </None>
-        <None Include="appsettings.json">
-        </None>
-        <None Include="wwwroot\debug\debug.log" />
-        <None Include="wwwroot\debug\debug.log.1.zip" />
-        <None Include="wwwroot\debug\debug.log.2.zip" />
-        <None Include="wwwroot\debug\debug.log.3.zip" />
-        <None Include="wwwroot\debug\debug.log.4.zip" />
-        <None Include="wwwroot\debug\debug.log.5.zip" />
-        <None Include="wwwroot\debug\debug.log.6.zip" />
-        <None Include="wwwroot\debug\debug.log.7.zip" />
-        <None Include="wwwroot\debug\debug.log.8.zip" />
-        <None Include="wwwroot\debug\debug.log.9.zip" />
+        <None Include="Properties\launchSettings.json" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-rc1.19457.4" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-rc1.19456.10" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.0.0-rc1.19456.10" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="3.0.0-rc1.19456.10" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.0.0" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
+        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="3.0.0" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'" />
         <PackageReference Include="Serilog" Version="2.9.0-dev-01124" />
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00824" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0-dev-00850" />
@@ -101,6 +82,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Update="wwwroot\app.js">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Update="wwwroot\ErpNet.FP.thumb.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
@@ -116,9 +100,5 @@
         <Content Update="wwwroot\index.js">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Properties\PublishProfiles\" />
     </ItemGroup>
 </Project>

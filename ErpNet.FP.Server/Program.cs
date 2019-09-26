@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -19,15 +18,6 @@ namespace ErpNet.FP.Server
     public class Program
     {
         private static readonly string DebugLogFileName = @"debug.log";
-
-        private static IEnumerable<IPAddress> GetLocalV4Addresses()
-        {
-            return from iface in NetworkInterface.GetAllNetworkInterfaces()
-                   where iface.OperationalStatus == OperationalStatus.Up
-                   from address in iface.GetIPProperties().UnicastAddresses
-                   where address.Address.AddressFamily == AddressFamily.InterNetwork
-                   select address.Address;
-        }
 
         public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -76,8 +66,8 @@ namespace ErpNet.FP.Server
 
             if (!File.Exists(appSettingsJsonFilePath))
             {
-                var appSettingsDevelopmentJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.Development.json");
-                File.Copy(appSettingsDevelopmentJsonFilePath, appSettingsJsonFilePath);
+                var defaultAppSettings = @"{ ""ErpNet.FP"": {""AutoDetect"": true, ""Printers"": { } }, ""Kestrel"": { ""EndPoints"": { ""Http"": { ""Url"": ""http://0.0.0.0:8001"" } } } }";
+                File.WriteAllText(appSettingsJsonFilePath, defaultAppSettings);
             }
         }
 
@@ -115,12 +105,9 @@ namespace ErpNet.FP.Server
         {
             var pathToContentRoot = Directory.GetCurrentDirectory();
 
-            if (!(Debugger.IsAttached))
-            {
-                var location = Assembly.GetExecutingAssembly().Location;
-                pathToContentRoot = Path.GetDirectoryName(location) ?? pathToContentRoot;
-                Directory.SetCurrentDirectory(pathToContentRoot);
-            }
+            var location = Assembly.GetExecutingAssembly().Location;
+            pathToContentRoot = Path.GetDirectoryName(location) ?? pathToContentRoot;
+            Directory.SetCurrentDirectory(pathToContentRoot);
 
             EnsureAppSettingsJson(pathToContentRoot);
 

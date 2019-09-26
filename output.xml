@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <OutputPath>Output</OutputPath>
+        <OutputType>Published</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <TargetPlatform Include="win-x86" />
+        <TargetPlatform Include="win-x64" />
+        <TargetPlatform Include="osx-x64" />
+        <TargetPlatform Include="linux-x64" />
+        <TargetPlatform Include="linux-arm" />
+    </ItemGroup>
+    
+    <Target Name="PublishToOutputPath">
+        <Message Text="Performing cleanup for the $(OutputPath) folder..." Importance="high" />        
+        <Exec Command="PowerShell -command Remove-Item -Recurse -Force $(OutputPath)" Condition="Exists('$(OutputPath)')" />
+
+        <Message Text="Performing cleanup for the $(OutputType) folder..." Importance="high" />
+        <Exec Command="PowerShell -command Remove-Item -Recurse -Force $(OutputType)" Condition="Exists('$(OutputType)')" />
+        
+        <MakeDir Directories="$(OutputPath);$(OutputType);"/>
+
+        <Exec Command="dotnet restore --verbosity q" />
+        
+        <Message Text="Publishing binaries for all supported target platforms into $(OutputType) folder..." Importance="high" />
+        <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release /p:PublishSingleFile=false /p:PublishTrimmed=true -o $(OutputType)/%(TargetPlatform.Identity) --verbosity q" />
+
+        <Message Text="Zipping published binaries into $(OutputPath) folder..." Importance="high" />
+        <Exec Command="PowerShell -command Compress-Archive $(OutputType)/%(TargetPlatform.Identity)/*.* $(OutputPath)/%(TargetPlatform.Identity).zip" />
+        
+        <Message Text="Everything is ready. Now you could run rebuild of ErpNet.FP.Setup to create the installer into $(OutputPath) folder" Importance="high" />
+    </Target>
+</Project>

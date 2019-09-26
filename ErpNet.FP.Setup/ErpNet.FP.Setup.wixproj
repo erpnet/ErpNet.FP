@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?define OUTPUT = "$(sys.CURRENTDIR)..\ErpNet.FP.Server\Published\win-x86" ?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
@@ -9,20 +9,27 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>ErpNet.FP.Setup</OutputName>
     <OutputType>Package</OutputType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>$(ProjectDir)..\Output\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;OUTPUT=..\ErpNet.FP.Server\Published\win-x86</DefineConstants>
+    <DefineConstants>Debug;OUTPUT=$(ProjectDir)..\Published\win-x86</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>$(ProjectDir)..\Output\</OutputPath>
+    <DefineConstants>OUTPUT=$(ProjectDir)..\Published\win-x86</DefineConstants>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
     <Compile Include="ProductInstallFiles.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.rtf" />
+    <Content Include="RemoveExeAndPdbTransform.xslt" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
@@ -34,17 +41,14 @@
       <Name>WixUtilExtension</Name>
     </WixExtension>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="LICENSE.rtf" />
-    <Content Include="RemoveExeAndPdbTransform.xslt" />
-  </ItemGroup>
-  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
-  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
-    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
-  </Target>
+  <PropertyGroup>
+    <WixToolPath>$(Wix)bin\</WixToolPath>
+    <WixTargetsPath>Wix.targets</WixTargetsPath>
+    <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
+  </PropertyGroup>
+  <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
-    <HeatDirectory OutputFile="$(ProjectDir)ProductInstallFiles.wxs" Transforms="$(ProjectDir)RemoveExeAndPdbTransform.xslt" Directory="$(ProjectDir)\..\ErpNet.FP.Server\Published\win-x86" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" SuppressRegistry="true" SuppressRootDirectory="true" SuppressCom="true" ToolPath="$(WixToolPath)" NoLogo="true" PreprocessorVariable="var.OUTPUT" />
+    <HeatDirectory OutputFile="$(ProjectDir)ProductInstallFiles.wxs" Transforms="$(ProjectDir)RemoveExeAndPdbTransform.xslt" Directory="$(ProjectDir)..\Published\win-x86" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" SuppressRegistry="true" SuppressRootDirectory="true" SuppressCom="true" NoLogo="true" PreprocessorVariable="var.OUTPUT" ToolPath="$(WixToolPath)" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
