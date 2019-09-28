@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ErpNet.FP.Server
+namespace ErpNet.FP.Server.Middlewares
 {
     public class ActionLoggingMiddleware
     {

@@ -2,6 +2,7 @@
 using ErpNet.FP.Core.Service;
 using ErpNet.FP.Server.Configuration;
 using ErpNet.FP.Server.Contexts;
+using ErpNet.FP.Server.Middlewares;
 using ErpNet.FP.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

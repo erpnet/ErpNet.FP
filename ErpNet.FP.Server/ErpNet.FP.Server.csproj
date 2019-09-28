@@ -11,16 +11,6 @@
       <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(IsWindows)'=='true'">
-          <DefineConstants>TRACE;Windows</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(IsOSX)'=='true'">
-        <DefineConstants>OSX</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(IsLinux)'=='true'">
-        <DefineConstants>Linux</DefineConstants>
-    </PropertyGroup>
-
     <ItemGroup>
         <Content Remove="Properties\launchSettings.json" />
     </ItemGroup>
