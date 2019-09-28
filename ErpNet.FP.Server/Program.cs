@@ -4,13 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Reflection;
 
 namespace ErpNet.FP.Server

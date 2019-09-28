@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		Config.md = Config.md
 		CONTRIBUTING.md = CONTRIBUTING.md
+		Directory.Build.props = Directory.Build.props
 		ErrorCodes.md = ErrorCodes.md
 		LICENSE.txt = LICENSE.txt
 		output.xml = output.xml
@@ -70,8 +71,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_StartDate = 2000/1/1
 		SolutionGuid = {5B765DC6-609B-4316-B270-FF956A1A0D3C}
+		BuildVersion_StartDate = 2000/1/1
+		BuildVersion_UseGlobalSettings = True
 	EndGlobalSection
 EndGlobal

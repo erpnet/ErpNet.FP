@@ -4,11 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>ErpNet.FP.Core</RootNamespace>
     <AssemblyName>ErpNet.FP.Core</AssemblyName>
-    <LangVersion>8.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <NullableReferenceTypes>true</NullableReferenceTypes>
-    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
     <PropertyGroup>

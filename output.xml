@@ -23,7 +23,7 @@
         <Exec Command="dotnet restore --verbosity q" />
         
         <Message Text="Publishing binaries for all supported target platforms into $(OutputType) folder..." Importance="high" />
-        <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release /p:PublishSingleFile=false /p:PublishTrimmed=true -o $(OutputType)/%(TargetPlatform.Identity) --verbosity q" />
+        <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release -o $(OutputType)/%(TargetPlatform.Identity) --verbosity q" />
 
         <Message Text="Zipping published binaries into $(OutputPath) folder..." Importance="high" />
         <ZipDirectory

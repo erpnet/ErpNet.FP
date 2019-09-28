@@ -2,29 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <OutputPath>../Published/Build</OutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <PublishTrimmed>true</PublishTrimmed>
         <AssemblyName>ErpNet.FP.Server</AssemblyName>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <LangVersion>8.0</LangVersion>
-        <Nullable>enable</Nullable>
-        <NullableContextOptions>enable</NullableContextOptions>
-        <NullableReferenceTypes>true</NullableReferenceTypes>
-        <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
         <ApplicationIcon>ErpNet.FP.ico</ApplicationIcon>
-        <Company>ErpNet</Company>
-        <StartupObject />
-        <Authors>ErpNet and Contributors</Authors>
-        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-        <Copyright>(c) ErpNet and Contributors</Copyright>
-        <AssemblyVersion>1.0.926.1900</AssemblyVersion>
-        <FileVersion>1.0.926.1900</FileVersion>
-        <Version>1.0.0</Version>
-        <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
-        <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-        <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
-        <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -60,10 +40,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\LICENSE.txt">
-            <Pack>True</Pack>
-            <PackagePath></PackagePath>
-        </None>
         <None Include="Properties\launchSettings.json" />
     </ItemGroup>
 
