@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System;
+    using System.Collections.Generic;
+
     public class BgDatecsXIslFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "DT";
@@ -26,7 +26,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return fiscalPrinter;
         }
 
-        protected int getPrintColumnsOfModel(string modelName)
+        protected int GetPrintColumnsOfModel(string modelName)
         {
             /*
             PrintColumns - Number of printer columns:
@@ -35,17 +35,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             - for FMP-55X = 32 columns;
             - for DP-25X, DP-150X, WP-500X, WP-50X = 42 columns;
             */
-            switch (modelName)
+            return modelName switch
             {
-                case "FP-700X":
-                    return 48;
-                case "FMP-350X":
-                    return 48;
-                case "FMP-55X":
-                    return 32;
-                default:
-                    return 42;
-            }
+                "FP-700X" => 48,
+                "FMP-350X" => 48,
+                "FMP-55X" => 32,
+                _ => 42,
+            };
         }
 
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)
@@ -69,7 +65,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
                 }
             }
-            var printColumns = getPrintColumnsOfModel(modelName);
+            var printColumns = GetPrintColumnsOfModel(modelName);
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,

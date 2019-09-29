@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System;
+
     /// <summary>
     /// Represents a concrete transport channel, created from a <see cref="Transport"/>.
     /// </summary>

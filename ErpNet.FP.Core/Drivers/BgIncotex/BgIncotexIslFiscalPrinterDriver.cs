@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgIncotex
 {
+    using System;
+    using System.Collections.Generic;
+
     public class BgIncotexIslFiscalPrinterDriver : FiscalPrinterDriver
     {
 

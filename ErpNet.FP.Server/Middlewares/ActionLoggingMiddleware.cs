@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Serilog;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ErpNet.FP.Server.Middlewares
+﻿namespace ErpNet.FP.Server.Middlewares
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Serilog;
+
     public class ActionLoggingMiddleware
     {
         private readonly RequestDelegate requestDelegate;
@@ -20,13 +20,11 @@ namespace ErpNet.FP.Server.Middlewares
         {
             await LogRequest(context.Request);
             var bodyStream = context.Response.Body;
-            using (var responseBody = new MemoryStream())
-            {
-                context.Response.Body = responseBody;
-                await requestDelegate(context);
-                await LogResponse(context.Response);
-                await responseBody.CopyToAsync(bodyStream);
-            }
+            using var responseBody = new MemoryStream();
+            context.Response.Body = responseBody;
+            await requestDelegate(context);
+            await LogResponse(context.Response);
+            await responseBody.CopyToAsync(bodyStream);
         }
 
         private async Task LogRequest(HttpRequest request)
@@ -51,7 +49,8 @@ namespace ErpNet.FP.Server.Middlewares
             try
             {
                 response.Body.Seek(0, SeekOrigin.Begin);
-                string bodyAsText = await new StreamReader(response.Body).ReadToEndAsync();
+                using StreamReader streamReader = new StreamReader(response.Body);
+                string bodyAsText = await streamReader.ReadToEndAsync();
                 response.Body.Seek(0, SeekOrigin.Begin);
                 Log.Information($"-- HTTP Response -- Code: {response.StatusCode}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? string.Empty : Environment.NewLine)}{bodyAsText}");
             }

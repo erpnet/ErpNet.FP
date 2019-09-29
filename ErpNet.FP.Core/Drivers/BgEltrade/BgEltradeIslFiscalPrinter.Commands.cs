@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace ErpNet.FP.Core.Drivers.BgEltrade
+﻿namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Eltrade Bulgaria.
     /// </summary>
@@ -49,17 +49,13 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "O";
-                case ReversalReason.Refund:
-                    return "R";
-                case ReversalReason.TaxBaseReduction:
-                    return "T";
-                default:
-                    return "O";
-            }
+                ReversalReason.OperatorError => "O",
+                ReversalReason.Refund => "R",
+                ReversalReason.TaxBaseReduction => "T",
+                _ => "O",
+            };
         }
 
         public override (string, DeviceStatus) OpenReversalReceipt(

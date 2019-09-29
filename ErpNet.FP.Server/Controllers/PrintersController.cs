@@ -1,12 +1,12 @@
-﻿using ErpNet.FP.Core;
-using ErpNet.FP.Core.Service;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace ErpNet.FP.Server.Controllers
+﻿namespace ErpNet.FP.Server.Controllers
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using ErpNet.FP.Core;
+    using ErpNet.FP.Core.Service;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
     // PrintersController, example: //host/printers/[controller]
     [Route("[controller]")]
     [ApiController]

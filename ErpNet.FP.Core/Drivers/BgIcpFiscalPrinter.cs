@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace ErpNet.FP.Core.Drivers.BgIcp
+﻿namespace ErpNet.FP.Core.Drivers.BgIcp
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Fiscal printer using the Icp implementation of Isl Bulgaria.
     /// </summary>
@@ -62,13 +62,13 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
         public override DeviceStatus PrintMoneyDeposit(TransferAmount transferAmount)
         {
-            var (response, status) = MoneyTransfer(transferAmount.Amount);
+            var (_, status) = MoneyTransfer(transferAmount.Amount);
             return status;
         }
 
         public override DeviceStatus PrintMoneyWithdraw(TransferAmount transferAmount)
         {
-            var (response, status) = MoneyTransfer(-transferAmount.Amount);
+            var (_, status) = MoneyTransfer(-transferAmount.Amount);
             return status;
         }
 
@@ -256,13 +256,13 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
         public override DeviceStatus PrintZReport(Credentials credentials)
         {
-            var (response, status) = PrintDailyReport(true);
+            var (_, status) = PrintDailyReport(true);
             return status;
         }
 
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
-            var (response, status) = PrintDailyReport(false);
+            var (_, status) = PrintDailyReport(false);
             return status;
         }
 
@@ -275,8 +275,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                 return new DeviceStatusWithRawResponse(deviceStatus);
             }
             var (rawResponse, status) = Request(requestFrame.RawRequest);
-            var deviceStatusWithRawResponse = new DeviceStatusWithRawResponse(status);
-            deviceStatusWithRawResponse.RawResponse = rawResponse;
+            var deviceStatusWithRawResponse = new DeviceStatusWithRawResponse(status) { RawResponse = rawResponse };
             return deviceStatusWithRawResponse;
         }
 

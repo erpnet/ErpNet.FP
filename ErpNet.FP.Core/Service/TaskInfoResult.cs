@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace ErpNet.FP.Core.Service
+﻿namespace ErpNet.FP.Core.Service
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     public class TaskInfoResult
     {
         /// <summary>

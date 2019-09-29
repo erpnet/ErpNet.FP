@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgIcp
 {
+    using System;
+    using System.Collections.Generic;
+
     public class BgIslIcpFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "IS";
@@ -24,7 +24,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             return fiscalPrinter;
         }
 
-        protected int getPrintColumnsOfModel(string modelName)
+        protected int GetPrintColumnsOfModel(string modelName)
         {
             /*
             За 57мм ISL3811.01,02,01М,02М – 32 символа
@@ -84,7 +84,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
                     throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
                 }
             }
-            var printColumns = getPrintColumnsOfModel(modelName);
+            var printColumns = GetPrintColumnsOfModel(modelName);
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,

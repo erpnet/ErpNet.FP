@@ -1,11 +1,11 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Serilog;
+
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
         protected byte FrameSequenceNumber = 0;
@@ -209,9 +209,7 @@ namespace ErpNet.FP.Core.Drivers
             var cmd = PrinterEncoding.GetBytes(requestFrame.RawRequest.Substring(0, 1))[0];
             var data = requestFrame.RawRequest.Substring(1);
             var (rawResponse, status) = Request(cmd, data);
-            var deviceStatusWithRawResponse = new DeviceStatusWithRawResponse(status);
-            deviceStatusWithRawResponse.RawResponse = rawResponse;
-            return deviceStatusWithRawResponse;
+            return new DeviceStatusWithRawResponse(status) { RawResponse = rawResponse };
         }
 
         protected (string, DeviceStatus) Request(byte command, string? data = null)

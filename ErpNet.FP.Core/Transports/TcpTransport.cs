@@ -1,10 +1,10 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-
-namespace ErpNet.FP.Core.Transports
+﻿namespace ErpNet.FP.Core.Transports
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Sockets;
+    using Serilog;
+
     /// <summary>
     /// TCP/IP transport.
     /// </summary>

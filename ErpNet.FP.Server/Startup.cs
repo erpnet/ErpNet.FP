@@ -1,21 +1,21 @@
-﻿using ErpNet.FP.Core.Configuration;
-using ErpNet.FP.Core.Service;
-using ErpNet.FP.Server.Configuration;
-using ErpNet.FP.Server.Contexts;
-using ErpNet.FP.Server.Middlewares;
-using ErpNet.FP.Server.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
-using System.IO;
-
-namespace ErpNet.FP.Server
+﻿namespace ErpNet.FP.Server
 {
+    using ErpNet.FP.Core.Configuration;
+    using ErpNet.FP.Core.Service;
+    using ErpNet.FP.Server.Configuration;
+    using ErpNet.FP.Server.Contexts;
+    using ErpNet.FP.Server.Middlewares;
+    using ErpNet.FP.Server.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Hosting.Server.Features;
+    using Microsoft.AspNetCore.StaticFiles;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
+    using Microsoft.Extensions.Hosting;
+    using System.IO;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)

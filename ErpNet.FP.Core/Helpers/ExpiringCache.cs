@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Helpers
+﻿namespace ErpNet.FP.Core.Helpers
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+
     public class ExpiringCache<TKey, TValue> where TValue : class
     {
         private readonly IDictionary<TKey, ExpiringCacheItem<TValue>>

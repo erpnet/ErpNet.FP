@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers.BgTremol
+﻿namespace ErpNet.FP.Core.Drivers.BgTremol
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Fiscal printer using the Zfp V2 implementation of Tremol Bulgaria.
     /// </summary>

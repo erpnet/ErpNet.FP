@@ -1,14 +1,14 @@
-﻿using ErpNet.FP.Core.Configuration;
-using Serilog;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ErpNet.FP.Core.Service
+﻿namespace ErpNet.FP.Core.Service
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using ErpNet.FP.Core.Configuration;
+    using Serilog;
+
     public interface IServiceController
     {
         Dictionary<string, DeviceInfo> PrintersInfo { get; }

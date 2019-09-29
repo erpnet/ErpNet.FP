@@ -1,11 +1,11 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers.BgIcp
+﻿namespace ErpNet.FP.Core.Drivers.BgIcp
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Serilog;
+
     /// <summary>
     /// Fiscal printer using the Icp implementation of ISL Ltd.
     /// </summary>
@@ -25,9 +25,11 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
         protected virtual byte[] BuildHostFrame(byte[]? data)
         {
             // Frame header
-            var frame = new List<byte>();
-            frame.Add(MarkerSTX);
-            frame.AddRange(DeviceNo == null ? PrinterEncoding.GetBytes("0000") : DeviceNo);
+            var frame = new List<byte>
+            {
+                MarkerSTX
+            };
+            frame.AddRange(DeviceNo ?? PrinterEncoding.GetBytes("0000"));
             frame.AddRange(data);
             frame.AddRange(ByteTo2Bytes((byte)(10 + (data != null ? data.Length : 0))));
             frame.AddRange(ComputeCS(frame.ToArray()));

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System;
+    using System.Collections.Generic;
+
     public class BgDatecsPIslFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "DT";

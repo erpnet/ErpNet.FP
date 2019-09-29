@@ -1,8 +1,8 @@
-﻿using ErpNet.FP.Core.Service;
-using Microsoft.Extensions.Hosting;
-
-namespace ErpNet.FP.Server.Services
+﻿namespace ErpNet.FP.Server.Services
 {
+    using ErpNet.FP.Core.Service;
+    using Microsoft.Extensions.Hosting;
+
     /// <summary>
     /// KeepAliveHostedService is wrapper around KeepAliveService
     /// which declares IHostedService implementation, and dependency

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Runtime.Serialization;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /*
     Описание (дадено от НАП), наша константа, XML константа на НАП
     В брой, "cash", "SCash"

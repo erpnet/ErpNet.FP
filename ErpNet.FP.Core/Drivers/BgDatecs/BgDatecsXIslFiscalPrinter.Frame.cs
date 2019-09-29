@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers.BgDatecs
+﻿namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Datecs Bulgaria.
     /// </summary>
@@ -15,8 +15,10 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         protected override byte[] BuildHostFrame(byte command, byte[]? data)
         {
             // Frame header
-            var frame = new List<byte>();
-            frame.Add(MarkerPreamble);
+            var frame = new List<byte>
+            {
+                MarkerPreamble
+            };
             frame.AddRange(UInt16To4Bytes((UInt16)(MarkerSpace + 10 + (data != null ? data.Length : 0))));
             frame.Add((byte)(MarkerSpace + FrameSequenceNumber));
             frame.AddRange(UInt16To4Bytes(command));

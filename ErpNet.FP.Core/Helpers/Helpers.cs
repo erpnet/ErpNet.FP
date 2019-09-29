@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Collections.Generic;
+
     public static class Helpers
     {
         public static T[] Slice<T>(this T[] arr, uint indexFrom, uint indexTo)

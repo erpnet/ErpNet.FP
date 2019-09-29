@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
-
-namespace ErpNet.FP.Server.Configuration
+﻿namespace ErpNet.FP.Server.Configuration
 {
+    using System;
+    using System.IO;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
     public interface IWritableOptions<out T> : IOptionsSnapshot<T> where T : class, new()
     {
         void Update(Action<T> applyChanges);

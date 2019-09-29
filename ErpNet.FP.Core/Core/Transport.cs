@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Represents the physical transport protocol like serial COM, Bluetooth, http, etc.
     /// </summary>

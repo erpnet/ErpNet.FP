@@ -1,13 +1,13 @@
-﻿using ErpNet.FP.Core.Drivers;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core.Provider
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using ErpNet.FP.Core.Drivers;
+    using Serilog;
+
     /// <summary>
     /// General functions for finding and connecting fiscal printers.
     /// </summary>

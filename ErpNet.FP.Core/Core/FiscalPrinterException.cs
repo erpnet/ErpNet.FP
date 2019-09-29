@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System;
+
     [Serializable]
     public class FiscalPrinterException : Exception
     {

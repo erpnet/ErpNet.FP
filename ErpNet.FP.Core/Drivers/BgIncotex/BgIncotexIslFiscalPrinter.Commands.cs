@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers.BgIncotex
+﻿namespace ErpNet.FP.Core.Drivers.BgIncotex
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
     /// </summary>

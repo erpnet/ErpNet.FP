@@ -1,18 +1,17 @@
-﻿using ErpNet.FP.Core.Service;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ErpNet.FP.Server.Services
+﻿namespace ErpNet.FP.Server.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.NetworkInformation;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using ErpNet.FP.Core.Service;
+    using Microsoft.AspNetCore.Hosting.Server.Features;
+    using Microsoft.Extensions.Hosting;
+    using Serilog;
 
     /// <summary>
     /// SimpleDiscoveryService is created for zero-configuration 

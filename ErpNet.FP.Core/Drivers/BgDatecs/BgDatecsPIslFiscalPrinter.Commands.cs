@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers.BgDatecs
+﻿namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Datecs Bulgaria.
     /// </summary>
@@ -84,17 +84,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "E";
-                case ReversalReason.Refund:
-                    return "R";
-                case ReversalReason.TaxBaseReduction:
-                    return "T";
-                default:
-                    return "E";
-            }
+                ReversalReason.OperatorError => "E",
+                ReversalReason.Refund => "R",
+                ReversalReason.TaxBaseReduction => "T",
+                _ => "E",
+            };
         }
 
         public override (string, DeviceStatus) OpenReversalReceipt(

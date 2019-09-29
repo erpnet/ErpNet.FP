@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System.Collections.Generic;
+
     public class DeviceInfo
     {
         /// <summary>

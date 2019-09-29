@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers.BgIcp
+﻿namespace ErpNet.FP.Core.Drivers.BgIcp
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Fiscal printer using the Icp implementation of Isl Bulgaria.
     /// </summary>

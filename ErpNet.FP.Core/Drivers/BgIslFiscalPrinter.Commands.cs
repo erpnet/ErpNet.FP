@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Globalization;
+    using System.Text;
+
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
         protected const byte
@@ -26,17 +26,13 @@ namespace ErpNet.FP.Core.Drivers
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "1";
-                case ReversalReason.Refund:
-                    return "0";
-                case ReversalReason.TaxBaseReduction:
-                    return "2";
-                default:
-                    return "1";
-            }
+                ReversalReason.OperatorError => "1",
+                ReversalReason.Refund => "0",
+                ReversalReason.TaxBaseReduction => "2",
+                _ => "1",
+            };
         }
 
         public virtual (string, DeviceStatus) GetStatus()

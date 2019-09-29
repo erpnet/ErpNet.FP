@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Fiscal printer base class for Bg printers.
     /// </summary>
@@ -66,17 +66,13 @@ namespace ErpNet.FP.Core.Drivers
 
         public virtual string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "0";
-                case ReversalReason.Refund:
-                    return "1";
-                case ReversalReason.TaxBaseReduction:
-                    return "2";
-                default:
-                    return "0";
-            }
+                ReversalReason.OperatorError => "0",
+                ReversalReason.Refund => "1",
+                ReversalReason.TaxBaseReduction => "2",
+                _ => "0",
+            };
         }
 
         public ICollection<PaymentType> GetSupportedPaymentTypes()

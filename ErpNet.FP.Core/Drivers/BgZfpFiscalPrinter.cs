@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Fiscal printer using the Zfp implementation.
     /// </summary>
@@ -15,27 +15,18 @@ namespace ErpNet.FP.Core.Drivers
 
         public override string GetTaxGroupText(TaxGroup taxGroup)
         {
-            switch (taxGroup)
+            return taxGroup switch
             {
-                case TaxGroup.TaxGroup1:
-                    return "А";
-                case TaxGroup.TaxGroup2:
-                    return "Б";
-                case TaxGroup.TaxGroup3:
-                    return "В";
-                case TaxGroup.TaxGroup4:
-                    return "Г";
-                case TaxGroup.TaxGroup5:
-                    return "Д";
-                case TaxGroup.TaxGroup6:
-                    return "Е";
-                case TaxGroup.TaxGroup7:
-                    return "Ж";
-                case TaxGroup.TaxGroup8:
-                    return "З";
-                default:
-                    throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411");
-            }
+                TaxGroup.TaxGroup1 => "А",
+                TaxGroup.TaxGroup2 => "Б",
+                TaxGroup.TaxGroup3 => "В",
+                TaxGroup.TaxGroup4 => "Г",
+                TaxGroup.TaxGroup5 => "Д",
+                TaxGroup.TaxGroup6 => "Е",
+                TaxGroup.TaxGroup7 => "Ж",
+                TaxGroup.TaxGroup8 => "З",
+                _ => throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411"),
+            };
         }
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
@@ -90,7 +81,7 @@ namespace ErpNet.FP.Core.Drivers
                 throw new StandardizedStatusMessageException("Withdraw amount must be positive number", "E403");
             }
             transferAmount.Amount = -transferAmount.Amount;
-            var (response, status) = MoneyTransfer(transferAmount);
+            var (_, status) = MoneyTransfer(transferAmount);
             return status;
         }
 
@@ -286,13 +277,13 @@ namespace ErpNet.FP.Core.Drivers
 
         public override DeviceStatus PrintZReport(Credentials credentials)
         {
-            var (response, status) = PrintDailyReport(true);
+            var (_, status) = PrintDailyReport(true);
             return status;
         }
 
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
-            var (response, status) = PrintDailyReport(false);
+            var (_, status) = PrintDailyReport(false);
             return status;
         }
 

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace ErpNet.FP.Core.Drivers.BgDatecs
+﻿namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Datecs Bulgaria.
     /// </summary>
@@ -26,27 +26,18 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         public override string GetTaxGroupText(TaxGroup taxGroup)
         {
-            switch (taxGroup)
+            return taxGroup switch
             {
-                case TaxGroup.TaxGroup1:
-                    return "1";
-                case TaxGroup.TaxGroup2:
-                    return "2";
-                case TaxGroup.TaxGroup3:
-                    return "3";
-                case TaxGroup.TaxGroup4:
-                    return "4";
-                case TaxGroup.TaxGroup5:
-                    return "5";
-                case TaxGroup.TaxGroup6:
-                    return "6";
-                case TaxGroup.TaxGroup7:
-                    return "7";
-                case TaxGroup.TaxGroup8:
-                    return "8";
-                default:
-                    throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411");
-            }
+                TaxGroup.TaxGroup1 => "1",
+                TaxGroup.TaxGroup2 => "2",
+                TaxGroup.TaxGroup3 => "3",
+                TaxGroup.TaxGroup4 => "4",
+                TaxGroup.TaxGroup5 => "5",
+                TaxGroup.TaxGroup6 => "6",
+                TaxGroup.TaxGroup7 => "7",
+                TaxGroup.TaxGroup8 => "8",
+                _ => throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411"),
+            };
         }
 
         public override (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
@@ -114,18 +105,12 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 var amountString = fields[4];
                 if (amountString.Length > 0)
                 {
-                    switch (amountString[0])
+                    receiptAmount = (amountString[0]) switch
                     {
-                        case '+':
-                            receiptAmount = decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
-                            break;
-                        case '-':
-                            receiptAmount = -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m;
-                            break;
-                        default:
-                            receiptAmount = decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture);
-                            break;
-                    }
+                        '+' => decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m,
+                        '-' => -decimal.Parse(amountString.Substring(1), System.Globalization.CultureInfo.InvariantCulture) / 100m,
+                        _ => decimal.Parse(amountString, System.Globalization.CultureInfo.InvariantCulture),
+                    };
                 }
 
             }
@@ -206,21 +191,15 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
         {
             string PriceModifierTypeToProtocolValue()
             {
-                switch (priceModifierType)
+                return priceModifierType switch
                 {
-                    case PriceModifierType.None:
-                        return "0";
-                    case PriceModifierType.DiscountPercent:
-                        return "2";
-                    case PriceModifierType.DiscountAmount:
-                        return "4";
-                    case PriceModifierType.SurchargePercent:
-                        return "1";
-                    case PriceModifierType.SurchargeAmount:
-                        return "3";
-                    default:
-                        return "";
-                }
+                    PriceModifierType.None => "0",
+                    PriceModifierType.DiscountPercent => "2",
+                    PriceModifierType.DiscountAmount => "4",
+                    PriceModifierType.SurchargePercent => "1",
+                    PriceModifierType.SurchargeAmount => "3",
+                    _ => "",
+                };
             }
 
             // Protocol: {PluName}<SEP>{TaxCd}<SEP>{Price}<SEP>{Quantity}<SEP>{DiscountType}<SEP>{DiscountValue}<SEP>{Department}<SEP>
@@ -254,17 +233,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "0";
-                case ReversalReason.Refund:
-                    return "1";
-                case ReversalReason.TaxBaseReduction:
-                    return "2";
-                default:
-                    return "0";
-            }
+                ReversalReason.OperatorError => "0",
+                ReversalReason.Refund => "1",
+                ReversalReason.TaxBaseReduction => "2",
+                _ => "0",
+            };
         }
 
         public override (string, DeviceStatus) OpenReceipt(

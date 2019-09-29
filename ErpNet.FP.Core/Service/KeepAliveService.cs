@@ -1,11 +1,10 @@
-﻿using ErpNet.FP.Core.Service;
-using Serilog;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ErpNet.FP.Server.Services
+﻿namespace ErpNet.FP.Server.Services
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using ErpNet.FP.Core.Service;
+    using Serilog;
 
     /// <summary>
     /// KeepAliveService implements IHostedService, but can be manually used
@@ -25,6 +24,10 @@ namespace ErpNet.FP.Server.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.CompletedTask;
+            }
             // Get Status every 120 seconds, for keeping alive the connection
             Timer = new Timer(KeepAliveWithGetStatus, null, TimeSpan.FromSeconds(120),
                 TimeSpan.FromSeconds(120));
@@ -51,7 +54,7 @@ namespace ErpNet.FP.Server.Services
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken _)
         {
             Timer?.Change(Timeout.Infinite, 0);
 

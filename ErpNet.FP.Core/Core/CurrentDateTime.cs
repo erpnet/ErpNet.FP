@@ -1,8 +1,8 @@
-﻿
-using Newtonsoft.Json;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+
+    using Newtonsoft.Json;
+
     public class CurrentDateTime : Credentials
     {
         [JsonProperty(Required = Required.Always)]

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers.BgIcp
+﻿namespace ErpNet.FP.Core.Drivers.BgIcp
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// Fiscal printer using the Icp implementation of Isl Bulgaria.
     /// </summary>
@@ -30,27 +30,18 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
         public override string GetTaxGroupText(TaxGroup taxGroup)
         {
-            switch (taxGroup)
+            return taxGroup switch
             {
-                case TaxGroup.TaxGroup1:
-                    return "1";
-                case TaxGroup.TaxGroup2:
-                    return "2";
-                case TaxGroup.TaxGroup3:
-                    return "3";
-                case TaxGroup.TaxGroup4:
-                    return "4";
-                case TaxGroup.TaxGroup5:
-                    return "5";
-                case TaxGroup.TaxGroup6:
-                    return "6";
-                case TaxGroup.TaxGroup7:
-                    return "7";
-                case TaxGroup.TaxGroup8:
-                    return "8";
-                default:
-                    throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411");
-            }
+                TaxGroup.TaxGroup1 => "1",
+                TaxGroup.TaxGroup2 => "2",
+                TaxGroup.TaxGroup3 => "3",
+                TaxGroup.TaxGroup4 => "4",
+                TaxGroup.TaxGroup5 => "5",
+                TaxGroup.TaxGroup6 => "6",
+                TaxGroup.TaxGroup7 => "7",
+                TaxGroup.TaxGroup8 => "8",
+                _ => throw new StandardizedStatusMessageException($"Tax group {taxGroup} unsupported", "E411"),
+            };
         }
 
         public virtual (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
@@ -241,17 +232,13 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {
-            switch (reversalReason)
+            return reversalReason switch
             {
-                case ReversalReason.OperatorError:
-                    return "0";
-                case ReversalReason.Refund:
-                    return "1";
-                case ReversalReason.TaxBaseReduction:
-                    return "2";
-                default:
-                    return "0";
-            }
+                ReversalReason.OperatorError => "0",
+                ReversalReason.Refund => "1",
+                ReversalReason.TaxBaseReduction => "2",
+                _ => "0",
+            };
         }
 
         public virtual (string, DeviceStatus) OpenReversalReceipt(

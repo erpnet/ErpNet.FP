@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers.BgDatecs
+﻿namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Datecs Bulgaria.
     /// </summary>

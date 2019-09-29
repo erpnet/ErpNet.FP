@@ -1,8 +1,8 @@
-﻿
-using System.Runtime.Serialization;
-
-namespace ErpNet.FP.Core.Service
+﻿namespace ErpNet.FP.Core.Service
 {
+
+    using System.Runtime.Serialization;
+
     public enum TaskStatus
     {
         [EnumMember(Value = "unknown")]

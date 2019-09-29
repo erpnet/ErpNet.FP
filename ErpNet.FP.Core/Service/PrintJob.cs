@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ErpNet.FP.Core.Service
+﻿namespace ErpNet.FP.Core.Service
 {
+    using System;
+
     public enum PrintJobAction
     {
         None,

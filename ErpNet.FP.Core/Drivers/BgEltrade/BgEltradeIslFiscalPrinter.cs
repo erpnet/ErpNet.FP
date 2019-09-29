@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Drivers.BgEltrade
+﻿namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Fiscal printer using the ISL implementation of Eltrade Bulgaria.
     /// </summary>

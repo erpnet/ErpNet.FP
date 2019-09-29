@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+    using System.Globalization;
+    using System.Text;
+
     public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
         protected const byte

@@ -1,9 +1,9 @@
-﻿using ErpNet.FP.Core.Helpers;
-using System.Collections.Generic;
-
-#nullable enable
+﻿#nullable enable
 namespace ErpNet.FP.Core
 {
+    using System.Collections.Generic;
+    using ErpNet.FP.Core.Helpers;
+
     /// <summary>
     /// Represents a driver for a fiscal printer
     /// </summary>

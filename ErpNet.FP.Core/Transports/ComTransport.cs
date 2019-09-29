@@ -1,13 +1,13 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Ports;
-using System.Linq;
-using System.Threading;
-
-namespace ErpNet.FP.Core.Transports
+﻿namespace ErpNet.FP.Core.Transports
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Ports;
+    using System.Linq;
+    using System.Threading;
+    using Serilog;
+
     public class ComTransport : Transport
     {
         public override string TransportName => "com";

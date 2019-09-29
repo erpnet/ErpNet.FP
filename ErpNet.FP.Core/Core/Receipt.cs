@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-
-namespace ErpNet.FP.Core
+﻿namespace ErpNet.FP.Core
 {
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Represents one Receipt, which can be printed on a fiscal printer.
     /// </summary>

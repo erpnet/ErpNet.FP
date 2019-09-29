@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ErpNet.FP.Core.Drivers
+﻿namespace ErpNet.FP.Core.Drivers
 {
+    using System;
+
     [Serializable]
     public class InvalidDeviceInfoException : Exception
     {

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ErpNet.FP.Core.Configuration
+﻿namespace ErpNet.FP.Core.Configuration
 {
+    using System.Collections.Generic;
+
     public class PrinterConfig
     {
         public string Uri { get; set; } = string.Empty;
