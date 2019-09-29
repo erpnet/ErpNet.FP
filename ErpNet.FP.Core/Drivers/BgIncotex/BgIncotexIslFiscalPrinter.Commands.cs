@@ -6,7 +6,7 @@
     using System.Text;
 
     /// <summary>
-    /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
+    /// Fiscal printer using the ISL implementation of Incotex.
     /// </summary>
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgIncotexIslFiscalPrinter : BgIslFiscalPrinter
