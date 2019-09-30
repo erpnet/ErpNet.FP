@@ -6,6 +6,7 @@
         <NullableReferenceTypes>true</NullableReferenceTypes>
         <PublishTrimmed>true</PublishTrimmed>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>  
         <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
         <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
         <OutputPath>$(SolutionDir)Published/Build</OutputPath>
