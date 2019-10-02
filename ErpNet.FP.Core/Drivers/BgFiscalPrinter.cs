@@ -114,7 +114,7 @@
                 status.AddError("E405", "UniqueSaleNumber is empty");
                 return status;
             }
-            var uniqueSaleNumberMatch = Regex.Match(receipt.UniqueSaleNumber, "^[A-Z0-9]{8}-[A-Z0-9]{4}-[0-9]{7}$");
+            var uniqueSaleNumberMatch = Regex.Match(receipt.UniqueSaleNumber, "^[A-Z]{2}[0-9]{6}-[A-Z0-9]{4}-[0-9]{7}$");
             if (!uniqueSaleNumberMatch.Success)
             {
                 status.AddError("E405", "Invalid format of UniqueSaleNumber");
