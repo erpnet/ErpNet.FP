@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.926.1900"
+    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.1002.2040"
              Manufacturer="Erp.Net And Contributors"
              UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
         
