@@ -58,7 +58,7 @@
                 app.UseHsts();
             }
 
-            app.UseMiddleware<ActionLoggingMiddleware>();
+            //app.UseMiddleware<ActionLoggingMiddleware>();
 
             app.UseRouting();
 

@@ -6,7 +6,6 @@
         <NullableReferenceTypes>true</NullableReferenceTypes>
         <PublishTrimmed>true</PublishTrimmed>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>  
         <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
         <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
         <OutputPath>$(SolutionDir)Published/Build</OutputPath>
@@ -14,20 +13,20 @@
         <Authors>ErpNet and Contributors</Authors>
         <PackageLicenseFile>$(SolutionDir)LICENSE.txt</PackageLicenseFile>
         <Copyright>(c) ErpNet and Contributors</Copyright>
-        <AssemblyVersion>1.0.1002.2040</AssemblyVersion>
-        <FileVersion>1.0.1002.2040</FileVersion>
-        <Version>1.0.1002.2040</Version>
+        <AssemblyVersion>1.0.1003.1800</AssemblyVersion>
+        <FileVersion>1.0.1003.1800</FileVersion>
+        <Version>1.0.1003.1800</Version>
         <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
         <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
     </PropertyGroup>
     <PropertyGroup Condition="'$(IsWindows)'=='true'">
-        <DefineConstants>TRACE;Windows</DefineConstants>
+        <DefineConstants>Windows</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="'$(IsOSX)'=='true'">
-        <DefineConstants>TRACE;OSX</DefineConstants>
+        <DefineConstants>OSX</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="'$(IsLinux)'=='true'">
-        <DefineConstants>TRACE;Linux</DefineConstants>
+        <DefineConstants>Linux</DefineConstants>
     </PropertyGroup>
 </Project>

@@ -14,6 +14,7 @@
     public class Program
     {
         private static readonly string DebugLogFileName = @"debug.log";
+        private static readonly string AppSettingsFileName = @"appsettings.json";
 
         public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -23,7 +24,7 @@
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                 var env = hostingContext.HostingEnvironment;
-                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                config.AddJsonFile(AppSettingsFileName, optional: true, reloadOnChange: true);
                 config.AddEnvironmentVariables();
             })
             .ConfigureWebHostDefaults(webBuilder =>
@@ -34,7 +35,7 @@
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var env = hostingContext.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile(AppSettingsFileName, optional: true, reloadOnChange: true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureKestrel((hostingContext, options) =>
@@ -45,20 +46,12 @@
                     options.AllowSynchronousIO = false;
                     options.Limits.MaxRequestBodySize = 500 * 1024;
                 })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging
-                        .ClearProviders()
-                        .AddConfiguration(hostingContext.Configuration.GetSection("Logging"))
-                        .AddDebug()
-                        .AddEventSourceLogger();
-                })
                 .UseStartup<Startup>();
             });
 
         public static void EnsureAppSettingsJson(string pathToContentRoot)
         {
-            var appSettingsJsonFilePath = Path.Combine(pathToContentRoot, "appsettings.json");
+            var appSettingsJsonFilePath = Path.Combine(pathToContentRoot, AppSettingsFileName);
 
             if (!File.Exists(appSettingsJsonFilePath))
             {
@@ -97,7 +90,7 @@
             return (version != null) ? version.ToString() : "unknown";
         }
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             var pathToContentRoot = Directory.GetCurrentDirectory();
 
@@ -107,25 +100,26 @@
 
             EnsureAppSettingsJson(pathToContentRoot);
 
+            var logOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .Enrich.FromLogContext()
+                .WriteTo.Console(outputTemplate: logOutputTemplate)
+                .WriteTo.File(
+                    EnsureDebugLogHistory(pathToContentRoot),
+                    rollingInterval: RollingInterval.Infinite,
+                    outputTemplate: logOutputTemplate)
+                .CreateLogger();
+
             // Setup debug logs
             try
             {
                 var builder = CreateHostBuilder(
-                pathToContentRoot,
-                args.Where(arg => arg != "--console").ToArray());
+                    pathToContentRoot,
+                    args.Where(arg => arg != "--console").ToArray());
 
                 var host = builder.Build();
-
-                var logOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
-
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Debug()
-                    .WriteTo.Console(outputTemplate: logOutputTemplate)
-                    .WriteTo.File(
-                        EnsureDebugLogHistory(pathToContentRoot),
-                        rollingInterval: RollingInterval.Infinite,
-                        outputTemplate: logOutputTemplate)
-                    .CreateLogger();
 
                 Log.Information($"Starting the service, version {GetVersion()}...");
 
@@ -133,12 +127,16 @@
 
                 Log.Information("Stopping the service.");
 
-                Log.CloseAndFlush();
+                return 0;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while creating debug.log file: {ex.Message}");
-                return;
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
     }

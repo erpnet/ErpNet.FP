@@ -14,7 +14,7 @@
     </ItemGroup>
     
     <Target Name="PublishToOutputPath">
-        <Message Text="Performing cleanup for the $(OutputPath) and $(OutputType) folder..." Importance="high" />
+        <Message Text="Performing cleanup..." Importance="high" />
         <RemoveDir
             Directories="$(OutputPath);$(OutputType)" />
 
@@ -22,10 +22,10 @@
 
         <Exec Command="dotnet restore --verbosity q" />
         
-        <Message Text="Publishing binaries for all supported target platforms into $(OutputType) folder..." Importance="high" />
-        <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release -o $(OutputType)/%(TargetPlatform.Identity) --verbosity q" />
-
-        <Message Text="Zipping published binaries into $(OutputPath) folder..." Importance="high" />
+        <Message Text="Publishing binaries for %(TargetPlatform.Identity) into $(OutputType) folder..." Importance="high" />
+        <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release  -o Published\%(TargetPlatform.Identity) --verbosity q" />
+              
+        <Message Text="Zipping binaries for all supported target platforms into $(OutputPath) folder..." Importance="high" />
         <ZipDirectory
             SourceDirectory="$(OutputType)/%(TargetPlatform.Identity)"
             DestinationFile="$(OutputPath)/%(TargetPlatform.Identity).zip" />
