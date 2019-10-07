@@ -418,6 +418,9 @@
             <Component Id="cmpD0A27145DF91E42A761E3A37B2CB9DDC" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil8F7514FF24FCE4BE026ABA261D3C16F5" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.DiaSymReader.Native.x86.dll" />
             </Component>
+            <Component Id="cmp8829932782E2062A8292EB806216CC80" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil7E65EF656EF556143E801F8F85E3AC17" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.DotNet.PlatformAbstractions.dll" />
+            </Component>
             <Component Id="cmp75E1D360F7F3BEA782095608B95EAF01" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filB2EC777A0DF3BC93E22F83FF2D6AA439" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Extensions.Caching.Abstractions.dll" />
             </Component>
@@ -462,6 +465,9 @@
             </Component>
             <Component Id="cmp493E9BC44885B6BC5C57BDB1302C40D9" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filA40291A4FBD4719B6995DEB783A39A65" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Extensions.DependencyInjection.dll" />
+            </Component>
+            <Component Id="cmp828BABCAA179DFEF8C123894E628FE4B" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filF6E569B7A4467871DC459846AD8CAB0C" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Extensions.DependencyModel.dll" />
             </Component>
             <Component Id="cmp2D32282B28700E11E5396B90699884C5" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filA435B38B08484F49C0918882FAB82018" KeyPath="yes" Source="$(var.OUTPUT)\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll" />
@@ -586,11 +592,29 @@
             <Component Id="cmpBC4FC00A26E7D32479D42D3411317FC5" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil90A8AAD9FC612906D405476D61CEA3F4" KeyPath="yes" Source="$(var.OUTPUT)\Newtonsoft.Json.dll" />
             </Component>
+            <Component Id="cmp6F76674123E31ADA0CB0373827395329" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil24340B036E07AE74D4CB0089D07A83D2" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.AspNetCore.dll" />
+            </Component>
             <Component Id="cmp74A2C73F11C177073B0A672936A0D5EB" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1CF141D24266A4E5F331DDFE02166A27" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.dll" />
             </Component>
+            <Component Id="cmp214710B2088B640AA2C8ECD80E170376" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filE72D6FFBC556E18D146AC0CA92CF450B" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Extensions.Hosting.dll" />
+            </Component>
+            <Component Id="cmpA9CD02E2996345805AE749B403FD0E7A" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil56CB5FAFD9298B97D060AE19F2DB1B10" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Extensions.Logging.dll" />
+            </Component>
+            <Component Id="cmpC08CEB1C24E4A6DA79EE83CFD8BDCD60" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filD89F64F083730E2B8CC0DEE7002EF506" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Formatting.Compact.dll" />
+            </Component>
+            <Component Id="cmp0E9DAA4C1F27CA840B7893F6337CDC29" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="fil3908D6B667B492BF06F390753E52341D" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Settings.Configuration.dll" />
+            </Component>
             <Component Id="cmp539EB192BE11EA8C5B17EFB0CC1DDCEB" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="filB637049630FB5D2AC00236DBD60DD2BE" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Sinks.Console.dll" />
+            </Component>
+            <Component Id="cmp54D178BF4B123B0F7249047E7AA7FE7F" Directory="INSTALLFOLDER" Guid="*">
+                <File Id="filB1D7D8DE3D3E218CF70D1265B59FC7F6" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Sinks.Debug.dll" />
             </Component>
             <Component Id="cmp49818C715FF04B8E95F7B53BDDD323EF" Directory="INSTALLFOLDER" Guid="*">
                 <File Id="fil1A12B15365165DDBE60433B150808BEE" KeyPath="yes" Source="$(var.OUTPUT)\Serilog.Sinks.File.dll" />
