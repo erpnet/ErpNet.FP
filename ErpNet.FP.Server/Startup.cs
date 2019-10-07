@@ -1,5 +1,6 @@
 ﻿namespace ErpNet.FP.Server
 {
+    using System.IO;
     using ErpNet.FP.Core.Configuration;
     using ErpNet.FP.Core.Service;
     using ErpNet.FP.Server.Configuration;
@@ -14,7 +15,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-    using System.IO;
+    using Serilog;
 
     public class Startup
     {
@@ -58,7 +59,9 @@
                 app.UseHsts();
             }
 
-            //app.UseMiddleware<ActionLoggingMiddleware>();
+            app.UseSerilogRequestLogging();
+
+            app.UseMiddleware<ActionLoggingMiddleware>();
 
             app.UseRouting();
 
@@ -73,13 +76,17 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(loggingBuilder =>
+                loggingBuilder.AddSerilog(dispose: true));
             services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
             services.AddSingleton<IServiceController, ServiceSingleton>();
             services.AddControllers().AddNewtonsoftJson();
 
             // KeepAliveHostedService will warm up ServiceSingleton context at start
             services.AddHostedService<KeepAliveHostedService>();
+#if Windows
             services.AddHostedService<SimpleDiscoveryService>();
+#endif
         }
 
         public IConfiguration Configuration { get; }

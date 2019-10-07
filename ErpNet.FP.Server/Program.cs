@@ -1,15 +1,15 @@
 ﻿namespace ErpNet.FP.Server
 {
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Serilog;
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
+    using Serilog;
 
     public class Program
     {
@@ -46,7 +46,8 @@
                     options.AllowSynchronousIO = false;
                     options.Limits.MaxRequestBodySize = 500 * 1024;
                 })
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog();
             });
 
         public static void EnsureAppSettingsJson(string pathToContentRoot)
@@ -102,15 +103,24 @@
 
             var logOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+            var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Console(outputTemplate: logOutputTemplate)
                 .WriteTo.File(
                     EnsureDebugLogHistory(pathToContentRoot),
                     rollingInterval: RollingInterval.Infinite,
-                    outputTemplate: logOutputTemplate)
-                .CreateLogger();
+                    outputTemplate: logOutputTemplate);
+
+            if (Debugger.IsAttached)
+            {
+                loggerConfiguration.MinimumLevel.Debug();
+            }
+            else
+            {
+                loggerConfiguration.MinimumLevel.Information();
+            }
+
+            Log.Logger = loggerConfiguration.CreateLogger();
 
             // Setup debug logs
             try

@@ -217,7 +217,10 @@
 
         public override (string, DeviceStatus) AddComment(string text)
         {
-            return Request(CommandFiscalReceiptComment, text.WithMaxLength(Info.CommentTextMaxLength) + "\t");
+            return Request(
+                CommandFiscalReceiptComment,
+                text.WithMaxLength(Info.CommentTextMaxLength) + "\t"
+            );
         }
         public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)
         {

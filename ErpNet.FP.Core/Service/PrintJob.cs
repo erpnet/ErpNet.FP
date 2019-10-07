@@ -45,11 +45,7 @@
                 switch (Action)
                 {
                     case PrintJobAction.Cash:
-                        if (Document == null)
-                        {
-                            Document = new Credentials();
-                        }
-                        Result = Printer.Cash((Credentials)Document);
+                        Result = Printer.Cash((Credentials)(Document ?? new Credentials()));
                         break;
                     case PrintJobAction.RawRequest:
                         if (Document != null)
@@ -120,18 +116,10 @@
                         }
                         break;
                     case PrintJobAction.XReport:
-                        if (Document == null)
-                        {
-                            Document = new Credentials();
-                        }
-                        Result = Printer.PrintXReport((Credentials)Document);
+                        Result = Printer.PrintXReport((Credentials)(Document ?? new Credentials()));
                         break;
                     case PrintJobAction.ZReport:
-                        if (Document == null)
-                        {
-                            Document = new Credentials();
-                        }
-                        Result = Printer.PrintZReport((Credentials)Document);
+                        Result = Printer.PrintZReport((Credentials)(Document ?? new Credentials()));
                         break;
                     case PrintJobAction.SetDateTime:
                         if (Document != null)
@@ -140,11 +128,7 @@
                         };
                         break;
                     case PrintJobAction.Reset:
-                        if (Document == null)
-                        {
-                            Document = new Credentials();
-                        }
-                        Result = Printer.Reset((Credentials)Document);
+                        Result = Printer.Reset((Credentials)(Document ?? new Credentials()));
                         break;
                     default:
                         break;

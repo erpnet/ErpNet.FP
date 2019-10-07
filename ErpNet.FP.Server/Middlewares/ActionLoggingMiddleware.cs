@@ -49,7 +49,7 @@
             try
             {
                 response.Body.Seek(0, SeekOrigin.Begin);
-                using StreamReader streamReader = new StreamReader(response.Body);
+                var streamReader = new StreamReader(response.Body);
                 string bodyAsText = await streamReader.ReadToEndAsync();
                 response.Body.Seek(0, SeekOrigin.Begin);
                 Log.Information($"-- HTTP Response -- Code: {response.StatusCode}, Body({bodyAsText.Length}):{(bodyAsText.Length == 0 ? string.Empty : Environment.NewLine)}{bodyAsText}");
