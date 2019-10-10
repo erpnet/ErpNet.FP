@@ -57,8 +57,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 Model = modelName,
                 FirmwareVersion = commaFields[1],
                 Manufacturer = "Datecs",
-                CommentTextMaxLength = 42, // Set by Datecs protocol
-                ItemTextMaxLength = 36, // Set by Datecs protocol
+                CommentTextMaxLength = 40, // Set 42 by Datecs protocol, but in reality is 40 symbols
+                ItemTextMaxLength = 34, // Set by 36 Datecs protocol, but in reality is 34 symbols
                 OperatorPasswordMaxLength = 8 // Set by Datecs protocol
             };
             return info;
