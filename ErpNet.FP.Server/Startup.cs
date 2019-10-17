@@ -69,8 +69,6 @@
             {
                 endpoints.MapControllers();
             });
-
-            SimpleDiscoveryService.ServerAddresses = app.ServerFeatures.Get<IServerAddressesFeature>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -84,9 +82,6 @@
 
             // KeepAliveHostedService will warm up ServiceSingleton context at start
             services.AddHostedService<KeepAliveHostedService>();
-#if Windows
-            services.AddHostedService<SimpleDiscoveryService>();
-#endif
         }
 
         public IConfiguration Configuration { get; }

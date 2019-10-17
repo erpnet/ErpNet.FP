@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="index.css?ver=1.0.1010.1440">
+    <link rel="stylesheet" href="index.css?ver=1.0.1017.1400">
     <title>ErpNet.FP Admin Page</title>
 </head>
 
@@ -41,7 +41,7 @@
             </legend>
             <input type="checkbox" id="NewPrinterModal" class="modal">
             <div>
-                <div class="card">
+                <div class="card" style="overflow: hidden; padding-bottom: 10px;">
                     <label for="NewPrinterModal" class="modal-close"></label>
                     <h3 class="section">New printer configuration</h3>
                     <div class="input-group vertical">
@@ -49,8 +49,33 @@
                         <input id="NewPrinterId" value="" />
                         <label>Printer's Uri:</label>
                         <input id="NewPrinterUri" value="" />
+                        <select id="protocols" onchange="protocolSelected(this.value)">
+                            <option>Select Uri template...</option>
+                            <option>bg.dt.x.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.dt.x.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.dt.p.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.dt.p.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.dt.c.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.dt.c.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.zk.zfp.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.zk.zfp.com://&lt;com-port&gt;</option>
+                            <option>bg.zk.v2.zfp.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.zk.v2.zfp.com://&lt;com-port&gt;</option>
+                            <option>bg.ed.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.ed.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.dy.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.dy.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.in.isl.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.in.isl.com://&lt;com-port&gt;</option>
+                            <option>bg.is.icp.tcp://&lt;ip-address&gt;:&lt;port&gt;</option>
+                            <option>bg.is.icp.com://&lt;com-port&gt;</option>
+                        </select>
                         <button class="small primary" onclick="configurePrinter()">Detect and add the printer...</button>
                     </div>
+                    <ul>
+                        <li><small>For tcp:// replace <b>&lt;ip-address&gt;</b> and <b>&lt;port&gt;</b> with the device's ip address and port, i.e. bg.dt.x.isl.tcp://<b>192.168.1.55</b>:<b>9001</b></small></li>
+                        <li><small>For com:// replace <b>&lt;com-port&gt;</b> with the device's com port, i.e. bg.dt.x.isl.com://<b>COM5</b> on Windows, or bg.dt.x.isl.com://<b>/dev/ttyS0</b> on Linux</small></li>
+                    </ul>
                 </div>
             </div>
             <div id="ConfiguredPrintersList" class="collapse">
@@ -71,7 +96,7 @@
     <div id="ToastArea"></div>
 
     <script src="index.js"></script>
-    <script src="app.js?ver=1.0.1010.1440"></script>
+    <script src="app.js?ver=1.0.1017.1400"></script>
 </body>
 
 </html>

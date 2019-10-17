@@ -302,6 +302,19 @@ function resetPrinter(printerId) {
     })
 }
 
+function protocolSelected(protocolTemplate) {
+    var delimiter = "://"
+    var oldValue = $("#NewPrinterUri").val()
+    if (oldValue) {
+        var oldParts = oldValue.split(delimiter, 2)
+        if (oldParts.length == 2) {
+            newParts = protocolTemplate.split(delimiter, 2)
+            $("#NewPrinterUri").val(newParts[0] + delimiter + oldParts[1])
+        }
+    } else {
+        $("#NewPrinterUri").val(protocolTemplate)
+    }
+}
 
 function showToastMessage(msg) {
     var toastArea = $("#ToastArea")
