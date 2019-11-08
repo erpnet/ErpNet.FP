@@ -14,6 +14,7 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Print Fiscal Receipt](#post-print-fiscal-receipt)
 * `POST` [Print Fiscal Receipt With Operator Credentials](#post-print-fiscal-receipt-with-operator-credentials)
 * `POST` [Print Fiscal Receipt (Async)](#post-print-fiscal-receipt-async)
+* 'POST' [Print Fiscal Receipt (Idempotent)](#post-print-fiscal-receipt-idempotent)
 * `GET` [Get Async Task Information](#get-get-async-task-information)
 * `POST` [Print Reversal Receipt](#post-print-reversal-receipt)
 * `POST` [Print Deposit Money Receipt](#post-print-deposit-money-receipt)
@@ -442,6 +443,31 @@ It is the same as when calling Print Receipt.
 ```
 **"taskId"** result
 The **"taskId"** result is demonstated in the example return value. It contains a single **taskId** token, which can be used to later make **"taskinfo"** requests to check its status. Bellow you will see how we will use the returned **taskId** identifier **QHC_H_7u8EaAjTB7WPEP3g** to get the status of, or result information of the printed receipt.
+
+## `POST` Print Fiscal Receipt (Idempotent)
+Prints a fiscal receipt to the printer and guarantees idempotency.
+Idempotency, if properly implemented, guarantees that the caller will have total guarantee whether the document was printed or not, even in the case of (temporary) network problems.
+
+### Idempotency
+In order to achieve idempotency, the caller should create (and provide it as paramater) a unique taskId for each print task. 
+This would allow the caller to properly check the task status, even in the case when the inital call has not returned response properly (due to network issues, for example).
+
+It is suggested, that the taskId is a short, but unique string, serialized as base64 string.
+
+### Example request uri:
+```
+http://localhost:8001/printers/dt525860/receipt?asyncTimeout=0&taskId=QHC_H_7u8EaAjTB7WPEP3g
+```
+
+### Example request body
+It is the same as when calling Print Receipt.
+
+### Example response 
+```json
+{
+  "taskId": "QHC_H_7u8EaAjTB7WPEP3g"
+}
+```
 
 ## `GET` Get Async Task Information
 Returns information about an async printing task. Async printing tasks are created, when **"asyncTimeout"** parameter is used on any printing task. For more information about creating async printing tasks, see the documentation of "Print Fiscal Receipt (Async)".
