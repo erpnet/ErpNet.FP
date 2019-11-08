@@ -433,7 +433,7 @@ The **"asyncTimeout"** parameter specifies the timeout, after which the task is 
 NOTE: Asynchrounous execution (through the asyncTimeout parameter) is available for all print requests.
 
 ### Example request body
-It is the same as when calling Print Receipt.
+Тhe same as when calling Print Receipt.
 
 ### Example response 
 ```json
@@ -449,7 +449,7 @@ Prints a fiscal receipt to the printer and guarantees idempotency.
 Idempotency, if properly implemented, guarantees that the caller will have total guarantee whether the document was printed or not, even in the case of (temporary) network problems.
 
 ### Idempotency
-In order to achieve idempotency, the caller should create (and provide it as paramater) a unique taskId for each print task. 
+In order to achieve idempotency, the caller should create (and provide it as а paramater) a unique taskId for each print task. 
 This would allow the caller to properly check the task status, even in the case when the inital call has not returned response properly (due to network issues, for example).
 
 It is suggested, that the taskId is a short, but unique string, serialized as base64 string.
@@ -460,7 +460,7 @@ http://localhost:8001/printers/dt525860/receipt?asyncTimeout=0&taskId=QHC_H_7u8E
 ```
 
 ### Example request body
-It is the same as when calling Print Receipt.
+Тhe same as when calling Print Receipt.
 
 ### Example response 
 ```json
