@@ -141,7 +141,7 @@
                     {
                         status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
                     }
-                    if (item.Quantity <= 0)
+                    if (item.Quantity < 0)
                     {
                         status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
                     }
@@ -157,7 +157,7 @@
                     {
                         status.AddError(e.Code, e.Message);
                     }
-                    var quantity = Math.Round(item.Quantity, 3, MidpointRounding.AwayFromZero);
+                    var quantity = Math.Round(item.Quantity == 0m ? 1m : item.Quantity, 3, MidpointRounding.AwayFromZero);
                     var unitPrice = Math.Round(item.UnitPrice, 2, MidpointRounding.AwayFromZero);
                     var itemPrice = quantity * unitPrice;
                     switch (item.PriceModifierType)

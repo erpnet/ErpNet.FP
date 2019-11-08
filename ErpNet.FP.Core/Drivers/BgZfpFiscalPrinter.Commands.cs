@@ -133,7 +133,11 @@
                     operatorPassword,
                 "1", // Protocol: Detailed
                 "1", // Protocol: Include VAT
-                "4$"+uniqueSaleNumber, // Protocol: Buffered printing (faster), delimiter '$' before USN
+                "2$"+uniqueSaleNumber, // Protocol: Buffered printing (4) is faster than (2) postponed printing, 
+                // but there are problems with read timeout because 
+                // the Fiscal Device becomes non-responsable when 
+                // there are many rows to be printed.
+                // Delimiter '$' before USN.
             }));
         }
 

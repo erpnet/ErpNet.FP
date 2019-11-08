@@ -207,7 +207,7 @@
                 itemText.WithMaxLength(Info.ItemTextMaxLength),
                 GetTaxGroupText(taxGroup),
                 unitPrice.ToString("F2", CultureInfo.InvariantCulture),
-                quantity.ToString(CultureInfo.InvariantCulture),
+                quantity == 0m ? string.Empty : quantity.ToString(CultureInfo.InvariantCulture),
                 PriceModifierTypeToProtocolValue(),
                 priceModifierValue.ToString("F2", CultureInfo.InvariantCulture),
                 "0",
