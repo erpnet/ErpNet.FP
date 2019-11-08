@@ -14,7 +14,7 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Print Fiscal Receipt](#post-print-fiscal-receipt)
 * `POST` [Print Fiscal Receipt With Operator Credentials](#post-print-fiscal-receipt-with-operator-credentials)
 * `POST` [Print Fiscal Receipt (Async)](#post-print-fiscal-receipt-async)
-* 'POST' [Print Fiscal Receipt (Idempotent)](#post-print-fiscal-receipt-idempotent)
+* `POST` [Print Fiscal Receipt (Idempotent)](#post-print-fiscal-receipt-idempotent)
 * `GET` [Get Async Task Information](#get-get-async-task-information)
 * `POST` [Print Reversal Receipt](#post-print-reversal-receipt)
 * `POST` [Print Deposit Money Receipt](#post-print-deposit-money-receipt)
