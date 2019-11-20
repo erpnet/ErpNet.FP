@@ -327,7 +327,7 @@ Free support for ErpNet.FP is available on the https://www.facebook.com/groups/B
 If ErpNet.FP is "mission critical" to your company, or do not want to discuss your issues in public, the "Annual  Maintenance Subscription" or "AMS" might serve your needs better. You can contact Stantek Solutions at support@stantek.solutions, for more information.
 
 # License
-"Simplified BSD License" or "FreeBSD License", see [LICENSE.txt]
+"BSD Zero Clause License", see [LICENSE.txt]
 
 # Contributing
 See our [Contributing] document and our [Code of Conduct] document, to learn how to help us.
