@@ -322,7 +322,7 @@ For Linux, or as alternative for Windows and macOs, you can use Visual Studio Co
 # Support
 ErpNet.FP is free, open and works great. Most people use ErpNet.FP without any kind of support.
 
-Free support for SQLite is available on the https://www.facebook.com/groups/BgBusinessDev/. This group is monitored by a community of experts, including the core ErpNet.FP development team, who are able to resolve your problems with ErpNet.FP that you are likely to have. The main language of this group is Bulgarian, but you can post your questions in English.
+Free support for ErpNet.FP is available on the https://www.facebook.com/groups/BgBusinessDev/. This group is monitored by a community of experts, including the core ErpNet.FP development team, who are able to resolve your problems with ErpNet.FP that you are likely to have. The main language of this group is Bulgarian, but you can post your questions in English.
 
 If ErpNet.FP is "mission critical" to your company, or do not want to discuss your issues in public, the "Annual  Maintenance Subscription" or "AMS" might serve your needs better. You can contact Stantek Solutions at support@stantek.solutions, for more information.
 
