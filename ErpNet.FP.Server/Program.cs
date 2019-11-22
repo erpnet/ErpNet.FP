@@ -43,7 +43,7 @@
                     options.Configure(hostingContext.Configuration.GetSection("Kestrel"));
 
                     // Overriding some of the config values 
-                    options.AllowSynchronousIO = false;
+                    options.AllowSynchronousIO = true;
                     options.Limits.MaxRequestBodySize = 500 * 1024;
                 })
                 .UseStartup<Startup>()

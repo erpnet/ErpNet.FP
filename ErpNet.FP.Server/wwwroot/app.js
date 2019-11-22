@@ -30,6 +30,7 @@ function showAvailablePrinters() {
                     '<button class="small primary" onclick="printZReport(\'' + printerId + '\')">Z-Report</button>' +
                     '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">X-Report</button>' +
                     '<button class="small primary" onclick="resetPrinter(\'' + printerId + '\')">Reset</button>' +
+                    '<button class="small primary" title="Sync the printer time with the current time on the PC" onclick="syncTime(\'' + printerId + '\')">Sync Time</button>' +
                     '</div>'
                 this.append(section)
             }
@@ -218,11 +219,39 @@ function saveSettingsForPrinter(printerId) {
     })
 }
 
+function syncTime(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/datetime',
+        data: "{}",
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            if (data.ok) {
+                showToastMessage("The printer's time is sync'ed with the current time on the PC.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot sync printer's time: " + errors.trim())
+            }
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot sync printer's time.")
+        }
+    })
+}
+
 function printZReport(printerId) {
     $.ajax({
         type: 'POST',
         url: '/printers/' + printerId + '/zreport',
-        data: {},
+        data: {"deviceDateTime":""},
         contentType: 'application/json',
         dataType: 'json',
         timeout: 0,
