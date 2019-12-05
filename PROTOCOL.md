@@ -224,7 +224,7 @@ Root elements
 * **"payments"** - list of payments.
 
 ### "items"
-Contains one entry for each fiscal or comment line items. The line items are printed in the same order on the fiscal printer. Comment lines can be intermixed with the fiscal line items.
+Contains one entry for each fiscal or comment line items with itemType="comment" or itemType="footer-comment". The line items are printed in the same order on the fiscal printer. Comment lines (itemType="comment") can be intermixed with the fiscal line items. There are another type of comments - footer comments, represented with itemType="footer-comment", which prints comments after the payment area of the fiscal receipt.
 The fiscal line **items** can have the following fields set:
 * **"text"** - the name of the product
 * **"quantiy"** - the quantity sold
