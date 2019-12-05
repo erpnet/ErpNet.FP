@@ -282,6 +282,10 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
       "taxGroup": 2,
       "priceModifierValue": 10,
       "priceModifierType": "discount-percent"
+    },
+    {
+      "type": "footer-comment",
+      "text": "YOU ARE WELCOME!"
     }
   ],
   "payments": [
