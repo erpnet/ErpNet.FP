@@ -5,6 +5,7 @@ namespace ErpNet.FP.Core.Provider
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using ErpNet.FP.Core.Configuration;
     using ErpNet.FP.Core.Drivers;
     using Serilog;
 
@@ -13,9 +14,10 @@ namespace ErpNet.FP.Core.Provider
     /// </summary>
     public class Provider
     {
-        private readonly Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =
-            new Dictionary<string, (FiscalPrinterDriver driver, Transport transport)>();
-
+        public Provider(ServiceOptions serviceOptions)
+        {
+            this.ServiceOptions = serviceOptions;
+        }
         /// <summary>
         /// Adds the specified protocol to the provider.
         /// A protocol consists of a printer driver and a transport.
@@ -42,7 +44,7 @@ namespace ErpNet.FP.Core.Provider
                 Log.Information($"Probing {uri}...");
                 try
                 {
-                    printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel));
+                    printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel, ServiceOptions));
                     printer.DeviceInfo.Uri = uri;
 
                     // We found our driver, so do not test more
@@ -156,7 +158,7 @@ namespace ErpNet.FP.Core.Provider
         /// The fiscal printer object.
         /// </returns>
         /// <exception cref="InvalidOperationException">When the printer is not found or the URI is not correctly formatted.</exception>
-        public IFiscalPrinter Connect(string deviceUri, bool autoDetect = true, IDictionary<string, string>? options = null)
+        public IFiscalPrinter Connect(string deviceUri, ServiceOptions serviceOptions, bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var match = uriPattern.Match(deviceUri);
             if (!match.Success)
@@ -179,11 +181,14 @@ namespace ErpNet.FP.Core.Provider
 
             var channel = transport.OpenChannel(address);
             var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
-            var p = driver.Connect(channel, autoDetect, options);
+            var p = driver.Connect(channel, serviceOptions, autoDetect, options);
             p.DeviceInfo.Uri = uri;
             return p;
         }
 
+        private readonly Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =
+            new Dictionary<string, (FiscalPrinterDriver driver, Transport transport)>();
 
+        public ServiceOptions ServiceOptions { get; }
     }
 }

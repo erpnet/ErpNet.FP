@@ -1,6 +1,7 @@
 ﻿namespace ErpNet.FP.Core.Drivers.BgTremol
 {
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the Zfp V2 implementation of Tremol Bulgaria.
@@ -8,8 +9,11 @@
     /// <seealso cref="ErpNet.FP.Drivers.BgTremolZfpV2FiscalPrinter" />
     public partial class BgTremolZfpV2FiscalPrinter : BgZfpFiscalPrinter
     {
-        public BgTremolZfpV2FiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        public BgTremolZfpV2FiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
         public override IDictionary<string, string>? GetDefaultOptions()
         {

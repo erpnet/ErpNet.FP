@@ -3,15 +3,20 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
     using System;
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     public class BgDatecsXIslFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "DT";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.x.isl";
 
-        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            bool autoDetect = true, 
+            IDictionary<string, string>? options = null)
         {
-            var fiscalPrinter = new BgDatecsXIslFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgDatecsXIslFiscalPrinter(channel, serviceOptions, options);
             var rawDeviceInfoCacheKey = $"x.isl.{channel.Descriptor}";
             var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
             if (rawDeviceInfo == null)

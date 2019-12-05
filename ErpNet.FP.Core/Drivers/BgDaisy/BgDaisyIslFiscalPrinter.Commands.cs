@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
@@ -33,12 +35,14 @@
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            return new Dictionary<PaymentType, string> {
+            var paymentTypeMappings = new Dictionary<PaymentType, string> {
                 { PaymentType.Cash,       "P" },
                 { PaymentType.Card,       "C" },
                 { PaymentType.Check,      "N" },
                 { PaymentType.Reserved1,  "D" }
             };
+            ServiceOptions.RemapPaymentTypes(Info.SerialNumber, paymentTypeMappings);
+            return paymentTypeMappings;
         }
 
         // 6 Bytes x 8 bits

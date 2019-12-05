@@ -50,7 +50,7 @@
             var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
 
             // Add drivers and their compatible transports to the provider.
-            Provider = new Provider()
+            Provider = new Provider(configOptions)
                 // Isl X Frame
                 .Register(datecsXIsl, comTransport)
                 .Register(datecsXIsl, tcpTransport)
@@ -83,6 +83,7 @@
                 updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
                 updatedConfigOptions.ServerId = configOptions.ServerId;
                 updatedConfigOptions.Printers = configOptions.Printers ?? new Dictionary<string, PrinterConfig>();
+                updatedConfigOptions.PrintersProperties = configOptions.PrintersProperties ?? new Dictionary<string, PrinterProperties> { };
             });
         }
     }

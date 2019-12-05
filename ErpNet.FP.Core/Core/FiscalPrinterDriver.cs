@@ -2,6 +2,7 @@
 namespace ErpNet.FP.Core
 {
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
     using ErpNet.FP.Core.Helpers;
 
     /// <summary>
@@ -30,8 +31,10 @@ namespace ErpNet.FP.Core
         /// </returns>
         public abstract IFiscalPrinter Connect(
             IChannel channel,
+            ServiceOptions serviceOptions,
             bool autoDetect = true,
-            IDictionary<string, string>? options = null);
+            IDictionary<string, string>? options = null
+            );
 
         public static ExpiringCache<string, string> Cache = new ExpiringCache<string, string>();
     }

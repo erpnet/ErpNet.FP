@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the Zfp implementation.
@@ -10,8 +11,11 @@
     /// <seealso cref="ErpNet.FP.Core.Drivers.BgFiscalPrinter" />
     public partial class BgZfpFiscalPrinter : BgFiscalPrinter
     {
-        public BgZfpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        public BgZfpFiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
         public override string GetTaxGroupText(TaxGroup taxGroup)
         {

@@ -17,6 +17,8 @@
 
         Dictionary<string, PrinterConfig> ConfiguredPrinters { get; }
 
+        Dictionary<string, PrinterProperties> PrintersProperties { get; set; }
+
         Task<object> RunAsync(PrintJob printJob);
 
         TaskInfoResult GetTaskInfo(string taskId);
@@ -46,14 +48,21 @@
 
         protected ServiceOptions configOptions = new ServiceOptions();
         public string ServerId { get; private set; } = string.Empty;
-        public Provider.Provider Provider { get; protected set; } = new Provider.Provider();
+        public Provider.Provider Provider { get; protected set; }
         public Dictionary<string, DeviceInfo> PrintersInfo { get; } = new Dictionary<string, DeviceInfo>();
         public Dictionary<string, IFiscalPrinter> Printers { get; } = new Dictionary<string, IFiscalPrinter>();
         public Dictionary<string, PrinterConfig> ConfiguredPrinters
         {
-            get
+            get => configOptions.Printers;
+        }
+
+        public Dictionary<string, PrinterProperties> PrintersProperties
+        {
+            get => configOptions.PrintersProperties;
+            set
             {
-                return configOptions.Printers;
+                configOptions.PrintersProperties = value;
+                WriteOptions();
             }
         }
         public ConcurrentQueue<string> TaskQueue { get; } = new ConcurrentQueue<string>();
@@ -80,6 +89,11 @@
                 configOptions.UdpBeaconPort = value;
                 WriteOptions();
             }
+        }
+
+        public ServiceControllerContext()
+        {
+            Provider = new Provider.Provider(configOptions);
         }
 
         protected abstract void SetupProvider();
@@ -143,7 +157,7 @@
                             {
                                 try
                                 {
-                                    var printer = Provider.Connect(printerSetting.Value.Uri, false, null);
+                                    var printer = Provider.Connect(printerSetting.Value.Uri, configOptions, false, null);
                                     Log.Information($"{logString}, OK");
                                     PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
                                     Printers.Add(printerSetting.Key, printer);

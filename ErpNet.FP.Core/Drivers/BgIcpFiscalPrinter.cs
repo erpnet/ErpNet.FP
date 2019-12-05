@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the Icp implementation of Isl Bulgaria.
@@ -10,8 +11,11 @@
     /// <seealso cref="ErpNet.FP.Drivers.BgIcpFiscalPrinter" />
     public partial class BgIcpFiscalPrinter : BgFiscalPrinter
     {
-        public BgIcpFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        public BgIcpFiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
 
         public override DeviceStatusWithDateTime CheckStatus()

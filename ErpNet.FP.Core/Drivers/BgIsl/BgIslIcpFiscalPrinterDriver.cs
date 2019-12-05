@@ -3,15 +3,20 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
 {
     using System;
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     public class BgIslIcpFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "IS";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.icp";
 
-        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            bool autoDetect = true, 
+            IDictionary<string, string>? options = null)
         {
-            var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, serviceOptions, options);
             var rawDeviceInfoCacheKey = $"icp.{channel.Descriptor}";
             var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
             if (rawDeviceInfo == null)

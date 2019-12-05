@@ -1,6 +1,7 @@
 ﻿namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the ISL implementation of Daisy Bulgaria.
@@ -8,8 +9,11 @@
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgDaisyIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgDaisyIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        public BgDaisyIslFiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
         public override IDictionary<string, string>? GetDefaultOptions()
         {

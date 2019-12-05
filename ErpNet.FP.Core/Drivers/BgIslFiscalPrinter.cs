@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the ISL implementation.
@@ -10,8 +11,11 @@
     /// <seealso cref="ErpNet.FP.BgFiscalPrinter" />
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
-        protected BgIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        protected BgIslFiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
         public override DeviceStatusWithDateTime CheckStatus()
         {

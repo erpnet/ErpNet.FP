@@ -1,6 +1,7 @@
 ﻿namespace ErpNet.FP.Core.Drivers.BgEltrade
 {
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     /// <summary>
     /// Fiscal printer using the ISL implementation of Eltrade Bulgaria.
@@ -8,8 +9,11 @@
     /// <seealso cref="ErpNet.FP.Drivers.BgIslFiscalPrinter" />
     public partial class BgEltradeIslFiscalPrinter : BgIslFiscalPrinter
     {
-        public BgEltradeIslFiscalPrinter(IChannel channel, IDictionary<string, string>? options = null)
-        : base(channel, options) { }
+        public BgEltradeIslFiscalPrinter(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            IDictionary<string, string>? options = null)
+        : base(channel, serviceOptions, options) { }
 
         public override IDictionary<string, string>? GetDefaultOptions()
         {

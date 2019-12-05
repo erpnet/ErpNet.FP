@@ -3,6 +3,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
 {
     using System;
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     public class BgDaisyIslFiscalPrinterDriver : FiscalPrinterDriver
     {
@@ -11,9 +12,13 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.isl";
 
 
-        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            bool autoDetect = true, 
+            IDictionary<string, string>? options = null)
         {
-            var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgDaisyIslFiscalPrinter(channel, serviceOptions, options);
             var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}";
             var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
             if (rawDeviceInfo == null)

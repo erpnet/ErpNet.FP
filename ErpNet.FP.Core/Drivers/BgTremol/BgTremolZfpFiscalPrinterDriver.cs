@@ -3,6 +3,7 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
 {
     using System;
     using System.Collections.Generic;
+    using ErpNet.FP.Core.Configuration;
 
     public class BgTremolZfpFiscalPrinterDriver : FiscalPrinterDriver
     {
@@ -10,9 +11,13 @@ namespace ErpNet.FP.Core.Drivers.BgTremol
         protected readonly string SerialNumberPrefix = "ZK";
         public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.zfp";
 
-        public override IFiscalPrinter Connect(IChannel channel, bool autoDetect = true, IDictionary<string, string>? options = null)
+        public override IFiscalPrinter Connect(
+            IChannel channel, 
+            ServiceOptions serviceOptions, 
+            bool autoDetect = true, 
+            IDictionary<string, string>? options = null)
         {
-            var fiscalPrinter = new BgTremolZfpFiscalPrinter(channel, options);
+            var fiscalPrinter = new BgTremolZfpFiscalPrinter(channel, serviceOptions, options);
             var rawDeviceInfoCacheKey = $"zfp.{channel.Descriptor}";
             var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
             if (rawDeviceInfo == null)

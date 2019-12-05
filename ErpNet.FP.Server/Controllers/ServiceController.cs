@@ -34,9 +34,7 @@
         // GET vars
         [HttpGet("vars")]
         public ActionResult<ServerVariables> Vars()
-        {
-            return serverVariables;
-        }
+            => serverVariables;
 
         // GET toggleautodetect
         [HttpGet("toggleautodetect")]
@@ -73,12 +71,23 @@
             }
         }
 
+        // GET printersprops
+        [HttpGet("printersprops")]
+        public ActionResult<Dictionary<string, PrinterProperties>> GetPrinterSpecificProperties()
+            => context.PrintersProperties;
+
+        // POST printersprops
+        [HttpPost("printersprops")]
+        public ActionResult<Dictionary<string, PrinterProperties>> PrinterSpecificProperties(Dictionary<string, PrinterProperties> printersProperties)
+        {
+            context.PrintersProperties = printersProperties;
+            return context.PrintersProperties;
+        }
+
         // GET printers
         [HttpGet("printers")]
         public ActionResult<Dictionary<string, PrinterConfig>> Configured()
-        {
-            return context.ConfiguredPrinters;
-        }
+            => context.ConfiguredPrinters;
 
         // POST printers/configure
         [HttpPost("printers/configure")]
