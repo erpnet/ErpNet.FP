@@ -16,7 +16,7 @@
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            return new Dictionary<PaymentType, string> {
+            var paymentTypeMappings = new Dictionary<PaymentType, string> {
                 { PaymentType.Cash,          "P" },
                 { PaymentType.Check,         "N" },
                 { PaymentType.Coupons,       "C" },
@@ -29,6 +29,8 @@
                 { PaymentType.Reserved1,     "Q" },
                 { PaymentType.Reserved2,     "R" }
             };
+            ServiceOptions.RemapPaymentTypes(Info.SerialNumber, paymentTypeMappings);
+            return paymentTypeMappings;
         }
 
         public override (string, DeviceStatus) OpenReceipt(

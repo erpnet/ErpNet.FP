@@ -108,7 +108,7 @@
                         return (receiptInfo, deviceStatus);
                     }
                 }
-                else
+                else if (item.Type == ItemType.Sale)
                 {
                     if (item.PriceModifierValue < 0m)
                     {
@@ -190,6 +190,22 @@
                     if (!deviceStatus.Ok)
                     {
                         deviceStatus.AddInfo($"Error occurred in Payment {paymentNumber}");
+                        return (receiptInfo, deviceStatus);
+                    }
+                }
+            }
+
+            itemNumber = 0;
+            // Receipt items
+            foreach (var item in receipt.Items)
+            {
+                itemNumber++;
+                if (item.Type == ItemType.FooterComment)
+                {
+                    (_, deviceStatus) = AddComment(receipt.UniqueSaleNumber, item.Text);
+                    if (!deviceStatus.Ok)
+                    {
+                        deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
                         return (receiptInfo, deviceStatus);
                     }
                 }

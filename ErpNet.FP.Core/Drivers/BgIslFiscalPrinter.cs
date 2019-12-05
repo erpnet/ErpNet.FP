@@ -117,7 +117,7 @@
                     {
                         (_, deviceStatus) = AddComment(item.Text);
                     }
-                    else
+                    else if (item.Type == ItemType.Sale)
                     {
                         try
                         {
@@ -186,6 +186,21 @@
                 }
             }
 
+            itemNumber = 0;
+            if (receipt.Items != null) foreach (var item in receipt.Items)
+                {
+                    itemNumber++;
+                    if (item.Type == ItemType.FooterComment)
+                    {
+                        (_, deviceStatus) = AddComment(item.Text);
+                        if (!deviceStatus.Ok)
+                        {
+                            deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                            return (receiptInfo, deviceStatus);
+                        }
+                    }
+                }
+
             // Get the receipt date and time (current fiscal device date and time)
             DateTime? dateTime;
             (dateTime, deviceStatus) = GetDateTime();
@@ -229,7 +244,6 @@
 
             return (receiptInfo, deviceStatus);
         }
-
 
         public override (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt)
         {

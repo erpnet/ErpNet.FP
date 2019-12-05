@@ -35,7 +35,7 @@
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            return new Dictionary<PaymentType, string> {
+            var paymentTypeMappings = new Dictionary<PaymentType, string> {
                 { PaymentType.Cash,          "0" },
                 { PaymentType.Check,         "1" },
                 { PaymentType.Coupons,       "2" },
@@ -48,6 +48,8 @@
                 { PaymentType.Reserved1,     "9" },
                 { PaymentType.Reserved2,    "10" }
             };
+            ServiceOptions.RemapPaymentTypes(Info.SerialNumber, paymentTypeMappings);
+            return paymentTypeMappings;
         }
 
         public override DeviceStatusWithDateTime CheckStatus()
@@ -110,7 +112,7 @@
                     {
                         (_, deviceStatus) = AddComment(item.Text);
                     }
-                    else
+                    else if (item.Type == ItemType.Sale)
                     {
                         try
                         {
@@ -176,6 +178,22 @@
                         return (receiptInfo, deviceStatus);
                     }
                 }
+
+                itemNumber = 0;
+                if (receipt.Items != null) foreach (var item in receipt.Items)
+                    {
+                        itemNumber++;
+                        if (item.Type == ItemType.FooterComment)
+                        {
+                            (_, deviceStatus) = AddComment(item.Text);
+                            if (!deviceStatus.Ok)
+                            {
+                                deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
+                                return (receiptInfo, deviceStatus);
+                            }
+                        }
+                    }
+
                 (_, deviceStatus) = CloseReceipt();
                 if (!deviceStatus.Ok)
                 {
@@ -186,27 +204,6 @@
             }
 
             return GetLastReceiptInfo();
-        }
-
-        protected virtual (ReceiptInfo, DeviceStatus) GetLastReceiptInfo()
-        {
-            // QR Code Data Format: <FM Number>*<Receipt Number>*<Receipt Date>*<Receipt Hour>*<Receipt Amount>
-            var (qrCodeData, deviceStatus) = GetLastReceiptQRCodeData();
-            if (!deviceStatus.Ok)
-            {
-                deviceStatus.AddInfo($"Error occurred while reading last receipt QR code data");
-                return (new ReceiptInfo(), deviceStatus);
-            }
-
-            var qrCodeFields = qrCodeData.Split('*');
-            return (new ReceiptInfo
-            {
-                ReceiptNumber = qrCodeFields[1],
-                ReceiptDateTime = DateTime.ParseExact(string.Format(
-                    $"{qrCodeFields[2]} {qrCodeFields[3]}"),
-                    "yyyy-MM-dd HH:mm:ss",
-                    System.Globalization.CultureInfo.InvariantCulture)
-            }, deviceStatus);
         }
 
         public override (ReceiptInfo, DeviceStatus) PrintReversalReceipt(ReversalReceipt reversalReceipt)
@@ -230,7 +227,65 @@
                 return (new ReceiptInfo(), deviceStatus);
             }
 
-            return PrintReceiptBody(reversalReceipt);
+            ReceiptInfo receiptInfo;
+            (receiptInfo, deviceStatus) = PrintReceiptBody(reversalReceipt);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+            }
+
+            return (receiptInfo, deviceStatus);
+        } 
+
+        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
+        {
+            // Abort all unfinished or erroneus receipts
+            AbortReceipt();
+
+            // Receipt header
+            var (_, deviceStatus) = OpenReceipt(
+                receipt.UniqueSaleNumber,
+                receipt.Operator,
+                receipt.OperatorPassword
+            );
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
+                return (new ReceiptInfo(), deviceStatus);
+            }
+
+            ReceiptInfo receiptInfo;
+            (receiptInfo, deviceStatus) = PrintReceiptBody(receipt);
+            if (!deviceStatus.Ok)
+            {
+                AbortReceipt();
+                deviceStatus.AddInfo($"Error occured while printing receipt items");
+            }
+
+            return (receiptInfo, deviceStatus);
+        }
+
+        protected virtual (ReceiptInfo, DeviceStatus) GetLastReceiptInfo()
+        {
+            // QR Code Data Format: <FM Number>*<Receipt Number>*<Receipt Date>*<Receipt Hour>*<Receipt Amount>
+            var (qrCodeData, deviceStatus) = GetLastReceiptQRCodeData();
+            if (!deviceStatus.Ok)
+            {
+                deviceStatus.AddInfo($"Error occurred while reading last receipt QR code data");
+                return (new ReceiptInfo(), deviceStatus);
+            }
+
+            var qrCodeFields = qrCodeData.Split('*');
+            return (new ReceiptInfo
+            {
+                ReceiptNumber = qrCodeFields[1],
+                ReceiptDateTime = DateTime.ParseExact(string.Format(
+                    $"{qrCodeFields[2]} {qrCodeFields[3]}"),
+                    "yyyy-MM-dd HH:mm:ss",
+                    System.Globalization.CultureInfo.InvariantCulture)
+            }, deviceStatus);
         }
 
         public override DeviceStatusWithCashAmount Cash(Credentials credentials)
@@ -256,27 +311,6 @@
                 }
             }
             return statusEx;
-        }
-
-        public override (ReceiptInfo, DeviceStatus) PrintReceipt(Receipt receipt)
-        {
-            // Abort all unfinished or erroneus receipts
-            AbortReceipt();
-
-            // Receipt header
-            var (_, deviceStatus) = OpenReceipt(
-                receipt.UniqueSaleNumber,
-                receipt.Operator,
-                receipt.OperatorPassword
-            );
-            if (!deviceStatus.Ok)
-            {
-                AbortReceipt();
-                deviceStatus.AddInfo($"Error occured while opening new fiscal receipt");
-                return (new ReceiptInfo(), deviceStatus);
-            }
-
-            return PrintReceiptBody(receipt);
         }
 
         public override DeviceStatus PrintZReport(Credentials credentials)

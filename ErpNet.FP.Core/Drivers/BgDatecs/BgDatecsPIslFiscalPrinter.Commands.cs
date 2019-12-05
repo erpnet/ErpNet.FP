@@ -125,7 +125,7 @@
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            return new Dictionary<PaymentType, string> {
+            var paymentTypeMappings = new Dictionary<PaymentType, string> {
                 { PaymentType.Cash,          "P" },
                 { PaymentType.Check,         "C" },
                 { PaymentType.Coupons,       "m" },
@@ -138,6 +138,8 @@
                 { PaymentType.Reserved1,     "I" },
                 { PaymentType.Reserved2,     "L" }
             };
+            ServiceOptions.RemapPaymentTypes(Info.SerialNumber, paymentTypeMappings);
+            return paymentTypeMappings;
         }
 
         // 6 Bytes x 8 bits

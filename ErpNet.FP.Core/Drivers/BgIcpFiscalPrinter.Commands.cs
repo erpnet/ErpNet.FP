@@ -13,7 +13,7 @@
     {
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
-            return new Dictionary<PaymentType, string> {
+            var paymentTypeMappings = new Dictionary<PaymentType, string> {
                 { PaymentType.Cash,          "0" },
                 { PaymentType.Check,         "1" },
                 { PaymentType.Coupons,       "2" },
@@ -26,6 +26,8 @@
                 { PaymentType.Reserved1,     "9" },
                 { PaymentType.Reserved2,     "A" }
             };
+            ServiceOptions.RemapPaymentTypes(Info.SerialNumber, paymentTypeMappings);
+            return paymentTypeMappings;
         }
 
         public override string GetTaxGroupText(TaxGroup taxGroup)

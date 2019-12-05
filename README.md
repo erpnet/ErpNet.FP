@@ -45,6 +45,10 @@ POST /printers/dt517985/receipt
       "taxGroup": 2,
       "priceModifierValue": 10,
       "priceModifierType": "discount-percent"
+    },
+    {
+      "type": "footer-comment",
+      "text": "YOU ARE WELCOME!"
     }
   ],
   "payments": [

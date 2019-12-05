@@ -9,7 +9,9 @@
         [EnumMember(Value = "sale")]
         Sale,
         [EnumMember(Value = "comment")]
-        Comment
+        Comment,
+        [EnumMember(Value = "footer-comment")]
+        FooterComment
     }
 
     /// <summary>
