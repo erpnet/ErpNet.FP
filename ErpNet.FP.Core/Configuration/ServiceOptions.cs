@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using Newtonsoft.Json;
 
@@ -18,6 +20,7 @@
     public class PrinterProperties
     {
         public Dictionary<string, string> PaymentTypeMappings { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> PrinterConstants { get; set; } = new Dictionary<string, string>();
     }
 
     public class ServiceOptions
@@ -43,6 +46,33 @@
                     {
                         if (!string.IsNullOrEmpty(newValue)) {
                             map[pmt] = newValue;
+                        }
+                    }
+                }
+            }
+            RWLock.ExitReadLock();
+        }
+
+        public void ReconfigurePrinterConstants(DeviceInfo info)
+        {
+            RWLock.EnterReadLock();
+            if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
+            {
+                if (printerProperties.PrinterConstants.TryGetValue("commentTextMaxLength", out string commentTextMaxLength)) {
+                    if (int.TryParse(commentTextMaxLength, out int value)) {
+                        if (value > 0)
+                        {
+                            info.CommentTextMaxLength = value;
+                        }
+                    }
+                }
+                if (printerProperties.PrinterConstants.TryGetValue("itemTextMaxLength", out string itemTextMaxLength))
+                {
+                    if (int.TryParse(itemTextMaxLength, out int value))
+                    {
+                        if (value > 0)
+                        {
+                            info.ItemTextMaxLength = value;
                         }
                     }
                 }

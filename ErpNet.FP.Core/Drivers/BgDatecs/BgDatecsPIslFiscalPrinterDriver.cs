@@ -28,6 +28,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
             return fiscalPrinter;
         }
 
@@ -47,10 +48,17 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
                 }
 
-                if (modelName.EndsWith("X", System.StringComparison.Ordinal) || (
+                if (modelName.EndsWith("X", System.StringComparison.Ordinal) || 
+                    modelName.EndsWith("XR", System.StringComparison.Ordinal) || 
+                    modelName.EndsWith("XE", System.StringComparison.Ordinal)) 
+                {
+                    throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
+                }
+
+                if (
                     !modelName.StartsWith("FP", System.StringComparison.Ordinal) &&
                     !modelName.StartsWith("FMP", System.StringComparison.Ordinal) &&
-                    !modelName.StartsWith("SK", System.StringComparison.Ordinal)))
+                    !modelName.StartsWith("SK", System.StringComparison.Ordinal))
                 {
                     throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
                 }
@@ -62,9 +70,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 Model = modelName,
                 FirmwareVersion = commaFields[1],
                 Manufacturer = "Datecs",
-                CommentTextMaxLength = 40, // Set 42 by Datecs protocol, but in reality is 40 symbols
-                ItemTextMaxLength = 34, // Set by 36 Datecs protocol, but in reality is 34 symbols
-                OperatorPasswordMaxLength = 8 // Set by Datecs protocol
+                CommentTextMaxLength = 46,
+                ItemTextMaxLength = 34, 
+                OperatorPasswordMaxLength = 8 
             };
             return info;
         }

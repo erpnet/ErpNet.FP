@@ -1,5 +1,6 @@
 ﻿var availablePrinters = {}
 var availablePaymentTypes = ['cash', 'check', 'coupons', 'ext-coupons', 'packaging', 'internal-usage', 'damage', 'card', 'bank', 'reserved1', 'reserved2'];
+var availablePrinterConstantsNames = ['itemTextMaxLength', 'commentTextMaxLength'];
 var printerProperties = {}
 
 function showAvailablePrinters() {
@@ -26,9 +27,30 @@ function showAvailablePrinters() {
                     characteristics += '<li>' + characteristic + ':&nbsp;<strong>' + printer[characteristic] + '</strong></li>'
                 }
 
+                var printerProps = printerProperties[printer.serialNumber]
+
+                var printerConstantsContent =
+                    '<div class="section dark"><h5 style="padding: 0 em; margin: 0;">Printer constants override</h5></div>' +
+                    '<div class="section input-group horizontal">';
+                for (var pc in availablePrinterConstantsNames) {
+                    var printerConstantName = availablePrinterConstantsNames[pc]
+                    var printerConstantValue = ''
+                    if (printerProps) {
+                        var pv = printerProps.printerConstants[printerConstantName]
+                        if (pv) {
+                            printerConstantValue = pv
+                        }
+                    }
+                    printerConstantsContent +=
+                        '<label style="margin-right: 0;">' + printerConstantName + ':</label>' +
+                        '<input id="' + printer.serialNumber + '_pc_' + printerConstantName + '"' +
+                        ' title="Enter here the Printer Constant Value for \'' +
+                        printerConstantName + '\' payment type" style="margin-left: 0; padding: 0.2em; height: 1.5em; width: 5em;" value="' +
+                        printerConstantValue + '" onFocus="this.select()"/>&nbsp;';
+                }
+                printerConstantsContent += '</div>';
+
                 var paymentMappingsContent =
-                    '<br /><h4>Advanced properties for printer with serial number ' + printer.serialNumber + '... &#8964;</h4>' +
-                    '<div class="card fluid">' + 
                     '<div class="section dark"><h5 style="padding: 0 em; margin: 0;">Payment Type to the Printer Protocol\'s Raw Symbols mappings</h5></div>' + 
                     '<div class="section input-group horizontal">';
                 var printerProps = printerProperties[printer.serialNumber]
@@ -48,11 +70,7 @@ function showAvailablePrinters() {
                         paymentType + '\' payment type" style="margin-left: 0; padding: 0.2em; height: 1.5em; width: 1.5em;" value="' +
                         paymentMapping + '" maxlength="1" onFocus="this.select()"/>&nbsp;';
                 }
-                paymentMappingsContent +=
-                    '</div>' +
-                    '<div class="section"><i>If you leave the Printer Protocol\'s Raw Symbol Value empty, then the default value will be used. Fill only the values, that you want to override.</i></div>' +
-                    '<div class="section"><button class="small primary" onclick="applyChanges(\'' + printer.serialNumber + '\')">Apply changes</button></div>' +
-                    '</div>';
+                paymentMappingsContent += '</div>';
 
                 var section =
                     '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
@@ -63,7 +81,13 @@ function showAvailablePrinters() {
                     '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">X-Report</button>' +
                     '<button class="small primary" onclick="resetPrinter(\'' + printerId + '\')">Reset</button>' +
                     '<button class="small primary" title="Sync the printer time with the current time on the PC" onclick="syncTime(\'' + printerId + '\')">Sync Time</button>' +
+                    '<br /><h4>Advanced properties for printer with serial number ' + printer.serialNumber + '... &#8964;</h4>' +
+                    '<div class="card fluid">' +
+                    printerConstantsContent +
                     paymentMappingsContent +
+                    '<div class="section"><i>If you leave the Value empty, then the default value will be used. Fill only the values, that you want to override.</i></div>' +
+                    '<div class="section"><button class="small primary" onclick="applyChanges(\'' + printer.serialNumber + '\')">Apply changes</button></div>' +
+                    '</div>'+
                     '</div>'
                 this.append(section)
             }
@@ -88,13 +112,24 @@ function getPrinterProperties(serialNumber) {
 }
 
 function applyChanges(serialNumber) {
-    printerProperties[serialNumber] = { paymentTypeMappings: {}}
+    printerProperties[serialNumber] = {
+        paymentTypeMappings: {},
+        printerConstants: {}
+    }
     for (var pti in availablePaymentTypes) {
         var paymentType = availablePaymentTypes[pti]
         var input = $('#' + serialNumber + '_pt_' + paymentType);
         var v = input.val()
         if (v) {
             printerProperties[serialNumber].paymentTypeMappings[paymentType] = v
+        }
+    }
+    for (var pci in availablePrinterConstantsNames) {
+        var printerConstantName = availablePrinterConstantsNames[pci]
+        var input = $('#' + serialNumber + '_pc_' + printerConstantName);
+        var v = input.val()
+        if (v) {
+            printerProperties[serialNumber].printerConstants[printerConstantName] = v
         }
     }
     console.log("props", printerProperties)

@@ -28,6 +28,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
             return fiscalPrinter;
         }
 
@@ -43,6 +44,8 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             return modelName switch
             {
                 "FP-700X" => 48,
+                "FP-700XR" => 48,
+                "FP-700XE" => 48,
                 "FMP-350X" => 48,
                 "FMP-55X" => 32,
                 _ => 42,
@@ -65,7 +68,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
                 }
 
-                if (!modelName.EndsWith("X", System.StringComparison.Ordinal))
+                if (!modelName.EndsWith("X", System.StringComparison.Ordinal) &&
+                    !modelName.EndsWith("XR", System.StringComparison.Ordinal) &&
+                    !modelName.EndsWith("XE", System.StringComparison.Ordinal))
                 {
                     throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
                 }

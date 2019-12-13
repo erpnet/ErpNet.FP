@@ -28,6 +28,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
             return fiscalPrinter;
         }
 
@@ -47,9 +48,16 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                     throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
                 }
 
-                if (modelName.EndsWith("X", System.StringComparison.Ordinal) || (
+                if (modelName.EndsWith("X", System.StringComparison.Ordinal) ||
+                    modelName.EndsWith("XR", System.StringComparison.Ordinal) ||
+                    modelName.EndsWith("XE", System.StringComparison.Ordinal))
+                {
+                    throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
+                }
+
+                if (
                     !modelName.StartsWith("DP", System.StringComparison.Ordinal) &&
-                    !modelName.StartsWith("WP", System.StringComparison.Ordinal)))
+                    !modelName.StartsWith("WP", System.StringComparison.Ordinal))
                 {
                     throw new InvalidDeviceInfoException($"incompatible with '{DriverName}'");
                 }

@@ -62,7 +62,7 @@
         public class Channel : IChannel
         {
             private readonly TcpClient tcpClient;
-            private readonly NetworkStream netStream;
+            private NetworkStream netStream;
 
             private string HostName { get; }
             private int Port { get; }
@@ -120,6 +120,18 @@
                 throw new TimeoutException(errorMessage);
             }
 
+            private void Reconnect()
+            {
+                try
+                {
+                    Close();
+                }
+                finally
+                {
+                    netStream = ConnectAndGetStream();
+                }
+            }
+
             /// <summary>
             /// Writes the specified data to the tcp connection.
             /// </summary>
@@ -128,7 +140,16 @@
             {
                 if (!tcpClient.Connected)
                 {
-                    tcpClient.Connect(HostName, Port);
+                    try
+                    {
+                        Reconnect();
+                    } 
+                    catch
+                    {
+                        var errorMessage = $"Cannot reconnect to {HostName}:{Port}";
+                        Log.Error(errorMessage);
+                        throw new TimeoutException(errorMessage);
+                    }
                 }
                 var bytesToWrite = data.Length;
                 while (bytesToWrite > 0)

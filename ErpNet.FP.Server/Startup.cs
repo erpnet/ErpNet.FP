@@ -33,7 +33,7 @@
             // Set up custom content types - associating file extension to MIME type
             var customContentProvider = new FileExtensionContentTypeProvider();
             // Add new mappings
-            customContentProvider.Mappings[".log"] = "text/plain";
+            customContentProvider.Mappings[".log"] = "text/plain; charset=UTF-8";
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
