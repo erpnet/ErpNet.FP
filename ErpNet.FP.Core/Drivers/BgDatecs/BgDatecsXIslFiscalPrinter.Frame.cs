@@ -71,7 +71,7 @@
                 var computedBcc = ComputeBCC(rawResponse.Slice(preamblePos + 1, postamblePos + 1));
                 if (bcc.SequenceEqual(computedBcc))
                 {
-                    var response = Encoding.UTF8.GetString(data);
+                    var response = PrinterEncoding.GetString(data);
 
                     return (response, ParseStatus(status));
                 }

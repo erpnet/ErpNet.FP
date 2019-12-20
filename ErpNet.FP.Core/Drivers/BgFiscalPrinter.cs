@@ -36,12 +36,6 @@
 
         protected abstract DeviceStatus ParseStatus(byte[]? status);
 
-        protected virtual string WithPrinterEncoding(string text)
-        {
-            return PrinterEncoding.GetString(
-                Encoding.Convert(Encoding.Default, PrinterEncoding, Encoding.Default.GetBytes(text)));
-        }
-
         protected IChannel Channel { get; }
         protected IDictionary<string, string> Options { get; }
         public ServiceOptions ServiceOptions { get; }

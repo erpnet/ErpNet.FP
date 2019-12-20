@@ -154,7 +154,7 @@
                 return string.Empty;
             }
 
-            var response = Encoding.UTF8.GetString(data);
+            var response = PrinterEncoding.GetString(data);
 
             return response;
         }
@@ -208,7 +208,7 @@
                     var response = ParseResponse(RawRequest(data == null ? null : PrinterEncoding.GetBytes(data)));
                     if (data == "00")
                     {
-                        return (response, new DeviceStatus());
+                        return (response, new DeviceStatus());                        
                     }
                     var rawStatus = ParseRawResponse(RawRequest(data == null ? null : PrinterEncoding.GetBytes("F80C")));
                     return (response, ParseStatus(rawStatus));

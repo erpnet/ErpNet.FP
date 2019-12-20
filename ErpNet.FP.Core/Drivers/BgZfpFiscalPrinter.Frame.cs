@@ -261,7 +261,7 @@
             {
                 return ("", status);
             }
-            return (Encoding.UTF8.GetString(response), status);
+            return (PrinterEncoding.GetString(response), status);
         }
 
         protected virtual (byte[]?, DeviceStatus) ParseResponseAsByteArray(byte[]? rawResponse)

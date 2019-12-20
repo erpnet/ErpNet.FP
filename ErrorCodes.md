@@ -68,6 +68,7 @@ However, the "originalCode" might not always be available or it might change due
 * **E506** No mobile operator
 * **E507** No GPRS Modem
 * **E508** No SIM card
+* **E509** Block - buffers for NRA are full
 * **E599** NRA link general error
 
 ## External or referenced errors
