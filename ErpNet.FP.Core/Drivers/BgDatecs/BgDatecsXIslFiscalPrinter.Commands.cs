@@ -224,6 +224,12 @@
                 text.WithMaxLength(Info.CommentTextMaxLength) + "\t"
             );
         }
+
+        public override (string, DeviceStatus) FullPayment()
+        {
+            return Request(CommandFiscalReceiptTotal, "\t\t\t");
+        }
+
         public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)
         {
             // Protocol: {PaidMode}<SEP>{Amount}<SEP>{Type}<SEP>

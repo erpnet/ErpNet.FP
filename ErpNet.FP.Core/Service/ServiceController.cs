@@ -130,63 +130,70 @@
                 {
                     isReady = false;
 
-                    PrintersInfo.Clear();
-                    Printers.Clear();
-
-                    // Autodetecting
-                    var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
-                    if (forceAutoDetect || configOptions.AutoDetect)
+                    try
                     {
-                        Log.Information("Autodetecting local printers...");
-                        var printers = Provider.DetectAvailablePrinters();
-                        foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
-                        {
-                            AddPrinter(printer.Value);
-                        }
-                    }
 
-                    // Detecting configured printers
-                    if (configOptions.Printers != null && configOptions.Printers.Count != 0)
-                    {
-                        Log.Information("Detecting configured printers...");
-                        foreach (var printerSetting in configOptions.Printers)
+                        PrintersInfo.Clear();
+                        Printers.Clear();
+
+                        // Autodetecting
+                        var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
+                        if (forceAutoDetect || configOptions.AutoDetect)
                         {
-                            string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
-                            var uri = printerSetting.Value.Uri;
-                            if (uri.Length > 0)
+                            Log.Information("Autodetecting local printers...");
+                            var printers = Provider.DetectAvailablePrinters();
+                            foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
                             {
-                                try
-                                {
-                                    var printer = Provider.Connect(printerSetting.Value.Uri, configOptions, false, null);
-                                    Log.Information($"{logString}, OK");
-                                    PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
-                                    Printers.Add(printerSetting.Key, printer);
-                                }
-                                catch
-                                {
-                                    Log.Information($"{logString}, failed");
-                                    // Do not add this printer, it fails to connect.
-                                }
+                                AddPrinter(printer.Value);
                             }
                         }
 
-                        /*
-                        // Auto cache to config all listed printers, for future use
-                        // It is possible to have aliases, i.e. different PrinterId with the same Uri
-                        foreach (var printer in Printers)
+                        // Detecting configured printers
+                        if (configOptions.Printers != null && configOptions.Printers.Count != 0)
                         {
-                            configOptions.Printers[printer.Key] = new PrinterConfig { Uri = printer.Value.DeviceInfo.Uri };
+                            Log.Information("Detecting configured printers...");
+                            foreach (var printerSetting in configOptions.Printers)
+                            {
+                                string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
+                                var uri = printerSetting.Value.Uri;
+                                if (uri.Length > 0)
+                                {
+                                    try
+                                    {
+                                        var printer = Provider.Connect(printerSetting.Value.Uri, configOptions, false, null);
+                                        Log.Information($"{logString}, OK");
+                                        PrintersInfo.Add(printerSetting.Key, printer.DeviceInfo);
+                                        Printers.Add(printerSetting.Key, printer);
+                                    }
+                                    catch
+                                    {
+                                        Log.Information($"{logString}, failed");
+                                        // Do not add this printer, it fails to connect.
+                                    }
+                                }
+                            }
+
+                            /*
+                            // Auto cache to config all listed printers, for future use
+                            // It is possible to have aliases, i.e. different PrinterId with the same Uri
+                            foreach (var printer in Printers)
+                            {
+                                configOptions.Printers[printer.Key] = new PrinterConfig { Uri = printer.Value.DeviceInfo.Uri };
+                            }
+                            */
                         }
-                        */
+
+                        // configOptions.AutoDetect = Printers.Count == 0;
+
+                        WriteOptions();
+
+                        Log.Information($"Detecting done. Found {Printers.Count} available printer(s).");
+
                     }
-
-                    // configOptions.AutoDetect = Printers.Count == 0;
-
-                    WriteOptions();
-
-                    Log.Information($"Detecting done. Found {Printers.Count} available printer(s).");
-
-                    isReady = true;
+                    finally
+                    {
+                        isReady = true;
+                    }
 
                     return true;
                 }

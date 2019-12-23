@@ -278,7 +278,7 @@
 
         public virtual (string, DeviceStatus) FullPayment()
         {
-            return Request(CommandFiscalReceiptTotal);
+            return Request(CommandFiscalReceiptTotal, "\t");
         }
 
         public virtual (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)

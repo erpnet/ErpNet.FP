@@ -238,6 +238,11 @@
             {
                 return status;
             }
+            if (reversalReceipt.Payments?.Count > 0)
+            {
+                status.AddWarning("W302", "Reversal receipt payments array should be empty. It will be ignored.");
+                reversalReceipt.Payments.Clear();
+            }
             if (String.IsNullOrEmpty(reversalReceipt.ReceiptNumber))
             {
                 status.AddError("E405", $"ReceiptNumber of the original receipt is empty");
