@@ -151,7 +151,6 @@ Eager to try?
 You can list and [download the binaries for ErpNet.FP.Server]:
 
 ### Windows 32/64 Service Installer (.MSI) ** New **
-- All Windows versions, from Windows XP SP2 and up are supported. 
 - [Prerequisites for ErpNet.FP on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites).
 - There is no need for .Net installation. 
 - Everything that is needed is included in the MSI installer. 
@@ -163,7 +162,6 @@ The installer unpacks and installs a Windows service, called "ErpNet.FP".
 There is no UI, but when the service is running in the default configuration, you can browse the Admin page at http://localhost:8001.
 
 ### Windows 32/64 bit, folder install
-- All Windows versions from Windows XP SP2 and up are supported. 
 - [Prerequisites for ErpNet.FP on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites).
 - There is no need for .Net installation. 
 - Everything that is needed is included in the Zip files below. 
