@@ -184,6 +184,7 @@
         }
 
         public override (string, DeviceStatus) AddItem(
+            int department,
             string itemText,
             decimal unitPrice,
             TaxGroup taxGroup,
@@ -204,6 +205,10 @@
                 };
             }
 
+            if (department < 0) {
+                department = 0;
+            }
+
             // Protocol: {PluName}<SEP>{TaxCd}<SEP>{Price}<SEP>{Quantity}<SEP>{DiscountType}<SEP>{DiscountValue}<SEP>{Department}<SEP>
             var itemData = string.Join("\t",
                 itemText.WithMaxLength(Info.ItemTextMaxLength),
@@ -212,7 +217,7 @@
                 quantity == 0m ? string.Empty : quantity.ToString(CultureInfo.InvariantCulture),
                 PriceModifierTypeToProtocolValue(),
                 priceModifierValue.ToString("F2", CultureInfo.InvariantCulture),
-                "0",
+                department.ToString(),
                 "");
             return Request(CommandFiscalReceiptSale, itemData);
         }

@@ -93,6 +93,14 @@
         public TaxGroup TaxGroup { get; set; } = TaxGroup.Unspecified;
 
         /// <summary>
+        /// Gets or sets the department. Department 0 means no department.
+        /// </summary>
+        /// <value>
+        /// The department.
+        /// </value>
+        public int Department { get; set; } = 0;
+
+        /// <summary>
         /// Gets or sets the quantity.
         /// </summary>
         /// <value>
