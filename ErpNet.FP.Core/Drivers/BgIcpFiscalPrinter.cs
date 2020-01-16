@@ -122,6 +122,7 @@
                     {
                         (_, deviceStatus) = AddItem(
                             receipt.UniqueSaleNumber,
+                            item.Department,
                             item.Text,
                             item.UnitPrice,
                             item.TaxGroup,
