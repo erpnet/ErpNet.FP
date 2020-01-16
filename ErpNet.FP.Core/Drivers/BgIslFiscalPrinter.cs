@@ -122,6 +122,7 @@
                         try
                         {
                             (_, deviceStatus) = AddItem(
+                                item.Department,
                                 item.Text,
                                 item.UnitPrice,
                                 item.TaxGroup,

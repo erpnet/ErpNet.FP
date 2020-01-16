@@ -145,9 +145,13 @@
                     {
                         status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
                     }
+                    if (item.Department < 0) 
+                    {
+                        status.AddError("E403", $"Item {row}; \"department\" should be positive number or zero.");
+                    }
                     if (item.TaxGroup == TaxGroup.Unspecified)
                     {
-                        status.AddError("E403", $"Item {row}: \"taxGroup\" should'nt be \"unspecified\" or empty");
+                        status.AddError("E403", $"Item {row}: \"taxGroup\" shouldn't be \"unspecified\" or empty");
                     }
                     try
                     {

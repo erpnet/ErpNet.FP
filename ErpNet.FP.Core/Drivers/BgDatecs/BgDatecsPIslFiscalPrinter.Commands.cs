@@ -36,6 +36,7 @@
         }
 
         public override (string, DeviceStatus) AddItem(
+            int department,
             string itemText,
             decimal unitPrice,
             TaxGroup taxGroup,
@@ -44,10 +45,22 @@
             PriceModifierType priceModifierType = PriceModifierType.None)
         // Protocol [<L1>][<Lf><L2>]<Tab><TaxCd><[Sign]Price>[*<Qwan>][,Perc|;Abs]
         {
-            var itemData = new StringBuilder()
-                .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
-                .Append('\t').Append(GetTaxGroupText(taxGroup))
-                .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
+            var itemData = new StringBuilder();
+            if (department <= 0) 
+            {
+                itemData
+                    .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
+                    .Append('\t').Append(GetTaxGroupText(taxGroup))
+                    .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
+            }
+            else 
+            {
+                itemData
+                    .Append(itemText.WithMaxLength(Info.ItemTextMaxLength))
+                    .Append('\t').Append(department).Append('\t')
+                    .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
+            }
+
             if (quantity != 0)
             {
                 itemData

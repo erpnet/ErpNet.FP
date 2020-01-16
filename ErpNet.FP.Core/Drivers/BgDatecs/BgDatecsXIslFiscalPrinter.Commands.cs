@@ -184,6 +184,7 @@
         }
 
         public override (string, DeviceStatus) AddItem(
+            int department,
             string itemText,
             decimal unitPrice,
             TaxGroup taxGroup,
@@ -212,7 +213,7 @@
                 quantity == 0m ? string.Empty : quantity.ToString(CultureInfo.InvariantCulture),
                 PriceModifierTypeToProtocolValue(),
                 priceModifierValue.ToString("F2", CultureInfo.InvariantCulture),
-                "0",
+                department.ToString(),
                 "");
             return Request(CommandFiscalReceiptSale, itemData);
         }
