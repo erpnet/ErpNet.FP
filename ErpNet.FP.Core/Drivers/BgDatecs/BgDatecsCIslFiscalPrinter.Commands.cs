@@ -88,6 +88,7 @@
                     .Append('*')
                     .Append(quantity.ToString(CultureInfo.InvariantCulture));
             }
+            
             if (priceModifierType != PriceModifierType.None)
             {
                 itemData
