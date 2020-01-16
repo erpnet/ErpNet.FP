@@ -205,10 +205,6 @@
                 };
             }
 
-            if (department < 0) {
-                department = 0;
-            }
-
             // Protocol: {PluName}<SEP>{TaxCd}<SEP>{Price}<SEP>{Quantity}<SEP>{DiscountType}<SEP>{DiscountValue}<SEP>{Department}<SEP>
             var itemData = string.Join("\t",
                 itemText.WithMaxLength(Info.ItemTextMaxLength),
