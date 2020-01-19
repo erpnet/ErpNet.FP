@@ -14,7 +14,7 @@
         OperatorError = 1,
         [EnumMember(Value = "refund")]
         Refund = 2,
-        [EnumMember(Value = "taxbase-reduction")]
+        [EnumMember(Value = "tax-base-reduction")]
         TaxBaseReduction = 3
     }
 
