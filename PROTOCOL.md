@@ -519,7 +519,7 @@ The reversal receipt JSON input format is mostly the same as PrintReceipt. The c
 * **"reason"** - the reason for the reversal. One of: 
 * * **"operator-error"**
 * * **"refund"**
-* * **"tax-base-reduction"**.
+* * **"taxbase-reduction"**. (it should be "tax-base-reduction", but because of the backward compatibility issues, we will stick with "taxbase-reduction").
 
 ### Response
 The same as PrintReceipt, except for the "info" section, which is not provided (not needed).
