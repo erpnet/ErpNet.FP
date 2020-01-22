@@ -642,9 +642,9 @@ The first character "P" is the code for the command. Next charaters are the requ
 
 ### Example for FP-2000
 Command
-58H (88) Obtain the Date of the last record in fiscal memory
+56H (86) Obtain the Date of the last record in fiscal memory
 
-0x58 is the ASCII code for "V". 
+0x56 is the ASCII code for "V". 
 
 "T" is the parameter for command, which gives not only Date, but also the Time of the last record in FM.
 
