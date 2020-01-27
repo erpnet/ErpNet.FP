@@ -47,6 +47,6 @@ then
         echo "There are no printers detected"
 else
         echo "Setting hostname"
-        echo "FP-$fprinter" | sudo tee -a /etc/hostname
+        echo "FP-$fprinter" | sudo tee /etc/hostname
 fi
 echo "Done."
