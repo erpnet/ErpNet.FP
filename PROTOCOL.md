@@ -225,11 +225,15 @@ Root elements
 * **"payments"** - list of payments.
 
 ### "items"
-Contains items with several item types. Supported types are "sale" (default, can be ommited), "discount-amount", "surcharge-amount", "comment" and "footer-comment". 
+Contains the items sold. 
 The line items are printed in the same order on the fiscal printer. 
-Comment lines (type="comment") can be intermixed with the fiscal line items. 
-There are another type of comments - footer comments, represented with type="footer-comment", 
-which prints comments after the payment area of the fiscal receipt.
+Each item record can be of different type. The type is specified in the "type" field and can be one of:
+* **"sale"** - specifies items sold (default, can be omitted)
+* **"discount-amount"** - specifies discount amount on the current sub-total 
+* **"surcharge-amount"** - specifiessurcharge amount on the current sub-total 
+* **"comment"** - comment line (printer with #)
+* **"footer-comment"** - comment, printed after the payment area of the receipt
+
 The item with type "sale" can have the following fields set:
 * **"text"** - the name of the product
 * **"quantiy"** - the quantity sold
@@ -246,6 +250,9 @@ The item with type "sale" can have the following fields set:
 The item with type "discount-amount" and "surcharge-amount" can have the following fields set:
 * **"amount"** - the amount that will be substracted or added to the subtotal
 **Warning**: Check the value of "supportsSubTotalAmountModifiers" in your device info, to check whether your device supports subtotal modifiers by amount.
+
+The item with type "comment" and "footer-comment" can have the following fields set:
+* **"text"** - the text of the comment
 
 ### "payments"
 This section contains the payment types and amounts for each payment.
