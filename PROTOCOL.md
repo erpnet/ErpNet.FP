@@ -326,7 +326,7 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
   ],
   "receiptNumber": "0000085",
   "receiptDateTime": "2019-05-17T13:55:18",
-  "receiptAmount": 30,
+  "receiptAmount": 20,
   "fiscalMemorySerialNumber": "02517985"
 }
 ```
