@@ -24,6 +24,7 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Set Printer Date And Time](#post-set-printer-date-and-time)
 * `GET` [Get Current Cash Amount](#get-get-current-cash-amount)
 * `POST` [Post Raw Request](#post-post-raw-request)
+* `POST` [Print Last Receipt's Duplicate](#post-print-last-receipt-s-duplicate)
 
 ---
 
@@ -710,3 +711,15 @@ The answer is here: "rawResponse": "25-06-2019 11:15:26".
     ]
 }
 ```
+
+## `POST` Print Last Receipt's Duplicate
+Prints duplicate of the last fiscal receipt
+
+### Example request uri:
+```
+http://localhost:8001/printers/dt517985/duplicate
+```
+
+### Response
+The response is standard status response.
+
