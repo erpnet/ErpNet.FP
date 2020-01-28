@@ -227,8 +227,8 @@ Root elements
 ### "items"
 Contains items with several item types. Supported types are "sale" (default, can be ommited), "discount-amount", "surcharge-amount", "comment" and "footer-comment". 
 The line items are printed in the same order on the fiscal printer. 
-Comment lines (itemType="comment") can be intermixed with the fiscal line items. 
-There are another type of comments - footer comments, represented with itemType="footer-comment", 
+Comment lines (type="comment") can be intermixed with the fiscal line items. 
+There are another type of comments - footer comments, represented with type="footer-comment", 
 which prints comments after the payment area of the fiscal receipt.
 The item with type "sale" can have the following fields set:
 * **"text"** - the name of the product
@@ -242,6 +242,7 @@ The item with type "sale" can have the following fields set:
 * * **"discount-amount"**
 * * **"surcharge-percent"**
 * * **"surcharge-amount"**
+
 The item with type "discount-amount" and "surcharge-amount" can have the following fields set:
 * **"amount"** - the amount that will be substracted or added to the subtotal
 **Warning**: Check the value of "supportsSubTotalAmountModifiers" in your device info, to check whether your device supports subtotal modifiers by amount.
