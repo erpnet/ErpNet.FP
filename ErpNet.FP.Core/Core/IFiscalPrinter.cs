@@ -83,6 +83,11 @@
         DeviceStatus PrintXReport(Credentials credentials);
 
         /// <summary>
+        /// Prints duplicate of the last fiscal receipt.
+        /// </summary>
+        DeviceStatus PrintDuplicate(Credentials credentials);
+
+        /// <summary>
         /// Raw request.
         /// </summary>
         DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);

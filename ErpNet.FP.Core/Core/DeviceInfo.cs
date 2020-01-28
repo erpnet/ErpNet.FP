@@ -48,5 +48,9 @@
         /// List of supported payment types by the device
         /// </summary>        
         public ICollection<PaymentType> SupportedPaymentTypes = new PaymentType[] { };
+        /// <summary>
+        /// Expresses support of item types discount-amount and surcharge-amount by the device
+        /// </summary>   
+        public bool SupportsSubTotalAmountModifiers = false;
     }
 }

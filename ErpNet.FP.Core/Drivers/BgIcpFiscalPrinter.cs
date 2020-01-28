@@ -287,6 +287,12 @@
             return status;
         }
 
+        public override DeviceStatus PrintDuplicate(Credentials credentials)
+        {
+            var (_, status) = Request("AA");
+            return status;
+        }
+
         public override DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame)
         {
             if (requestFrame.RawRequest.Length < 2)

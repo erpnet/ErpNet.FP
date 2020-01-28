@@ -26,6 +26,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             }
             fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = false;
             serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
             return fiscalPrinter;
         }

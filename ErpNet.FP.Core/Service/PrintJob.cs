@@ -14,6 +14,7 @@
         XReport,
         ZReport,
         SetDateTime,
+        Duplicate,
         Reset
     }
 
@@ -131,6 +132,9 @@
                             }
                             Result = Printer.SetDateTime(dateTimeDocument);
                         };
+                        break;
+                    case PrintJobAction.Duplicate:
+                        Result = Printer.PrintDuplicate((Credentials)(Document ?? new Credentials()));
                         break;
                     case PrintJobAction.Reset:
                         Result = Printer.Reset((Credentials)(Document ?? new Credentials()));

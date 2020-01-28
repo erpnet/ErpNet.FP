@@ -22,6 +22,8 @@
             CommandGetReceiptStatus = 0x4c,
             CommandGetLastDocumentNumber = 0x71,
             CommandGetTaxIdentificationNumber = 0x63,
+            CommandPrintLastReceiptDuplicate = 0x6D,
+            CommandSubtotal = 0x33,
             CommandReadLastReceiptQRCodeData = 0x74;
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
@@ -48,6 +50,10 @@
         public virtual (string, DeviceStatus) GetLastDocumentNumber(string closeReceiptResponse)
         {
             return Request(CommandGetLastDocumentNumber);
+        }
+        public virtual (string, DeviceStatus) SubtotalChangeAmount(Decimal amount)
+        {
+            return Request(CommandSubtotal, $"10;{amount.ToString("F2", CultureInfo.InvariantCulture)}");
         }
 
         public virtual (decimal?, DeviceStatus) GetReceiptAmount()

@@ -27,5 +27,11 @@
             };
         }
 
+        public override DeviceStatus PrintDuplicate(Credentials credentials)
+        {
+            var (_, status) = Request(CommandPrintLastReceiptDuplicate);
+            return status;
+        }
+
     }
 }

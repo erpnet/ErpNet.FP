@@ -42,6 +42,17 @@
             };
         }
 
+        public override (string, DeviceStatus) SubtotalChangeAmount(Decimal amount)
+        {
+            // {Print}<SEP>{Display}<SEP>{DiscountType}<SEP>{DiscountValue}<SEP>
+            return Request(CommandSubtotal, string.Join("\t",
+                "1",
+                "0",
+                amount < 0 ? "4" : "3",
+                Math.Abs(amount).ToString("F2", CultureInfo.InvariantCulture),
+                ""));
+        }
+
         public override (string, DeviceStatus) SetDeviceDateTime(DateTime dateTime)
         {
             return Request(CommandSetDateTime, dateTime.ToString("dd-MM-yy HH:mm:ss\t", CultureInfo.InvariantCulture));
@@ -429,4 +440,6 @@
         }
 
     }
+
+    
 }

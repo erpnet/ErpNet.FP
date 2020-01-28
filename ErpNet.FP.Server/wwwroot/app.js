@@ -81,6 +81,7 @@ function showAvailablePrinters() {
                     '<button class="small primary" onclick="printXReport(\'' + printerId + '\')">X-Report</button>' +
                     '<button class="small primary" onclick="resetPrinter(\'' + printerId + '\')">Reset</button>' +
                     '<button class="small primary" title="Sync the printer time with the current time on the PC" onclick="syncTime(\'' + printerId + '\')">Sync Time</button>' +
+                    '<button class="small primary" title="Prints duplicate of the last fiscal receipt" onclick="printDuplicate(\'' + printerId + '\')">Duplicate</button>' +
                     '<br /><h4>Advanced properties for printer with serial number ' + printer.serialNumber + '... &#8964;</h4>' +
                     '<div class="card fluid">' +
                     printerConstantsContent +
@@ -365,6 +366,34 @@ function syncTime(printerId) {
         },
         error: function (xhr, type) {
             showToastMessage("Cannot sync printer's time.")
+        }
+    })
+}
+
+function printDuplicate(printerId) {
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/duplicate',
+        data: "{}",
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            if (data.ok) {
+                showToastMessage("Printing the duplicate of the last fiscal receipt printing is done.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot print duplicate of the last fiscal receipt: " + errors.trim())
+            }
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot print duplicate of the last fiscal receipt.")
         }
     })
 }

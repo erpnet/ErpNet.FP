@@ -94,12 +94,13 @@
 
         public abstract DeviceStatus PrintZReport(Credentials credentials);
 
+        public abstract DeviceStatus PrintDuplicate(Credentials credentials);
+
         public abstract DeviceStatusWithRawResponse RawRequest(RequestFrame requestFrame);
 
         public abstract DeviceStatusWithDateTime Reset(Credentials credentials);
 
         public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
-
 
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
         {
@@ -125,61 +126,100 @@
             foreach (var item in receipt.Items)
             {
                 row++;
-                if (String.IsNullOrEmpty(item.Text))
-                {
-                    status.AddError("E407", $"Item {row}: \"text\" is empty");
-                }
 
-                // Validation of "type" : "sale"
-                if (item.Type == ItemType.Sale)
+                switch (item.Type)
                 {
-                    if (item.PriceModifierValue <= 0 && item.PriceModifierType != PriceModifierType.None)
-                    {
-                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
-                    }
-                    if (item.PriceModifierValue != 0 && item.PriceModifierType == PriceModifierType.None)
-                    {
-                        status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
-                    }
-                    if (item.Quantity < 0)
-                    {
-                        status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
-                    }
-                    if (item.Department < 0) 
-                    {
-                        status.AddError("E403", $"Item {row}; \"department\" should be positive number or zero.");
-                    }
-                    if (item.TaxGroup == TaxGroup.Unspecified)
-                    {
-                        status.AddError("E403", $"Item {row}: \"taxGroup\" shouldn't be \"unspecified\" or empty");
-                    }
-                    try
-                    {
-                        GetTaxGroupText(item.TaxGroup);
-                    }
-                    catch (StandardizedStatusMessageException e)
-                    {
-                        status.AddError(e.Code, e.Message);
-                    }
-                    var quantity = Math.Round(item.Quantity == 0m ? 1m : item.Quantity, 3, MidpointRounding.AwayFromZero);
-                    var unitPrice = Math.Round(item.UnitPrice, 2, MidpointRounding.AwayFromZero);
-                    var itemPrice = quantity * unitPrice;
-                    switch (item.PriceModifierType)
-                    {
-                        case PriceModifierType.DiscountAmount:
-                            itemPrice -= item.PriceModifierValue;
-                            break;
-                        case PriceModifierType.DiscountPercent:
-                            itemPrice -= itemPrice * (item.PriceModifierValue / 100.0m);
-                            break;
-                        case PriceModifierType.SurchargeAmount:
-                            itemPrice += item.PriceModifierValue;
-                            break;
-                        case PriceModifierType.SurchargePercent:
-                            itemPrice += itemPrice * (item.PriceModifierValue / 100.0m);
-                            break;
-                    }
-                    itemsTotalAmount += Math.Round(itemPrice, 2, MidpointRounding.AwayFromZero);
+                    case ItemType.Sale:
+                        if (String.IsNullOrEmpty(item.Text))
+                        {
+                            status.AddError("E407", $"Item {row}: \"text\" is empty");
+                        }
+                        if (item.PriceModifierValue <= 0 && item.PriceModifierType != PriceModifierType.None)
+                        {
+                            status.AddError("E403", $"Item {row}: \"priceModifierValue\" should be positive number");
+                        }
+                        if (item.PriceModifierValue != 0 && item.PriceModifierType == PriceModifierType.None)
+                        {
+                            status.AddError("E403", $"Item {row}: \"priceModifierValue\" should'nt be \"none\" or empty. You can avoid setting priceModifier if you do not want price modification");
+                        }
+                        if (item.Quantity < 0)
+                        {
+                            status.AddError("E403", $"Item {row}: \"quantity\" should be positive number");
+                        }
+                        if (item.Department < 0)
+                        {
+                            status.AddError("E403", $"Item {row}; \"department\" should be positive number or zero.");
+                        }
+                        if (item.TaxGroup == TaxGroup.Unspecified)
+                        {
+                            status.AddError("E403", $"Item {row}: \"taxGroup\" shouldn't be \"unspecified\" or empty");
+                        }
+                        try
+                        {
+                            GetTaxGroupText(item.TaxGroup);
+                        }
+                        catch (StandardizedStatusMessageException e)
+                        {
+                            status.AddError(e.Code, e.Message);
+                        }
+                        var quantity = Math.Round(item.Quantity == 0m ? 1m : item.Quantity, 3, MidpointRounding.AwayFromZero);
+                        var unitPrice = Math.Round(item.UnitPrice, 2, MidpointRounding.AwayFromZero);
+                        var itemPrice = quantity * unitPrice;
+                        switch (item.PriceModifierType)
+                        {
+                            case PriceModifierType.DiscountAmount:
+                                itemPrice -= item.PriceModifierValue;
+                                break;
+                            case PriceModifierType.DiscountPercent:
+                                itemPrice -= itemPrice * (item.PriceModifierValue / 100.0m);
+                                break;
+                            case PriceModifierType.SurchargeAmount:
+                                itemPrice += item.PriceModifierValue;
+                                break;
+                            case PriceModifierType.SurchargePercent:
+                                itemPrice += itemPrice * (item.PriceModifierValue / 100.0m);
+                                break;
+                        }
+                        itemsTotalAmount += Math.Round(itemPrice, 2, MidpointRounding.AwayFromZero);
+                        break;
+
+
+                    case ItemType.Comment:
+                        if (String.IsNullOrEmpty(item.Text))
+                        {
+                            status.AddError("E407", $"Item {row}: \"text\" is empty");
+                        }
+                        break;
+
+
+                    case ItemType.FooterComment:
+                        if (String.IsNullOrEmpty(item.Text))
+                        {
+                            status.AddError("E407", $"Item {row}: \"text\" is empty");
+                        }
+                        break;
+
+
+                    case ItemType.SurchargeAmount:
+                        if (item.Amount <= 0)
+                        {
+                            status.AddError("E403", $"Item {row}: \"amount\" should be positive number");
+                        }
+                        itemsTotalAmount += Math.Round(item.Amount, 2, MidpointRounding.AwayFromZero);
+                        break;
+
+
+                    case ItemType.DiscountAmount:
+                        if (item.Amount <= 0)
+                        {
+                            status.AddError("E403", $"Item {row}: \"amount\" should be positive number");
+                        }
+                        itemsTotalAmount -= Math.Round(item.Amount, 2, MidpointRounding.AwayFromZero);
+                        break;
+
+
+                    default:
+                        break;
                 }
 
                 if (!status.Ok)

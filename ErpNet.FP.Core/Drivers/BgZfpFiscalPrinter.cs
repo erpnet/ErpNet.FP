@@ -137,6 +137,14 @@
                         deviceStatus.AddInfo($"Error occurred in Item {itemNumber}");
                         return (receiptInfo, deviceStatus);
                     }
+                    else if (item.Type == ItemType.SurchargeAmount)
+                    {
+                        (_, deviceStatus) = SubtotalChangeAmount(item.Amount);
+                    }
+                    else if (item.Type == ItemType.DiscountAmount)
+                    {
+                        (_, deviceStatus) = SubtotalChangeAmount(-item.Amount);
+                    }
                 }
 
             // Receipt payments
@@ -323,6 +331,12 @@
         public override DeviceStatus PrintXReport(Credentials credentials)
         {
             var (_, status) = PrintDailyReport(false);
+            return status;
+        }
+
+        public override DeviceStatus PrintDuplicate(Credentials credentials)
+        {
+            var (_, status) = Request(CommandPrintLastReceiptDuplicate);
             return status;
         }
 
