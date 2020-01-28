@@ -24,7 +24,7 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Set Printer Date And Time](#post-set-printer-date-and-time)
 * `GET` [Get Current Cash Amount](#get-get-current-cash-amount)
 * `POST` [Post Raw Request](#post-post-raw-request)
-* `POST` [Print Last Receipt's Duplicate](#post-print-last-receipt-s-duplicate)
+* `POST` [Print Last Receipt's Duplicate](#post-print-last-receipts-duplicate)
 
 ---
 
