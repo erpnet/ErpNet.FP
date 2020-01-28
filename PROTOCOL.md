@@ -240,8 +240,8 @@ The item with type "sale" can have the following fields set:
 * **"unitPrice"** - the unit price, not including any discounts/markups
 * **"taxGroup"** - the government regulated tax group. An integer from 1 to 8.
 * **"department"** - *(optional)* the department number. A positive integer. 
-* **"priceModifierValue"** - modifies the total amount of the line according to the setting of "priceModifierType"
-* **"priceModifierType"** - can be one of: 
+* **"priceModifierValue"** - *(optional)* modifies the total amount of the line according to the setting of "priceModifierType"
+* **"priceModifierType"** - *(optional)* can be one of: 
 * * **"discount-percent"**
 * * **"discount-amount"**
 * * **"surcharge-percent"**
