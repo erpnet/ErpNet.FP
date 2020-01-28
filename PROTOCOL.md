@@ -224,8 +224,12 @@ Root elements
 * **"payments"** - list of payments.
 
 ### "items"
-Contains one entry for each fiscal or comment line items with itemType="comment" or itemType="footer-comment". The line items are printed in the same order on the fiscal printer. Comment lines (itemType="comment") can be intermixed with the fiscal line items. There are another type of comments - footer comments, represented with itemType="footer-comment", which prints comments after the payment area of the fiscal receipt.
-The fiscal line **items** can have the following fields set:
+Contains items with several item types. Supported types are "sale" (default, can be ommited), "discount-amount", "surcharge-amount", "comment" and "footer-comment". 
+The line items are printed in the same order on the fiscal printer. 
+Comment lines (itemType="comment") can be intermixed with the fiscal line items. 
+There are another type of comments - footer comments, represented with itemType="footer-comment", 
+which prints comments after the payment area of the fiscal receipt.
+The item with type "sale" can have the following fields set:
 * **"text"** - the name of the product
 * **"quantiy"** - the quantity sold
 * **"unitPrice"** - the unit price, not including any discounts/markups
@@ -237,6 +241,9 @@ The fiscal line **items** can have the following fields set:
 * * **"discount-amount"**
 * * **"surcharge-percent"**
 * * **"surcharge-amount"**
+The item with type "discount-amount" and "surcharge-amount" can have the following fields set:
+* **"amount"** - the amount that will be substracted or added to the subtotal
+**Warning**: Check the value of "supportsSubTotalAmountModifiers" in your device info, to check whether your device supports subtotal modifiers by amount.
 
 ### "payments"
 This section contains the payment types and amounts for each payment.
@@ -285,13 +292,17 @@ NOTE: If the whole section "payments" is not provided, then the whole amount of 
       "priceModifierType": "discount-percent"
     },
     {
+        "type": "discount-amount",
+        "amount": 10
+    },
+    {
       "type": "footer-comment",
       "text": "YOU ARE WELCOME!"
     }
   ],
   "payments": [
     {
-      "amount": 30,
+      "amount": 20,
       "paymentType": "cash"
     }
   ]
