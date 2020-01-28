@@ -236,7 +236,7 @@ Each item record can be of different type. The type is specified in the "type" f
 
 The item with type "sale" can have the following fields set:
 * **"text"** - the name of the product
-* **"quantiy"** - the quantity sold
+* **"quantiy"** - *(optional)* the quantity sold. When not specified, some fiscal printers might be able to omit the quantity completely, while others might print "1". For calculation purposes, omitting quantity means 1.
 * **"unitPrice"** - the unit price, not including any discounts/markups
 * **"taxGroup"** - the government regulated tax group. An integer from 1 to 8.
 * **"department"** - *(optional)* the department number. A positive integer. 
