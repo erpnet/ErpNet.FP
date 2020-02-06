@@ -546,6 +546,7 @@ The same as PrintReceipt, except for the "info" section, which is not provided (
 
 ## `POST` Print Deposit Money Receipt
 Deposits the amount
+
 Warning: Be aware, in Tremol devices, you should present credentials - operator and operatorPassword as in receipt request.
 
 ### Example request uri:
@@ -564,6 +565,7 @@ The response is standard status response.
 
 ## `POST` Print Withdraw Money Receipt
 Withdraws the amount
+
 Warning: Be aware, in Tremol devices, you should present credentials - operator and operatorPassword as in receipt request.
 
 ### Example request uri:
@@ -625,6 +627,7 @@ The response is standard status response.
 ## `GET` Get Current Cash Amount
 Gets the current cash amount registered in the fiscal printer. 
 The request is `POST` because you are allowed to provide "taskId" in the body of the request.
+
 Warning: Be aware, in Tremol devices, you should present credentials - operator and operatorPassword as in receipt request.
 
 ### Example request uri:
