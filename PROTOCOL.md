@@ -255,7 +255,8 @@ The item with type "comment" and "footer-comment" can have the following fields 
 * **"text"** - the text of the comment
 
 ### "payments"
-This section contains the payment types and amounts for each payment. If this section is skipped, the full amount of the receipt is allocated to this payment.
+This section contains the payment types and amounts for each payment. 
+
 NOTE: If the whole section "payments" is not provided, then the whole amount of the receipt is printed as cash payment.
 
 NOTE: Multiple different payment types and amounts are allowed for one receipt.
