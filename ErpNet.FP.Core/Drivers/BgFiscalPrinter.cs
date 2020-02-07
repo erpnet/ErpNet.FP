@@ -171,13 +171,13 @@
                                 itemPrice -= item.PriceModifierValue;
                                 break;
                             case PriceModifierType.DiscountPercent:
-                                itemPrice -= itemPrice * (item.PriceModifierValue / 100.0m);
+                                itemPrice -= Math.Round(itemPrice * (item.PriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
                                 break;
                             case PriceModifierType.SurchargeAmount:
                                 itemPrice += item.PriceModifierValue;
                                 break;
                             case PriceModifierType.SurchargePercent:
-                                itemPrice += itemPrice * (item.PriceModifierValue / 100.0m);
+                                itemPrice += Math.Round(itemPrice * (item.PriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
                                 break;
                         }
                         itemsTotalAmount += Math.Round(itemPrice, 2, MidpointRounding.AwayFromZero);
