@@ -164,20 +164,21 @@
                         }
                         var quantity = Math.Round(item.Quantity == 0m ? 1m : item.Quantity, 3, MidpointRounding.AwayFromZero);
                         var unitPrice = Math.Round(item.UnitPrice, 2, MidpointRounding.AwayFromZero);
-                        var itemPrice = quantity * unitPrice;
+                        var itemPrice = Math.Round(quantity * unitPrice, 2, MidpointRounding.AwayFromZero);
+                        var itemPriceModifierValue = Math.Round(item.PriceModifierValue, 2, MidpointRounding.AwayFromZero);
                         switch (item.PriceModifierType)
                         {
                             case PriceModifierType.DiscountAmount:
-                                itemPrice -= item.PriceModifierValue;
+                                itemPrice -= itemPriceModifierValue;
                                 break;
                             case PriceModifierType.DiscountPercent:
-                                itemPrice -= Math.Round(itemPrice * (item.PriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
+                                itemPrice -= Math.Round(itemPrice * (itemPriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
                                 break;
                             case PriceModifierType.SurchargeAmount:
-                                itemPrice += item.PriceModifierValue;
+                                itemPrice += itemPriceModifierValue;
                                 break;
                             case PriceModifierType.SurchargePercent:
-                                itemPrice += Math.Round(itemPrice * (item.PriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
+                                itemPrice += Math.Round(itemPrice * (itemPriceModifierValue / 100.0m), 2, MidpointRounding.AwayFromZero);
                                 break;
                         }
                         itemsTotalAmount += Math.Round(itemPrice, 2, MidpointRounding.AwayFromZero);
