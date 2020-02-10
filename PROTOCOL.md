@@ -627,7 +627,7 @@ The response is standard status response.
 
 ## `GET` Get Current Cash Amount
 Gets the current cash amount registered in the fiscal printer. 
-The request is `POST` because you are allowed to provide "taskId" in the body of the request.
+You can provide taskId as URL query parameter.
 
 Warning: Be aware, in Tremol devices, you should present credentials - operator and operatorPassword as in receipt request.
 
