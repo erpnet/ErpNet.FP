@@ -243,7 +243,7 @@
             // Get receipt number
             string lastDocumentNumberResponse;
             (lastDocumentNumberResponse, deviceStatus) = GetLastDocumentNumber(closeReceiptResponse);
-            if (!deviceStatus.Ok)
+            if (!deviceStatus.Ok || String.IsNullOrWhiteSpace(lastDocumentNumberResponse))
             {
                 AbortReceipt();
                 deviceStatus.AddInfo($"Error occurred while reading last document number");

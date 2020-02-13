@@ -289,7 +289,7 @@
 
             var qrCodeFields = qrCodeData.Split('*');
             decimal receiptAmount;
-            try  
+            try
             {
                 receiptAmount = decimal.Parse(qrCodeFields[4], CultureInfo.InvariantCulture);
             }
@@ -311,11 +311,17 @@
                 deviceStatus.AddInfo($"Error occurred while parsing last receipt QR code data (receipt date and time)");
                 return (new ReceiptInfo(), deviceStatus);
             }
+            string receiptNumber = qrCodeFields[1];
+            if (String.IsNullOrWhiteSpace(receiptNumber))
+            {
+                deviceStatus.AddInfo($"Error occurred while reading last receipt number");
+                return (new ReceiptInfo(), deviceStatus);
+            }
             return (new ReceiptInfo
             {
                 FiscalMemorySerialNumber = qrCodeFields[0],
                 ReceiptAmount = receiptAmount,
-                ReceiptNumber = qrCodeFields[1],
+                ReceiptNumber = receiptNumber,
                 ReceiptDateTime = receiptDateTime
             }, deviceStatus);
         }
