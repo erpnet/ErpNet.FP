@@ -27,6 +27,7 @@
         public DateTime Enqueued = DateTime.Now;
         public DateTime? Started = null;
         public DateTime? Finished = null;
+        public DateTime DeadLine = DateTime.MaxValue;
 
         public PrintJobAction Action = PrintJobAction.None;
         public IFiscalPrinter? Printer;
@@ -36,11 +37,33 @@
         public string? TaskId;
         public int AsyncTimeout = DefaultTimeout;
 
+        public int Timeout { 
+            get => timeout; 
+            set {
+                timeout = value;
+                DeadLine = timeout <= 0 ? DateTime.MaxValue : Enqueued.AddMilliseconds(timeout);
+            } 
+        }
+
         public void Run()
         {
             if (Printer == null) return;
+            
             Started = DateTime.Now;
+
+            if (DeadLine <= Started)
+            {                
+                Finished = DateTime.Now;
+                TaskStatus = TaskStatus.Finished;
+                var deviceStatus = new DeviceStatus();
+                deviceStatus.AddError("E999", "User timeout occured while sending the request");
+                Result = deviceStatus;
+                return;
+            }
+
             TaskStatus = TaskStatus.Running;
+
+            Printer.SetDeadLine(DeadLine);
             try
             {
                 switch (Action)
@@ -149,5 +172,7 @@
                 TaskStatus = TaskStatus.Finished;
             }
         }
+
+        private int timeout = 0;
     }
 }

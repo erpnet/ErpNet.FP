@@ -315,6 +315,7 @@
             if (String.IsNullOrWhiteSpace(receiptNumber))
             {
                 deviceStatus.AddInfo($"Error occurred while reading last receipt number");
+                deviceStatus.AddError("E409", $"Last receipt number is empty");
                 return (new ReceiptInfo(), deviceStatus);
             }
             return (new ReceiptInfo

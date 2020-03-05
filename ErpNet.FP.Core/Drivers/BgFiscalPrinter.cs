@@ -20,7 +20,7 @@
 
         public DeviceInfo Info = new DeviceInfo();
 
-        public IDictionary<PaymentType, string> PaymentTypeMappings = new Dictionary<PaymentType, string>();
+        public IDictionary<PaymentType, string> PaymentTypeMappings = new Dictionary<PaymentType, string>();        
 
         protected BgFiscalPrinter(
             IChannel channel, 
@@ -314,5 +314,8 @@
         }
 
         public DeviceInfo DeviceInfo => Info;
+
+        public void SetDeadLine(DateTime deadLine) => DeadLine = deadLine;
+        public DateTime DeadLine { get; private set; } = DateTime.MaxValue;
     }
 }

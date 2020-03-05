@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text.RegularExpressions;
 
     public static class Helpers
     {
@@ -92,5 +93,35 @@
             return result;
         }
 
+        public static int ParseTimeout(this string s)
+        {
+            int value = 0;
+            var match = TimeoutRegex.Match(s);
+            if (match.Success &&
+                match.Groups.Count == 3 &&
+                int.TryParse(match.Groups[1].Value, out value))
+            {
+                switch (match.Groups[2].Value.ToLowerInvariant())
+                {
+                    case "m":
+                        value *= 60 * 1000;
+                        break;
+                    case "s":
+                        value *= 1000;
+                        break;
+                    case "ms":
+                    case "":
+                        // keep the parsed value
+                        break;
+                    default:
+                        // unknown sufix
+                        value = 0;
+                        break;
+                }
+            }
+            return value;
+        }
+
+        private static readonly Regex TimeoutRegex = new Regex(@"^(\d+)\s*?([ms]*)\s*?$", RegexOptions.IgnoreCase);
     }
 }

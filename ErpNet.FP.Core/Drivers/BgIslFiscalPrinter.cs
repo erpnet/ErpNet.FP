@@ -246,7 +246,8 @@
             if (!deviceStatus.Ok || String.IsNullOrWhiteSpace(lastDocumentNumberResponse))
             {
                 AbortReceipt();
-                deviceStatus.AddInfo($"Error occurred while reading last document number");
+                deviceStatus.AddInfo($"Error occurred while reading last receipt number");
+                deviceStatus.AddError("E409", $"Last receipt number is empty");
                 return (receiptInfo, deviceStatus);
             }
             receiptInfo.ReceiptNumber = lastDocumentNumberResponse;

@@ -203,6 +203,12 @@
         {
             lock (frameSyncLock)
             {
+                if (DeadLine < DateTime.Now)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E999", "User timeout occured while sending the request");
+                    return (string.Empty, deviceStatus);
+                }
                 try
                 {
                     var response = ParseResponse(RawRequest(data == null ? null : PrinterEncoding.GetBytes(data)));

@@ -1,4 +1,6 @@
-﻿namespace ErpNet.FP.Core
+﻿using System;
+
+namespace ErpNet.FP.Core
 {
     /// <summary>
     /// Represents the capabilities of a connected fiscal printer.
@@ -96,5 +98,7 @@
         /// Tries to fix the erroneous state of the device to the normal - ready for printing state
         /// </summary>
         DeviceStatusWithDateTime Reset(Credentials credentials);
+
+        void SetDeadLine(DateTime deadLine);
     }
 }
