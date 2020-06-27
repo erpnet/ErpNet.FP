@@ -129,7 +129,7 @@
 
         public virtual DeviceStatus FullPayment()
         {
-            var (_, status) = Request("4902");
+            var (_, status) = Request("490");//"4902");
             return status;
         }
 
@@ -228,8 +228,8 @@
             var paymentData = new StringBuilder()
                 .Append("49")
                 .Append(GetPaymentTypeText(paymentType))
-                .Append(IcpDecimal(amount, 12, 2))
-                .Append("0");
+                .Append(IcpDecimal(amount, 12, 2));
+                //.Append("0");
             return Request(paymentData.ToString());
         }
 
