@@ -6,6 +6,8 @@
     using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
@@ -13,8 +15,10 @@
 
     public class Program
     {
-        private static readonly string DebugLogFileName = @"debug.log";
-        private static readonly string AppSettingsFileName = @"appsettings.json";
+        private const string DebugLogFileName = "debug.log";
+        // Serilog appends yyyyMMdd before file extension when rolling is set to daily
+        private const string DebugLogFilePattern = "debug*.log";
+        private const string AppSettingsFileName = "appsettings.json";
 
         public static IHostBuilder CreateHostBuilder(string pathToContentRoot, string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -61,25 +65,55 @@
             }
         }
 
+        private static Task EnsureDebugLogHistoryInBackground(string pathToContentRoot, CancellationToken ct)
+        {
+            return Task.Run(async () =>
+            {
+                while (!ct.IsCancellationRequested)
+                {
+                    await Task.Delay(TimeSpan.FromDays(1), ct);
 
-        public static string EnsureDebugLogHistory(string pathToContentRoot)
+                    try
+                    {
+                        EnsureDebugLogHistory(pathToContentRoot);
+                    }
+                    catch (OperationCanceledException)
+                    { break; }
+                    catch (ThreadAbortException)
+                    { break; }
+                    catch
+                    { }
+                }
+            });
+        }
+
+        private static string EnsureDebugLogHistory(string pathToContentRoot)
         {
             var debugLogFolder = Path.Combine(pathToContentRoot, "wwwroot", "debug");
             var debugLogFilePath = Path.Combine(debugLogFolder, DebugLogFileName);
             Directory.CreateDirectory(debugLogFolder);
-            if (File.Exists(debugLogFilePath))
+
+            for (var i = 9; i > 1; i--)
             {
-                for (var i = 9; i > 1; i--)
+                if (File.Exists($"{debugLogFilePath}.{i - 1}.zip"))
                 {
-                    if (File.Exists($"{debugLogFilePath}.{i - 1}.zip"))
+                    File.Move($"{debugLogFilePath}.{i - 1}.zip", $"{debugLogFilePath}.{i}.zip", true);
+                }
+            }
+
+            var files = Directory.GetFiles(debugLogFolder, DebugLogFilePattern);
+            if (files.Length > 0)
+            {
+                // Zip the files
+                using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
+                {
+                    foreach (var fileNameWithDatePattern in files)
                     {
-                        File.Move($"{debugLogFilePath}.{i - 1}.zip", $"{debugLogFilePath}.{i}.zip", true);
+                        zip.CreateEntryFromFile(fileNameWithDatePattern, Path.GetFileName(fileNameWithDatePattern));
+                        File.Delete(fileNameWithDatePattern);
                     }
                 }
-                // Zip the file
-                using (var zip = ZipFile.Open($"{debugLogFilePath}.1.zip", ZipArchiveMode.Create))
-                    zip.CreateEntryFromFile(debugLogFilePath, DebugLogFileName);
-                File.Delete(debugLogFilePath);
+                
             }
             return debugLogFilePath;
         }
@@ -108,7 +142,7 @@
                 .WriteTo.Console(outputTemplate: logOutputTemplate)
                 .WriteTo.File(
                     EnsureDebugLogHistory(pathToContentRoot),
-                    rollingInterval: RollingInterval.Infinite,
+                    rollingInterval: RollingInterval.Day,
                     outputTemplate: logOutputTemplate);
 
             if (Debugger.IsAttached)
@@ -133,7 +167,13 @@
 
                 Log.Information($"Starting the service, version {GetVersion()}...");
 
+                var cts = new CancellationTokenSource();
+                
+                EnsureDebugLogHistoryInBackground(pathToContentRoot, cts.Token);
+
                 host.Run();
+
+                cts.Cancel();
 
                 Log.Information("Stopping the service.");
 
