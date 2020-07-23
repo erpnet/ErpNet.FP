@@ -19,7 +19,7 @@
 
         Dictionary<string, PrinterProperties> PrintersProperties { get; set; }
 
-        Task<object> RunAsync(PrintJob printJob);
+        Task<object?> RunAsync(PrintJob printJob);
 
         TaskInfoResult GetTaskInfo(string taskId);
 
@@ -220,7 +220,7 @@
             }
         }
 
-        public async Task<object> RunAsync(PrintJob printJob)
+        public async Task<object?> RunAsync(PrintJob printJob)
         {
             try
             {

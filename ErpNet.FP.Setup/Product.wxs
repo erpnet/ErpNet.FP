@@ -1,95 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-    <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.2020.3020"
-             Manufacturer="Erp.Net And Contributors"
-             UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
-        
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
-        
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes" />
-
-        <Property Id="MSIFASTINSTALL" Value="7" />
-        
-        <!-- Cab file to be embedded in the .msi file -->
-        <MediaTemplate EmbedCab="yes" />
-
-        <!-- Add CheckBox UI to your installer for running application on exit-->
-        <UI>
-            <UIRef Id="WixUI_Minimal" />
-            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="ExitDialog" Order="3">1</Publish>
-            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
-        </UI>
-
-        <CustomAction Id="LaunchApplication" Directory="INSTALLFOLDER" ExeCommand="explorer.exe http://localhost:8001" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
-        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Show Admin (http://localhost:8001)" />
-
-        <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="ProgramFilesFolder">
-                <Directory Id="INSTALLFOLDER" Name="ErpNet.FP" />
-                <Directory Id="ProductFilesComponentGroup" />
-            </Directory>
-            <Directory Id="ProgramMenuFolder">
-            </Directory>
-            <Directory Id="DesktopFolder">
-            </Directory>
-        </Directory>
-        <Feature Id="ProductFeature" Title="ErpNet.FP.Setup" Level="1">
-            <ComponentGroupRef Id="ProductFilesComponentGroup" />
-            <ComponentGroupRef Id="ProductComponents" />
-        </Feature>
-    </Product>
-    <Fragment>
-        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-            <Component Id="ExeFile" Guid="*">
-                <File Source="$(var.OUTPUT)\wwwroot\favicon.ico" />
-                <!-- Install shortcut on Start Menu -->
-                <util:InternetShortcut 
-                    Id="ShortcutAtProgramMenuFolder" 
-                    Directory="ProgramMenuFolder" 
-                    Name="ErpNet.FP Admin Page" 
-                    Target="http://localhost:8001/" 
-                    IconFile="file://[#favicon.ico]" />
-                
-                <!-- Install shortcut on Desktop -->
-                <!-- util:InternetShortcut
+  <Product Id="*" Name="ErpNet.FP - Fiscal Print Server" Language="1033" Version="1.0.3000.0000" Manufacturer="Erp.Net And Contributors" UpgradeCode="05e58513-a8d9-45bf-a280-d47ccb696623">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes" />
+    <Property Id="MSIFASTINSTALL" Value="7" />
+    <!-- Cab file to be embedded in the .msi file -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- Add CheckBox UI to your installer for running application on exit-->
+    <UI>
+      <UIRef Id="WixUI_Minimal" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="ExitDialog" Order="3">1</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+    </UI>
+    <CustomAction Id="LaunchApplication" Directory="INSTALLFOLDER" ExeCommand="explorer.exe http://localhost:8001" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Show Admin (http://localhost:8001)" />
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="ErpNet.FP" />
+        <Directory Id="ProductFilesComponentGroup" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+      </Directory>
+      <Directory Id="DesktopFolder">
+      </Directory>
+    </Directory>
+    <Feature Id="ProductFeature" Title="ErpNet.FP.Setup" Level="1">
+      <ComponentGroupRef Id="ProductFilesComponentGroup" />
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ExeFile" Guid="*">
+        <File Source="$(var.OUTPUT)\wwwroot\favicon.ico" />
+        <!-- Install shortcut on Start Menu -->
+        <util:InternetShortcut Id="ShortcutAtProgramMenuFolder" Directory="ProgramMenuFolder" Name="ErpNet.FP Admin Page" Target="http://localhost:8001/" IconFile="file://[#favicon.ico]" />
+        <!-- Install shortcut on Desktop -->
+        <!-- util:InternetShortcut
                     Id="ShortcutAtDesktopFolder"
                     Directory="DesktopFolder"
                     Name="ErpNet.FP Admin Page"
                     Target="http://localhost:8001/"
                     IconFile="file://[#favicon.ico]" /-->
-                
-                <!-- Install service executable -->
-                <File
-                  Id="ErpNet.FP.Server"
-                  Source="$(var.OUTPUT)\ErpNet.FP.Server.exe"
-                  KeyPath="yes" />
-                <!-- Install service -->
-                <ServiceInstall 
-                        Id="ServiceInstaller" 
-                        Type="ownProcess" 
-                        Name="ErpNetFPServer"
-                        DisplayName="ErpNet.FP - Fiscal Print Server"
-                        Description="Http server for printing to fiscal printers through simple JSON Api (https://github.com/erpnet/erpnet.fp)."
-                        Start="auto"
-                        Account="LocalSystem"
-                        ErrorControl="normal" />
-                <!-- Set start/stop/remove options -->
-                <ServiceControl
-                        Id="StartService"
-                        Name="ErpNetFPServer"
-                        Stop="both"
-                        Start="install"
-                        Remove="uninstall"
-                        Wait="yes" />
-                <util:ServiceConfig 
-                    ServiceName="ErpNetFPServer"
-                    FirstFailureActionType="restart"
-                    SecondFailureActionType="restart"
-                    ThirdFailureActionType="restart"
-                    ResetPeriodInDays="1"
-                    RestartServiceDelayInSeconds="60" />
-            </Component>
-        </ComponentGroup>
-    </Fragment>
+        <!-- Install service executable -->
+        <File Id="ErpNet.FP.Server" Source="$(var.OUTPUT)\ErpNet.FP.Server.exe" KeyPath="yes" />
+        <!-- Install service -->
+        <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Name="ErpNetFPServer" DisplayName="ErpNet.FP - Fiscal Print Server" Description="Http server for printing to fiscal printers through simple JSON Api (https://github.com/erpnet/erpnet.fp)." Start="auto" Account="LocalSystem" ErrorControl="normal" />
+        <!-- Set start/stop/remove options -->
+        <ServiceControl Id="StartService" Name="ErpNetFPServer" Stop="both" Start="install" Remove="uninstall" Wait="yes" />
+        <util:ServiceConfig ServiceName="ErpNetFPServer" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" ResetPeriodInDays="1" RestartServiceDelayInSeconds="60" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>
