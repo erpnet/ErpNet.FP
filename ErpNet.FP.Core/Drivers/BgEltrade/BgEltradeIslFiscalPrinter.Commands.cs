@@ -38,14 +38,22 @@
             string operatorId,
             string operatorPassword)
         {
-            var header = string.Join(",",
-                new string[] {
-                    String.IsNullOrEmpty(operatorId) ?
-                        Options.ValueOrDefault("Operator.Name", "Operator")
-                        :
-                        operatorId,
+            string theOperator = string.IsNullOrEmpty(operatorId)
+                ? Options.ValueOrDefault("Operator.Name", "Operator")
+                : operatorId;
+            string header;
+            if (string.IsNullOrEmpty(uniqueSaleNumber))
+            {
+                header = string.Join(",",
+                    theOperator);
+            }
+            else
+            {
+                header = string.Join(",",
+                    theOperator,
                     uniqueSaleNumber
-                });
+                );
+            }
             return Request(EltradeCommandOpenFiscalReceipt, header);
         }
 
