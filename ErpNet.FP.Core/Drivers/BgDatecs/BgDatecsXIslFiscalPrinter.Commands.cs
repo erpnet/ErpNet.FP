@@ -270,7 +270,28 @@
             string operatorId,
             string operatorPassword)
         {
-            var header = string.Join("\t",
+            string header;
+            if (string.IsNullOrEmpty(uniqueSaleNumber))
+            {
+                header = string.Join("\t",
+                new string[] {
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.ID", "1")
+                        :
+                        operatorId,
+                    String.IsNullOrEmpty(operatorId) ?
+                        Options.ValueOrDefault("Operator.Password", "0000").WithMaxLength(Info.OperatorPasswordMaxLength)
+                        :
+                        operatorPassword,
+                    "1",
+                    "",
+                    ""
+                });
+
+            }
+            else
+            {
+                header = string.Join("\t",
                 new string[] {
                     String.IsNullOrEmpty(operatorId) ?
                         Options.ValueOrDefault("Operator.ID", "1")
@@ -285,6 +306,8 @@
                     "",
                     ""
                 });
+
+            }
             return Request(CommandOpenFiscalReceipt, header);
         }
 
