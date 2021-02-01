@@ -102,6 +102,9 @@
 
         public abstract DeviceStatus SetDateTime(CurrentDateTime currentDateTime);
 
+        private static readonly Regex UniqueSalesNumberPattern =
+            new Regex("^[A-Z]{2}[0-9]{6}-[A-Z0-9]{4}-[0-9]{7}$", RegexOptions.Compiled);
+
         public virtual DeviceStatus ValidateReceipt(Receipt receipt)
         {
             var status = new DeviceStatus();
@@ -112,14 +115,17 @@
             }
             if (String.IsNullOrEmpty(receipt.UniqueSaleNumber))
             {
-                status.AddError("E405", "UniqueSaleNumber is empty");
-                return status;
+                // NOTE: don't enforce USN
+                // Let the device itself determine
             }
-            var uniqueSaleNumberMatch = Regex.Match(receipt.UniqueSaleNumber, "^[A-Z]{2}[0-9]{6}-[A-Z0-9]{4}-[0-9]{7}$");
-            if (!uniqueSaleNumberMatch.Success)
+            else
             {
-                status.AddError("E405", "Invalid format of UniqueSaleNumber");
-                return status;
+                var isMatch = UniqueSalesNumberPattern.IsMatch(receipt.UniqueSaleNumber);
+                if (!isMatch)
+                {
+                    status.AddError("E405", "Invalid format of UniqueSaleNumber");
+                    return status;
+                }
             }
             var itemsTotalAmount = 0.00m;
             var row = 0;

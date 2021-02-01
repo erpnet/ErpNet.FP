@@ -11,7 +11,7 @@
         /// <summary>
         /// The unique sale number is a fiscally controlled number.
         /// </summary>
-        [JsonProperty(Required = Required.Always)]
+        //[JsonProperty(Required = Required.Always)]
         public string UniqueSaleNumber { get; set; } = string.Empty;
 
         /// <summary>

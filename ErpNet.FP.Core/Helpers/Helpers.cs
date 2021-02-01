@@ -70,6 +70,12 @@
             string defaultValue) =>
             options.TryGetValue(key, out string value) ? value : defaultValue;
 
+        public static string IfNullOrEmpty(this string val, string fallback) =>
+            string.IsNullOrEmpty(val) ? fallback : val;
+
+        public static string IfNullOrEmpty(this string val, Func<string> fallback) =>
+            string.IsNullOrEmpty(val) ? fallback() : val;
+
         public static string[] Split(this string str, int[] chunkSizes)
         {
             var listOfStrings = new List<string>();
