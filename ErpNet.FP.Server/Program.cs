@@ -135,10 +135,11 @@
 
             EnsureAppSettingsJson(pathToContentRoot);
 
-            var logOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+            var logOutputTemplate = "[{RequestId} {Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
                 .WriteTo.Console(outputTemplate: logOutputTemplate)
                 .WriteTo.File(
                     EnsureDebugLogHistory(pathToContentRoot),
