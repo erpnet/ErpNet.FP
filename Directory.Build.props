@@ -13,9 +13,9 @@
     <Authors>ErpNet and Contributors</Authors>
     <PackageLicenseFile>$(SolutionDir)LICENSE.txt</PackageLicenseFile>
     <Copyright>(c) ErpNet and Contributors</Copyright>
-    <AssemblyVersion>1.0.3000.0000</AssemblyVersion>
-    <FileVersion>1.0.3000.0000</FileVersion>
-    <Version>1.0.3000.0000</Version>
+    <AssemblyVersion>1.0.4000.0000</AssemblyVersion>
+    <FileVersion>1.0.4000.0000</FileVersion>
+    <Version>1.0.4000.0000</Version>
     <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
     <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
