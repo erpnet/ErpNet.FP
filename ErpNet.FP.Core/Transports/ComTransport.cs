@@ -13,7 +13,7 @@
         public override string TransportName => "com";
 
         protected const int DefaultBaudRate = 115200;
-        protected const int DefaultTimeout = 800;
+        protected const int DefaultTimeout = 1000;
 
         private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
             new Dictionary<string, ComTransport.Channel?>();
