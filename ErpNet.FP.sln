@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		output.xml = output.xml
 		PROTOCOL.md = PROTOCOL.md
 		README.md = README.md
+		ReleaseNewVersion.md = ReleaseNewVersion.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErpNet.FP.Core", "ErpNet.FP.Core\ErpNet.FP.Core.csproj", "{E6273892-F5B1-485E-A4BE-3934214B40BA}"
@@ -72,8 +73,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_StartDate = 2000/1/1
 		SolutionGuid = {5B765DC6-609B-4316-B270-FF956A1A0D3C}
+		BuildVersion_StartDate = 2000/1/1
+		BuildVersion_UseGlobalSettings = True
 	EndGlobalSection
 EndGlobal
