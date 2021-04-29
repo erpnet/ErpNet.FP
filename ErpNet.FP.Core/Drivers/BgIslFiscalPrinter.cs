@@ -128,7 +128,8 @@
                                 item.TaxGroup,
                                 item.Quantity,
                                 item.PriceModifierValue,
-                                item.PriceModifierType);
+                                item.PriceModifierType,
+                                item.ItemCode);
                         }
                         catch (StandardizedStatusMessageException e)
                         {

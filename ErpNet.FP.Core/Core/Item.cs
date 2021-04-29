@@ -73,6 +73,7 @@
     /// </summary>
     public class Item
     {
+        public int ItemCode { get; set; } = 999;
         /// <summary>
         /// ItemType is the type of the item row
         /// </summary>

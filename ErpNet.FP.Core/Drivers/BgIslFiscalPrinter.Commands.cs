@@ -236,7 +236,8 @@
             TaxGroup taxGroup,
             decimal quantity = 0,
             decimal priceModifierValue = 0,
-            PriceModifierType priceModifierType = PriceModifierType.None)
+            PriceModifierType priceModifierType = PriceModifierType.None,
+            int ItemCode = 999)
         {
             var itemData = new StringBuilder();
             if (department <= 0) {
