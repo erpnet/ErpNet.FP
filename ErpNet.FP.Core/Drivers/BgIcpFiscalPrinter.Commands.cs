@@ -184,6 +184,8 @@
             bool reversalReceipt = false,
             int ItemCode = 999)
         {
+            //Making sure ItemCode is within accepted boundries
+            ItemCode = (ItemCode > 99999999) || (ItemCode < 1) ? 99999999 : ItemCode;
             var itemData = new StringBuilder()
                 .Append(reversalReceipt ? "24" : "44")
                 .Append(uniqueSaleNumber)
