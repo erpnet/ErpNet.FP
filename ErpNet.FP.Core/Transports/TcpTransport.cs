@@ -144,11 +144,11 @@
                     {
                         Reconnect();
                     } 
-                    catch
+                    catch (Exception inner)
                     {
                         var errorMessage = $"Cannot reconnect to {HostName}:{Port}";
                         Log.Error(errorMessage);
-                        throw new TimeoutException(errorMessage);
+                        throw new TimeoutException(errorMessage, inner);
                     }
                 }
                 var bytesToWrite = data.Length;

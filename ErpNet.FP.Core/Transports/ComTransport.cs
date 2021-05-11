@@ -117,14 +117,14 @@
                 {
                     serialPort.Open();
                 }
-                catch (FileNotFoundException ex)
+                catch (FileNotFoundException)
                 {
-                    throw ex;
+                    throw;
                 }
                 catch (UnauthorizedAccessException ex)
                 {
                     Log.Information($"Access denied for {serialPort.PortName}: {ex.Message}. Maybe the port is already open from another application or driver.");
-                    throw ex;
+                    throw;
                 }
                 catch (Exception ex)
                 {

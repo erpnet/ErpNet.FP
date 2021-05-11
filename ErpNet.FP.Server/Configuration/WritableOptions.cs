@@ -43,13 +43,24 @@
             var physicalPath = fileInfo.PhysicalPath;
 
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
-            var sectionObject = jObject.TryGetValue(section, out JToken? sectionToken) ?
-                JsonConvert.DeserializeObject<T>(sectionToken.ToString()) : (Value ?? new T());
+            if (jObject != null)
+            {
+                T? sectionObject = null;
+                if (jObject.TryGetValue(section, out JToken? sectionToken) && sectionToken != null)
+                {
+                    sectionObject = JsonConvert.DeserializeObject<T>(sectionToken.ToString());
+                }
 
-            applyChanges(sectionObject);
+                if (object.ReferenceEquals(sectionObject, null))
+                {
+                    sectionObject = Value ?? new T();
+                }
 
-            jObject[section] = JObject.Parse(JsonConvert.SerializeObject(sectionObject));
-            File.WriteAllText(physicalPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
+                applyChanges(sectionObject);
+
+                jObject[section] = JObject.Parse(JsonConvert.SerializeObject(sectionObject));
+                File.WriteAllText(physicalPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
+            }
         }
     }
 
@@ -63,8 +74,8 @@
             services.Configure<T>(section);
             services.AddTransient<IWritableOptions<T>>(provider =>
             {
-                var environment = provider.GetService<IWebHostEnvironment>();
-                var options = provider.GetService<IOptionsMonitor<T>>();
+                var environment = provider.GetRequiredService<IWebHostEnvironment>();
+                var options = provider.GetRequiredService<IOptionsMonitor<T>>();
                 return new WritableOptions<T>(environment, options, section.Key, file);
             });
         }
