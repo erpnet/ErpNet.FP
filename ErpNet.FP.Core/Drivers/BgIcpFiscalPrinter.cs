@@ -129,7 +129,8 @@
                             item.Quantity,
                             item.PriceModifierValue,
                             item.PriceModifierType,
-                            reversalReceipt);
+                            reversalReceipt,
+                            item.ItemCode);
                     }
                     catch (StandardizedStatusMessageException e)
                     {

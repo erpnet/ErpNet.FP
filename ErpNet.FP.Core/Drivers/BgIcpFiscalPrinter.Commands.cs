@@ -181,13 +181,16 @@
             decimal quantity = 0m,
             decimal priceModifierValue = 0m,
             PriceModifierType priceModifierType = PriceModifierType.None,
-            bool reversalReceipt = false)
+            bool reversalReceipt = false,
+            int ItemCode = 999)
         {
+            //Making sure ItemCode is within accepted boundries
+            ItemCode = (ItemCode > 99999999) || (ItemCode < 1) ? 99999999 : ItemCode;
             var itemData = new StringBuilder()
                 .Append(reversalReceipt ? "24" : "44")
                 .Append(uniqueSaleNumber)
                 .Append(IcpDecimal(quantity == 0m ? 1m : quantity, 8, 3))
-                .Append(IcpDecimal(999, 8, 0))
+                .Append(IcpDecimal(ItemCode, 8, 0))
                 .Append(IcpDecimal(unitPrice, 8, 2))
                 .Append(department.ToString("X"))
                 .Append(GetTaxGroupText(taxGroup))
