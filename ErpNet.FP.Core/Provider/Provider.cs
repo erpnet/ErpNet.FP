@@ -8,6 +8,7 @@ namespace ErpNet.FP.Core.Provider
     using ErpNet.FP.Core.Configuration;
     using ErpNet.FP.Core.Drivers;
     using Serilog;
+    using static ErpNet.FP.Core.Transports.ComTransport;
 
     /// <summary>
     /// General functions for finding and connecting fiscal printers.
@@ -38,45 +39,50 @@ namespace ErpNet.FP.Core.Provider
         {
             IFiscalPrinter? printer = null;
             var unknownDeviceConnectedToChannel = true;
-            foreach (var driver in drivers)
+            var positionInList = 1;
+            using ( ((Channel)channel).serialPort = ((Channel)channel).GetNewSerialPort()) 
             {
-                var uri = $"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}";
-                Log.Information($"Probing {uri}...");
-                try
+                foreach (var driver in drivers)
                 {
-                    printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel, ServiceOptions));
-                    printer.DeviceInfo.Uri = uri;
+                    try
+                    {
+                        var uri = $"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}";
+                        Log.Information($"Probing ({positionInList++}/{drivers.Count}){uri}...");
 
-                    // We found our driver, so do not test more
-                    unknownDeviceConnectedToChannel = false;
-                    Log.Information($"Successfully detected {uri}.");
-                    break;
-                }
-                catch (TimeoutException ex)
-                {
-                    // Timeout occured while connecting. Skip this transport address.
-                    Log.Error($"Timeout occured: {ex.Message}");
-                }
-                catch (InvalidResponseException ex)
-                {
-                    // Autodetect probe not passed for this channel. No response.
-                    Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: {ex.Message}");
-                }
-                catch (InvalidDeviceInfoException)
-                {
-                    // Autodetect probe not passed for this channel. Invalid device.
-                    Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: invalid device info returned.");
-                }
-                catch (Exception ex)
-                {
-                    Log.Error($"Unexpected error: {ex.Message}");
-                }
+                        printer = await Task<IFiscalPrinter>.Run(() => driver.Connect(channel, ServiceOptions));
+                        printer.DeviceInfo.Uri = uri;
+
+                        // We found our driver, so do not test more
+                        unknownDeviceConnectedToChannel = false;
+                        Log.Information($"Successfully detected {uri}.");
+                        break;
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        // Timeout occured while connecting. Skip this transport address.
+                        Log.Error($"Timeout occured: {ex.Message}");
+                    }
+                    catch (InvalidResponseException ex)
+                    {
+                        // Autodetect probe not passed for this channel. No response.
+                        Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: {ex.Message}");
+                    }
+                    catch (InvalidDeviceInfoException)
+                    {
+                        // Autodetect probe not passed for this channel. Invalid device.
+                        Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: invalid device info returned.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Unexpected error: {ex.Message}");
+                    }
+                } 
             }
             if (unknownDeviceConnectedToChannel)
             {
                 // We did not recognize the device, so drop that channel 
                 // and leave it available for others
-                transport.Drop(channel);
+                // transport.Drop(channel);   // hangs here if device driver problem occure
             }
             return printer;
         }
