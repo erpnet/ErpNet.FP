@@ -88,10 +88,14 @@
                     {
                         Channel.Write(new byte[] { SpecialCommandPing });
                     }
+                    catch (TimeoutException)
+                    {
+                        continue;
+                    }
                     catch (Exception ex)
                     {
                         Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
-                        continue;
+                        throw;  // nothing to do
                     }
                     try
                     {
@@ -181,7 +185,7 @@
                 catch (Exception ex)
                 {
                     Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
-                    continue;
+                    throw;  // nothing to do
                 }
 
                 // Read response frames.

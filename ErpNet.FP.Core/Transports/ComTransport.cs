@@ -14,6 +14,7 @@
 
         protected const int DefaultBaudRate = 115200;
         protected const int DefaultTimeout = 800;
+        protected const int DefaultTimeoutToClose = 3000;   // dispose SerialPort object when specified time after communication is elapsed
 
         private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
             new Dictionary<string, ComTransport.Channel?>();
@@ -22,27 +23,16 @@
         {
             if (openedChannels.TryGetValue(address, out Channel? channel))
             {
-                if (channel == null)
-                {
-                    throw new TimeoutException("disabled due to timeout");
-                }
-                return channel;
-            }
-            else
-            {
-                try
-                {
-                    var (comPort, baudRate) = ParseAddress(address);
-                    channel = new Channel(comPort, baudRate);
-                    openedChannels.Add(address, channel);
+                if (channel != null)
                     return channel;
-                }
-                catch (TimeoutException e)
-                {
-                    openedChannels.Add(address, null);
-                    throw e;
-                }
+                else
+                    openedChannels.Remove(address);
             }
+            var (comPort, baudRate) = ParseAddress(address);
+            channel = new Channel(comPort, baudRate);
+            // <address> is more specific (<Com>:<Speed>) than <comPort> and multiple addresses on one port can lead to locking or not finding device (only one can be opened)
+            openedChannels.Add(comPort /*address*/, channel); 
+            return channel;
         }
 
         protected (string, int) ParseAddress(string address)
@@ -75,7 +65,9 @@
 
         public class Channel : IChannel
         {
-            internal readonly SerialPort serialPort;
+            internal /*readonly*/ SerialPort? serialPort;    // can be disposed and created multiple times
+            private string portName;       
+            private int baudRate;
             protected Timer idleTimer;
             protected const int MinimalBaudRate = 9600;
 
@@ -83,14 +75,22 @@
             {
                 get
                 {
-                    return serialPort.PortName +
-                        (serialPort.BaudRate == DefaultBaudRate ? "" : $":{serialPort.BaudRate}");
+                    if (serialPort != null)
+                    {
+                        return serialPort.PortName +
+                            (serialPort.BaudRate == DefaultBaudRate ? "" : $":{serialPort.BaudRate}");
+                    }
+                    else
+                    {
+                        return portName + (baudRate == DefaultBaudRate ? "" : $":{baudRate}");
+                    }
                 }
             }
 
-            public Channel(string portName, int baudRate = DefaultBaudRate, int timeout = DefaultTimeout)
+            public SerialPort GetNewSerialPort(int timeout = DefaultTimeout)
             {
-                serialPort = new SerialPort
+                idleTimer.Change(DefaultTimeoutToClose, 0);
+                return new SerialPort
                 {
                     // Allow the user to set the appropriate properties.
                     PortName = portName,
@@ -100,22 +100,49 @@
                     ReadTimeout = timeout,
                     WriteTimeout = timeout
                 };
+            }
 
-                idleTimer = new Timer(IdleTimerElapsed);
+            public Channel(string portName, int baudRate = DefaultBaudRate, int timeout = DefaultTimeout)
+            {
+                this.portName = portName;
+                this.baudRate = baudRate;
+
+                serialPort = null;  // GetNewSerialPort();
+                idleTimer = new Timer(IdleTimerElapsed); 
+                idleTimer.Change(DefaultTimeoutToClose, 0);
             }
 
             private void IdleTimerElapsed(object state)
             {
-                Log.Information($"Idle timer elapsed for the com port {serialPort.PortName}");
-                Close();
+                if (Monitor.TryEnter(this))
+                {
+                    try
+                    { 
+                        Log.Information($"Idle timer elapsed for the com port {this.portName}");
+                        Close();
+                    }
+                    finally
+                    {
+                        Monitor.Exit(this);
+                    }
+                }
             }
 
             public void Open()
             {
-                Log.Information($"Opening the com port {serialPort.PortName}");
+                if (serialPort == null)
+                    serialPort = GetNewSerialPort();
+                idleTimer.Change(DefaultTimeoutToClose, 0);
+
                 try
                 {
-                    serialPort.Open();
+                    if (!serialPort.IsOpen)
+                    {
+                        serialPort.Open();
+                        Log.Information($"Opening the com port {serialPort.PortName}");
+                    }
+                    else
+                        Log.Information($"Com port {serialPort.PortName} allready opened!");
                 }
                 catch (FileNotFoundException)
                 {
@@ -129,24 +156,26 @@
                 catch (Exception ex)
                 {
                     Log.Information($"Error while opening {serialPort.PortName}: {ex.Message}. Trying baudrate {MinimalBaudRate}...");
+                    serialPort.Dispose();           // Dispose and get new SerialPort object before trying new speed
+                    serialPort = GetNewSerialPort();
+                    idleTimer.Change(DefaultTimeoutToClose, 0);
                     // Trying to open the port at minimal baudrate
-                    serialPort.BaudRate = MinimalBaudRate;
-                    serialPort.Open();
+                    serialPort.BaudRate = MinimalBaudRate;  
+                    serialPort.Open();  // will throw another exception if not working with MinimalBaudRate
                 }
             }
 
             public void Close()
             {
-                if (serialPort.IsOpen)
+                Log.Information($"Closing the com port {this.portName}");
+                if (serialPort != null)
                 {
-                    Log.Information($"Closing the com port {serialPort.PortName}");
-                    serialPort.DiscardInBuffer();
-                    serialPort.DiscardOutBuffer();
-                    serialPort.Close();
                     serialPort.Dispose();
+                    serialPort = null;
                 }
             }
 
+            //    not called ever
             public void Dispose()
             {
                 idleTimer.Dispose();
@@ -166,12 +195,20 @@
                 {
                     var result = new byte[task.Result];
                     Array.Copy(buffer, result, task.Result);
-                    idleTimer.Change(1000, 0);
+                    idleTimer.Change(DefaultTimeoutToClose, 0);
                     return result;
                 }
+                idleTimer.Change(DefaultTimeoutToClose, 0);
                 var errorMessage = $"Timeout occured while reading from com port '{serialPort.PortName}'";
                 Log.Error(errorMessage);
-                throw new TimeoutException(errorMessage);
+                try
+                {
+                    serialPort.Close();
+                }
+                finally
+                {
+                    throw new TimeoutException(errorMessage);
+                }
             }
 
             /// <summary>
@@ -180,31 +217,38 @@
             /// <param name="data">The data to write.</param>
             public void Write(byte[] data)
             {
-                idleTimer.Change(-1, 0);
-                if (!serialPort.IsOpen)
+                Monitor.Enter(this);
+                try
                 {
+                    idleTimer.Change(-1, 0);
                     Open();
+                    serialPort.DiscardInBuffer();
+                    var bytesToWrite = data.Length;
+                    while (bytesToWrite > 0)
+                    {
+                        var writeSize = Math.Min(bytesToWrite, serialPort.WriteBufferSize);
+                        var task = serialPort.BaseStream.WriteAsync(
+                            data,
+                            data.Length - bytesToWrite,
+                            writeSize
+                        );
+                        if (task.Wait(serialPort.WriteTimeout))
+                        {
+                            bytesToWrite -= writeSize;
+                            idleTimer.Change(DefaultTimeoutToClose, 0);
+                        }
+                        else
+                        {
+                            var errorMessage = $"Timeout occured while writing to com port '{serialPort.PortName}'";
+                            Log.Error(errorMessage);
+                            idleTimer.Change(DefaultTimeoutToClose, 0);
+                            throw new TimeoutException(errorMessage);
+                        }
+                    }
                 }
-                serialPort.DiscardInBuffer();
-                var bytesToWrite = data.Length;
-                while (bytesToWrite > 0)
+                finally
                 {
-                    var writeSize = Math.Min(bytesToWrite, serialPort.WriteBufferSize);
-                    var task = serialPort.BaseStream.WriteAsync(
-                        data,
-                        data.Length - bytesToWrite,
-                        writeSize
-                    );
-                    if (task.Wait(serialPort.WriteTimeout))
-                    {
-                        bytesToWrite -= writeSize;
-                    }
-                    else
-                    {
-                        var errorMessage = $"Timeout occured while writing to com port '{serialPort.PortName}'";
-                        Log.Error(errorMessage);
-                        throw new TimeoutException(errorMessage);
-                    }
+                    Monitor.Exit(this);
                 }
             }
         }

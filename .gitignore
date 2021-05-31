@@ -11,3 +11,4 @@ Output/
 .DS_Store
 ErpNet.FP.Server/appsettings.json
 ErpNet.FP.Setup/ProductInstallFiles.wxs
+/UpgradeLog.htm

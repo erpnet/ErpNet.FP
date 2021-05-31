@@ -69,10 +69,14 @@
                 {
                     Channel.Write(request);
                 }
+                catch (TimeoutException)
+                {
+                    continue;
+                }
                 catch (Exception ex)
                 {
                     Log.Information($"{deviceDescriptor} Cannot write to channel: {ex.Message}");
-                    continue;
+                    throw;  // nothing to do
                 }
 
                 // Read response frames.
