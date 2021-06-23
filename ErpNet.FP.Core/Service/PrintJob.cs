@@ -1,7 +1,7 @@
 ﻿namespace ErpNet.FP.Core.Service
 {
     using System;
-
+    
     public enum PrintJobAction
     {
         None,
@@ -31,7 +31,7 @@
 
         public PrintJobAction Action = PrintJobAction.None;
         public IFiscalPrinter? Printer;
-        public TaskStatus TaskStatus = TaskStatus.Unknown;
+        public TaskStatus TaskStatus = TaskStatus.Enqueued;  // On creation status must be "Enqueued"!  "Unknown" is for task NOT FOUND in queue.
         public object? Document;
         public object? Result;
         public string? TaskId;
