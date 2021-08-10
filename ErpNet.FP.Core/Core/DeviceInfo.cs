@@ -52,5 +52,13 @@
         /// Expresses support of item types discount-amount and surcharge-amount by the device
         /// </summary>   
         public bool SupportsSubTotalAmountModifiers = false;
+        /// <summary>
+        /// Expresses support of payment terminal for current device model
+        /// </summary>
+        public bool SupportPaymentTerminal = false;
+        /// <summary>
+        /// Expresses using of payment terminal for current device
+        /// </summary>
+        public bool UsePaymentTerminal = false;
     }
 }

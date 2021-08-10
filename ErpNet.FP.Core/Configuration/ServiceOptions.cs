@@ -21,6 +21,7 @@
     {
         public Dictionary<string, string> PaymentTypeMappings { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, string> PrinterConstants { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> PrinterOptions { get; set; } = new Dictionary<string, string>();
     }
 
     public class ServiceOptions
@@ -75,6 +76,37 @@
                             info.ItemTextMaxLength = value;
                         }
                     }
+                }
+            }
+            RWLock.ExitReadLock();
+        }
+
+        public void ReconfigurePrinterOptions(DeviceInfo info)
+        {
+            RWLock.EnterReadLock();
+            if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
+            {
+                if (printerProperties.PrinterOptions.TryGetValue("supportPaymentTerminal", out string supportPaymentTerminal))
+                {
+                    if (bool.TryParse(supportPaymentTerminal, out bool value))
+                    {
+                            info.SupportPaymentTerminal = value;
+                    }
+                }
+                else
+                {
+                    printerProperties.PrinterOptions["supportPaymentTerminal"] = info.SupportPaymentTerminal.ToString();
+                }
+                if (printerProperties.PrinterOptions.TryGetValue("usePaymentTerminal", out string usePaymentTerminal))
+                {
+                    if (bool.TryParse(usePaymentTerminal, out bool value))
+                    {
+                            info.UsePaymentTerminal = value;
+                    }
+                }
+                else
+                {
+                    printerProperties.PrinterOptions["usePaymentTerminal"] = info.UsePaymentTerminal.ToString();
                 }
             }
             RWLock.ExitReadLock();

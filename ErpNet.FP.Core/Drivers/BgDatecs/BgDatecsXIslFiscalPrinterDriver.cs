@@ -5,6 +5,9 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     using System.Collections.Generic;
     using ErpNet.FP.Core.Configuration;
 
+    /// <summary>
+    /// Protocol for devices DP-25X, DP-05C, WP-500X, WP-50X, FP-700X, FP-700XR, FMP-350X, FMP-55X
+    /// </summary>
     public class BgDatecsXIslFiscalPrinterDriver : FiscalPrinterDriver
     {
         protected readonly string SerialNumberPrefix = "DT";
@@ -30,6 +33,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
             fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
             serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
+            serviceOptions.ReconfigurePrinterOptions(fiscalPrinter.Info);
             return fiscalPrinter;
         }
 
@@ -55,12 +59,12 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)
         {
-            var commaFields = rawDeviceInfo.Split(',');
-            if (commaFields.Length != 6)
+            var commaFields = rawDeviceInfo.Split(new char[] { ',', ' ', '\t'});  // for compatibility reasons
+            if (commaFields.Length != 8)
             {
-                throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 6 comma-separated items for '{DriverName}'");
+                throw new InvalidDeviceInfoException($"rawDeviceInfo must contain 8 fields for '{DriverName}'");
             }
-            var serialNumber = commaFields[4];
+            var serialNumber = commaFields[6];
             var modelName = commaFields[0];
             if (autoDetect)
             {
@@ -80,13 +84,14 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var info = new DeviceInfo
             {
                 SerialNumber = serialNumber,
-                FiscalMemorySerialNumber = commaFields[5],
+                FiscalMemorySerialNumber = commaFields[7],
                 Model = modelName,
-                FirmwareVersion = commaFields[1],
+                FirmwareVersion = $"{commaFields[1]} {commaFields[2]} {commaFields[3]}" ,
                 Manufacturer = "Datecs",
                 CommentTextMaxLength = printColumns - 2, // Set by Datecs X protocol
                 ItemTextMaxLength = 72, // Set by Datecs X protocol
-                OperatorPasswordMaxLength = 8 // Set by Datecs X protocol
+                OperatorPasswordMaxLength = 8, // Set by Datecs X protocol
+                SupportPaymentTerminal = true
             };
 
 

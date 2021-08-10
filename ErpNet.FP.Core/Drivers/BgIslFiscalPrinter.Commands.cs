@@ -24,7 +24,8 @@
             CommandGetTaxIdentificationNumber = 0x63,
             CommandPrintLastReceiptDuplicate = 0x6D,
             CommandSubtotal = 0x33,
-            CommandReadLastReceiptQRCodeData = 0x74;
+            CommandReadLastReceiptQRCodeData = 0x74,
+            CommandToPinpad = 0x37;
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {

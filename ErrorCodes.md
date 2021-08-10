@@ -71,6 +71,13 @@ However, the "originalCode" might not always be available or it might change due
 * **E509** Block - buffers for NRA are full
 * **E599** NRA link general error
 
+## Payment terminal error codes
+* **E601** Payment terminal timeout
+* **E602** Pаyment terminal communication error
+* **E603** Payment transaction cancelled by user
+* **E604** Invalid PIN
+* **E699** General error from payment terminal
+
 ## External or referenced errors
 * **E999** Error from another reference, i.e. find and read the error code description in the device/operations/users manual 
 
