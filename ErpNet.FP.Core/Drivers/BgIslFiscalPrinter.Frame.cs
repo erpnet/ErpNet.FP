@@ -68,6 +68,7 @@
         protected virtual byte[]? RawRequest(byte command, byte[]? data)
         {
             var deviceDescriptor = string.IsNullOrEmpty(DeviceInfo.Uri) ? Channel.Descriptor : DeviceInfo.Uri;
+            var beginTime = DateTime.Now;
 
             FrameSequenceNumber++;
             if (FrameSequenceNumber > MaxSequenceNumber)
@@ -148,6 +149,8 @@
                     if (wait)
                     {
                         // The FiscalPrinter is still not ready, so make another read
+                        if (command == CommandFiscalReceiptTotal && data != null && data.Length > 0 && data[0] == '2')
+                            r -= 1;     // set no limit of reads when receiving MarkerSyn for this payment type only
                         continue;
                     }
                     if (repeat)

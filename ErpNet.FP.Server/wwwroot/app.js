@@ -1,6 +1,11 @@
 ﻿var availablePrinters = {}
 var availablePaymentTypes = ['cash', 'check', 'coupons', 'ext-coupons', 'packaging', 'internal-usage', 'damage', 'card', 'bank', 'reserved1', 'reserved2'];
 var availablePrinterConstantsNames = ['itemTextMaxLength', 'commentTextMaxLength'];
+// use positional matching of availablePrinterOptions, hintsForPrinterOptions, useOfPrinterOptions and displayTextsForPrinterOptions
+var availablePrinterOptions = ['supportPaymentTerminal'];
+var hintsForPrinterOptions = ['For fiscal notes with CARD payment, activate the payment terminal attached to the fiscal printer to receive the payment.'];
+var useOfPrinterOptions = ['usePaymentTerminal'];
+var displayTextsForPrinterOptions = ['Automatically Activate Payment Terminal'];
 var printerProperties = {}
 
 function showAvailablePrinters() {
@@ -72,6 +77,38 @@ function showAvailablePrinters() {
                 }
                 paymentMappingsContent += '</div>';
 
+                var printerOpionsContent = '';
+                if (printerProps) {
+                    for (var i = 0; i < availablePrinterOptions.length; i++) {
+                        var po = availablePrinterOptions[i];
+                        var optionAvailable = printerProps.printerOptions[po];
+                        if (optionAvailable) {
+                            var printerOptionName = useOfPrinterOptions[i];
+                            var printerOptionHint = hintsForPrinterOptions[i];
+                            var printerOptionDisplayText = displayTextsForPrinterOptions[i];
+                            var inputId = printer.serialNumber + '_po_' + printerOptionName;
+                            var printerOptionValue = '';
+
+                            var pv = printerProps.printerOptions[printerOptionName]
+                            //if (pv) {
+                                if (pv == 'True')
+                                    printerOptionValue = 'checked';
+                            //}
+
+                            printerOpionsContent +=
+                                '<label title ="' + printerOptionHint + '" for="' + inputId + '" style="margin-right: 0;">' +
+                                    printerOptionDisplayText + '</label>' +
+                                '<input type = "checkbox"' + ' id="' + inputId + '" title="' + printerOptionHint + '" ' +
+                                printerOptionValue + ' onFocus="this.select()"/>&nbsp;';
+                        }
+                    }
+                    if (printerOpionsContent.length > 0) {
+                        printerOpionsContent =
+                            '<div class="section dark"><h5 style="padding: 0 em; margin: 0;">Printer options</h5></div>' +
+                            '<div class="section input-group horizontal">' + printerOpionsContent + '</div>';
+                    }
+                }
+
                 var section =
                     '<input type="radio" id="available-section-' + printerId + '" aria-hidden="true" name="available">' +
                     '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="available-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
@@ -87,6 +124,7 @@ function showAvailablePrinters() {
                     printerConstantsContent +
                     paymentMappingsContent +
                     '<div class="section"><i>If you leave the Value empty, then the default value will be used. Fill only the values, that you want to override.</i></div>' +
+                    printerOpionsContent +
                     '<div class="section"><button class="small primary" onclick="applyChanges(\'' + printer.serialNumber + '\')">Apply changes</button></div>' +
                     '</div>'+
                     '</div>'
@@ -113,10 +151,11 @@ function getPrinterProperties(serialNumber) {
 }
 
 function applyChanges(serialNumber) {
-    printerProperties[serialNumber] = {
-        paymentTypeMappings: {},
-        printerConstants: {}
-    }
+    //printerProperties[serialNumber] = {
+    //    paymentTypeMappings: {},
+    //    printerConstants: {},
+    //    printerOptions: {}
+    //}
     for (var pti in availablePaymentTypes) {
         var paymentType = availablePaymentTypes[pti]
         var input = $('#' + serialNumber + '_pt_' + paymentType);
@@ -131,6 +170,17 @@ function applyChanges(serialNumber) {
         var v = input.val()
         if (v) {
             printerProperties[serialNumber].printerConstants[printerConstantName] = v
+        }
+    }
+    for (var poi in useOfPrinterOptions) {
+        var printerOptionName = useOfPrinterOptions[poi];
+        var input = document.getElementById(serialNumber + '_po_' + printerOptionName);
+        var v = input.checked;
+        if (v) {
+            printerProperties[serialNumber].printerOptions[printerOptionName] = "True";
+        }
+        else {
+            printerProperties[serialNumber].printerOptions[printerOptionName] = "False";
         }
     }
     console.log("props", printerProperties)

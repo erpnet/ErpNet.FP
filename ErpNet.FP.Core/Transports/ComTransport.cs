@@ -189,6 +189,10 @@
             public byte[] Read()
             {
                 idleTimer.Change(-1, 0);
+                if (serialPort == null)
+                {
+                    throw new FileNotFoundException("Can't read from unexistent serial port!");
+                }
                 var buffer = new byte[serialPort.ReadBufferSize];
                 var task = serialPort.BaseStream.ReadAsync(buffer, 0, buffer.Length);
                 if (task.Wait(serialPort.ReadTimeout))

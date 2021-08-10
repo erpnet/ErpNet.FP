@@ -245,14 +245,74 @@
 
         public override (string, DeviceStatus) AddPayment(decimal amount, PaymentType paymentType)
         {
+            var paymentTypeText = GetPaymentTypeText(paymentType);
+            if (paymentType == PaymentType.Card && DeviceInfo.SupportPaymentTerminal && DeviceInfo.UsePaymentTerminal)
+                paymentTypeText = "2";
+            
             // Protocol: {PaidMode}<SEP>{Amount}<SEP>{Type}<SEP>
             var paymentData = string.Join("\t",
-                GetPaymentTypeText(paymentType),
+                paymentTypeText,
                 amount.ToString("F2", CultureInfo.InvariantCulture),
                 "1",
                 "");
 
-            return Request(CommandFiscalReceiptTotal, paymentData);
+            var (data, status) = Request(CommandFiscalReceiptTotal, paymentData);
+
+            if(data.Length > 0 && paymentType == PaymentType.Card && DeviceInfo.SupportPaymentTerminal &&
+                DeviceInfo.UsePaymentTerminal)
+            {
+                // check response for specific error when using pinpad
+                var returnedData = data.Split('\t');
+                decimal paysum;
+                if (returnedData[0] == "-111560" && returnedData.Length > 1 && decimal.TryParse(returnedData[1], out paysum) &&
+                    paysum == amount)
+                {
+                    // rocovery from error, suppose it prints receipt for pinpad transaction
+                    var (tempData, _) = Request(CommandToPinpad, "13\t1\t");
+                    if (tempData.Length > 0 && tempData.Split("\t")[0] == "0")
+                    {
+                        //var newstatus = new DeviceStatus() { Messages = status.Messages; Ok = true; }
+                        returnedData[0] = "0";
+                        data = string.Join("\t", returnedData);
+                    }
+                }
+                else if (returnedData[0] == "0")
+                {
+                    // print receipt for pinpad transaction
+                    (_, _) = Request(CommandToPinpad, "15\t");
+                }
+                else
+                {
+                    switch (returnedData[0])
+                    {
+                        case "-111509":
+                            status.AddError("E601", "Payment terminal timeout");
+                            break;
+                        case "-111546":
+                        case "-111558":
+                        case "-111560":
+                        case "-111512":
+                        case "-111550":
+                        case "-111555":
+                        case "-111557":
+                        case "-111561":
+                            status.AddError("E602", "Pаyment terminal communication error");
+                            break;
+                        case "-111518":
+                            status.AddError("E603", "Payment transaction cancelled by user");
+                            break;
+                        case "-111514":
+                        case "-111526":
+                            status.AddError("E604", "Invalid PIN");
+                            break;
+                        default:
+                            status.AddError("E699", "General error from payment terminal");
+                            break;
+                    }
+                }
+            }
+
+            return (data, status);
         }
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
