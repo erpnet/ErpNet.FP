@@ -149,7 +149,9 @@
                     if (wait)
                     {
                         // The FiscalPrinter is still not ready, so make another read
-                        if (command == CommandFiscalReceiptTotal && data != null && data.Length > 0 && data[0] == '2')
+                        // If sended command is CommandFiscalReceiptTotal and payment is "Pay by Card using pinpad" ("2")
+                        if (Info.UsePaymentTerminal && this is BgDatecs.BgDatecsXIslFiscalPrinter && 
+                            command == CommandFiscalReceiptTotal && data != null && data.Length > 0 && data[0] == '2')
                             r -= 1;     // set no limit of reads when receiving MarkerSyn for this payment type only
                         continue;
                     }

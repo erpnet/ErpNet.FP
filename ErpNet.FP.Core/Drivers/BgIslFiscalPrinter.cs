@@ -261,9 +261,9 @@
                     if (p.PaymentType == PaymentType.Card)
                         payWithCard = true;
                 }
-                // print client receipt for pinpad transaction after fiscal note
-                if (payWithCard)
-                    (_, _) = Request(CommandToPinpad, "15\t");
+                // print client receipt for pinpad transaction after successfully closed fiscal note
+                if (this is BgDatecs.BgDatecsXIslFiscalPrinter && payWithCard)
+                    (_, _) = Request(CommandToPinpad, DatecsXPinpadPrintReceipt);
             }
 
             return (receiptInfo, deviceStatus);

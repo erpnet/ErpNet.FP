@@ -84,32 +84,38 @@
         public void ReconfigurePrinterOptions(DeviceInfo info)
         {
             RWLock.EnterReadLock();
-            if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
+            try
             {
-                if (printerProperties.PrinterOptions.TryGetValue("supportPaymentTerminal", out string supportPaymentTerminal))
+                if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
                 {
-                    if (bool.TryParse(supportPaymentTerminal, out bool value))
+                    if (printerProperties.PrinterOptions.TryGetValue("supportPaymentTerminal", out string supportPaymentTerminal))
                     {
+                        if (bool.TryParse(supportPaymentTerminal, out bool value))
+                        {
                             info.SupportPaymentTerminal = value;
+                        }
                     }
-                }
-                else
-                {
-                    printerProperties.PrinterOptions["supportPaymentTerminal"] = info.SupportPaymentTerminal.ToString();
-                }
-                if (printerProperties.PrinterOptions.TryGetValue("usePaymentTerminal", out string usePaymentTerminal))
-                {
-                    if (bool.TryParse(usePaymentTerminal, out bool value))
+                    else
                     {
-                            info.UsePaymentTerminal = value;
+                        printerProperties.PrinterOptions["supportPaymentTerminal"] = info.SupportPaymentTerminal.ToString();
                     }
-                }
-                else
-                {
-                    printerProperties.PrinterOptions["usePaymentTerminal"] = info.UsePaymentTerminal.ToString();
+                    if (printerProperties.PrinterOptions.TryGetValue("usePaymentTerminal", out string usePaymentTerminal))
+                    {
+                        if (bool.TryParse(usePaymentTerminal, out bool value))
+                        {
+                            info.UsePaymentTerminal = value;
+                        }
+                    }
+                    else
+                    {
+                        printerProperties.PrinterOptions["usePaymentTerminal"] = info.UsePaymentTerminal.ToString();
+                    }
                 }
             }
-            RWLock.ExitReadLock();
+            finally
+            {
+                RWLock.ExitReadLock();
+            }
         }
     }
 }

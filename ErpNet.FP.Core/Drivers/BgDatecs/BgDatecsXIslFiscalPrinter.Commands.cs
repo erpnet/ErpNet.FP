@@ -264,22 +264,23 @@
                 // check response for specific error when using pinpad
                 var returnedData = data.Split('\t');
                 decimal paysum;
-                if (returnedData[0] == "-111560" && returnedData.Length > 1 && decimal.TryParse(returnedData[1], out paysum) &&
-                    paysum == amount)
+                if (returnedData[0] == DatecsPinpadErrorUnfinishedTransaction && returnedData.Length > 1 &&
+                    decimal.TryParse(returnedData[1], out paysum) && paysum == amount)
                 {
-                    // rocovery from error, suppose it prints receipt for pinpad transaction
-                    var (tempData, _) = Request(CommandToPinpad, "13\t1\t");
+                    // Recovery from error, suppose it prints receipt for pinpad transaction
+                    var (tempData, _) = Request(CommandToPinpad, DatecsFinalizePinpadTransactionAndPrintReceipt);
                     if (tempData.Length > 0 && tempData.Split("\t")[0] == "0")
                     {
-                        //var newstatus = new DeviceStatus() { Messages = status.Messages; Ok = true; }
+                        // If execution of FinalizePinpadTransaction is successful,
+                        // then replace error code of previous command (CommandFiscalReceiptTotal) with NOERROR ("0") code
                         returnedData[0] = "0";
                         data = string.Join("\t", returnedData);
                     }
                 }
                 else if (returnedData[0] == "0")
                 {
-                    // print receipt for pinpad transaction
-                    (_, _) = Request(CommandToPinpad, "15\t");
+                    // Print receipt for pinpad transaction
+                    (_, _) = Request(CommandToPinpad, DatecsXPinpadPrintReceipt);
                 }
                 else
                 {
