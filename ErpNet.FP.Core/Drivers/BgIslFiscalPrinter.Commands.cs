@@ -24,7 +24,15 @@
             CommandGetTaxIdentificationNumber = 0x63,
             CommandPrintLastReceiptDuplicate = 0x6D,
             CommandSubtotal = 0x33,
-            CommandReadLastReceiptQRCodeData = 0x74;
+            CommandReadLastReceiptQRCodeData = 0x74,
+            CommandToPinpad = 0x37;
+
+        // Error for payment with pinpad when transaction may be successful in pinpad, but unsuccessful in fiscal device
+        protected const string DatecsPinpadErrorUnfinishedTransaction = "-111560";
+        // Pinpad commands – option ‘13’ - After error (-111560) by "CommandFiscalReceiptTotal" and do "Print pinpad receipt"
+        protected const string DatecsFinalizePinpadTransactionAndPrintReceipt = "13\t1\t";
+        // Pinpad commands – option ‘15’ - Print receipt for pinpad after successful transaction
+        protected const string DatecsXPinpadPrintReceipt = "15\t";
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {

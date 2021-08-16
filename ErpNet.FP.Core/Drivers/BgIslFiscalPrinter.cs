@@ -253,6 +253,19 @@
             }
             receiptInfo.ReceiptNumber = lastDocumentNumberResponse;
 
+            if (DeviceInfo.SupportPaymentTerminal && DeviceInfo.UsePaymentTerminal && deviceStatus.Ok && receipt.Payments != null)
+            {
+                var payWithCard = false;
+                foreach (var p in receipt.Payments)
+                {
+                    if (p.PaymentType == PaymentType.Card)
+                        payWithCard = true;
+                }
+                // print client receipt for pinpad transaction after successfully closed fiscal note
+                if (this is BgDatecs.BgDatecsXIslFiscalPrinter && payWithCard)
+                    (_, _) = Request(CommandToPinpad, DatecsXPinpadPrintReceipt);
+            }
+
             return (receiptInfo, deviceStatus);
         }
 
