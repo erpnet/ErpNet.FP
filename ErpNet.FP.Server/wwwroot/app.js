@@ -18,6 +18,8 @@ function showAvailablePrinters() {
         context: $('#PrintersList'),
         success: function (data) {
             availablePrinters = data
+            if (!printerProperties)
+                getPrinterProperties()
             this.html("")
             for (var printerId in data) {
                 var printer = data[printerId]

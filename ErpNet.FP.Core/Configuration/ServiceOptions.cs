@@ -57,27 +57,30 @@
         public void ReconfigurePrinterConstants(DeviceInfo info)
         {
             RWLock.EnterReadLock();
-            if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
+            if (!PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
             {
-                if (printerProperties.PrinterConstants.TryGetValue("commentTextMaxLength", out string commentTextMaxLength)) {
-                    if (int.TryParse(commentTextMaxLength, out int value)) {
-                        if (value > 0)
-                        {
-                            info.CommentTextMaxLength = value;
-                        }
-                    }
-                }
-                if (printerProperties.PrinterConstants.TryGetValue("itemTextMaxLength", out string itemTextMaxLength))
-                {
-                    if (int.TryParse(itemTextMaxLength, out int value))
+                printerProperties = new PrinterProperties();
+                PrintersProperties.Add(info.SerialNumber, printerProperties);
+            }
+            if (printerProperties.PrinterConstants.TryGetValue("commentTextMaxLength", out string commentTextMaxLength)) {
+                if (int.TryParse(commentTextMaxLength, out int value)) {
+                    if (value > 0)
                     {
-                        if (value > 0)
-                        {
-                            info.ItemTextMaxLength = value;
-                        }
+                        info.CommentTextMaxLength = value;
                     }
                 }
             }
+            if (printerProperties.PrinterConstants.TryGetValue("itemTextMaxLength", out string itemTextMaxLength))
+            {
+                if (int.TryParse(itemTextMaxLength, out int value))
+                {
+                    if (value > 0)
+                    {
+                        info.ItemTextMaxLength = value;
+                    }
+                }
+            }
+            
             RWLock.ExitReadLock();
         }
 
@@ -86,31 +89,35 @@
             RWLock.EnterReadLock();
             try
             {
-                if (PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
+                if (!PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
                 {
-                    if (printerProperties.PrinterOptions.TryGetValue("supportPaymentTerminal", out string supportPaymentTerminal))
+                    printerProperties = new PrinterProperties();
+                    PrintersProperties.Add(info.SerialNumber, printerProperties);
+                }
+                 
+                if (printerProperties.PrinterOptions.TryGetValue("supportPaymentTerminal", out string supportPaymentTerminal))
+                {
+                    if (bool.TryParse(supportPaymentTerminal, out bool value))
                     {
-                        if (bool.TryParse(supportPaymentTerminal, out bool value))
-                        {
-                            info.SupportPaymentTerminal = value;
-                        }
-                    }
-                    else
-                    {
-                        printerProperties.PrinterOptions["supportPaymentTerminal"] = info.SupportPaymentTerminal.ToString();
-                    }
-                    if (printerProperties.PrinterOptions.TryGetValue("usePaymentTerminal", out string usePaymentTerminal))
-                    {
-                        if (bool.TryParse(usePaymentTerminal, out bool value))
-                        {
-                            info.UsePaymentTerminal = value;
-                        }
-                    }
-                    else
-                    {
-                        printerProperties.PrinterOptions["usePaymentTerminal"] = info.UsePaymentTerminal.ToString();
+                        info.SupportPaymentTerminal = value;
                     }
                 }
+                else
+                {
+                    printerProperties.PrinterOptions["supportPaymentTerminal"] = info.SupportPaymentTerminal.ToString();
+                }
+                if (printerProperties.PrinterOptions.TryGetValue("usePaymentTerminal", out string usePaymentTerminal))
+                {
+                    if (bool.TryParse(usePaymentTerminal, out bool value))
+                    {
+                        info.UsePaymentTerminal = value;
+                    }
+                }
+                else
+                {
+                    printerProperties.PrinterOptions["usePaymentTerminal"] = info.UsePaymentTerminal.ToString();
+                }
+                
             }
             finally
             {
