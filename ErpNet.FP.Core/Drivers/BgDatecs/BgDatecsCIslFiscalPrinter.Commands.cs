@@ -49,6 +49,7 @@
                         Options.ValueOrDefault("Operator.Password", "1").WithMaxLength(Info.OperatorPasswordMaxLength)
                         :
                         operatorPassword,
+                    uniqueSaleNumber,
                     "1"
                 });
             }
