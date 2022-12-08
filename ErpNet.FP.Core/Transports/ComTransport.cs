@@ -226,6 +226,12 @@
                 {
                     idleTimer.Change(-1, 0);
                     Open();
+
+                    if (serialPort == null)
+                    {
+                        throw new FileNotFoundException("Can't write to an unavailable serial port!");
+                    }
+
                     serialPort.DiscardInBuffer();
                     var bytesToWrite = data.Length;
                     while (bytesToWrite > 0)
