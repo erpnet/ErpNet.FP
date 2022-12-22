@@ -34,13 +34,18 @@
         }
 
         public T Value => options.CurrentValue;
-        public T Get(string name) => options.Get(name);
+        public T Get(string? name) => options.Get(name);
 
         public void Update(Action<T> applyChanges)
         {
             var fileProvider = environment.ContentRootFileProvider;
             var fileInfo = fileProvider.GetFileInfo(file);
             var physicalPath = fileInfo.PhysicalPath;
+
+            if (string.IsNullOrEmpty(physicalPath))
+            {
+                throw new IOException("Invalid file path.");
+            }
 
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
             if (jObject != null)
