@@ -50,8 +50,7 @@
                     options.AllowSynchronousIO = true;
                     options.Limits.MaxRequestBodySize = 500 * 1024;
                 })
-                .UseStartup<Startup>()
-                .UseSerilog();
+                .UseStartup<Startup>();
             });
 
         public static void EnsureAppSettingsJson(string pathToContentRoot)
@@ -163,6 +162,7 @@
                 var builder = CreateHostBuilder(
                     pathToContentRoot,
                     args.Where(arg => arg != "--console").ToArray());
+                builder.UseSerilog();
 
                 var host = builder.Build();
 
