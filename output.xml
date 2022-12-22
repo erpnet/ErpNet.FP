@@ -5,7 +5,7 @@
       <OutputPath>Output</OutputPath>
       <OutputType>Published</OutputType>
       <!-- Increase version when releasing a build -->
-      <Version>1.1.0.318</Version>
+      <Version>1.1.0.434</Version>
       <WixNamespaces>
         <Namespace Prefix="wix" Uri="http://schemas.microsoft.com/wix/2006/wi" />
         <Namespace Prefix="wixutil" Uri="http://schemas.microsoft.com/wix/UtilExtension" />
