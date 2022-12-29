@@ -33,6 +33,10 @@
         protected const string DatecsFinalizePinpadTransactionAndPrintReceipt = "13\t1\t";
         // Pinpad commands – option ‘15’ - Print receipt for pinpad after successful transaction
         protected const string DatecsXPinpadPrintReceipt = "15\t";
+        // Pinpad commands – option ‘5’ - End of day from pinpad
+        protected const string DatecsXPinpadEndOfDay = "5\t";
+        // Pinpad commands – option ‘6’ - Report from pinpad
+        protected const string DatecsXPinpadReportFromPinpad = "6\t";
 
         public override string GetReversalReasonText(ReversalReason reversalReason)
         {

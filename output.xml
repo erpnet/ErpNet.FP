@@ -5,7 +5,7 @@
       <OutputPath>Output</OutputPath>
       <OutputType>Published</OutputType>
       <!-- Increase version when releasing a build -->
-      <Version>1.1.0.0</Version>
+      <Version>1.1.0.721</Version>
       <WixNamespaces>
         <Namespace Prefix="wix" Uri="http://schemas.microsoft.com/wix/2006/wi" />
         <Namespace Prefix="wixutil" Uri="http://schemas.microsoft.com/wix/UtilExtension" />
@@ -128,7 +128,7 @@ System.IO.File.WriteAllText(File, replaced);
     <Exec Command="dotnet restore --verbosity q" />
         
     <Message Text="Publishing binaries for %(TargetPlatform.Identity) into $(OutputType) folder..." Importance="high" />
-    <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release  -o Published\%(TargetPlatform.Identity) --verbosity q" />
+    <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release  --self-contained=true  -p:PublishTrimmed=false  -o Published\%(TargetPlatform.Identity)  --verbosity q" />
               
     <Message Text="Zipping binaries for all supported target platforms into $(OutputPath) folder..." Importance="high" />
     <ZipDirectory
