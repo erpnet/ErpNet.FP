@@ -3,15 +3,20 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <AssemblyName>ErpNet.FP.Server</AssemblyName>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <ApplicationIcon>ErpNet.FP.ico</ApplicationIcon>
     </PropertyGroup>
     
     <PropertyGroup>
       <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+      <StartupObject>ErpNet.FP.Server.Program</StartupObject>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <Optimize>False</Optimize>
     </PropertyGroup>
 
-    <ItemGroup>
+	<ItemGroup>
         <Content Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
@@ -44,7 +49,7 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     </ItemGroup>
-
+	
     <ItemGroup>
         <ProjectReference Include="..\ErpNet.FP.Core\ErpNet.FP.Core.csproj" />
     </ItemGroup>

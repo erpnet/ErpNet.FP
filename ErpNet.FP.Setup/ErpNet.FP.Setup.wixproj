@@ -17,6 +17,9 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug;OUTPUT=$(ProjectDir)..\Published\win-x86</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
+    <VerboseOutput>True</VerboseOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>$(ProjectDir)..\Output\</OutputPath>
@@ -47,8 +50,12 @@
     <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+  <InstallerPlatform>$(Platform)</InstallerPlatform>
+  <Platform>$(Platform)</Platform>
+	</PropertyGroup>
   <Target Name="BeforeBuild">
-    <HeatDirectory OutputFile="$(ProjectDir)ProductInstallFiles.wxs" Transforms="$(ProjectDir)RemoveExeAndPdbTransform.xslt" Directory="$(ProjectDir)..\Published\win-x86" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" SuppressRegistry="true" SuppressRootDirectory="true" SuppressCom="true" NoLogo="true" PreprocessorVariable="var.OUTPUT" ToolPath="$(WixToolPath)" />
+    <Exec Command='"$(WIX)bin\heat.exe" dir "$(ProjectDir)..\Published\win-$(Platform)" -cg ProductFilesComponentGroup -dr INSTALLFOLDER -scom -sreg -srd -var var.OUTPUT -nologo -ag -nologo -t "$(ProjectDir)RemoveExeAndPdbTransform.xslt" -out "$(ProjectDir)ProductInstallFiles.wxs"'/>
   </Target>
   <Target Name="AfterBuild">
   </Target>
