@@ -5,12 +5,14 @@
       <OutputPath>Output</OutputPath>
       <OutputType>Published</OutputType>
       <!-- Increase version when releasing a build -->
-      <Version>1.1.0.721</Version>
-      <WixNamespaces>
-        <Namespace Prefix="wix" Uri="http://schemas.microsoft.com/wix/2006/wi" />
-        <Namespace Prefix="wixutil" Uri="http://schemas.microsoft.com/wix/UtilExtension" />
-      </WixNamespaces>
-      <MSBuildNamespaces>
+      <Version>1.1.0.1110</Version>
+		<WixNamespaces>
+			<Namespace Prefix="wix" Uri="http://wixtoolset.org/schemas/v4/wxs" />
+			<Namespace Prefix="ui" Uri="http://wixtoolset.org/schemas/v4/wxs/ui" />
+			<Namespace Prefix="util" Uri="http://wixtoolset.org/schemas/v4/wxs/util" />
+			<Namespace Prefix="fg" Uri="http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools" />			
+		</WixNamespaces>
+		<MSBuildNamespaces>
         <Namespace Prefix="m" Uri="http://schemas.microsoft.com/developer/msbuild/2003" />
       </MSBuildNamespaces>
     </PropertyGroup>

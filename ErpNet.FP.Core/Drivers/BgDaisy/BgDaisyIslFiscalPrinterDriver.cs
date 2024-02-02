@@ -34,7 +34,7 @@ namespace ErpNet.FP.Core.Drivers.BgDaisy
             var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
             fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
             fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
-            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = false;
+            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
             serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
             return fiscalPrinter;
         }

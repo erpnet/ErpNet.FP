@@ -61,6 +61,11 @@
             return Request(DaisyCommandFiscalReceiptSaleDepartment, itemData.ToString());
         }
 
+        public override (string, DeviceStatus) SubtotalChangeAmount(Decimal amount)
+        {
+            return Request(CommandSubtotal, $"10${amount.ToString("F2", CultureInfo.InvariantCulture)}");
+        }
+
         public override (string, DeviceStatus) AbortReceipt()
         {
             return Request(DaisyCommandAbortFiscalReceipt);
