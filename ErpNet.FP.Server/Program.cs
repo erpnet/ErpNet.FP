@@ -134,7 +134,7 @@
 
             EnsureAppSettingsJson(pathToContentRoot);
 
-            var logOutputTemplate = "[{RequestId} {Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+            var logOutputTemplate = "[{RequestId} {Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.FromLogContext()

@@ -32,6 +32,8 @@
         public Dictionary<string, PrinterConfig> Printers { get; set; } = new Dictionary<string, PrinterConfig>();
         public int UdpBeaconPort { get; set; } = 8001;
         public Dictionary<string, PrinterProperties> PrintersProperties { get; set; } = new Dictionary<string, PrinterProperties>();
+        public string ExcludePortList { get; set; } = string.Empty;
+        public int DetectionTimeout { get; set; } = 30;
 
         private readonly ReaderWriterLockSlim RWLock = new ReaderWriterLockSlim();
 

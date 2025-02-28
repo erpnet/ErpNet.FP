@@ -5,6 +5,7 @@
     using System.IO;
     using System.IO.Ports;
     using System.Linq;
+    using System.Net;
     using System.Threading;
     using Serilog;
 
@@ -21,17 +22,17 @@
 
         public override IChannel OpenChannel(string address)
         {
-            if (openedChannels.TryGetValue(address, out Channel? channel))
+            var (comPort, baudRate) = ParseAddress(address);
+            if (openedChannels.TryGetValue(comPort, out Channel? channel))
             {
                 if (channel != null)
                     return channel;
-                else
-                    openedChannels.Remove(address);
+                else 
+                    openedChannels.Remove(comPort);
             }
-            var (comPort, baudRate) = ParseAddress(address);
             channel = new Channel(comPort, baudRate);
             // <address> is more specific (<Com>:<Speed>) than <comPort> and multiple addresses on one port can lead to locking or not finding device (only one can be opened)
-            openedChannels.Add(comPort /*address*/, channel); 
+            openedChannels.Add(comPort, channel); 
             return channel;
         }
 
@@ -95,7 +96,7 @@
                     // Allow the user to set the appropriate properties.
                     PortName = portName,
                     BaudRate = baudRate,
-
+                    
                     // Set the read/write timeouts
                     ReadTimeout = timeout,
                     WriteTimeout = timeout
@@ -118,7 +119,8 @@
                 {
                     try
                     { 
-                        Log.Information($"Idle timer elapsed for the com port {this.portName}");
+                        if (serialPort != null)
+                            Log.Information($"Idle timer elapsed for the com port {this.portName}");
                         Close();
                     }
                     finally
@@ -138,11 +140,12 @@
                 {
                     if (!serialPort.IsOpen)
                     {
-                        serialPort.Open();
                         Log.Information($"Opening the com port {serialPort.PortName}");
+                        serialPort.Open();
+                        Log.Information($"Com port {serialPort.PortName} opened successfully!");
                     }
-                    else
-                        Log.Information($"Com port {serialPort.PortName} allready opened!");
+                    //else
+                    //    Log.Information($"Com port {serialPort.PortName} allready opened!");
                 }
                 catch (FileNotFoundException)
                 {
@@ -155,10 +158,10 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Information($"Error while opening {serialPort.PortName}: {ex.Message}. Trying baudrate {MinimalBaudRate}...");
-                    serialPort.Dispose();           // Dispose and get new SerialPort object before trying new speed
+                    Log.Information($"Error while opening {portName}: {ex.Message}. Trying baudrate {MinimalBaudRate}...");
+                    if (serialPort != null)
+                        serialPort.Dispose();           // Dispose and get new SerialPort object before trying new speed
                     serialPort = GetNewSerialPort();
-                    idleTimer.Change(DefaultTimeoutToClose, 0);
                     // Trying to open the port at minimal baudrate
                     serialPort.BaudRate = MinimalBaudRate;  
                     serialPort.Open();  // will throw another exception if not working with MinimalBaudRate
@@ -167,11 +170,21 @@
 
             public void Close()
             {
-                Log.Information($"Closing the com port {this.portName}");
                 if (serialPort != null)
                 {
-                    serialPort.Dispose();
-                    serialPort = null;
+                    Log.Information($"Closing the com port {this.portName}");
+                    try
+                    {
+                        serialPort.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error while closing the com port {this.portName}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        serialPort = null;
+                    }
                 }
             }
 
@@ -200,6 +213,7 @@
                     var result = new byte[task.Result];
                     Array.Copy(buffer, result, task.Result);
                     idleTimer.Change(DefaultTimeoutToClose, 0);
+                    Log.Information($"Read {result.Length} bytes from the com port {this.portName}");
                     return result;
                 }
                 idleTimer.Change(DefaultTimeoutToClose, 0);
@@ -221,6 +235,7 @@
             /// <param name="data">The data to write.</param>
             public void Write(byte[] data)
             {
+                //Log.Information($"Before Writing {data.Length} bytes to the com port {this.portName}");
                 Monitor.Enter(this);
                 try
                 {
@@ -237,6 +252,7 @@
                     while (bytesToWrite > 0)
                     {
                         var writeSize = Math.Min(bytesToWrite, serialPort.WriteBufferSize);
+                        //Log.Information($"Writing {writeSize} bytes to the com port {this.portName}");
                         var task = serialPort.BaseStream.WriteAsync(
                             data,
                             data.Length - bytesToWrite,
@@ -246,10 +262,11 @@
                         {
                             bytesToWrite -= writeSize;
                             idleTimer.Change(DefaultTimeoutToClose, 0);
+                            Log.Information($"Write completed to the com port {portName}");
                         }
                         else
                         {
-                            var errorMessage = $"Timeout occured while writing to com port '{serialPort.PortName}'";
+                            var errorMessage = $"Timeout occured while writing to com port '{portName}'";
                             Log.Error(errorMessage);
                             idleTimer.Change(DefaultTimeoutToClose, 0);
                             throw new TimeoutException(errorMessage);

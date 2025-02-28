@@ -222,6 +222,46 @@ function autoDetectChanged() {
     })
 }
 
+function excludePortsChanged() {
+    var excludePortListValue = document.getElementById("ExcludePortList").value;
+    $.ajax({
+        type: 'POST',
+        url: '/service/excludeports',
+        data: JSON.stringify({
+            "ExcludePortList": excludePortListValue
+        }),
+        contentType: 'application/json',
+        timeout: 0,
+        success: function (data) {
+            document.getElementById("ExcludePortList").value = data.excludePortList;
+            showToastMessage("Exclude ports list updated successfully.");
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot update exclude ports list.")
+        }
+    })
+}
+
+function detectionTimeoutChanged() {   
+    var detectionTimeoutValue = document.getElementById("DetectionTimeout").value;
+    $.ajax({
+        type: 'POST',
+        url: '/service/detectiontimeout',
+        data: JSON.stringify({
+            "DetectionTimeout": detectionTimeoutValue
+        }),
+        contentType: 'application/json',    
+        timeout: 0,
+        success: function (data) {
+            document.getElementById("DetectionTimeout").value = data.detectionTimeout;
+            showToastMessage("Detection timeout updated successfully.");
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot update detection timeout.")
+        }
+    })
+}
+
 function showConfiguredPrinters() {
     $.ajax({
         type: 'GET',
@@ -267,6 +307,8 @@ function getServerVariables() {
             $("#Version").html('ver.' + data.version)
             $("#ServerId").html('Server Id: ' + data.serverId)
             $("#AutoDetect").attr('checked', data.autoDetect ? 'checked' : null)
+            $("#ExcludePortList").attr('value', data.excludePortList) 
+            $("#DetectionTimeout").attr('value', data.detectionTimeout)
         },
         error: function (xhr, type) {
             showToastMessage("Cannot get server variables.")

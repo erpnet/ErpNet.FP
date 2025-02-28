@@ -1,5 +1,6 @@
 ﻿namespace ErpNet.FP.Server.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using ErpNet.FP.Core.Configuration;
@@ -28,6 +29,8 @@
             serverVariables.ServerId = context.ServerId;
             serverVariables.AutoDetect = context.AutoDetect;
             serverVariables.UdpBeaconPort = context.UdpBeaconPort;
+            serverVariables.ExcludePortList = context.ExcludePortList;
+            serverVariables.DetectionTimeout = context.DetectionTimeout;
         }
 
 
@@ -42,6 +45,42 @@
         {
             context.AutoDetect = !context.AutoDetect;
             serverVariables.AutoDetect = context.AutoDetect;
+            return serverVariables;
+        }
+
+        // POST excludeports
+        [HttpPost("excludeports")]
+        public ActionResult<ServerVariables> ExcludePorts(Dictionary<string, string> param) 
+        {
+            //context.AutoDetect = !context.AutoDetect;
+            string? newValue;
+            if (param.TryGetValue("ExcludePortList", out newValue))
+            {
+                var excludePortArray = newValue.ToUpper()
+                        .Split(new char[] { ',', ';', ':', ' ', '|' }, StringSplitOptions.RemoveEmptyEntries);
+                var excludePortString = string.Join(", ", excludePortArray);
+                serverVariables.ExcludePortList = excludePortString;
+                context.ExcludePortList = excludePortString;
+            }
+            return serverVariables;
+        }
+
+        // POST detectiontimeout
+        [HttpPost("detectiontimeout")]
+        public ActionResult<ServerVariables> DetectionTimeout(Dictionary<string, string> param)
+        {
+            string? newValue;
+            if (param.TryGetValue("DetectionTimeout", out newValue))
+            {
+                if (int.TryParse(newValue, out int value))
+                {
+                    if (value > 0)
+                    {
+                        serverVariables.DetectionTimeout = value;
+                        context.DetectionTimeout = value;
+                    }
+                }
+            }
             return serverVariables;
         }
 

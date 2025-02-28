@@ -4,6 +4,7 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
     using System;
     using System.Collections.Generic;
     using ErpNet.FP.Core.Configuration;
+    using Serilog;
 
     public class BgIslIcpFiscalPrinterDriver : FiscalPrinterDriver
     {
@@ -17,18 +18,22 @@ namespace ErpNet.FP.Core.Drivers.BgIcp
             IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgIslIcpFiscalPrinter(channel, serviceOptions, options);
-            var rawDeviceInfoCacheKey = $"icp.{channel.Descriptor}";
-            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
-            if (rawDeviceInfo == null)
+            var rawDeviceInfoCacheKey = $"icp.{channel.Descriptor}.{DriverName}";
+            lock (channel)
             {
-                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+                if (rawDeviceInfo == null)
+                {
+                    (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                    Log.Information($"RawDeviceInfo({channel.Descriptor}): {rawDeviceInfo}");
+                    Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                }
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
+                fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+                fiscalPrinter.Info.SupportsSubTotalAmountModifiers = false;
+                serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
+                return fiscalPrinter;
             }
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
-            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
-            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = false;
-            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
-            return fiscalPrinter;
         }
 
         protected int GetPrintColumnsOfModel(string modelName)

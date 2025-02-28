@@ -4,6 +4,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
     using System;
     using System.Collections.Generic;
     using ErpNet.FP.Core.Configuration;
+    using Serilog;
 
     /// <summary>
     /// Protocol for devices DP-25X, DP-05C, WP-500X, WP-50X, FP-700X, FP-700XR, FMP-350X, FMP-55X
@@ -20,21 +21,25 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDatecsXIslFiscalPrinter(channel, serviceOptions, options);
-            var rawDeviceInfoCacheKey = $"x.isl.{channel.Descriptor}";
-            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
-            if (rawDeviceInfo == null)
+            var rawDeviceInfoCacheKey = $"x.isl.{channel.Descriptor}.{DriverName}";
+            lock (channel)
             {
-                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+                if (rawDeviceInfo == null)
+                {
+                    (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                    Log.Information($"RawDeviceInfo({channel.Descriptor}): {rawDeviceInfo}");
+                    Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                }
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
+                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
+                fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+                fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
+                serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
+                serviceOptions.ReconfigurePrinterOptions(fiscalPrinter.Info);
+                return fiscalPrinter;
             }
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
-            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
-            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
-            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
-            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
-            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
-            serviceOptions.ReconfigurePrinterOptions(fiscalPrinter.Info);
-            return fiscalPrinter;
         }
 
         protected int GetPrintColumnsOfModel(string modelName)

@@ -3,6 +3,8 @@ namespace ErpNet.FP.Core.Provider
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using ErpNet.FP.Core.Configuration;
@@ -40,7 +42,7 @@ namespace ErpNet.FP.Core.Provider
             IFiscalPrinter? printer = null;
             var unknownDeviceConnectedToChannel = true;
             var positionInList = 1;
-            using ( ((Channel)channel).serialPort = ((Channel)channel).GetNewSerialPort()) 
+            var detectionTask = Task.Run(async () =>
             {
                 foreach (var driver in drivers)
                 {
@@ -64,26 +66,46 @@ namespace ErpNet.FP.Core.Provider
                     }
                     catch (InvalidResponseException ex)
                     {
+                        // If speed not matched, then skip this transport address detection.
+                        if (ex.Message.Contains("communication speed not match"))
+                            break;
                         // Autodetect probe not passed for this channel. No response.
                         Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: {ex.Message}");
                     }
-                    catch (InvalidDeviceInfoException)
+                    catch (InvalidDeviceInfoException ex)
                     {
                         // Autodetect probe not passed for this channel. Invalid device.
-                        Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: invalid device info returned.");
+                        Log.Information($"Device at {channel.Descriptor} incompatible with protocol {driver.DriverName}: invalid device info returned ({ex.Message}).");
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // Port not exists
+                        break;
                     }
                     catch (Exception ex)
                     {
                         Log.Error($"Unexpected error: {ex.Message}");
                     }
-                } 
+                }
+            });
+
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(ServiceOptions.DetectionTimeout));
+
+            var completedTask = await Task.WhenAny(detectionTask, timeoutTask);
+
+            if (completedTask == timeoutTask)
+            {
+                Log.Error($"Detection for channel {channel.Descriptor} timed out after {ServiceOptions.DetectionTimeout} seconds.");
+                return null;
             }
+
             if (unknownDeviceConnectedToChannel)
             {
                 // We did not recognize the device, so drop that channel 
                 // and leave it available for others
                 // transport.Drop(channel);   // hangs here if device driver problem occure
             }
+            Log.Information($"Probing finished for {channel.Descriptor}.");
             return printer;
         }
 
@@ -92,7 +114,7 @@ namespace ErpNet.FP.Core.Provider
         /// Returns the available fiscal printers.
         /// </summary>
         /// <returns>The available fiscal printers.</returns>
-        public IDictionary<string, IFiscalPrinter> DetectAvailablePrinters()
+        public IDictionary<string, IFiscalPrinter> DetectAvailablePrinters(IEnumerable<string> excludedPorts)
         {
             var fp = new Dictionary<string, IFiscalPrinter>();
             var transportDrivers = new Dictionary<Transport, List<FiscalPrinterDriver>>();
@@ -113,6 +135,11 @@ namespace ErpNet.FP.Core.Provider
                 var drivers = td.Value;
                 foreach (var (address, _) in transport.GetAvailableAddresses())
                 {
+                    if ( excludedPorts.ToList().Contains(address))
+                    {
+                        Log.Information($"Port {address} is excluded from probing.");
+                        continue;
+                    }
                     try
                     {
                         var channel = transport.OpenChannel(address);
@@ -187,9 +214,17 @@ namespace ErpNet.FP.Core.Provider
 
             var channel = transport.OpenChannel(address);
             var uri = string.Format($"{driver.DriverName}.{transport.TransportName}://{channel.Descriptor}");
-            var p = driver.Connect(channel, serviceOptions, autoDetect, options);
-            p.DeviceInfo.Uri = uri;
-            return p;
+            try
+            {
+                var p = driver.Connect(channel, serviceOptions, autoDetect, options);
+                p.DeviceInfo.Uri = uri;
+                return p;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot connect to {uri}: {ex.Message}");
+                throw;
+            }
         }
 
         private readonly Dictionary<string, (FiscalPrinterDriver driver, Transport transport)> protocols =

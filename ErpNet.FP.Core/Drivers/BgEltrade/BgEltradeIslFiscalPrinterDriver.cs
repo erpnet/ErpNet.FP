@@ -4,6 +4,7 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
     using System;
     using System.Collections.Generic;
     using ErpNet.FP.Core.Configuration;
+    using Serilog;
 
     public class BgEltradeIslFiscalPrinterDriver : FiscalPrinterDriver
     {
@@ -16,20 +17,24 @@ namespace ErpNet.FP.Core.Drivers.BgEltrade
             bool autoDetect = true, IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgEltradeIslFiscalPrinter(channel, serviceOptions, options);
-            var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}";
-            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
-            if (rawDeviceInfo == null)
+            var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}.{DriverName}";
+            lock (channel)
             {
-                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+                if (rawDeviceInfo == null)
+                {
+                    (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                    Log.Information($"RawDeviceInfo({channel.Descriptor}): {rawDeviceInfo}");
+                    Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                }
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
+                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
+                fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+                fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
+                serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
+                return fiscalPrinter;
             }
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
-            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
-            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
-            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
-            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
-            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
-            return fiscalPrinter;
         }
 
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.IO;
     using System.Text;
     using Serilog;
 
@@ -69,8 +70,10 @@
                 {
                     Channel.Write(request);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
+                    if (ex.Message.Contains("writ"))
+                        throw;
                     continue;
                 }
                 catch (Exception ex)
@@ -143,6 +146,10 @@
                     {
                         // The FiscalPrinter cannot answer, so make the request again
                         break;
+                    }
+                    if (buffer.Count() > 0 && buffer[0] == 0)
+                    {
+                        throw new InvalidResponseException("The response is invalid. Probably the communication speed not match or the device is not a fiscal device!");
                     }
                 }
             }
@@ -228,6 +235,10 @@
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError("E107", e.Message);
                     return (string.Empty, deviceStatus);
+                }
+                catch (FileNotFoundException)
+                {
+                    throw;
                 }
                 catch (Exception e)
                 {

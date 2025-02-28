@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="index.css?ver=5EDA27DCB2C677E735CFBDC7BB2A4E32E6CE5B71A9F478669DF20B722ABA662D">
@@ -82,9 +83,13 @@
                 <div class="spinner primary"></div>Loading...
             </div>
         </fieldset>
-        <div class="input-group">
+        <div class="section input-group horizontal">
             <input type="checkbox" id="AutoDetect" tabindex="0" onclick="autoDetectChanged()">
-            <label for="AutoDetect" class="switch">Auto detect printers on service startup</label>
+            <label for="AutoDetect" class="switch">Auto detect printers on service startup</label><br />
+            <label for="ExcludePortList" >Exclude port(s) list</label>
+            <input type="text" id="ExcludePortList" tabindex="1" onchange="excludePortsChanged()" /><br />
+            <label for="DetectionTimeout" >Detection timeout</label>
+            <input type="number" id="DetectionTimeout" tabindex="2" min="10" max="60" onchange="detectionTimeoutChanged()" />
         </div>
     </div>
 
@@ -96,7 +101,7 @@
     <div id="ToastArea"></div>
 
     <script src="index.js"></script>
-    <script src="app.js?ver=554435584E93B2A6954C68CF69690EFD7BDE2730E8E7BE99977D1B734C00F5F9"></script>
+    <script src="app.js?ver=85798FCFFD18DE2B865075788F91A593B768A3D2170D6610F588B89EA8EA10E8"></script>
 </body>
 
 </html>

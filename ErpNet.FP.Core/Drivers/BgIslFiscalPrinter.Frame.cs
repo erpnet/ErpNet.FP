@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using Serilog;
 
     public abstract partial class BgIslFiscalPrinter : BgFiscalPrinter
     {
-        protected byte FrameSequenceNumber = 0;
+        private static readonly Random random = new Random();
         protected const byte
             MarkerSpace = 0x20,
             MarkerSyn = 0x16,
@@ -20,6 +21,7 @@
         protected const byte MaxSequenceNumber = 0x7F - MarkerSpace;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
+        protected byte FrameSequenceNumber = (byte)random.Next(0, MaxSequenceNumber - 1);
 
         protected virtual byte[] UInt16To4Bytes(UInt16 word)
         {
@@ -86,7 +88,7 @@
                 }
                 catch (TimeoutException)
                 {
-                    continue;
+                    throw;      // nothing to do
                 }
                 catch (Exception ex)
                 {
@@ -159,6 +161,10 @@
                     {
                         // The FiscalPrinter cannot answer, so make the request again
                         break;
+                    }
+                    if (buffer.Count() > 0 && buffer[0] == 0)
+                    {
+                        throw new InvalidResponseException("The response is invalid. Probably the communication speed not match or the device is not a fiscal device!");
                     }
                 }
             }
@@ -240,6 +246,10 @@
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError("E107", e.Message);
                     return (string.Empty, deviceStatus);
+                }
+                catch (FileNotFoundException)
+                {
+                    throw;
                 }
                 catch (Exception e)
                 {
