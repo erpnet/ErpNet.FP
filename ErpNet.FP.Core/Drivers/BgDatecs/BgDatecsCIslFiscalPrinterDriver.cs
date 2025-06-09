@@ -3,13 +3,14 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using ErpNet.FP.Core.Configuration;
     using Serilog;
 
     public class BgDatecsCIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        protected readonly string SerialNumberPrefix = "DT";
-        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.c.isl";
+        protected readonly List<string> SerialNumberPrefix = new() { "DT", "DA" };
+        public override string DriverName => $"bg.{SerialNumberPrefix[0].ToLower()}.c.isl";
 
         public override IFiscalPrinter Connect(
             IChannel channel, 
@@ -22,7 +23,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             lock (channel)
             {
                 var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
-                if (rawDeviceInfo == null)
+                if (rawDeviceInfo == null || autoDetect)
                 {
                     (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
                     Log.Information($"RawDeviceInfo({channel.Descriptor}): {rawDeviceInfo}");
@@ -49,9 +50,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var modelName = commaFields[0];
             if (autoDetect)
             {
-                if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix, System.StringComparison.Ordinal))
+                if (serialNumber.Length != 8)
                 {
-                    throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                    throw new InvalidDeviceInfoException($"serial number must be with length 8 characters for '{DriverName}'");
+                }
+                if (!SerialNumberPrefix.Where(prefix => serialNumber.StartsWith(prefix, System.StringComparison.Ordinal)).Any())
+                {
+                    throw new InvalidDeviceInfoException($"serial number must begin with {string.Join(",",SerialNumberPrefix)} for '{DriverName}'");
                 }
 
                 if (modelName.EndsWith("X", System.StringComparison.Ordinal) ||
