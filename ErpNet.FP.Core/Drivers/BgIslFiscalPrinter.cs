@@ -38,7 +38,7 @@
             var (response, status) = Request(CommandMoneyTransfer, "0");
             var statusEx = new DeviceStatusWithCashAmount(status);
             var commaFields = response.Split(',');
-            if (commaFields.Length >= 4)
+            if (commaFields.Length < 4)
             {
                 statusEx.AddInfo("Error occured while reading cash amount");
                 statusEx.AddError("E409", "Invalid format");
