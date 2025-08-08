@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+	<RuntimeIdentifiers>win-x64;osx-x64;win-x86;linux-x64;linux-arm</RuntimeIdentifiers>
     <RootNamespace>ErpNet.FP.Core</RootNamespace>
     <AssemblyName>ErpNet.FP.Core</AssemblyName>
   </PropertyGroup>
