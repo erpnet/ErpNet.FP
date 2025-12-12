@@ -1,6 +1,7 @@
 ﻿namespace ErpNet.FP.Server
 {
     using System.IO;
+    using System.Threading.Tasks;
     using ErpNet.FP.Core.Configuration;
     using ErpNet.FP.Core.Service;
     using ErpNet.FP.Server.Configuration;
@@ -26,8 +27,6 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
             app.UseDefaultFiles();
 
             // Set up custom content types - associating file extension to MIME type
@@ -64,6 +63,19 @@
 
             app.UseRouting();
 
+            app.UseCors("FrontendPolicy");
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
+                {
+                    context.Response.Headers["Access-Control-Allow-Private-Network"] = "true";
+                    return Task.CompletedTask;
+                });
+
+                await next();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -78,6 +90,17 @@
             services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
             services.AddSingleton<IServiceController, ServiceSingleton>();
             services.AddControllers().AddNewtonsoftJson();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("FrontendPolicy", builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
 
             // KeepAliveHostedService will warm up ServiceSingleton context at start
             services.AddHostedService<KeepAliveHostedService>();
