@@ -309,7 +309,7 @@ This is a list of default credentials we use in the library, when there is no ex
 * bg.is.icp - "operator" : "1", "operatorPassword": N/A
 
 # Source Code
-To compile and run the source code, you will need .Net Core 3.0 SDK installed.
+To compile and run the source code, you will need .Net 7.0 SDK installed.
 
 To build the binaries into Published folder and .zip files into Output folder, just write this line in the console, while you are in the ErpNet.FP folder:
 ```bash
@@ -317,7 +317,7 @@ dotnet msbuild output.xml
 ```
 If you are under Windows, you can install [Wix toolset - Wix 3.11](https://wixtoolset.org/releases/) and you will be able to build ErpNet.FP.Setup and to get the Windows MSI setup file into the Output folder.
 
-As IDE for Windows, you can use Visual Studio 2019. 
+As IDE for Windows, you can use Visual Studio 2022. 
 For macOS, you can use Visual Studio for Mac 8.3.
 For Linux, or as alternative for Windows and macOs, you can use Visual Studio Code.
 

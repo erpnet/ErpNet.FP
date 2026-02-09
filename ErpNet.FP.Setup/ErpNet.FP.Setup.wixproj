@@ -1,27 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="wixtoolset.sdk/4.0.3">
+  <ItemGroup>
+    <ProjectReference Include="..\ErpNet.FP.Server\ErpNet.FP.Server.csproj" HarvestOutputGroups="BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Heat" Version="4.0.6" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.6" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.6" />
+  </ItemGroup>
   <PropertyGroup>
-    <DefineSolutionProperties>false</DefineSolutionProperties>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>6c8ef156-4fd1-46d5-92e9-a2f45516044e</ProjectGuid>
-    <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>ErpNet.FP.Setup</OutputName>
-    <OutputType>Package</OutputType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>OUTPUT=$(ProjectDir)..\Published\win-x86;Version=$(Version);WixHeatBinDir=$(WixHeatBinDir);</DefineConstants>
+    <OutputPath>$(ProjectDir)..\Output\</OutputPath>
+    <CompilerAdditionalOptions>-ext WixToolset.UI.wixext -ext WixToolset.Util.wixext</CompilerAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Cultures>en-US;bg-BG</Cultures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>$(ProjectDir)..\Output\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;OUTPUT=$(ProjectDir)..\Published\win-x86</DefineConstants>
+    <DefineConstants>OUTPUT=..\Published\win-x86;Version=$(Version)</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
+    <VerboseOutput>True</VerboseOutput>
+    <CompilerAdditionalOptions>-ext WixToolset.UI.wixext -ext WixToolset.Util.wixext</CompilerAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>$(ProjectDir)..\Output\</OutputPath>
-    <DefineConstants>OUTPUT=$(ProjectDir)..\Published\win-x86</DefineConstants>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>OUTPUT=..\Published\win-x86;Version=$(Version)</DefineConstants>
+    <CompilerAdditionalOptions>-ext WixToolset.UI.wixext -ext WixToolset.Util.wixext</CompilerAdditionalOptions>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
@@ -31,25 +40,16 @@
     <Content Include="LICENSE.rtf" />
     <Content Include="RemoveExeAndPdbTransform.xslt" />
   </ItemGroup>
-  <ItemGroup>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>$(WixToolPath)WixUIExtension.dll</HintPath>
-      <Name>WixUIExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixUtilExtension">
-      <HintPath>$(WixToolPath)WixUtilExtension.dll</HintPath>
-      <Name>WixUtilExtension</Name>
-    </WixExtension>
-  </ItemGroup>
   <PropertyGroup>
-    <WixToolPath>$(Wix)bin\</WixToolPath>
-    <WixTargetsPath>Wix.targets</WixTargetsPath>
-    <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
+    <InstallerPlatform>$(Platform)</InstallerPlatform>
+    <Platform>$(Platform)</Platform>
+    <OutputType>Package</OutputType>
+    <PreBuildEvent>$(USERPROFILE)\.nuget\packages\wixtoolset.heat\4.0.3\tools\net472\x86\heat.exe dir ..\Published\win-x86 -cg ProductFilesComponentGroup -dr INSTALLFOLDER -scom -sreg -srd -var var.OUTPUT -nologo -ag -nologo -t ..\ErpNet.FP.Setup\RemoveExeAndPdbTransform.xslt -out ..\ErpNet.FP.Setup\ProductInstallFiles.wxs</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="$(WixTargetsPath)" />
-  <Target Name="BeforeBuild">
-    <HeatDirectory OutputFile="$(ProjectDir)ProductInstallFiles.wxs" Transforms="$(ProjectDir)RemoveExeAndPdbTransform.xslt" Directory="$(ProjectDir)..\Published\win-x86" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" SuppressRegistry="true" SuppressRootDirectory="true" SuppressCom="true" NoLogo="true" PreprocessorVariable="var.OUTPUT" ToolPath="$(WixToolPath)" />
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CompilerAdditionalOptions>-ext WixToolset.UI.wixext -ext WixToolset.Util.wixext</CompilerAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <CompilerAdditionalOptions>-ext WixToolset.UI.wixext -ext WixToolset.Util.wixext</CompilerAdditionalOptions>
+  </PropertyGroup>
 </Project>

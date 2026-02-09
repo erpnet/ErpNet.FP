@@ -2,10 +2,10 @@
 
 ## Prerequisites
 
-* You need to have [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet/current) installed for your operating system
+* You need to have [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/current) installed for your operating system
 * You need to have a newer version of MSBuild (>=15.8) in your `PATH`.
 * If you are on a Windows machine:
-	* Make sure you have [WIX](https://wixtoolset.org/releases/) installed (for setup)
+	* Make sure you have [WIX](https://wixtoolset.org/releases/) v4 installed (for setup)
 
 
 ## Steps
@@ -41,7 +41,7 @@ Building the project
 ### Building On Windows
 
 ```
-msbuild /t:All output.xml
+msbuild /Restore /t:All output.xml
 ```
 
 ### Building on other platforms

@@ -76,6 +76,8 @@
         /// Gets or sets the dictionary of additional printer properties, mapped by serial number.
         /// </summary>
         public Dictionary<string, PrinterProperties> PrintersProperties { get; set; } = new Dictionary<string, PrinterProperties>();
+        public string ExcludePortList { get; set; } = string.Empty;
+        public int DetectionTimeout { get; set; } = 30;
 
         /// <summary>
         /// Gets or sets the web access security settings for the service.

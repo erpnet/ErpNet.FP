@@ -222,6 +222,7 @@ function autoDetectChanged() {
     })
 }
 
+<<<<<<< master
 function saveWebAccess() {
     var origins = $("#AllowedOrigins").val().split(',').map(s => s.trim()).filter(s => s.length > 0);
     var enablePrivate = $("#EnablePrivateNetwork").is(':checked');
@@ -241,6 +242,46 @@ function saveWebAccess() {
             showToastMessage("Error saving web access settings.");
         }
     });
+=======
+function excludePortsChanged() {
+    var excludePortListValue = document.getElementById("ExcludePortList").value;
+    $.ajax({
+        type: 'POST',
+        url: '/service/excludeports',
+        data: JSON.stringify({
+            "ExcludePortList": excludePortListValue
+        }),
+        contentType: 'application/json',
+        timeout: 0,
+        success: function (data) {
+            document.getElementById("ExcludePortList").value = data.excludePortList;
+            showToastMessage("Exclude ports list updated successfully.");
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot update exclude ports list.")
+        }
+    })
+}
+
+function detectionTimeoutChanged() {   
+    var detectionTimeoutValue = document.getElementById("DetectionTimeout").value;
+    $.ajax({
+        type: 'POST',
+        url: '/service/detectiontimeout',
+        data: JSON.stringify({
+            "DetectionTimeout": detectionTimeoutValue
+        }),
+        contentType: 'application/json',    
+        timeout: 0,
+        success: function (data) {
+            document.getElementById("DetectionTimeout").value = data.detectionTimeout;
+            showToastMessage("Detection timeout updated successfully.");
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot update detection timeout.")
+        }
+    })
+>>>>>>> master
 }
 
 function showConfiguredPrinters() {
@@ -288,6 +329,7 @@ function getServerVariables() {
             $("#Version").html('ver.' + data.version)
             $("#ServerId").html('Server Id: ' + data.serverId)
             $("#AutoDetect").attr('checked', data.autoDetect ? 'checked' : null)
+<<<<<<< master
             if (data.webAccess) {
                 $("#AllowedOrigins").val(data.webAccess.allowedOrigins.join(", "));
                 $("#EnablePrivateNetwork").prop('checked', data.webAccess.enablePrivateNetwork);
@@ -295,6 +337,10 @@ function getServerVariables() {
                     originalOrigins = data.webAccess.allowedOrigins.join(", ");
                 }
             }
+=======
+            $("#ExcludePortList").attr('value', data.excludePortList) 
+            $("#DetectionTimeout").attr('value', data.detectionTimeout)
+>>>>>>> master
         },
         error: function (xhr, type) {
             showToastMessage("Cannot get server variables.")

@@ -82,6 +82,8 @@
             {
                 updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
                 updatedConfigOptions.ServerId = configOptions.ServerId;
+                updatedConfigOptions.ExcludePortList = configOptions.ExcludePortList;
+                updatedConfigOptions.DetectionTimeout = configOptions.DetectionTimeout;
                 updatedConfigOptions.Printers = configOptions.Printers ?? new Dictionary<string, PrinterConfig>();
                 updatedConfigOptions.PrintersProperties = configOptions.PrintersProperties ?? new Dictionary<string, PrinterProperties> { };
                 updatedConfigOptions.WebAccess = configOptions.WebAccess;

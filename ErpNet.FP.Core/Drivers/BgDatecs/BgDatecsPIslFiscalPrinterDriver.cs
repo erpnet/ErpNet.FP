@@ -3,12 +3,14 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using ErpNet.FP.Core.Configuration;
+    using Serilog;
 
     public class BgDatecsPIslFiscalPrinterDriver : FiscalPrinterDriver
     {
-        protected readonly string SerialNumberPrefix = "DT";
-        public override string DriverName => $"bg.{SerialNumberPrefix.ToLower()}.p.isl";
+        protected readonly List<string> SerialNumberPrefix = new() { "DT", "DA" };
+        public override string DriverName => $"bg.{SerialNumberPrefix[0].ToLower()}.p.isl";
 
         public override IFiscalPrinter Connect(
             IChannel channel, 
@@ -17,20 +19,24 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             IDictionary<string, string>? options = null)
         {
             var fiscalPrinter = new BgDatecsPIslFiscalPrinter(channel, serviceOptions, options);
-            var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}";
-            var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
-            if (rawDeviceInfo == null)
+            var rawDeviceInfoCacheKey = $"isl.{channel.Descriptor}.{DriverName}";
+            lock (channel)
             {
-                (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
-                Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                var rawDeviceInfo = Cache.Get(rawDeviceInfoCacheKey);
+                if (rawDeviceInfo == null || autoDetect)
+                {
+                    (rawDeviceInfo, _) = fiscalPrinter.GetRawDeviceInfo();
+                    Log.Information($"RawDeviceInfo({channel.Descriptor}): {rawDeviceInfo}");
+                    Cache.Store(rawDeviceInfoCacheKey, rawDeviceInfo, TimeSpan.FromSeconds(30));
+                }
+                fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
+                var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
+                fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
+                fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
+                fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
+                serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
+                return fiscalPrinter;
             }
-            fiscalPrinter.Info = ParseDeviceInfo(rawDeviceInfo, autoDetect);
-            var (TaxIdentificationNumber, _) = fiscalPrinter.GetTaxIdentificationNumber();
-            fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
-            fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
-            fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
-            serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
-            return fiscalPrinter;
         }
 
         protected DeviceInfo ParseDeviceInfo(string rawDeviceInfo, bool autoDetect)
@@ -44,9 +50,13 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
             var modelName = commaFields[0];
             if (autoDetect)
             {
-                if (serialNumber.Length != 8 || !serialNumber.StartsWith(SerialNumberPrefix, System.StringComparison.Ordinal))
+                if (serialNumber.Length != 8)
                 {
-                    throw new InvalidDeviceInfoException($"serial number must begin with {SerialNumberPrefix} and be with length 8 characters for '{DriverName}'");
+                    throw new InvalidDeviceInfoException($"serial number must be with length 8 characters for '{DriverName}'");
+                }
+                if (!SerialNumberPrefix.Where(prefix => serialNumber.StartsWith(prefix, System.StringComparison.Ordinal)).Any())
+                {
+                    throw new InvalidDeviceInfoException($"serial number must begin with {string.Join(",", SerialNumberPrefix)} for '{DriverName}'");
                 }
 
                 if (modelName.EndsWith("X", System.StringComparison.Ordinal) || 

@@ -61,7 +61,7 @@
 
         public class Channel : IChannel
         {
-            private readonly TcpClient tcpClient;
+            private TcpClient tcpClient;
             private NetworkStream netStream;
 
             private string HostName { get; }
@@ -128,6 +128,8 @@
                 }
                 finally
                 {
+                    // Closing TcpClient disposes instance
+                    tcpClient = new TcpClient();
                     netStream = ConnectAndGetStream();
                 }
             }

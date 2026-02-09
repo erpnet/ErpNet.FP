@@ -3,10 +3,13 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Threading.Channels;
     using System.Threading.Tasks;
     using ErpNet.FP.Core.Configuration;
+    using ErpNet.FP.Core.Drivers;
     using Serilog;
 
     public interface IServiceController
@@ -34,6 +37,10 @@
         int UdpBeaconPort { get; set; }
 
         WebAccessOptions WebAccess { get; set; }
+
+        string ExcludePortList { get; set; }
+
+        int DetectionTimeout { get; set; }
 
         bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
 
@@ -99,6 +106,23 @@
             set
             {
                 configOptions.WebAccess = value;
+
+        public string ExcludePortList
+        {
+            get => configOptions.ExcludePortList;
+            set
+            {
+                configOptions.ExcludePortList = value;
+                WriteOptions();
+            }
+        }
+
+        public int DetectionTimeout
+        {
+            get => configOptions.DetectionTimeout;
+            set
+            {
+                configOptions.DetectionTimeout = value;
                 WriteOptions();
             }
         }
@@ -148,18 +172,6 @@
                         PrintersInfo.Clear();
                         Printers.Clear();
 
-                        // Autodetecting
-                        var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
-                        if (forceAutoDetect || configOptions.AutoDetect)
-                        {
-                            Log.Information("Autodetecting local printers...");
-                            var printers = Provider.DetectAvailablePrinters();
-                            foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
-                            {
-                                AddPrinter(printer.Value);
-                            }
-                        }
-
                         // Detecting configured printers
                         if (configOptions.Printers != null && configOptions.Printers.Count != 0)
                         {
@@ -193,6 +205,28 @@
                                 configOptions.Printers[printer.Key] = new PrinterConfig { Uri = printer.Value.DeviceInfo.Uri };
                             }
                             */
+                        }
+                        
+                        var excludePortList = configOptions.ExcludePortList
+                            .Split(new char[] { ',', ';', ':', ' ', '|' }, StringSplitOptions.RemoveEmptyEntries)
+                            .ToList();
+                        foreach (var printer in Printers)
+                        {
+                            // use Uris instead of Channels
+                            var usedChannel = printer.Value.DeviceInfo.Uri.Split("//")[1].Split(':')[0];
+                            if (!excludePortList.Contains(usedChannel) && usedChannel.StartsWith("COM"))
+                                excludePortList.Add(usedChannel);
+                        }
+                        // Autodetecting
+                        var autoDetectedPrinters = new Dictionary<string, PrinterConfig>();
+                        if (forceAutoDetect || configOptions.AutoDetect)
+                        {
+                            Log.Information("Autodetecting local printers...");
+                            var printers = Provider.DetectAvailablePrinters(excludePortList);
+                            foreach (KeyValuePair<string, IFiscalPrinter> printer in printers)
+                            {
+                                AddPrinter(printer.Value);
+                            }
                         }
 
                         // configOptions.AutoDetect = Printers.Count == 0;

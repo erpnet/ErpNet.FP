@@ -284,32 +284,7 @@
                 }
                 else
                 {
-                    switch (returnedData[0])
-                    {
-                        case "-111509":
-                            status.AddError("E601", "Payment terminal timeout");
-                            break;
-                        case "-111546":
-                        case "-111558":
-                        case "-111560":
-                        case "-111512":
-                        case "-111550":
-                        case "-111555":
-                        case "-111557":
-                        case "-111561":
-                            status.AddError("E602", "Pаyment terminal communication error");
-                            break;
-                        case "-111518":
-                            status.AddError("E603", "Payment transaction cancelled by user");
-                            break;
-                        case "-111514":
-                        case "-111526":
-                            status.AddError("E604", "Invalid PIN");
-                            break;
-                        default:
-                            status.AddError("E699", "General error from payment terminal");
-                            break;
-                    }
+                    CheckPinpadResponse(returnedData[0], status);
                 }
             }
 
@@ -409,13 +384,61 @@
 
         public override (string, DeviceStatus) PrintDailyReport(bool zeroing = true)
         {
+            (string response, DeviceStatus status) result;
             if (zeroing)
             {
-                return Request(CommandPrintDailyReport, "Z\t");
+                result = Request(CommandPrintDailyReport, "Z\t");
             }
             else
             {
-                return Request(CommandPrintDailyReport, "X\t");
+                result = Request(CommandPrintDailyReport, "X\t");
+            }
+            if (!result.status.Ok)
+                return result;
+            if (DeviceInfo.SupportPaymentTerminal && DeviceInfo.UsePaymentTerminal)
+            {
+                if (zeroing)
+                {
+                    result = Request(CommandToPinpad, DatecsXPinpadEndOfDay);
+                }
+                else
+                {
+                    result = Request(CommandToPinpad, DatecsXPinpadReportFromPinpad);
+                }
+                CheckPinpadResponse(result.response.Split('\t')[0], result.status);
+            }
+            return result;
+        }
+
+        public void CheckPinpadResponse(string response, DeviceStatus status)
+        {
+            switch (response)
+            {
+                case "0":
+                    break;
+                case "-111509":
+                    status.AddError("E601", "Payment terminal timeout");
+                    break;
+                case "-111546":
+                case "-111558":
+                case "-111560":
+                case "-111512":
+                case "-111550":
+                case "-111555":
+                case "-111557":
+                case "-111561":
+                    status.AddError("E602", "Pаyment terminal communication error");
+                    break;
+                case "-111518":
+                    status.AddError("E603", "Payment transaction cancelled by user");
+                    break;
+                case "-111514":
+                case "-111526":
+                    status.AddError("E604", "Invalid PIN");
+                    break;
+                default:
+                    status.AddError("E699", "General error from payment terminal");
+                    break;
             }
         }
 

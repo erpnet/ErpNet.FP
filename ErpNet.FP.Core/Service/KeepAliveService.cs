@@ -39,6 +39,11 @@
 
         private void KeepAliveWithGetStatus(object state)
         {
+            if (!Context.IsReady)
+            {
+                Log.Information("Keep Alive Background Service run skipped(ongoing detection process)!");
+                return;
+            }
             Log.Information("Keep Alive Background Service running...");
             try
             {

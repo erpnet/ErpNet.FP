@@ -14,7 +14,7 @@
     public abstract class BgFiscalPrinter : IFiscalPrinter
     {
 
-        protected static readonly object frameSyncLock = new object();
+        protected readonly object frameSyncLock = new object();
 
         protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
