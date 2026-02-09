@@ -1,5 +1,6 @@
 ﻿namespace ErpNet.FP.Server
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
     using ErpNet.FP.Core.Configuration;
@@ -15,6 +16,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
     using Serilog;
 
     public class Startup
@@ -62,17 +64,20 @@
             app.UseMiddleware<ActionLoggingMiddleware>();
 
             app.UseRouting();
-
             app.UseCors("FrontendPolicy");
 
-            app.Use(async (context, next) =>
+            app.Use(async (httpContext, next) =>
             {
-                context.Response.OnStarting(() =>
-                {
-                    context.Response.Headers["Access-Control-Allow-Private-Network"] = "true";
-                    return Task.CompletedTask;
-                });
+                var serviceController = httpContext.RequestServices.GetRequiredService<IServiceController>();
 
+                if (serviceController.WebAccess.EnablePrivateNetwork)
+                {
+                    httpContext.Response.OnStarting(() =>
+                    {
+                        httpContext.Response.Headers["Access-Control-Allow-Private-Network"] = "true";
+                        return Task.CompletedTask;
+                    });
+                }
                 await next();
             });
 
@@ -87,18 +92,30 @@
         {
             services.AddLogging(loggingBuilder =>
                 loggingBuilder.AddSerilog(dispose: true));
+
             services.ConfigureWritable<ServiceOptions>(Configuration.GetSection("ErpNet.FP"));
+
             services.AddSingleton<IServiceController, ServiceSingleton>();
+
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddCors(options =>
             {
                 options.AddPolicy("FrontendPolicy", builder =>
                 {
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                    var origins = new List<string>();
+                    Configuration.GetSection("ErpNet.FP:WebAccess:AllowedOrigins").Bind(origins);
+
+                    if (origins.Count == 0 || origins.Contains("*"))
+                    {
+                        builder.AllowAnyOrigin();
+                    }
+                    else
+                    {
+                        builder.WithOrigins(origins.ToArray());
+                    }
+
+                    builder.AllowAnyMethod().AllowAnyHeader();
                 });
             });
 

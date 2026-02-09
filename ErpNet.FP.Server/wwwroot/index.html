@@ -86,6 +86,28 @@
             <input type="checkbox" id="AutoDetect" tabindex="0" onclick="autoDetectChanged()">
             <label for="AutoDetect" class="switch">Auto detect printers on service startup</label>
         </div>
+        <fieldset>
+            <legend>Web Access Settings</legend>
+            <div class="input-group vertical">
+                <label>Allowed Origins (comma separated, use * for all):</label>
+                <input id="AllowedOrigins"
+                       placeholder="https://myapp.example.com, http://localhost:3000"
+                       oninput="onOriginsChanged()" />
+
+                <p id="RestartWarning" style="display:none; color: #d73a49; font-size: 0.85em; margin-top: 0;">
+                    <span class="icon-alert"></span> Changing Allowed Origins requires a service restart to take effect.
+                </p>
+
+                <div class="input-group">
+                    <input type="checkbox" id="EnablePrivateNetwork">
+                    <label for="EnablePrivateNetwork" class="switch">Allow Private Network Access (Chrome/Edge compatibility)</label>
+                </div>
+
+                <div class="input-group">
+                    <button id="WebAccessButton" class="small primary" onclick="saveWebAccess()">Apply Web Access Settings</button>
+                </div>
+            </div>
+        </fieldset>
     </div>
 
     <footer class="responsive-padding">

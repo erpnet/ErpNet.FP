@@ -28,8 +28,8 @@
             serverVariables.ServerId = context.ServerId;
             serverVariables.AutoDetect = context.AutoDetect;
             serverVariables.UdpBeaconPort = context.UdpBeaconPort;
+            serverVariables.WebAccess = context.WebAccess;
         }
-
 
         // GET vars
         [HttpGet("vars")]
@@ -69,6 +69,18 @@
             {
                 return StatusCode(StatusCodes.Status423Locked);
             }
+        }
+
+        [HttpPost("webaccess")]
+        public ActionResult<ServerVariables> UpdateWebAccess([FromBody] WebAccessOptions newWebAccess)
+        {
+            if (newWebAccess == null)
+                return BadRequest("Invalid configuration data.");
+
+            context.WebAccess = newWebAccess;
+            serverVariables.WebAccess = context.WebAccess;
+
+            return Ok(serverVariables);
         }
 
         // GET printersprops

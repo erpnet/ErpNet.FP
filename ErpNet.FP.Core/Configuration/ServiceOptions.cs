@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
     using System.Threading;
     using Newtonsoft.Json;
 
@@ -24,20 +22,69 @@
         public Dictionary<string, string> PrinterOptions { get; set; } = new Dictionary<string, string>();
     }
 
+    /// <summary>
+    /// Configuration options for controlling web-based access to the service, 
+    /// specifically handling CORS and browser security features.
+    /// </summary>
+    public class WebAccessOptions
+    {
+        /// <summary>
+        /// Gets or sets the list of allowed origins for Cross-Origin Resource Sharing (CORS).
+        /// Use "*" to allow all origins (less secure) or specific URLs like "https://myapp.myhost.com".
+        /// Defaults to ["*"].
+        /// </summary>
+        public List<string> AllowedOrigins { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to include the 'Access-Control-Allow-Private-Network' header.
+        /// This is required by modern browsers when a public website attempts to 
+        /// connect to a service on a local or private network.
+        /// Defaults to false.
+        /// </summary>
+        public bool EnablePrivateNetwork { get; set; } = false;
+    }
+
+    /// <summary>
+    /// Main service configuration options for ErpNet.FP.
+    /// </summary>
     public class ServiceOptions
     {
-        
+        private readonly ReaderWriterLockSlim _rwLock = new ReaderWriterLockSlim();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to automatically detect 
+        /// printers on service startup.
+        /// </summary>
         public bool AutoDetect { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the unique identifier for this server instance.
+        /// </summary>
         public string ServerId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the dictionary of manually configured printers.
+        /// </summary>
         public Dictionary<string, PrinterConfig> Printers { get; set; } = new Dictionary<string, PrinterConfig>();
+
+        /// <summary>
+        /// Gets or sets the port used for UDP beacon broadcasting.
+        /// </summary>
         public int UdpBeaconPort { get; set; } = 8001;
+
+        /// <summary>
+        /// Gets or sets the dictionary of additional printer properties, mapped by serial number.
+        /// </summary>
         public Dictionary<string, PrinterProperties> PrintersProperties { get; set; } = new Dictionary<string, PrinterProperties>();
 
-        private readonly ReaderWriterLockSlim RWLock = new ReaderWriterLockSlim();
+        /// <summary>
+        /// Gets or sets the web access security settings for the service.
+        /// </summary>
+        public WebAccessOptions WebAccess { get; set; } = new WebAccessOptions();
 
         public void RemapPaymentTypes(string serialNumber, Dictionary<PaymentType, string> map) 
         {
-            RWLock.EnterReadLock();
+            _rwLock.EnterReadLock();
             if (PrintersProperties.TryGetValue(serialNumber, out PrinterProperties? printerProperties))
             {
                 foreach (PaymentType pmt in (PaymentType[])Enum.GetValues(typeof(PaymentType)))
@@ -51,12 +98,12 @@
                     }
                 }
             }
-            RWLock.ExitReadLock();
+            _rwLock.ExitReadLock();
         }
 
         public void ReconfigurePrinterConstants(DeviceInfo info)
         {
-            RWLock.EnterReadLock();
+            _rwLock.EnterReadLock();
             if (!PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
             {
                 printerProperties = new PrinterProperties();
@@ -81,12 +128,12 @@
                 }
             }
             
-            RWLock.ExitReadLock();
+            _rwLock.ExitReadLock();
         }
 
         public void ReconfigurePrinterOptions(DeviceInfo info)
         {
-            RWLock.EnterReadLock();
+            _rwLock.EnterReadLock();
             try
             {
                 if (!PrintersProperties.TryGetValue(info.SerialNumber, out PrinterProperties? printerProperties))
@@ -121,7 +168,7 @@
             }
             finally
             {
-                RWLock.ExitReadLock();
+                _rwLock.ExitReadLock();
             }
         }
     }

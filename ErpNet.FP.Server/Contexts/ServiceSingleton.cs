@@ -84,6 +84,7 @@
                 updatedConfigOptions.ServerId = configOptions.ServerId;
                 updatedConfigOptions.Printers = configOptions.Printers ?? new Dictionary<string, PrinterConfig>();
                 updatedConfigOptions.PrintersProperties = configOptions.PrintersProperties ?? new Dictionary<string, PrinterProperties> { };
+                updatedConfigOptions.WebAccess = configOptions.WebAccess;
             });
         }
     }

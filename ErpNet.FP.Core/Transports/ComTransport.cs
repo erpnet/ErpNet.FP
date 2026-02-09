@@ -142,7 +142,7 @@
                         Log.Information($"Opening the com port {serialPort.PortName}");
                     }
                     else
-                        Log.Information($"Com port {serialPort.PortName} allready opened!");
+                        Log.Information($"Com port {serialPort.PortName} already opened!");
                 }
                 catch (FileNotFoundException)
                 {

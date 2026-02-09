@@ -33,6 +33,8 @@
 
         int UdpBeaconPort { get; set; }
 
+        WebAccessOptions WebAccess { get; set; }
+
         bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
 
         bool DeletePrinter(PrinterConfigWithId printerConfigWithId);
@@ -87,6 +89,16 @@
             set
             {
                 configOptions.UdpBeaconPort = value;
+                WriteOptions();
+            }
+        }
+
+        public WebAccessOptions WebAccess
+        {
+            get => configOptions.WebAccess;
+            set
+            {
+                configOptions.WebAccess = value;
                 WriteOptions();
             }
         }
