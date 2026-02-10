@@ -6,10 +6,8 @@
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using System.Threading.Channels;
     using System.Threading.Tasks;
     using ErpNet.FP.Core.Configuration;
-    using ErpNet.FP.Core.Drivers;
     using Serilog;
 
     public interface IServiceController
@@ -35,6 +33,8 @@
         bool AutoDetect { get; set; }
 
         int UdpBeaconPort { get; set; }
+
+        WebAccessOptions WebAccess { get; set; }
 
         string ExcludePortList { get; set; }
 
@@ -114,6 +114,16 @@
             set
             {
                 configOptions.DetectionTimeout = value;
+                WriteOptions();
+            }
+        }
+
+        public WebAccessOptions WebAccess
+        {
+            get => configOptions.WebAccess;
+            set
+            {
+                configOptions.WebAccess = value;
                 WriteOptions();
             }
         }
@@ -244,7 +254,8 @@
             {
                 var taskInfoResult = new TaskInfoResult();
                 {
-                    if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+                    if (Tasks.TryGetValue(taskId, out var printJob)
+                        && printJob is not null)
                     {
                         taskInfoResult.TaskStatus = printJob.TaskStatus;
                         if (printJob.Result != null)
@@ -281,7 +292,8 @@
         {
             const int timeoutMinimalStep = 50; // check the queue every 50 ms
             if (asyncTimeout < 0) asyncTimeout = PrintJob.DefaultTimeout;
-            if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+            if (Tasks.TryGetValue(taskId, out var printJob)
+                && printJob is not null)
             {
                 // While the print job is not finished
                 while (printJob.Finished == null)
@@ -316,12 +328,15 @@
         public void ConsumeTaskQueue()
         {
             // Run all tasks from the TaskQueue
-            while (TaskQueue.TryDequeue(out string taskId))
+            while (TaskQueue.TryDequeue(out var taskId))
             {
+                if (string.IsNullOrEmpty(taskId))
+                    continue;
+
                 // Resolve printJob by taskId
-                if (Tasks.TryGetValue(taskId, out PrintJob printJob))
+                if (Tasks.TryGetValue(taskId, out var printJob))
                 {
-                    printJob.Run();
+                    printJob?.Run();
                 }
             }
         }

@@ -1,59 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-         DefaultTargets="All">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="All">
+
     <PropertyGroup>
-      <OutputPath>Output</OutputPath>
-      <OutputType>Published</OutputType>
-      <!-- Increase version when releasing a build -->
-      <Version>1.1.0.1680</Version>
-		<WixNamespaces>
-			<Namespace Prefix="wix" Uri="http://wixtoolset.org/schemas/v4/wxs" />
-			<Namespace Prefix="ui" Uri="http://wixtoolset.org/schemas/v4/wxs/ui" />
-			<Namespace Prefix="util" Uri="http://wixtoolset.org/schemas/v4/wxs/util" />
-			<Namespace Prefix="fg" Uri="http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools" />			
-		</WixNamespaces>
-		<MSBuildNamespaces>
-        <Namespace Prefix="m" Uri="http://schemas.microsoft.com/developer/msbuild/2003" />
-      </MSBuildNamespaces>
+        <OutputPath>Output</OutputPath>
+        <PublishRoot>Published</PublishRoot>
+        <Version>1.1.0.1683</Version>
     </PropertyGroup>
 
-  <UsingTask
-    TaskName="RegexPoke"
-    TaskFactory="RoslynCodeTaskFactory"
-    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
-    <ParameterGroup>
-      <File ParameterType="System.String" Required="true" />
-      <Pattern ParameterType="System.String" Required="true" />
-      <Group ParameterType="System.String" Required="true"/>
-      <Value ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Code Type="Fragment" Language="cs">
-<![CDATA[
-var contents = System.IO.File.ReadAllText(File);
-var re = new System.Text.RegularExpressions.Regex(Pattern, System.Text.RegularExpressions.RegexOptions.Multiline);
-var replaced = re.Replace(contents, match =>
-{
-    var sb = new System.Text.StringBuilder();
-    var g = match.Groups[Group];
-    if (g.Success)
-    {
-        sb.Append(match.Value, 0, g.Index - match.Index);
-        sb.Append(Value);
-        sb.Append(match.Value, g.Index - match.Index + g.Length, match.Length - (g.Index - match.Index + g.Length));
-    }
-    else
-    {
-        sb.Append(match.Value);
-    }
-    return sb.ToString();
-});
-
-System.IO.File.WriteAllText(File, replaced);
-]]>
-      </Code>
-    </Task>
-  </UsingTask>
+    <ItemGroup>
+        <WixNamespace Include="wix">
+            <Prefix>wix</Prefix>
+            <Uri>http://wixtoolset.org/schemas/v4/wxs</Uri>
+        </WixNamespace>
+    </ItemGroup>
 
     <ItemGroup>
         <TargetPlatform Include="win-x86" />
@@ -63,90 +22,95 @@ System.IO.File.WriteAllText(File, replaced);
         <TargetPlatform Include="linux-arm" />
     </ItemGroup>
 
-  <Target Name="PrepareForRelease">
+    <UsingTask TaskName="RegexReplace" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <File ParameterType="System.String" Required="true" />
+            <Pattern ParameterType="System.String" Required="true" />
+            <Value ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+          string content = System.IO.File.ReadAllText(File);
+          string newContent = System.Text.RegularExpressions.Regex.Replace(content, Pattern, Value);
+          System.IO.File.WriteAllText(File, newContent);
+        ]]>
+            </Code>
+        </Task>
+    </UsingTask>
 
-    <Message Importance="high" Text="Update version in Product.wxs" />
-    
-    <XmlPoke
-      XmlInputPath="$(MSBuildProjectDirectory)\ErpNet.FP.Setup\Product.wxs"
-      Query="/wix:Wix/wix:Product/@Version"
-      Namespaces="$(WixNamespaces)" 
-      Value="$(Version)" />
+    <Target Name="PrepareForRelease">
+        <Message Importance="high" Text="=== STEP 1: Preparing Release $(Version) ===" />
 
-    <Message Importance="high" Text="Update versions in Directory.Build.props" />
+        <XmlPoke
+          XmlInputPath="ErpNet.FP.Setup\Product.wxs"
+          Query="/wix:Wix/wix:Package/@Version"
+          Namespaces="&lt;Namespace Prefix='wix' Uri='http://wixtoolset.org/schemas/v4/wxs' /&gt;"
+          Value="$(Version)" />
 
-    <XmlPoke
-      XmlInputPath="$(MSBuildProjectDirectory)\Directory.Build.props"
-      Query="/Project/PropertyGroup/AssemblyVersion"
-      Value="$(Version)" />
-    <XmlPoke
-      XmlInputPath="$(MSBuildProjectDirectory)\Directory.Build.props"
-      Query="/Project/PropertyGroup/FileVersion"
-      Value="$(Version)" />
-    <XmlPoke
-      XmlInputPath="$(MSBuildProjectDirectory)\Directory.Build.props"
-      Query="/Project/PropertyGroup/Version"
-      Value="$(Version)" />
+        <XmlPoke
+          Condition="Exists('Directory.Build.props')"
+          XmlInputPath="Directory.Build.props"
+          Query="/Project/PropertyGroup/Version"
+          Value="$(Version)" />
 
-    <Message Importance="high" Text="Calculate hashes" />
-    
-    <GetFileHash
-      Files="$(MSBuildProjectDirectory)\ErpNet.FP.Server\wwwroot\app.js">
-      <Output TaskParameter="Hash" PropertyName="AppJsHash" />
-    </GetFileHash>
+        <GetFileHash Files="ErpNet.FP.Server\wwwroot\app.js">
+            <Output TaskParameter="Items" ItemName="AppJsInfo" />
+        </GetFileHash>
+        <GetFileHash Files="ErpNet.FP.Server\wwwroot\index.css">
+            <Output TaskParameter="Items" ItemName="IndexCssInfo" />
+        </GetFileHash>
 
-    <Message Importance="high" Text="app.js -> $(AppJsHash)" />
+        <PropertyGroup>
+            <AppJsHash>%(AppJsInfo.FileHash)</AppJsHash>
+            <IndexCssHash>%(IndexCssInfo.FileHash)</IndexCssHash>
+        </PropertyGroup>
 
-    <GetFileHash
-      Files="$(MSBuildProjectDirectory)\ErpNet.FP.Server\wwwroot\index.css">
-      <Output TaskParameter="Hash" PropertyName="IndexCssHash" />
-    </GetFileHash>
+        <Message Importance="high" Text="Hashes: app.js=$(AppJsHash) | index.css=$(IndexCssHash)" />
 
-    <Message Importance="high" Text="index.css -> $(IndexCssHash)" />
+        <RegexReplace
+          File="ErpNet.FP.Server\wwwroot\index.html"
+          Pattern="app\.js\?ver=([^&quot;]+)"
+          Value="app.js?ver=$(AppJsHash)" />
 
-    <Message Importance="high" Text="Updating versions in index.html" />
-    
-    <RegexPoke
-      File="$(MSBuildProjectDirectory)\ErpNet.FP.Server\wwwroot\index.html"
-      Pattern='&lt;script src="app\.js\?ver=(?&lt;ver&gt;.+)"&gt;&lt;/script&gt;'
-      Group="ver"
-      Value="$(AppJsHash)" />
+        <RegexReplace
+          File="ErpNet.FP.Server\wwwroot\index.html"
+          Pattern="index\.css\?ver=([^&quot;]+)"
+          Value="index.css?ver=$(IndexCssHash)" />
+    </Target>
 
-    <RegexPoke
-      File="$(MSBuildProjectDirectory)\ErpNet.FP.Server\wwwroot\index.html"
-      Pattern='&lt;link rel="stylesheet" href="index\.css\?ver=(?&lt;ver&gt;.+)"&gt;'
-      Group="ver"
-      Value="$(IndexCssHash)" />
-  
-  </Target>
-    
-  <Target Name="PublishToOutputPath">
-    <Message Text="Performing cleanup..." Importance="high" />
-    <RemoveDir
-        Directories="$(OutputPath);$(OutputType)" />
+    <Target Name="PublishToOutputPath" DependsOnTargets="PrepareForRelease">
+        <Message Importance="high" Text="=== STEP 2: Publishing &amp; Zipping ===" />
 
-    <MakeDir Directories="$(OutputPath);$(OutputType);"/>
+        <RemoveDir Directories="$(OutputPath);$(PublishRoot)" />
+        <MakeDir Directories="$(OutputPath);$(PublishRoot)" />
 
-    <Exec Command="dotnet restore --verbosity q" />
-        
-    <Message Text="Publishing binaries for %(TargetPlatform.Identity) into $(OutputType) folder..." Importance="high" />
-    <Exec Command="dotnet publish -r %(TargetPlatform.Identity) -c Release  --self-contained=true  -p:PublishTrimmed=false  -o Published\%(TargetPlatform.Identity)  --verbosity q" />
-              
-    <Message Text="Zipping binaries for all supported target platforms into $(OutputPath) folder..." Importance="high" />
-    <ZipDirectory
-        SourceDirectory="$(OutputType)/%(TargetPlatform.Identity)"
-        DestinationFile="$(OutputPath)/%(TargetPlatform.Identity).zip" />
-		        
-    <Message Text="Everything is ready. Now you could run rebuild of ErpNet.FP.Setup to create the installer into $(OutputPath) folder" Importance="high" />
-  </Target>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="PublishSinglePlatform" Properties="PlatformName=%(TargetPlatform.Identity)" />
+    </Target>
 
-  <Target Name="BuildWindowsSetup">
-    <MSBuild
-      Projects="$(MSBuildProjectDirectory)\ErpNet.FP.Setup\ErpNet.FP.Setup.wixproj"
-      Properties="Configuration=Release" />
-  </Target>
+    <Target Name="PublishSinglePlatform">
+        <Message Text="Processing $(PlatformName)..." Importance="high" />
 
-  <Target Name="All" DependsOnTargets="PrepareForRelease;PublishToOutputPath;BuildWindowsSetup">
+        <Exec Command="dotnet publish ErpNet.FP.Server\ErpNet.FP.Server.csproj -c Release -r $(PlatformName) --self-contained true -p:PublishTrimmed=false -o $(PublishRoot)\$(PlatformName)" />
 
-  </Target>
+        <ZipDirectory
+          SourceDirectory="$(PublishRoot)\$(PlatformName)"
+          DestinationFile="$(OutputPath)\$(PlatformName).zip"
+          Overwrite="true" />
+    </Target>
+
+    <Target Name="BuildWindowsSetup" DependsOnTargets="PublishToOutputPath">
+        <Message Importance="high" Text="=== STEP 3: Building Windows MSI ===" />
+
+        <MSBuild
+          Projects="ErpNet.FP.Setup\ErpNet.FP.Setup.wixproj"
+          Properties="Configuration=Release;Platform=x86" />
+
+        <Message Importance="high" Text="MSI file is ready in $(OutputPath)" />
+    </Target>
+
+    <Target Name="All" DependsOnTargets="PrepareForRelease;PublishToOutputPath;BuildWindowsSetup">
+        <Message Importance="high" Text="=== BUILD COMPLETE! Check $(OutputPath) folder. ===" />
+    </Target>
+
 </Project>

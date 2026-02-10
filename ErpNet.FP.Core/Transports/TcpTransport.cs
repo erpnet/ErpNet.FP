@@ -37,10 +37,10 @@
                     openedChannels.Add(address, channel);
                     return channel;
                 }
-                catch (TimeoutException e)
+                catch (TimeoutException)
                 {
                     openedChannels.Add(address, null);
-                    throw e;
+                    throw;
                 }
             }
         }

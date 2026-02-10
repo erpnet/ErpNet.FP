@@ -28,6 +28,7 @@
             {
                 return Task.CompletedTask;
             }
+
             // Get Status every 120 seconds, for keeping alive the connection
             Timer = new Timer(KeepAliveWithGetStatus, null, TimeSpan.FromSeconds(120),
                 TimeSpan.FromSeconds(120));
@@ -37,7 +38,7 @@
             return Task.CompletedTask;
         }
 
-        private void KeepAliveWithGetStatus(object state)
+        private void KeepAliveWithGetStatus(object? state)
         {
             if (!Context.IsReady)
             {

@@ -68,7 +68,7 @@
             this IDictionary<string, string> options,
             string key,
             string defaultValue) =>
-            options.TryGetValue(key, out string value) ? value : defaultValue;
+            options.TryGetValue(key, out var value) ? value : defaultValue;
 
         public static string IfNullOrEmpty(this string val, string fallback) =>
             string.IsNullOrEmpty(val) ? fallback : val;

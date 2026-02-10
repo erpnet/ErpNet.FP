@@ -113,7 +113,7 @@
                 idleTimer.Change(DefaultTimeoutToClose, 0);
             }
 
-            private void IdleTimerElapsed(object state)
+            private void IdleTimerElapsed(object? state)
             {
                 if (Monitor.TryEnter(this))
                 {
@@ -145,7 +145,7 @@
                         Log.Information($"Com port {serialPort.PortName} opened successfully!");
                     }
                     //else
-                    //    Log.Information($"Com port {serialPort.PortName} allready opened!");
+                    //    Log.Information($"Com port {serialPort.PortName} already opened!");
                 }
                 catch (FileNotFoundException)
                 {
