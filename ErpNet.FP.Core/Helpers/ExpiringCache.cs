@@ -4,7 +4,9 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
 
-    public class ExpiringCache<TKey, TValue> where TValue : class
+    public class ExpiringCache<TKey, TValue>
+        where TKey : notnull
+        where TValue : class
     {
         private readonly IDictionary<TKey, ExpiringCacheItem<TValue>>
             cacheDictionary = new ConcurrentDictionary<TKey, ExpiringCacheItem<TValue>>();

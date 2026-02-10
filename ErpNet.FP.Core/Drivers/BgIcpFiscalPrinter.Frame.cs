@@ -31,7 +31,7 @@
                 MarkerSTX
             };
             frame.AddRange(DeviceNo ?? PrinterEncoding.GetBytes("0000"));
-            frame.AddRange(data);
+            frame.AddRange(data ?? []);
             frame.AddRange(ByteTo2Bytes((byte)(10 + (data != null ? data.Length : 0))));
             frame.AddRange(ComputeCS(frame.ToArray()));
             frame.Add(MarkerETX);

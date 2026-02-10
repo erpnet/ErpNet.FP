@@ -31,8 +31,8 @@
             serverVariables.UdpBeaconPort = context.UdpBeaconPort;
             serverVariables.ExcludePortList = context.ExcludePortList;
             serverVariables.DetectionTimeout = context.DetectionTimeout;
+            serverVariables.WebAccess = context.WebAccess;
         }
-
 
         // GET vars
         [HttpGet("vars")]
@@ -121,6 +121,18 @@
         {
             context.PrintersProperties = printersProperties;
             return context.PrintersProperties;
+        }
+
+        [HttpPost("webaccess")]
+        public ActionResult<ServerVariables> UpdateWebAccess([FromBody] WebAccessOptions newWebAccess)
+        {
+            if (newWebAccess == null)
+                return BadRequest("Invalid configuration data.");
+
+            context.WebAccess = newWebAccess;
+            serverVariables.WebAccess = context.WebAccess;
+
+            return Ok(serverVariables);
         }
 
         // GET printers

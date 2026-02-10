@@ -16,7 +16,8 @@
 
         protected readonly object frameSyncLock = new object();
 
-        protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
+        protected Encoding PrinterEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251)
+            ?? throw new NotSupportedException("Encoding 1251 (Cyrillic) is missing. Register CodePagesEncodingProvider!");
 
         public DeviceInfo Info = new DeviceInfo();
 

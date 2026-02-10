@@ -262,6 +262,27 @@ function detectionTimeoutChanged() {
     })
 }
 
+function saveWebAccess() {
+    var origins = $("#AllowedOrigins").val().split(',').map(s => s.trim()).filter(s => s.length > 0);
+    var enablePrivate = $("#EnablePrivateNetwork").is(':checked');
+
+    $.ajax({
+        type: 'POST',
+        url: '/service/webaccess',
+        data: JSON.stringify({
+            "allowedOrigins": origins,
+            "enablePrivateNetwork": enablePrivate
+        }),
+        contentType: 'application/json',
+        success: function (data) {
+            showToastMessage("Web access settings saved. A restart is required for changes to take effect.");
+        },
+        error: function () {
+            showToastMessage("Error saving web access settings.");
+        }
+    });
+}
+
 function showConfiguredPrinters() {
     $.ajax({
         type: 'GET',
@@ -309,6 +330,13 @@ function getServerVariables() {
             $("#AutoDetect").attr('checked', data.autoDetect ? 'checked' : null)
             $("#ExcludePortList").attr('value', data.excludePortList) 
             $("#DetectionTimeout").attr('value', data.detectionTimeout)
+            if (data.webAccess) {
+                $("#AllowedOrigins").val(data.webAccess.allowedOrigins.join(", "));
+                $("#EnablePrivateNetwork").prop('checked', data.webAccess.enablePrivateNetwork);
+                if (typeof originalOrigins !== 'undefined') {
+                    originalOrigins = data.webAccess.allowedOrigins.join(", ");
+                }
+            }
         },
         error: function (xhr, type) {
             showToastMessage("Cannot get server variables.")

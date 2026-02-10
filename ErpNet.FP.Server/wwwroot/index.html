@@ -86,10 +86,27 @@
         <div class="section input-group horizontal">
             <input type="checkbox" id="AutoDetect" tabindex="0" onclick="autoDetectChanged()">
             <label for="AutoDetect" class="switch">Auto detect printers on service startup</label><br />
-            <label for="ExcludePortList" >Exclude port(s) list</label>
+            <label for="ExcludePortList">Exclude port(s) list</label>
             <input type="text" id="ExcludePortList" tabindex="1" onchange="excludePortsChanged()" /><br />
-            <label for="DetectionTimeout" >Detection timeout</label>
+            <label for="DetectionTimeout">Detection timeout</label>
             <input type="number" id="DetectionTimeout" tabindex="2" min="10" max="60" onchange="detectionTimeoutChanged()" />
+            <fieldset>
+                <legend>Web Access Settings</legend>
+                <div class="input-group vertical">
+                    <label>Allowed Origins (comma separated, use * for all):</label>
+                    <input id="AllowedOrigins"
+                           placeholder="https://myapp.example.com, http://localhost:3000"
+                           oninput="onOriginsChanged()" />
+
+                    <div class="input-group">
+                        <input type="checkbox" id="EnablePrivateNetwork">
+                        <label for="EnablePrivateNetwork" class="switch">Allow Private Network Access (Chrome/Edge compatibility)</label>
+                    </div>
+                    <div class="input-group">
+                        <button id="WebAccessButton" class="small primary" onclick="saveWebAccess()">Apply Web Access Settings</button>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </div>
 
@@ -101,7 +118,7 @@
     <div id="ToastArea"></div>
 
     <script src="index.js"></script>
-    <script src="app.js?ver=85798FCFFD18DE2B865075788F91A593B768A3D2170D6610F588B89EA8EA10E8"></script>
+    <script src="app.js?ver=B6C2ADF195F593596EF45EC2FF46FA823673890C5B27B297C5D057BE3B2B2772"></script>
 </body>
 
 </html>
