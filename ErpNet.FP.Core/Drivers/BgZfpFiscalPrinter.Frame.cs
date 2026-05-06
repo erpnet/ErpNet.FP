@@ -345,6 +345,41 @@
             return new DeviceStatusWithRawResponse(status) { RawResponse = rawResponse };
         }
 
+        protected (string, DeviceStatus) RequestRaw(byte command, byte[] data)
+        {
+            lock (frameSyncLock)
+            {
+                if (DeadLine < DateTime.Now)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E999", "User timeout occured while sending the request");
+                    return (string.Empty, deviceStatus);
+                }
+                try
+                {
+                    return ParseResponse(RawRequest(command, data));
+                }
+                catch (StandardizedStatusMessageException e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError(e.Code, e.Message);
+                    return (string.Empty, deviceStatus);
+                }
+                catch (InvalidResponseException e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E107", e.Message);
+                    return (string.Empty, deviceStatus);
+                }
+                catch (Exception e)
+                {
+                    var deviceStatus = new DeviceStatus();
+                    deviceStatus.AddError("E101", e.Message);
+                    return (string.Empty, deviceStatus);
+                }
+            }
+        }
+
         protected (string, DeviceStatus) Request(byte command, string? data = null)
         {
             lock (frameSyncLock)
