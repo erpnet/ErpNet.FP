@@ -208,10 +208,13 @@
             {
                 // Protocol: <NamePLU[36]><;><DepNum[1..2]><;><Price[1..10]>{<'*'>< Quantity[1..10]>}
                 //           {<','><DiscAddP[1..7]>}{<':'><DiscAddV[1..8]>}
+                // NOTE: department byte = (dept + 0x80) must be injected as raw byte,
+                // NOT as a char, because CP1251 does not map U+0082 etc. to those bytes.
+                // We use a placeholder char '~' here and replace it in the byte array below.
                 itemData
                     .Append(itemText.WithMaxLength(Info.ItemTextMaxLength).PadRight(ItemTextMandatoryLength))
                     .Append(';')
-                    .Append((department + 0x80).ToString("X2"))
+                    .Append('~')
                     .Append(';')
                     .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
             }
@@ -254,7 +257,17 @@
             }
             else
             {
-                return Request(CommandSellCorrectionDepartment, itemData.ToString());
+                // Encode to bytes then patch the placeholder '~' (0x7E) with the real dept byte
+                var rawData = PrinterEncoding.GetBytes(itemData.ToString());
+                for (int i = 0; i < rawData.Length; i++)
+                {
+                    if (rawData[i] == 0x7E) // '~' placeholder
+                    {
+                        rawData[i] = (byte)(department + 0x80);
+                        break;
+                    }
+                }
+                return RequestRaw(CommandSellCorrectionDepartment, rawData);
             }
         }
 
