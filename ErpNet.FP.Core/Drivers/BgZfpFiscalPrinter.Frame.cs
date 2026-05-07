@@ -347,28 +347,37 @@
 
         protected (string, DeviceStatus) Request(byte command, string? data = null)
         {
+            return Request(command, data == null ? null : PrinterEncoding.GetBytes(data));
+        }
+
+        protected (string, DeviceStatus) Request(byte command, byte[]? data)
+        {
             lock (frameSyncLock)
             {
                 if (DeadLine < DateTime.Now)
                 {
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError("E999", "User timeout occured while sending the request");
+
                     return (string.Empty, deviceStatus);
                 }
+
                 try
                 {
-                    return ParseResponse(RawRequest(command, data == null ? null : PrinterEncoding.GetBytes(data)));
+                    return ParseResponse(RawRequest(command, data));
                 }
                 catch (StandardizedStatusMessageException e)
                 {
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError(e.Code, e.Message);
+
                     return (string.Empty, deviceStatus);
                 }
                 catch (InvalidResponseException e)
                 {
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError("E107", e.Message);
+
                     return (string.Empty, deviceStatus);
                 }
                 catch (FileNotFoundException)
@@ -379,6 +388,7 @@
                 {
                     var deviceStatus = new DeviceStatus();
                     deviceStatus.AddError("E101", e.Message);
+
                     return (string.Empty, deviceStatus);
                 }
             }
