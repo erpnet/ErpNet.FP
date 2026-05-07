@@ -192,7 +192,8 @@
             decimal priceModifierValue = 0,
             PriceModifierType priceModifierType = PriceModifierType.None)
         {
-            var itemData = new StringBuilder();
+            var itemData = new FrameBuilder(PrinterEncoding);
+
             if (department <= 0) 
             {
                 // Protocol: <NamePLU[36]><;><OptionVATClass[1]><;><Price[1..10]>{<'*'>< Quantity[1..10]>}
@@ -206,12 +207,15 @@
             }
             else
             {
-                // Protocol: <NamePLU[36]><;><DepNum[1..2]><;><Price[1..10]>{<'*'>< Quantity[1..10]>}
+                // Protocol: <NamePLU[36]><;><DepNum[1]><;><Price[1..10]>{<'*'>< Quantity[1..10]>}
                 //           {<','><DiscAddP[1..7]>}{<':'><DiscAddV[1..8]>}
                 itemData
                     .Append(itemText.WithMaxLength(Info.ItemTextMaxLength).PadRight(ItemTextMandatoryLength))
                     .Append(';')
-                    .Append((department + 0x80).ToString("X2"))
+                    // DepNum is one raw byte = dept + 0x80 (Dep01=0x81 ... Dep19=0x93).
+                    // Sent via FrameBuilder.Append(byte) to bypass CP1251 text encoding,
+                    // which cannot round-trip U+0080–U+009F through char.
+                    .Append((byte)(department + 0x80))
                     .Append(';')
                     .Append(unitPrice.ToString("F2", CultureInfo.InvariantCulture));
             }
@@ -222,6 +226,7 @@
                     .Append('*')
                     .Append(quantity.ToString(CultureInfo.InvariantCulture));
             }
+
             switch (priceModifierType)
             {
                 case PriceModifierType.DiscountPercent:
@@ -250,11 +255,11 @@
 
             if (department <= 0) 
             {
-                return Request(CommandSellCorrection, itemData.ToString());
+                return Request(CommandSellCorrection, itemData.ToArray());
             }
             else
             {
-                return Request(CommandSellCorrectionDepartment, itemData.ToString());
+                return Request(CommandSellCorrectionDepartment, itemData.ToArray());
             }
         }
 
