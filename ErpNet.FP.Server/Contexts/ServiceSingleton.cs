@@ -8,6 +8,7 @@
     using ErpNet.FP.Core.Drivers.BgIcp;
     using ErpNet.FP.Core.Drivers.BgIncotex;
     using ErpNet.FP.Core.Drivers.BgTremol;
+    using ErpNet.FP.Core.Drivers.BgSis;
     using ErpNet.FP.Core.Provider;
     using ErpNet.FP.Core.Service;
     using ErpNet.FP.Core.Transports;
@@ -21,13 +22,13 @@
     public class ServiceSingleton : ServiceControllerContext
     {
 
-        private readonly IWritableOptions<ServiceOptions> writableConfigOptions;
+        private readonly IWritableOptions<ServiceOptions> _writableConfigOptions;
 
         public ServiceSingleton(
             IWritableOptions<ServiceOptions> writableConfigOptions)
             : base()
         {
-            this.writableConfigOptions = writableConfigOptions;
+            _writableConfigOptions = writableConfigOptions;
             configOptions = writableConfigOptions.Value;
             Setup();
         }
@@ -37,6 +38,7 @@
             // Transports
             var comTransport = new ComTransport();
             var tcpTransport = new TcpTransport();
+            var httpSisJsonTransport = new BgSisJsonHttpTransport();
 
             // Drivers
             var datecsXIsl = new BgDatecsXIslFiscalPrinterDriver();
@@ -48,6 +50,7 @@
             var islIcp = new BgIslIcpFiscalPrinterDriver();
             var tremolZfp = new BgTremolZfpFiscalPrinterDriver();
             var tremolV2Zfp = new BgTremolZfpV2FiscalPrinterDriver();
+            var bgSisJson = new BgSisJsonFiscalPrinterDriver();
 
             // Add drivers and their compatible transports to the provider.
             Provider = new Provider(configOptions)
@@ -73,12 +76,14 @@
                 .Register(tremolZfp, comTransport)
                 .Register(tremolZfp, tcpTransport)
                 .Register(tremolV2Zfp, comTransport)
-                .Register(tremolV2Zfp, tcpTransport);
+                .Register(tremolV2Zfp, tcpTransport)
+                // SIS Fiscal Module (JSON-RPC over HTTP)
+                .Register(bgSisJson, httpSisJsonTransport);
         }
 
         protected override void WriteOptions()
         {
-            writableConfigOptions.Update(updatedConfigOptions =>
+            _writableConfigOptions.Update(updatedConfigOptions =>
             {
                 updatedConfigOptions.AutoDetect = configOptions.AutoDetect;
                 updatedConfigOptions.ServerId = configOptions.ServerId;

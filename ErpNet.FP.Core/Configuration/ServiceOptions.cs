@@ -192,7 +192,32 @@
         }
 
         /// <summary>
-        /// Updates the provided <see cref="DeviceInfo"/> object with operational options 
+        /// Returns a single printer-specific option value from <see cref="PrinterProperties.PrinterOptions"/>,
+        /// or null if the printer or the key is not configured.
+        /// </summary>
+        /// <param name="serialNumber">The serial number of the printer.</param>
+        /// <param name="key">The option key.</param>
+        public string? GetPrinterOption(string serialNumber, string key)
+        {
+            _rwLock.EnterReadLock();
+            try
+            {
+                if (PrintersProperties.TryGetValue(serialNumber, out PrinterProperties? printerProperties)
+                    && printerProperties.PrinterOptions.TryGetValue(key, out var value)
+                    && !string.IsNullOrEmpty(value))
+                {
+                    return value;
+                }
+                return null;
+            }
+            finally
+            {
+                _rwLock.ExitReadLock();
+            }
+        }
+
+        /// <summary>
+        /// Updates the provided <see cref="DeviceInfo"/> object with operational options
         /// (like payment terminal support) stored in the printer properties.
         /// </summary>
         /// <param name="info">The device info object to reconfigure.</param>
