@@ -46,6 +46,16 @@ The config has the following root elements
       },
       "zk970105": {
         "Uri": "bg.zk.v2.zfp.com://COM23"
+      },
+      "bn025335": {
+        "Uri": "bg.sis.json.http://192.168.10.147:5063"
+      }
+    },
+    "PrintersProperties": {
+      "BN025335": {
+        "PrinterOptions": {
+          "posId": "SCO033"
+        }
       }
     }
   },
@@ -87,6 +97,17 @@ E.g., the Printers section options have priority over the auto-detected printers
 ## Printers Sub-section
 Each element in this section contains information about a single printer:
 * **Uri** - contains the Uri of the configured printer.
+
+Network devices (which cannot be auto-detected) are configured here with their full Uri, e.g. `"bn025335": { "Uri": "bg.sis.json.http://192.168.10.147:5063" }`.
+
+## PrintersProperties Sub-section
+Optional. Per-device settings, keyed by the device **serial number** (not the printer id):
+* **PaymentTypeMappings** - override the payment type codes sent to the device.
+* **PrinterConstants** - override hardware constants (e.g. `commentTextMaxLength`, `itemTextMaxLength`).
+* **PrinterOptions** - operational options specific to the device model.
+
+### SIS Fiscal Module options (`bg.sis.json`)
+* **posId** - *(optional)* POS number printed in the receipt header, max 6 symbols. If omitted, no posId is sent.
 
 # "Kestrel" Section
 This section contains options, recognized by the integrated Kestrel web server. 

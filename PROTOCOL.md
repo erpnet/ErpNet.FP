@@ -52,6 +52,7 @@ When a printer is detected, the http server saves something, called printer Uri.
 - bg.dt.x.isl.com://COM21
 - bg.zk.zfp.http://fp5.mycompany.com
 - bg.dt.p.isl.tcp://192.168.1.77:9100
+- bg.sis.json.http://192.168.1.77:5063
 - etc.
 
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
@@ -181,6 +182,11 @@ http://localhost:8001/printers/dy448967
 }
 ```
 
+### Additional device info fields
+Depending on the device, the info may also contain capability flags:
+* **"supportsSubTotalAmountModifiers"** - whether the device supports receipt-level (subtotal) `discount-amount` / `surcharge-amount` items.
+* **"subTotalAmountModifiersRequireTaxGroup"** - when the above is true, whether each subtotal modifier item must also carry a **"taxGroup"** (VAT category).
+
 ## `GET` Get Printer Status
 Contacts the specific fiscal printer and returns its current status and current printer date and time.
 In this example **dt525860** is the printerId of a specific printer.
@@ -249,7 +255,9 @@ The item with type "sale" can have the following fields set:
 
 The item with type "discount-amount" and "surcharge-amount" can have the following fields set:
 * **"amount"** - the amount that will be substracted or added to the subtotal
-**Warning**: Check the value of "supportsSubTotalAmountModifiers" in your device info, to check whether your device supports subtotal modifiers by amount.
+* **"taxGroup"** - *(optional)* the tax group (an integer from 1 to 8) the modifier applies to. This is only required by devices that report **"subTotalAmountModifiersRequireTaxGroup": true** in their device info.
+
+**Warning**: Check the value of "supportsSubTotalAmountModifiers" in your device info, to check whether your device supports subtotal modifiers by amount. If it is true, also check "subTotalAmountModifiersRequireTaxGroup" to know whether a "taxGroup" is mandatory on these items.
 
 The item with type "comment" and "footer-comment" can have the following fields set:
 * **"text"** - the text of the comment

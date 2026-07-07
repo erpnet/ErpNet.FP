@@ -50,8 +50,14 @@
         public ICollection<PaymentType> SupportedPaymentTypes = new PaymentType[] { };
         /// <summary>
         /// Expresses support of item types discount-amount and surcharge-amount by the device
-        /// </summary>   
+        /// </summary>
         public bool SupportsSubTotalAmountModifiers = false;
+        /// <summary>
+        /// When <see cref="SupportsSubTotalAmountModifiers"/> is true, indicates whether the device also
+        /// requires a taxGroup (VAT category) on each subtotal amount modifier item
+        /// (discount-amount / surcharge-amount). Optional for the caller unless this is true.
+        /// </summary>
+        public bool SubTotalAmountModifiersRequireTaxGroup = false;
         /// <summary>
         /// Expresses support of payment terminal for current device model
         /// </summary>
