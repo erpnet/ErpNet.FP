@@ -300,6 +300,14 @@ If you want your device to be supported, please contact us, and we will try our 
 
 * **Didn't find your device on the list?** Please, create an issue here in the project and we will check whether we can support it with the current set of protocols or we need to implement a new one.
 
+## Native invoices and credit notes
+
+The server can print **native fiscal invoices** and **credit notes** (extended fiscal receipts that carry a buyer/recipient block) via the `POST /printers/{id}/invoice` and `POST /printers/{id}/creditnote` endpoints. See the [protocol documentation](PROTOCOL.md#post-print-invoice) for the request format, and a printer's `supportsInvoice` / `supportsCreditNote` device-info flags for availability.
+
+Currently this is **implemented only for the SIS driver (`bg.sis.json`)**.
+
+All the other supported Bulgarian fiscal devices also support native invoices and credit notes **at the device/protocol level** (confirmed against their manufacturer specifications - the ISL family via its "invoice data" command, Tremol ZFP via its fiscal-invoice commands, etc.), but the ErpNet.FP drivers do not map them **yet**. Until they do, those devices report `supportsInvoice` / `supportsCreditNote` as `false` and the two endpoints return error code **E413** ("feature not implemented by the driver"). Contributions and requests to implement the remaining drivers are welcome - please open an issue.
+
 ## Default passwords we use in the library.
 This is a list of default credentials we use in the library, when there is no exclusive override of the values in the Json fields "operator" and "operatorPassword", while you make a Json requests to the fiscal device.
 * bg.dt.c.isl - "operator" : "1", "operatorPassword": "1"

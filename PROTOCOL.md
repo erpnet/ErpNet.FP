@@ -17,6 +17,8 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Print Fiscal Receipt (Idempotent)](#post-print-fiscal-receipt-idempotent)
 * `GET` [Get Async Task Information](#get-get-async-task-information)
 * `POST` [Print Reversal Receipt](#post-print-reversal-receipt)
+* `POST` [Print Invoice](#post-print-invoice)
+* `POST` [Print Credit Note](#post-print-credit-note)
 * `POST` [Print Deposit Money Receipt](#post-print-deposit-money-receipt)
 * `POST` [Print Withdraw Money Receipt](#post-print-withdraw-money-receipt)
 * `POST` [Print X Report](#post-print-x-report)
@@ -186,6 +188,12 @@ http://localhost:8001/printers/dy448967
 Depending on the device, the info may also contain capability flags:
 * **"supportsSubTotalAmountModifiers"** - whether the device supports receipt-level (subtotal) `discount-amount` / `surcharge-amount` items.
 * **"subTotalAmountModifiersRequireTaxGroup"** - when the above is true, whether each subtotal modifier item must also carry a **"taxGroup"** (VAT category).
+* **"supportsInvoice"** - whether the driver can print a native fiscal invoice on this device (see [Print Invoice](#post-print-invoice)).
+* **"supportsCreditNote"** - whether the driver can print a native credit note on this device (see [Print Credit Note](#post-print-credit-note)).
+* **"invoiceNumberAssignment"** / **"creditNoteNumberAssignment"** - how the invoice / credit note number is assigned. One of:
+* * **"device-assigned"** - the device generates the number; a caller-supplied **"number"** is rejected.
+* * **"external-optional"** - the caller may supply the **"number"**; when omitted, the device assigns it.
+* * **"external-required"** - the caller must supply the **"number"**.
 
 ## `GET` Get Printer Status
 Contacts the specific fiscal printer and returns its current status and current printer date and time.
@@ -552,6 +560,114 @@ The reversal receipt JSON input format is mostly the same as PrintReceipt. The c
 
 ### Response
 The same as PrintReceipt, except for the "info" section, which is not provided (not needed).
+
+## `POST` Print Invoice
+Prints a native fiscal invoice - an extended fiscal receipt that also carries a **recipient** (buyer) block.
+
+NOTE: Not every device/driver implements native invoices. Check **"supportsInvoice"** in the device info first. A request to a device that does not implement it returns an error with code **E413** ("not implemented by the driver"). The neutral field names below are translated by each driver to its own device specifics.
+
+### Example request uri:
+```
+http://localhost:8001/printers/zk126720/invoice
+```
+
+The JSON input is the same as [Print Fiscal Receipt](#post-print-fiscal-receipt) (`uniqueSaleNumber`, `items`, `payments`, optional `operator`/`operatorPassword`), plus the following fields:
+
+* **"recipient"** - the buyer party (required). Its fields:
+* * **"name"** - buyer legal / registered name (required).
+* * **"identifier"** - buyer registration identifier, e.g. company registration number (required).
+* * **"identifierType"** - the kind of identifier (required). One of: **"legal-registration"**, **"national-id"**, **"foreigner-id"**, **"tax-number"**. Not every device can encode every type - an unsupported type is rejected with code **E412**.
+* * **"vatNumber"** - buyer VAT identifier (optional; leave empty when the buyer is not VAT registered).
+* * **"address"** - buyer postal address (required).
+* * **"city"** - buyer city / town. Some devices require it as a separate field (e.g. SIS); others fold the city into the address.
+* **"receiver"** - *(optional)* the person on the buyer side who received the goods / services (a signature line on the printed invoice). Device-dependent - printed only by devices whose protocol has a dedicated field for it; the SIS driver does not emit it.
+* **"issuer"** - *(optional)* the person on the seller side who drew up the invoice. Device-dependent, same as **"receiver"**.
+* **"number"** - the invoice number. Its handling depends on the device's **"invoiceNumberAssignment"** (see device info): required for **"external-required"**, optional for **"external-optional"**, and rejected (with **E412**) for **"device-assigned"**.
+
+### Example request body:
+```json
+{
+  "uniqueSaleNumber": "ZK126720-0001-0000001",
+  "recipient": {
+    "name": "SIS TECHNOLOGY AD",
+    "identifier": "200510279",
+    "identifierType": "legal-registration",
+    "vatNumber": "BG200510279",
+    "address": "bul. Tsarigradsko Shose 60",
+    "city": "Sofia"
+  },
+  "number": "9000000007",
+  "items": [
+    {
+      "text": "Cheese",
+      "quantity": 1,
+      "unitPrice": 12,
+      "taxGroup": 2
+    }
+  ],
+  "payments": [
+    {
+      "amount": 12,
+      "paymentType": "cash"
+    }
+  ]
+}
+```
+
+### Response
+The same as [Print Fiscal Receipt](#post-print-fiscal-receipt), plus:
+* **"invoiceNumber"** - the invoice number as actually printed: the caller-supplied value for external numbering, or the device-assigned value otherwise.
+
+## `POST` Print Credit Note
+Prints a native credit note - an extended fiscal reversal against an original invoice, carrying the same **recipient** (buyer) block as an invoice.
+
+NOTE: Check **"supportsCreditNote"** in the device info first; a device that does not implement it returns **E413**.
+
+### Example request uri:
+```
+http://localhost:8001/printers/zk126720/creditnote
+```
+
+The input combines [Print Reversal Receipt](#post-print-reversal-receipt) (it references the original document) with the invoice **"recipient"** block. Fields in addition to Print Reversal Receipt:
+
+* **"recipient"**, **"receiver"**, **"issuer"** - the same buyer block as [Print Invoice](#post-print-invoice).
+* **"number"** - the credit note's own number (handled per **"creditNoteNumberAssignment"**, same rules as the invoice number).
+* **"originalInvoiceNumber"** - the number of the original invoice being credited (required). This is distinct from **"receiptNumber"** (the original fiscal receipt number).
+* **"fiscalDeviceSerialNumber"** - the serial number of the fiscal device that issued the original invoice. Required by some devices (e.g. SIS); distinct from **"fiscalMemorySerialNumber"**.
+* Inherited from Print Reversal Receipt: **"uniqueSaleNumber"** (same as the original), **"receiptNumber"**, **"receiptDateTime"**, **"fiscalMemorySerialNumber"**, **"reason"**.
+
+### Example request body:
+```json
+{
+  "uniqueSaleNumber": "ZK126720-0001-0000001",
+  "recipient": {
+    "name": "SIS TECHNOLOGY AD",
+    "identifier": "200510279",
+    "identifierType": "legal-registration",
+    "vatNumber": "BG200510279",
+    "address": "bul. Tsarigradsko Shose 60",
+    "city": "Sofia"
+  },
+  "number": "9000000008",
+  "originalInvoiceNumber": "9000000007",
+  "receiptNumber": "0000000137",
+  "receiptDateTime": "2026-07-15T11:54:10",
+  "fiscalMemorySerialNumber": "51026679",
+  "fiscalDeviceSerialNumber": "BN025335",
+  "reason": "refund",
+  "items": [
+    {
+      "text": "Cheese",
+      "quantity": 1,
+      "unitPrice": 12,
+      "taxGroup": 2
+    }
+  ]
+}
+```
+
+### Response
+The same as [Print Invoice](#post-print-invoice) - includes **"invoiceNumber"** (here, the credit note number).
 
 ## `POST` Print Deposit Money Receipt
 Deposits the amount
