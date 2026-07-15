@@ -18,19 +18,22 @@ namespace ErpNet.FP.Core
         Unspecified = 0,
 
         /// <summary>
-        /// Legal registration identifier of an organization (e.g. company registration number).
+        /// Registration identifier of a domestic (resident) company. Drivers validate it against the
+        /// device's domestic scheme (e.g. a Bulgarian EIK / Bulstat), so a foreign number must NOT use
+        /// this type - use <see cref="ForeignerId"/> instead.
         /// </summary>
         [EnumMember(Value = "legal-registration")]
         LegalRegistration = 1,
 
         /// <summary>
-        /// National identification number of a person.
+        /// National identification number of a domestic (resident) natural person (e.g. a Bulgarian EGN).
         /// </summary>
         [EnumMember(Value = "national-id")]
         NationalId = 2,
 
         /// <summary>
-        /// Identification number of a foreign person (residence/personal number).
+        /// Identifier of a foreign (non-resident) party - company or natural person. Use for any
+        /// non-domestic buyer; the value may be alphanumeric.
         /// </summary>
         [EnumMember(Value = "foreigner-id")]
         ForeignerId = 3,

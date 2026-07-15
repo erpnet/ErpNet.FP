@@ -576,7 +576,13 @@ The JSON input is the same as [Print Fiscal Receipt](#post-print-fiscal-receipt)
 * **"recipient"** - the buyer party (required). Its fields:
 * * **"name"** - buyer legal / registered name (required).
 * * **"identifier"** - buyer registration identifier, e.g. company registration number (required).
-* * **"identifierType"** - the kind of identifier (required). One of: **"legal-registration"**, **"national-id"**, **"foreigner-id"**, **"tax-number"**. Not every device can encode every type - an unsupported type is rejected with code **E412**.
+* * **"identifierType"** - the kind of identifier (required). It **must match the buyer**: the device validates **"identifier"** against this type and rejects the whole document if they do not agree (e.g. a foreign number declared as a domestic one). One of:
+* * * **"legal-registration"** - a **domestic (resident) company**; **"identifier"** must be a valid domestic company registration number (on Bulgarian devices, a numeric ЕИК / Bulstat).
+* * * **"national-id"** - a **domestic (resident) individual**; **"identifier"** must be a valid national id (on Bulgarian devices, an ЕГН).
+* * * **"foreigner-id"** - a **foreign (non-resident) company or individual**; **"identifier"** may be alphanumeric. Use this for any non-domestic buyer, whether a company or a person.
+* * * **"tax-number"** - a tax-authority-issued number. Not supported by every device (rejected with **E412** where unsupported - e.g. the SIS driver).
+
+Not every device can encode every type; an unsupported type is rejected with code **E412**.
 * * **"vatNumber"** - buyer VAT identifier (optional; leave empty when the buyer is not VAT registered).
 * * **"address"** - buyer postal address (required).
 * * **"city"** - buyer city / town. Some devices require it as a separate field (e.g. SIS); others fold the city into the address.

@@ -13,6 +13,14 @@ namespace ErpNet.FP.Core.Drivers.BgSis
     /// <seealso cref="ErpNet.FP.Core.Drivers.BgFiscalPrinter" />
     public partial class BgSisJsonFiscalPrinter : BgFiscalPrinter
     {
+        // A "comment" line (emitted as freeprint before a sale, or as an item's textlines after one)
+        // accepts digits only in its first 31 characters; a digit further right is rejected by the
+        // device with EM_PARA_WRONG_FORMAT (0x5D). Validate it up front so the caller gets a clear
+        // message instead of the opaque device error. The rule is field-specific and verified live:
+        // it applies ONLY to comments - sale descriptions, footer comments (textAfterPayment) and
+        // subtotal-modifier text (subtotalText) are all exempt, so they must NOT be flagged.
+        private const int CommentDigitLimit = 31;
+
         public BgSisJsonFiscalPrinter(
             IChannel channel,
             ServiceOptions serviceOptions,
@@ -159,9 +167,100 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             return PrintFiscalReceipt(reversalReceipt, reversalReceipt);
         }
 
-        public override DeviceStatus ValidateInvoice(Invoice invoice) => ValidateInvoiceCore(invoice);
+        public override DeviceStatus ValidateReceipt(Receipt receipt)
+        {
+            var status = base.ValidateReceipt(receipt);
+            if (status.Ok)
+            {
+                ValidateCommentDigits(status, receipt);
+            }
 
-        public override DeviceStatus ValidateCreditNote(CreditNote creditNote) => ValidateCreditNoteCore(creditNote);
+            return status;
+        }
+
+        protected static void ValidateCommentDigits(DeviceStatus status, Receipt receipt)
+        {
+            if (receipt.Items == null)
+            {
+                return;
+            }
+
+            var row = 0;
+            foreach (var item in receipt.Items)
+            {
+                row++;
+                if (item.Type != ItemType.Comment)
+                {
+                    continue;
+                }
+
+                for (var i = CommentDigitLimit; i < item.Text.Length; i++)
+                {
+                    if (char.IsDigit(item.Text[i]))
+                    {
+                        status.AddError("E403",
+                            $"Item {row}: a comment line accepts digits only in the first {CommentDigitLimit} characters");
+                        
+                        break;
+                    }
+                }
+            }
+        }
+
+        public override DeviceStatus ValidateInvoice(Invoice invoice)
+        {
+            var status = ValidateInvoiceCore(invoice);
+            if (status.Ok)
+            {
+                ValidateSisRecipient(status, invoice.Recipient);
+            }
+
+            return status;
+        }
+
+        public override DeviceStatus ValidateCreditNote(CreditNote creditNote)
+        {
+            var status = ValidateCreditNoteCore(creditNote);
+
+            if (status.Ok)
+            {
+                ValidateSisRecipient(status, creditNote.Recipient);
+
+                if (string.IsNullOrEmpty(creditNote.FiscalDeviceSerialNumber))
+                {
+                    status.AddError("E405", "FiscalDeviceSerialNumber of the original invoice is required by this device");
+                }
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// SIS-specific recipient checks not covered by the neutral validation: the device requires a
+        /// city as a separate field, and it can only encode a subset of identifier types. Reported here
+        /// so the caller gets a clear error up front instead of an opaque device error at print time.
+        /// </summary>
+        protected void ValidateSisRecipient(DeviceStatus status, Recipient? recipient)
+        {
+            if (recipient == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(recipient.City))
+            {
+                status.AddError("E405", "Recipient \"city\" is required by this device");
+            }
+
+            try
+            {
+                GetIdentifierTypeCode(recipient.IdentifierType);
+            }
+            catch (StandardizedStatusMessageException e)
+            {
+                status.AddError(e.Code, e.Message);
+            }
+        }
 
         public override (ReceiptInfo, DeviceStatus) PrintInvoice(Invoice invoice)
         {
