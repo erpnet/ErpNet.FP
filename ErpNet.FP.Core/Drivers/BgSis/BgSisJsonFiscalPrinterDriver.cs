@@ -42,6 +42,12 @@ namespace ErpNet.FP.Core.Drivers.BgSis
                 // the extra flag tells callers that taxGroup is mandatory here for such items.
                 fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
                 fiscalPrinter.Info.SubTotalAmountModifiersRequireTaxGroup = true;
+                // The SIS module prints extended fiscal receipts (invoice / Credit Memo). The number
+                // (invNumber) must always be supplied by the caller (>= 1); the device never assigns it.
+                fiscalPrinter.Info.SupportsInvoice = true;
+                fiscalPrinter.Info.SupportsCreditNote = true;
+                fiscalPrinter.Info.InvoiceNumberAssignment = NumberAssignment.ExternalRequired;
+                fiscalPrinter.Info.CreditNoteNumberAssignment = NumberAssignment.ExternalRequired;
                 serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
 
                 return fiscalPrinter;

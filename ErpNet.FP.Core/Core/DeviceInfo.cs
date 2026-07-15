@@ -59,6 +59,26 @@
         /// </summary>
         public bool SubTotalAmountModifiersRequireTaxGroup = false;
         /// <summary>
+        /// Expresses support of printing a native fiscal invoice (a receipt in invoice mode
+        /// with a recipient block) by the device.
+        /// </summary>
+        public bool SupportsInvoice = false;
+        /// <summary>
+        /// Expresses support of printing a native credit note (a reversal in invoice mode
+        /// against an original invoice) by the device.
+        /// </summary>
+        public bool SupportsCreditNote = false;
+        /// <summary>
+        /// Expresses how the invoice number is assigned: by the device, optionally by the caller,
+        /// or required from the caller (see <see cref="NumberAssignment"/>).
+        /// </summary>
+        public NumberAssignment InvoiceNumberAssignment = NumberAssignment.DeviceAssigned;
+        /// <summary>
+        /// Expresses how the credit note number is assigned: by the device, optionally by the caller,
+        /// or required from the caller (see <see cref="NumberAssignment"/>).
+        /// </summary>
+        public NumberAssignment CreditNoteNumberAssignment = NumberAssignment.DeviceAssigned;
+        /// <summary>
         /// Expresses support of payment terminal for current device model
         /// </summary>
         public bool SupportPaymentTerminal = false;
