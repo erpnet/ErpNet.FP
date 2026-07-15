@@ -57,6 +57,8 @@ However, the "originalCode" might not always be available or it might change due
 * **E409** Wrong command response format
 * **E410** Document is empty or no items
 * **E411** Invalid tax group
+* **E412** Feature not supported by the device
+* **E413** Feature not implemented by the driver
 * **E499** Command general error
 
 ## NRA link error codes

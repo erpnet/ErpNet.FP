@@ -56,6 +56,28 @@ namespace ErpNet.FP.Core
         DeviceStatus ValidateReversalReceipt(ReversalReceipt reversalReceipt);
 
         /// <summary>
+        /// Prints a native invoice (an extended fiscal receipt with a recipient block).
+        /// Drivers that do not implement it return an E413 "not implemented" status.
+        /// </summary>
+        (ReceiptInfo, DeviceStatus) PrintInvoice(Invoice invoice);
+
+        /// <summary>
+        /// Validates the invoice object.
+        /// </summary>
+        DeviceStatus ValidateInvoice(Invoice invoice);
+
+        /// <summary>
+        /// Prints a native credit note (an extended fiscal reversal against an original invoice).
+        /// Drivers that do not implement it return an E413 "not implemented" status.
+        /// </summary>
+        (ReceiptInfo, DeviceStatus) PrintCreditNote(CreditNote creditNote);
+
+        /// <summary>
+        /// Validates the credit note object.
+        /// </summary>
+        DeviceStatus ValidateCreditNote(CreditNote creditNote);
+
+        /// <summary>
         /// Prints a deposit money note.
         /// </summary>
         /// <param name="amount">The deposited amount. Should be greater than 0.</param>

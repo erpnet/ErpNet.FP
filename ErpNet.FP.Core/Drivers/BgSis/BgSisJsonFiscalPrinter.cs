@@ -159,6 +159,57 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             return PrintFiscalReceipt(reversalReceipt, reversalReceipt);
         }
 
+        public override DeviceStatus ValidateInvoice(Invoice invoice) => ValidateInvoiceCore(invoice);
+
+        public override DeviceStatus ValidateCreditNote(CreditNote creditNote) => ValidateCreditNoteCore(creditNote);
+
+        public override (ReceiptInfo, DeviceStatus) PrintInvoice(Invoice invoice)
+        {
+            JObject prms;
+            try
+            {
+                prms = BuildReceiptParams(invoice, null);
+                prms["invoiceData"] = BuildInvoiceData(invoice);
+            }
+            catch (StandardizedStatusMessageException e)
+            {
+                return ErrorResult(e);
+            }
+
+            return ExecutePrint(prms, invoice, invoice.Number);
+        }
+
+        public override (ReceiptInfo, DeviceStatus) PrintCreditNote(CreditNote creditNote)
+        {
+            JObject prms;
+            try
+            {
+                prms = BuildReceiptParams(creditNote, creditNote);
+                var reversal = (JObject)prms["stornoInput"]!;
+                if (string.IsNullOrEmpty(creditNote.OriginalInvoiceNumber))
+                {
+                    throw new StandardizedStatusMessageException(
+                        "OriginalInvoiceNumber of the credit note is empty", "E405");
+                }
+
+                if (string.IsNullOrEmpty(creditNote.FiscalDeviceSerialNumber))
+                {
+                    throw new StandardizedStatusMessageException(
+                        "FiscalDeviceSerialNumber of the original invoice is required by this device", "E405");
+                }
+
+                reversal["invoiceNumber"] = creditNote.OriginalInvoiceNumber;
+                reversal["fiscDevNumber"] = creditNote.FiscalDeviceSerialNumber;
+                prms["invoiceData"] = BuildInvoiceData(creditNote);
+            }
+            catch (StandardizedStatusMessageException e)
+            {
+                return ErrorResult(e);
+            }
+
+            return ExecutePrint(prms, creditNote, creditNote.Number);
+        }
+
         protected (ReceiptInfo, DeviceStatus) PrintFiscalReceipt(Receipt receipt, ReversalReceipt? reversal)
         {
             JObject prms;
@@ -168,18 +219,47 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             }
             catch (StandardizedStatusMessageException e)
             {
-                var s = new DeviceStatus();
-                s.AddError(e.Code, e.Message);
-                return (new ReceiptInfo(), s);
+                return ErrorResult(e);
             }
 
+            return ExecutePrint(prms, receipt, null);
+        }
+
+        /// <summary>
+        /// Sends the built printReceipt request and resolves the returned receipt info. When
+        /// <paramref name="invoiceNumber"/> is non-null the result is an <see cref="InvoiceInfo"/>
+        /// carrying that number (invoice / credit note); otherwise a plain <see cref="ReceiptInfo"/>.
+        /// </summary>
+        protected (ReceiptInfo, DeviceStatus) ExecutePrint(JObject prms, Receipt receipt, string? invoiceNumber)
+        {
             var (json, status) = Request("printReceipt", prms);
             if (!status.Ok)
             {
                 return (new ReceiptInfo(), status);
             }
 
-            return EnrichReceiptInfo(json, status, receipt);
+            var (info, enrichedStatus) = EnrichReceiptInfo(json, status, receipt);
+
+            if (invoiceNumber != null)
+            {
+                info = new InvoiceInfo
+                {
+                    ReceiptNumber = info.ReceiptNumber,
+                    ReceiptDateTime = info.ReceiptDateTime,
+                    ReceiptAmount = info.ReceiptAmount,
+                    FiscalMemorySerialNumber = info.FiscalMemorySerialNumber,
+                    InvoiceNumber = invoiceNumber
+                };
+            }
+
+            return (info, enrichedStatus);
+        }
+
+        private static (ReceiptInfo, DeviceStatus) ErrorResult(StandardizedStatusMessageException e)
+        {
+            var status = new DeviceStatus();
+            status.AddError(e.Code, e.Message);
+            return (new ReceiptInfo(), status);
         }
 
         /// <summary>

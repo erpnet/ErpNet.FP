@@ -150,6 +150,20 @@
             ReceiptAmount = info.ReceiptAmount;
             FiscalMemorySerialNumber = info.FiscalMemorySerialNumber;
         }
+
+    }
+
+    public class DeviceStatusWithInvoiceInfo : DeviceStatusWithReceiptInfo
+    {
+        /// <summary>
+        /// The invoice / credit note number.
+        /// </summary>
+        public string InvoiceNumber = string.Empty;
+
+        public DeviceStatusWithInvoiceInfo(DeviceStatus status, InvoiceInfo info) : base(status, info)
+        {
+            InvoiceNumber = info.InvoiceNumber;
+        }
     }
 
 }

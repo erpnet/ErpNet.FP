@@ -187,6 +187,72 @@
             return NotFound();
         }
 
+        // POST {id}/invoice
+        [HttpPost("{id}/invoice")]
+        public async Task<IActionResult> PrintInvoice(
+            string id,
+            [FromBody] Invoice invoice,
+            [FromQuery] string? taskId,
+            [FromQuery] string? timeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
+            {
+                var result = await context.RunAsync(
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.Invoice,
+                        Document = invoice,
+                        AsyncTimeout = asyncTimeout,
+                        Timeout = timeout == null ? 0 : timeout.ParseTimeout(),
+                        TaskId = taskId
+                    });
+
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+
+        // POST {id}/creditnote
+        [HttpPost("{id}/creditnote")]
+        public async Task<IActionResult> PrintCreditNote(
+            string id,
+            [FromBody] CreditNote creditNote,
+            [FromQuery] string? taskId,
+            [FromQuery] string? timeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
+            {
+                var result = await context.RunAsync(
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.CreditNote,
+                        Document = creditNote,
+                        AsyncTimeout = asyncTimeout,
+                        Timeout = timeout == null ? 0 : timeout.ParseTimeout(),
+                        TaskId = taskId
+                    });
+
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+
         // POST {id}/withdraw
         [HttpPost("{id}/withdraw")]
         public async Task<IActionResult> PrintWithdraw(

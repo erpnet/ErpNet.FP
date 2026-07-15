@@ -382,6 +382,61 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             return prms;
         }
 
+        /// <summary>
+        /// Builds the "invoiceData" client block for an extended fiscal receipt (invoice or credit note).
+        /// </summary>
+        protected JObject BuildInvoiceData(IInvoiceDocument document)
+        {
+            var recipient = document.Recipient
+                ?? throw new StandardizedStatusMessageException("Invoice requires a \"recipient\"", "E405");
+
+            // invNumber is caller-supplied and mandatory in the SIS protocol.
+            if (string.IsNullOrEmpty(document.Number))
+            {
+                throw new StandardizedStatusMessageException("Invoice \"number\" is required by this device", "E405");
+            }
+
+            // The SIS module requires the city as a field of its own, separate from the address.
+            if (string.IsNullOrEmpty(recipient.City))
+            {
+                throw new StandardizedStatusMessageException("Recipient \"city\" is required by this device", "E405");
+            }
+
+            var data = new JObject
+            {
+                ["invNumber"] = document.Number,
+                ["city"] = recipient.City,
+                ["identNumber"] = recipient.Identifier,
+                ["identNumberType"] = GetIdentifierTypeCode(recipient.IdentifierType),
+                ["recipientAddress"] = recipient.Address,
+                ["recipientName"] = recipient.Name
+            };
+
+            if (!string.IsNullOrEmpty(recipient.VatNumber))
+            {
+                data["vatIdentNumber"] = recipient.VatNumber;
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// Maps the country-neutral <see cref="IdentifierType"/> to the SIS "identNumberType" code:
+        /// 0 = BG company, 1 = BG physical person, 2 = foreign company or physical person.
+        /// The SIS module has no code for a tax-authority number.
+        /// </summary>
+        protected static int GetIdentifierTypeCode(IdentifierType identifierType)
+        {
+            return identifierType switch
+            {
+                IdentifierType.LegalRegistration => 0,
+                IdentifierType.NationalId => 1,
+                IdentifierType.ForeignerId => 2,
+                _ => throw new StandardizedStatusMessageException(
+                    $"Identifier type {identifierType} is not supported by this device", "E412")
+            };
+        }
+
         protected JObject BuildSaleItem(Item item)
         {
             var quantity = item.Quantity == 0m ? 1m : item.Quantity;

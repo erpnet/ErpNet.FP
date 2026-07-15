@@ -9,6 +9,8 @@
         RawRequest,
         Receipt,
         ReversalReceipt,
+        Invoice,
+        CreditNote,
         Withdraw,
         Deposit,
         XReport,
@@ -85,7 +87,7 @@
                             if (validateStatus.Ok)
                             {
                                 var (info, status) = Printer.PrintReceipt(receipt);
-                                Result = new DeviceStatusWithReceiptInfo(status, info);
+                                Result = info.ToDeviceStatus(status);
                             }
                             else
                             {
@@ -101,13 +103,45 @@
                             if (validateStatus.Ok)
                             {
                                 var (info, status) = Printer.PrintReversalReceipt(reversalReceipt);
-                                Result = new DeviceStatusWithReceiptInfo(status, info);
+                                Result = info.ToDeviceStatus(status);
                             }
                             else
                             {
                                 Result = validateStatus;
                             }
                         };
+                        break;
+                    case PrintJobAction.Invoice:
+                        if (Document != null)
+                        {
+                            var invoice = (Invoice)Document;
+                            var validateStatus = Printer.ValidateInvoice(invoice);
+                            if (validateStatus.Ok)
+                            {
+                                var (info, status) = Printer.PrintInvoice(invoice);
+                                Result = info.ToDeviceStatus(status);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
+                        }
+                        break;
+                    case PrintJobAction.CreditNote:
+                        if (Document != null)
+                        {
+                            var creditNote = (CreditNote)Document;
+                            var validateStatus = Printer.ValidateCreditNote(creditNote);
+                            if (validateStatus.Ok)
+                            {
+                                var (info, status) = Printer.PrintCreditNote(creditNote);
+                                Result = info.ToDeviceStatus(status);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
+                        }
                         break;
                     case PrintJobAction.Withdraw:
                         if (Document != null)

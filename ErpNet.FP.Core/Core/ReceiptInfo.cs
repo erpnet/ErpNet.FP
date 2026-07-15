@@ -21,5 +21,11 @@
         /// The fiscal memory number.
         /// </summary>
         public string FiscalMemorySerialNumber = string.Empty;
+
+        /// <summary>
+        /// Wraps <see cref="ReceiptInfo"/> into the flat device-status response returned to callers.
+        /// </summary>
+        public virtual DeviceStatusWithReceiptInfo ToDeviceStatus(DeviceStatus status)
+            => new DeviceStatusWithReceiptInfo(status, this);
     }
 }

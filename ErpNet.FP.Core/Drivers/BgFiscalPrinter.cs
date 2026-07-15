@@ -308,6 +308,110 @@
             return status;
         }
 
+        // Native invoice / credit note. The default implementations report "not implemented".
+        public virtual DeviceStatus ValidateInvoice(Invoice invoice) => NotImplemented("Invoice");
+
+        public virtual DeviceStatus ValidateCreditNote(CreditNote creditNote) => NotImplemented("Credit note");
+
+        public virtual (ReceiptInfo, DeviceStatus) PrintInvoice(Invoice invoice)
+            => (new ReceiptInfo(), NotImplemented("Invoice"));
+
+        public virtual (ReceiptInfo, DeviceStatus) PrintCreditNote(CreditNote creditNote)
+            => (new ReceiptInfo(), NotImplemented("Credit note"));
+
+        protected static DeviceStatus NotImplemented(string documentName)
+        {
+            var status = new DeviceStatus();
+            status.AddError("E413", $"{documentName} printing is not implemented by this driver");
+            return status;
+        }
+
+        /// <summary>
+        /// Reusable invoice validation for drivers that implement invoices.
+        /// </summary>
+        protected DeviceStatus ValidateInvoiceCore(Invoice invoice)
+        {
+            var status = ValidateReceipt(invoice);
+            if (!status.Ok)
+            {
+                return status;
+            }
+
+            ValidateInvoiceDocument(status, invoice, Info.InvoiceNumberAssignment, "Invoice");
+
+            return status;
+        }
+
+        /// <summary>
+        /// Reusable credit note validation for drivers that implement credit notes.
+        /// </summary>
+        protected DeviceStatus ValidateCreditNoteCore(CreditNote creditNote)
+        {
+            var status = ValidateReversalReceipt(creditNote);
+            if (!status.Ok)
+            {
+                return status;
+            }
+
+            ValidateInvoiceDocument(status, creditNote, Info.CreditNoteNumberAssignment, "Credit note");
+
+            if (string.IsNullOrEmpty(creditNote.OriginalInvoiceNumber))
+            {
+                status.AddError("E405", "OriginalInvoiceNumber of the credit note is empty");
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Validates the shared invoice-mode fields (recipient block and number assignment).
+        /// </summary>
+        protected void ValidateInvoiceDocument(
+            DeviceStatus status,
+            IInvoiceDocument document,
+            NumberAssignment numberAssignment,
+            string documentName)
+        {
+            var recipient = document.Recipient;
+            if (recipient == null)
+            {
+                status.AddError("E405", $"{documentName} requires a \"recipient\"");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(recipient.Name))
+            {
+                status.AddError("E405", "Recipient \"name\" is empty");
+            }
+
+            if (string.IsNullOrEmpty(recipient.Identifier))
+            {
+                status.AddError("E405", "Recipient \"identifier\" is empty");
+            }
+
+            if (recipient.IdentifierType == IdentifierType.Unspecified)
+            {
+                status.AddError("E405", "Recipient \"identifierType\" is unspecified");
+            }
+
+            if (string.IsNullOrEmpty(recipient.Address))
+            {
+                status.AddError("E405", "Recipient \"address\" is empty");
+            }
+
+            if (string.IsNullOrEmpty(document.Number))
+            {
+                if (numberAssignment == NumberAssignment.ExternalRequired)
+                {
+                    status.AddError("E405", $"{documentName} \"number\" is required by this device");
+                }
+            }
+            else if (numberAssignment == NumberAssignment.DeviceAssigned)
+            {
+                status.AddError("E412", $"External {documentName.ToLowerInvariant()} number is not supported by this device");
+            }
+        }
+
 
 
         public virtual DeviceStatus ValidateTransferAmount(TransferAmount transferAmount)
