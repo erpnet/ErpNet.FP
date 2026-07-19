@@ -1,5 +1,31 @@
 <img src="https://github.com/erpnet/ErpNet.FP/raw/master/ErpNet.FP.Server/ErpNet.FP.thumb.png" align="right"/>
 
+> ## 🔱 FashionPoint Fork
+>
+> Това е форк на [erpnet/ErpNet.FP](https://github.com/erpnet/ErpNet.FP), поддържан от **FashionPoint** за нашите клиенти (салони/клиники) с фискални устройства.
+>
+> ### Защо съществува
+> Бавни касови апарати (напр. **Daisy PerfectS**) правят пауза от над 800ms между SYN байтовете, докато записват бона във фискалната памет при затваряне. Оригиналният ErpNet.FP има **хардкоднат сериен timeout от 800ms**, което води до:
+> - грешка **E107 "no response"**, въпреки че бонът реално се записва;
+> - автоматично анулиране на бона от драйвера → **„АНУЛИРАН БОН"** на хартията;
+> - фалшиви „провалени" продажби и дублирани УНП в POS системата (проблем по Наредба Н-18).
+>
+> ### Какво е променено спрямо оригинала
+> - **Серийният timeout е вдигнат 800ms → 3000ms** (`ComTransport.DefaultTimeout`);
+> - **Per-принтер timeout през адреса**: `com://COM5:115200:5000` (порт : скорост : timeout в ms) — бъдещи бавни устройства се решават с настройка, без ребилд. Напълно обратно съвместимо.
+>
+> Единственият променен файл е [`ErpNet.FP.Core/Transports/ComTransport.cs`](ErpNet.FP.Core/Transports/ComTransport.cs).
+>
+> ### Сваляне (нашите билдове)
+> Готови билдове за **Windows x64**, **macOS Intel** и **macOS Apple Silicon** — в [**Releases**](https://github.com/fashionpoint-bg/ErpNet.FP/releases). Инструкции за инсталация има във всеки релийз.
+>
+> ### Статус спрямо оригинала
+> Фиксът е предложен upstream: [erpnet/ErpNet.FP#205](https://github.com/erpnet/ErpNet.FP/pull/205). Ако бъде приет, форкът остава само като билд/дистрибуционна точка за нашите клиенти.
+>
+> Работен бранч: `fashionpoint` (дефолтен). Ъпдейти от оригинала: `git fetch upstream && git merge upstream/master`.
+
+---
+
 # ErpNet.FP
 
 ErpNet.FP is a light-weight multi-platform Http server facilitating printing to fiscal printers through simple JSON Api. The library provides methods to detect, get status, print receipts, reports and other documents to fiscal printers.

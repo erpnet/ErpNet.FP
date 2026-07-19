@@ -13,3 +13,7 @@ ErpNet.FP.Server/appsettings.json
 ErpNet.FP.Setup/ProductInstallFiles.wxs
 /UpgradeLog.htm
 /ErpNet.FP.Setup/HeatWaveConvert.log
+
+# FashionPoint build artifacts
+/publish-win-x64/
+/ErpNet.FP-fashionpoint-*
