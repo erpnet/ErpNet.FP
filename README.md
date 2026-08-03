@@ -308,6 +308,14 @@ Currently this is **implemented only for the SIS driver (`bg.sis.json`)**.
 
 All the other supported Bulgarian fiscal devices also support native invoices and credit notes **at the device/protocol level** (confirmed against their manufacturer specifications - the ISL family via its "invoice data" command, Tremol ZFP via its fiscal-invoice commands, etc.), but the ErpNet.FP drivers do not map them **yet**. Until they do, those devices report `supportsInvoice` / `supportsCreditNote` as `false` and the two endpoints return error code **E413** ("feature not implemented by the driver"). Contributions and requests to implement the remaining drivers are welcome - please open an issue.
 
+## Reports for a custom period
+
+Besides the daily X and Z reports, the server can print a **fiscal memory report for a custom period** (from date to date) via `POST /printers/{id}/periodreport`, in a **short** (summary) or **detailed** variant. See the [protocol documentation](PROTOCOL.md#post-print-period-report) for the request format, and a printer's `supportsPeriodReport` device-info flag for availability.
+
+This is implemented for **every supported protocol** - the ISL family (`bg.dt.c.isl`, `bg.dt.p.isl`, `bg.dt.x.isl`, `bg.dy.isl`, `bg.ed.isl`, `bg.in.isl`), Tremol (`bg.zk.zfp`, `bg.zk.v2.zfp`), ISL (`bg.is.icp`) and SIS (`bg.sis.json`).
+
+Note that a detailed report over a long period keeps the device printing for minutes. Request it asynchronously with `asyncTimeout=0` and poll the task, rather than waiting on the default 29 second timeout.
+
 ## Default passwords we use in the library.
 This is a list of default credentials we use in the library, when there is no exclusive override of the values in the Json fields "operator" and "operatorPassword", while you make a Json requests to the fiscal device.
 * bg.dt.c.isl - "operator" : "1", "operatorPassword": "1"

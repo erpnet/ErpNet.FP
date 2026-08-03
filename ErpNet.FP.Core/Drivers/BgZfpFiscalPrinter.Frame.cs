@@ -33,6 +33,8 @@
         protected const byte MaxSequenceNumber = 0x9F - MarkerSpace;
         protected const byte MaxWriteRetries = 3;
         protected const byte MaxReadRetries = 200;
+        // Printing a fiscal memory report for a long period keeps the device busy for minutes.
+        protected const int MaxReadRetriesLongRunning = 3000;
         protected byte FrameSequenceNumber = (byte)random.Next(0, MaxSequenceNumber - 1);
 
         protected virtual byte[] ByteTo2Bytes(UInt16 word)
@@ -192,7 +194,8 @@
 
                 // Read response frames.
                 var currentFrame = new List<byte>();
-                for (var r = 0; r < MaxReadRetries; r++)
+                var maxReadRetries = IsLongRunningCommand(command) ? MaxReadRetriesLongRunning : MaxReadRetries;
+                for (var r = 0; r < maxReadRetries; r++)
                 {
                     byte[] buffer;
 

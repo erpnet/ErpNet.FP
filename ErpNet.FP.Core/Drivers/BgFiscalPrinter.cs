@@ -319,6 +319,49 @@
         public virtual (ReceiptInfo, DeviceStatus) PrintCreditNote(CreditNote creditNote)
             => (new ReceiptInfo(), NotImplemented("Credit note"));
 
+        // Fiscal memory report for a custom period. The default implementation reports "not implemented".
+        public virtual DeviceStatus PrintPeriodReport(PeriodReport periodReport)
+            => NotImplemented("Period report");
+
+        public virtual DeviceStatus ValidatePeriodReport(PeriodReport periodReport)
+        {
+            if (!DeviceInfo.SupportsPeriodReport)
+            {
+                return NotImplemented("Period report");
+            }
+
+            return ValidatePeriodReportBase(periodReport);
+        }
+
+        /// <summary>
+        /// Reusable period report validation for drivers that implement period reports.
+        /// Only the bounds themselves are checked here - everything else is left to the device,
+        /// so that its own rejection reaches the caller instead of being pre-empted.
+        /// </summary>
+        protected static DeviceStatus ValidatePeriodReportBase(PeriodReport periodReport)
+        {
+            var status = new DeviceStatus();
+            if (periodReport.StartDate == DateTime.MinValue)
+            {
+                status.AddError("E405", "StartDate of the period report is empty");
+                return status;
+            }
+
+            if (periodReport.EndDate == DateTime.MinValue)
+            {
+                status.AddError("E405", "EndDate of the period report is empty");
+                return status;
+            }
+
+            if (periodReport.StartDate.Date > periodReport.EndDate.Date)
+            {
+                status.AddError("E403", "StartDate of the period report is after its EndDate");
+                return status;
+            }
+
+            return status;
+        }
+
         protected static DeviceStatus NotImplemented(string documentName)
         {
             var status = new DeviceStatus();

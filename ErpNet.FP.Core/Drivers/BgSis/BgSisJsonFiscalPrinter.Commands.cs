@@ -19,6 +19,8 @@ namespace ErpNet.FP.Core.Drivers.BgSis
         protected int idCounter = 0;
         protected const int MaxBusyRetries = 5;
         protected const int BusyRetryDelayMs = 500;
+        // mfc_error_message reported when the requested fiscal memory block does not exist.
+        protected const string MfcErrorNoFiscalMemoryBlock = "EM_MFMEM_BL_NOT_EXIST";
 
         protected static readonly Encoding JsonEncoding = new UTF8Encoding(false);
 
@@ -159,7 +161,17 @@ namespace ErpNet.FP.Core.Drivers.BgSis
                 && !mfcErrorMessage.Equals("EM_NO_ERROR", StringComparison.OrdinalIgnoreCase))
             {
                 var detail = string.IsNullOrEmpty(mfcErrorMessage) ? "Device error" : mfcErrorMessage;
-                status.AddError("E999", $"MFC error {mfcError}: {detail}");
+                if (mfcErrorMessage.Equals(MfcErrorNoFiscalMemoryBlock, StringComparison.OrdinalIgnoreCase))
+                {
+                    status.AddError(
+                        "E405",
+                        "No Z report is stored in the fiscal memory for the requested period "
+                            + $"(MFC error {mfcError}: {detail})");
+                }
+                else
+                {
+                    status.AddError("E999", $"MFC error {mfcError}: {detail}");
+                }
             }
 
             // Printer hardware status (paper, cover, ...). The device may repeat the same status
@@ -569,6 +581,12 @@ namespace ErpNet.FP.Core.Drivers.BgSis
         protected static string FormatStornoDate(DateTime dt)
         {
             return dt.ToString("ss,mm,HH;dd,MM,yy", CultureInfo.InvariantCulture);
+        }
+
+        // SIS fiscal memory report date format: "DD/MM/YY"
+        protected static string FormatPeriodReportDate(DateTime dt)
+        {
+            return dt.ToString("dd/MM/yy", CultureInfo.InvariantCulture);
         }
 
         // SIS receipt timestamp format (printReceipt answer): "ss,mm,hh;DD,MM,YY"

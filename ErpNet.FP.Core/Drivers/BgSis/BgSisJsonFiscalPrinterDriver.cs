@@ -48,6 +48,7 @@ namespace ErpNet.FP.Core.Drivers.BgSis
                 fiscalPrinter.Info.SupportsCreditNote = true;
                 fiscalPrinter.Info.InvoiceNumberAssignment = NumberAssignment.ExternalRequired;
                 fiscalPrinter.Info.CreditNoteNumberAssignment = NumberAssignment.ExternalRequired;
+                fiscalPrinter.Info.SupportsPeriodReport = true;
                 serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
 
                 return fiscalPrinter;

@@ -11,6 +11,8 @@
             CommandGetStatus = 0x20,
             CommandVersion = 0x21,
             CommandPrintDailyFiscalReport = 0x7c,
+            CommandPrintDetailedFMReportByDate = 0x7a,
+            CommandPrintBriefFMReportByDate = 0x7b,
             CommandNoFiscalRAorPOAmount = 0x3b,
             CommandOpenReceipt = 0x30,
             CommandCloseReceipt = 0x38,
@@ -305,6 +307,41 @@
             {
                 return Request(CommandPrintDailyFiscalReport, "X");
             }
+        }
+
+        // Protocol: <StartDate "DDMMYY"> <;> <EndDate "DDMMYY">
+        public virtual (string, DeviceStatus) PrintPeriodReport(
+            PeriodReportType type,
+            DateTime startDate,
+            DateTime endDate)
+        {
+            var command = type == PeriodReportType.Detailed
+                ? CommandPrintDetailedFMReportByDate
+                : CommandPrintBriefFMReportByDate;
+
+            return Request(
+                command,
+                string.Join(
+                    ";",
+                    [
+                        FormatPeriodReportDate(startDate),
+                        FormatPeriodReportDate(endDate)
+                    ]));
+        }
+
+        protected virtual string FormatPeriodReportDate(DateTime date)
+        {
+            return date.ToString("ddMMyy", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Commands that keep the device busy far longer than a regular one, because it prints
+        /// the whole requested period before answering. See <see cref="MaxReadRetriesLongRunning"/>.
+        /// </summary>
+        protected virtual bool IsLongRunningCommand(byte command)
+        {
+            return command == CommandPrintDetailedFMReportByDate
+                || command == CommandPrintBriefFMReportByDate;
         }
 
         public virtual (string, DeviceStatus) GetRawDeviceInfo()

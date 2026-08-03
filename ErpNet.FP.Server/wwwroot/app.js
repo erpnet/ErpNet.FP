@@ -121,6 +121,18 @@ function showAvailablePrinters() {
                     '<button class="small primary" onclick="resetPrinter(\'' + printerId + '\')">Reset</button>' +
                     '<button class="small primary" title="Sync the printer time with the current time on the PC" onclick="syncTime(\'' + printerId + '\')">Sync Time</button>' +
                     '<button class="small primary" title="Prints duplicate of the last fiscal receipt" onclick="printDuplicate(\'' + printerId + '\')">Duplicate</button>' +
+                    (printer.supportsPeriodReport ?
+                        '<div class="section input-group horizontal">' +
+                        '<label for="period-start-' + printerId + '">Period report from</label>' +
+                        '<input type="date" id="period-start-' + printerId + '">' +
+                        '<label for="period-end-' + printerId + '">to</label>' +
+                        '<input type="date" id="period-end-' + printerId + '">' +
+                        '<select id="period-type-' + printerId + '">' +
+                        '<option value="short">Short</option>' +
+                        '<option value="detailed">Detailed</option>' +
+                        '</select>' +
+                        '<button class="small primary" title="Prints a fiscal memory report for a custom period" onclick="printPeriodReport(\'' + printerId + '\')">Period Report</button>' +
+                        '</div>' : '') +
                     '<br /><h4>Advanced properties for printer with serial number ' + printer.serialNumber + '... &#8964;</h4>' +
                     '<div class="card fluid">' +
                     printerConstantsContent +
@@ -544,6 +556,48 @@ function printZReport(printerId) {
         },
         error: function (xhr, type) {
             showToastMessage("Cannot print the Z-Report.")
+        }
+    })
+}
+
+function printPeriodReport(printerId) {
+    var startDate = $('#period-start-' + printerId).val()
+    var endDate = $('#period-end-' + printerId).val()
+    if (!startDate || !endDate) {
+        showToastMessage("Please choose both a start and an end date for the period report.")
+        return
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/printers/' + printerId + '/periodreport',
+        data: JSON.stringify({
+            "type": $('#period-type-' + printerId).val(),
+            "startDate": startDate,
+            "endDate": endDate
+        }),
+        contentType: 'application/json',
+        dataType: 'json',
+        timeout: 0,
+        success: function (data) {
+            if (data.taskId) {
+                // The report is still printing. It keeps running on the server, so report the
+                // task id instead of a result - see the taskinfo endpoint.
+                showToastMessage("The period report is still printing. Task id: " + data.taskId)
+            } else if (data.ok) {
+                showToastMessage("The period report printing is done.")
+            } else {
+                var errors = "";
+                for (var ix in data.messages) {
+                    var message = data.messages[ix]
+                    if (message.type == "error") {
+                        errors += message.text + "; "
+                    }
+                }
+                showToastMessage("Cannot print the period report: " + errors.trim())
+            }
+        },
+        error: function (xhr, type) {
+            showToastMessage("Cannot print the period report.")
         }
     })
 }

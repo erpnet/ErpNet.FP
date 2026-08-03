@@ -107,6 +107,17 @@ namespace ErpNet.FP.Core
         DeviceStatus PrintXReport(Credentials credentials);
 
         /// <summary>
+        /// Prints a fiscal memory report for a custom period (from date to date).
+        /// Drivers that do not implement it return an E413 "not implemented" status.
+        /// </summary>
+        DeviceStatus PrintPeriodReport(PeriodReport periodReport);
+
+        /// <summary>
+        /// Validates the period report object.
+        /// </summary>
+        DeviceStatus ValidatePeriodReport(PeriodReport periodReport);
+
+        /// <summary>
         /// Prints duplicate of the last fiscal receipt.
         /// </summary>
         DeviceStatus PrintDuplicate(Credentials credentials);

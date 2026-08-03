@@ -401,6 +401,39 @@
             return NotFound();
         }
 
+        // POST {id}/periodreport
+        [HttpPost("{id}/periodreport")]
+        public async Task<IActionResult> PrintPeriodReport(
+            string id,
+            [FromBody] PeriodReport periodReport,
+            [FromQuery] string? taskId,
+            [FromQuery] string? timeout,
+            [FromQuery] int asyncTimeout = PrintJob.DefaultTimeout)
+        {
+            if (!context.IsReady)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+
+            if (context.Printers.TryGetValue(id, out IFiscalPrinter? printer))
+            {
+                var result = await context.RunAsync(
+                    new PrintJob
+                    {
+                        Printer = printer,
+                        Action = PrintJobAction.PeriodReport,
+                        Document = periodReport,
+                        AsyncTimeout = asyncTimeout,
+                        Timeout = timeout == null ? 0 : timeout.ParseTimeout(),
+                        TaskId = taskId
+                    });
+
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+
         // POST {id}/duplicate
         [HttpPost("{id}/duplicate")]
         public async Task<IActionResult> PrintDuplicate(
