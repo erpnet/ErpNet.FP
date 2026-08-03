@@ -272,6 +272,55 @@
             return Request(zeroing ? "510" : "511");
         }
 
+        // Command 55 - fiscal memory report by dates.
+        // Fields are fixed width and concatenated without separators:
+        // {ReportType[2]}{StartDate[8]}{EndDate[8]}, both dates DDMMYYYY.
+        // Report type "01" is detailed and "11" is short, both without a payments breakdown.
+        protected const string CommandPrintFMReportByDate = "55";
+
+        public virtual (string, DeviceStatus) PrintPeriodReport(
+            PeriodReportType type,
+            DateTime startDate,
+            DateTime endDate)
+        {
+            var periodReportData = new StringBuilder()
+                .Append(CommandPrintFMReportByDate)
+                .Append(type == PeriodReportType.Detailed ? "01" : "11")
+                .Append(FormatPeriodReportDate(startDate))
+                .Append(FormatPeriodReportDate(endDate));
+
+            return Request(periodReportData.ToString());
+        }
+
+        protected static string FormatPeriodReportDate(DateTime date)
+        {
+            return date.ToString("ddMMyyyy", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Requests that keep the device busy far longer than a regular one, because it prints
+        /// the whole requested period before answering. Unlike the other protocols the command
+        /// is not a separate byte here - it is the leading field of the request data.
+        /// See <see cref="MaxReadRetriesLongRunning"/>.
+        /// </summary>
+        protected virtual bool IsLongRunningRequest(byte[]? data)
+        {
+            if (data == null || data.Length < CommandPrintFMReportByDate.Length)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < CommandPrintFMReportByDate.Length; i++)
+            {
+                if (data[i] != CommandPrintFMReportByDate[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         protected static string IcpDecimal(decimal value, int length = 10, int digitsAfterPoint = 2)
         {
             return ((int)Math.Round(value * 10.IntPow(digitsAfterPoint), 0, MidpointRounding.AwayFromZero)).ToString($"D{length}");

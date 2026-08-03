@@ -11,7 +11,11 @@
     public partial class BgDatecsXIslFiscalPrinter : BgIslFiscalPrinter
     {
         protected const byte
-           DatecsXCommandOpenStornoDocument = 0x2b;
+           DatecsXCommandOpenStornoDocument = 0x2b,
+           // Unlike the classic ISL dialect, which has a separate command per level of detail,
+           // the X dialect prints both the short and the detailed report with this one command
+           // and distinguishes them by its Type parameter.
+           DatecsXCommandFMReportByDate = 0x5e;
 
         public override IDictionary<PaymentType, string> GetPaymentTypeMappings()
         {
@@ -380,6 +384,28 @@
                 "");
 
             return Request(DatecsXCommandOpenStornoDocument, headerData.ToString());
+        }
+
+        // {Type}<SEP>{Start}<SEP>{End}<SEP>
+        // Type is '0' for a short and '1' for a detailed report. Both dates are DD-MM-YY.
+        public override (string, DeviceStatus) PrintPeriodReport(
+            PeriodReportType type,
+            DateTime startDate,
+            DateTime endDate)
+        {
+            return Request(
+                DatecsXCommandFMReportByDate,
+                string.Join(
+                    "\t",
+                    type == PeriodReportType.Detailed ? "1" : "0",
+                    FormatPeriodReportDate(startDate),
+                    FormatPeriodReportDate(endDate),
+                    string.Empty));
+        }
+
+        protected override string FormatPeriodReportDate(DateTime date)
+        {
+            return date.ToString("dd-MM-yy", CultureInfo.InvariantCulture);
         }
 
         public override (string, DeviceStatus) PrintDailyReport(bool zeroing = true)

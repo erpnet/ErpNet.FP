@@ -23,6 +23,7 @@ The ErpNet.FP print server accepts documents for printing, using the JSON based 
 * `POST` [Print Withdraw Money Receipt](#post-print-withdraw-money-receipt)
 * `POST` [Print X Report](#post-print-x-report)
 * `POST` [Print Z Report](#post-print-z-report)
+* `POST` [Print Period Report](#post-print-period-report)
 * `POST` [Set Printer Date And Time](#post-set-printer-date-and-time)
 * `GET` [Get Current Cash Amount](#get-get-current-cash-amount)
 * `POST` [Post Raw Request](#post-post-raw-request)
@@ -190,6 +191,7 @@ Depending on the device, the info may also contain capability flags:
 * **"subTotalAmountModifiersRequireTaxGroup"** - when the above is true, whether each subtotal modifier item must also carry a **"taxGroup"** (VAT category).
 * **"supportsInvoice"** - whether the driver can print a native fiscal invoice on this device (see [Print Invoice](#post-print-invoice)).
 * **"supportsCreditNote"** - whether the driver can print a native credit note on this device (see [Print Credit Note](#post-print-credit-note)).
+* **"supportsPeriodReport"** - whether the driver can print a fiscal memory report for a custom period on this device (see [Print Period Report](#post-print-period-report)).
 * **"invoiceNumberAssignment"** / **"creditNoteNumberAssignment"** - how the invoice / credit note number is assigned. One of:
 * * **"device-assigned"** - the device generates the number; a caller-supplied **"number"** is rejected.
 * * **"external-optional"** - the caller may supply the **"number"**; when omitted, the device assigns it.
@@ -735,6 +737,74 @@ http://localhost:8001/printers/dt517985/zreport
 ### Response
 The response is standard status response.
 
+## `POST` Print Period Report
+Prints a report from the fiscal memory for a custom period, from date to date. The device reads the
+period out of its own fiscal memory and prints it - nothing is returned to the caller but the status.
+
+Available only on devices whose info reports **"supportsPeriodReport": true**. On the others the
+request returns error code **E413**.
+
+### Example request uri:
+```
+http://localhost:8001/printers/dt517985/periodreport
+```
+
+### Example request body:
+```json
+{
+    "type": "detailed",
+    "startDate": "2026-01-01",
+    "endDate": "2026-01-31"
+}
+```
+
+### "type"
+The level of detail of the report. Optional, defaults to **"short"**.
+* **"short"** - a summary report, with only the accumulated totals for the whole period.
+* **"detailed"** - a detailed report, listing every daily (Z) report stored in the fiscal memory for the period.
+
+### "startDate" and "endDate"
+Both are **required**, and only the date part is used. **"startDate"** must not be after **"endDate"**.
+Devices store one fiscal memory record per Z report, so the period is resolved against the dates of
+those records, not against individual receipts.
+
+A device only holds records from the day it was put into operation up to its last day closure, and the
+requested period is matched against that window:
+* A period that **partly** overlaps the stored records is narrowed by the device to what it actually
+  holds. Asking for a range that begins before the device was fiscalized prints a report that starts at
+  the fiscalization date - the device does not report this, the printed "from" date simply differs from
+  the one requested.
+* A period that overlaps **no** stored record at all is rejected by the device - for example a range
+  ending before the device was put into operation, or one starting after the last day closure. See
+  [Errors](#errors-1) below.
+
+Operator credentials (**"operator"** and **"operatorPassword"**) may be supplied like on any other
+document, but no currently supported device requires them for this report.
+
+### Print duration and timeouts
+A detailed report over a long period can keep the device printing for several minutes, which is far
+longer than the default **asyncTimeout** of 29 seconds. Request it asynchronously - pass
+**asyncTimeout=0** to get a **taskId** back immediately, then poll
+[Get Async Task Information](#get-get-async-task-information):
+```
+http://localhost:8001/printers/dt517985/periodreport?asyncTimeout=0
+```
+
+### Response
+The response is standard status response.
+
+### Errors
+* **E403** - **"startDate"** is after **"endDate"**.
+* **E405** - **"startDate"** or **"endDate"** is missing.
+* **E405** - the device holds no Z report in the requested period. On the SIS driver the message is
+  *"No Z report is stored in the fiscal memory for the requested period"*, and it keeps the original
+  device code in brackets (`MFC error 30: EM_MFMEM_BL_NOT_EXIST`). Other drivers pass their device's
+  own rejection through, so the code and wording there depend on the device.
+* **E413** - the driver does not implement period reports for this device.
+
+Note that the first two are produced by the server before anything is sent to the device, while the
+third comes from the device itself - the period is only known to be empty once the device has looked
+in its fiscal memory.
 
 ## `POST` Set Printer Date And Time
 Sets the date and time of the fiscal printer. You should use the format for **deviceDateTime** emitted by javascript Date's object, toJSON method, it conforms to ISO 8601.

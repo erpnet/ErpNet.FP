@@ -17,6 +17,8 @@
             CommandFiscalReceiptComment = 0x36,
             CommandFiscalReceiptSale = 0x31,
             CommandPrintDailyReport = 0x45,
+            CommandPrintDetailedFMReportByDate = 0x5e,
+            CommandPrintShortFMReportByDate = 0x4f,
             CommandGetDateTime = 0x3e,
             CommandSetDateTime = 0x3d,
             CommandGetReceiptStatus = 0x4c,
@@ -330,6 +332,41 @@
             {
                 return Request(CommandPrintDailyReport, "2");
             }
+        }
+
+        // Protocol: {StartDate},{EndDate}
+        // Both dates are 6 bytes, DDMMYY. Omitting the end date makes the device print a
+        // monthly (MMYY) or annual (YY) report instead, so both are always sent.
+        public virtual (string, DeviceStatus) PrintPeriodReport(
+            PeriodReportType type,
+            DateTime startDate,
+            DateTime endDate)
+        {
+            var command = type == PeriodReportType.Detailed
+                ? CommandPrintDetailedFMReportByDate
+                : CommandPrintShortFMReportByDate;
+            
+            var periodData = new StringBuilder()
+                .Append(FormatPeriodReportDate(startDate))
+                .Append(',')
+                .Append(FormatPeriodReportDate(endDate));
+
+            return Request(command, periodData.ToString());
+        }
+
+        protected virtual string FormatPeriodReportDate(DateTime date)
+        {
+            return date.ToString("ddMMyy", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Commands that keep the device busy far longer than a regular one, because it prints
+        /// the whole requested period before answering. See <see cref="MaxReadRetriesLongRunning"/>.
+        /// </summary>
+        protected virtual bool IsLongRunningCommand(byte command)
+        {
+            return command == CommandPrintDetailedFMReportByDate
+                || command == CommandPrintShortFMReportByDate;
         }
 
         public virtual (string, DeviceStatus) GetLastReceiptQRCodeData()

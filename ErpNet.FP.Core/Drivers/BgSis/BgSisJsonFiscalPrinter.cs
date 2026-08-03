@@ -453,6 +453,25 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             return status;
         }
 
+        public override DeviceStatus PrintPeriodReport(PeriodReport periodReport)
+        {
+            // "type" and "data" go at the root next to method/id, like getData - not under params.
+            // FD2D is the full (detailed) and SD2D the short report from date to date; the two dates
+            // travel together in "data" as "DD/MM/YY, DD/MM/YY".
+            var (_, status) = Request(
+                "printMFReport",
+                null,
+                new JObject
+                {
+                    ["type"] = periodReport.Type == PeriodReportType.Detailed ? "FD2D" : "SD2D",
+                    ["data"] =
+                        $"{FormatPeriodReportDate(periodReport.StartDate)}, " +
+                        $"{FormatPeriodReportDate(periodReport.EndDate)}"
+                });
+
+            return status;
+        }
+
         public override DeviceStatus PrintDuplicate(Credentials credentials)
         {
             var (_, status) = Request("printDuplicate");

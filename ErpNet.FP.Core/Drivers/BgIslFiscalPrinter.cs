@@ -345,6 +345,16 @@
             return status;
         }
 
+        public override DeviceStatus PrintPeriodReport(PeriodReport periodReport)
+        {
+            var (_, status) = PrintPeriodReport(
+                periodReport.Type,
+                periodReport.StartDate,
+                periodReport.EndDate);
+
+            return status;
+        }
+
         public override DeviceStatus PrintDuplicate(Credentials credentials)
         {
             var (_, status) = Request(CommandPrintLastReceiptDuplicate, "1");

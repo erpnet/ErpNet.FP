@@ -37,6 +37,7 @@ namespace ErpNet.FP.Core.Drivers.BgDatecs
                 fiscalPrinter.Info.TaxIdentificationNumber = TaxIdentificationNumber;
                 fiscalPrinter.Info.SupportedPaymentTypes = fiscalPrinter.GetSupportedPaymentTypes();
                 fiscalPrinter.Info.SupportsSubTotalAmountModifiers = true;
+                fiscalPrinter.Info.SupportsPeriodReport = true;
                 serviceOptions.ReconfigurePrinterConstants(fiscalPrinter.Info);
                 serviceOptions.ReconfigurePrinterOptions(fiscalPrinter.Info);
                 return fiscalPrinter;

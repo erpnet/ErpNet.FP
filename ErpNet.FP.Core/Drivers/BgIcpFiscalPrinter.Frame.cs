@@ -23,6 +23,8 @@
             MarkerACK = 0x06;
         protected const byte MaxWriteRetries = 6;
         protected const byte MaxReadRetries = 200;
+        // Printing a fiscal memory report for a long period keeps the device busy for minutes.
+        protected const int MaxReadRetriesLongRunning = 3000;
         protected virtual byte[] BuildHostFrame(byte[]? data)
         {
             // Frame header
@@ -84,7 +86,11 @@
 
                 // Read response frames.
                 var currentFrame = new List<byte>();
-                for (var r = 0; r < MaxReadRetries; r++)
+                var maxReadRetries = IsLongRunningRequest(data)
+                    ? MaxReadRetriesLongRunning
+                    : MaxReadRetries;
+
+                for (var r = 0; r < maxReadRetries; r++)
                 {
                     byte[] buffer;
 

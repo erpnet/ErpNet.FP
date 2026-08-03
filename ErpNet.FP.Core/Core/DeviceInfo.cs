@@ -79,6 +79,11 @@
         /// </summary>
         public NumberAssignment CreditNoteNumberAssignment = NumberAssignment.DeviceAssigned;
         /// <summary>
+        /// Expresses support of printing a fiscal memory report for a custom period
+        /// (from date to date) by the device.
+        /// </summary>
+        public bool SupportsPeriodReport = false;
+        /// <summary>
         /// Expresses support of payment terminal for current device model
         /// </summary>
         public bool SupportPaymentTerminal = false;

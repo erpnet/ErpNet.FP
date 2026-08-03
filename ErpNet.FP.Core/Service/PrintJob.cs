@@ -15,6 +15,7 @@
         Deposit,
         XReport,
         ZReport,
+        PeriodReport,
         SetDateTime,
         Duplicate,
         Reset
@@ -178,6 +179,21 @@
                         break;
                     case PrintJobAction.ZReport:
                         Result = Printer.PrintZReport((Credentials)(Document ?? new Credentials()));
+                        break;
+                    case PrintJobAction.PeriodReport:
+                        if (Document != null)
+                        {
+                            var periodReport = (PeriodReport)Document;
+                            var validateStatus = Printer.ValidatePeriodReport(periodReport);
+                            if (validateStatus.Ok)
+                            {
+                                Result = Printer.PrintPeriodReport(periodReport);
+                            }
+                            else
+                            {
+                                Result = validateStatus;
+                            }
+                        }
                         break;
                     case PrintJobAction.SetDateTime:
                         if (Document != null)
