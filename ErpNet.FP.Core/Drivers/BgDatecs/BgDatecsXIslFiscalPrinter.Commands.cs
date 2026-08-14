@@ -176,6 +176,21 @@
             }
         }
 
+        public override (string, DeviceStatus) CloseReceipt()
+        {
+            var (response, deviceStatus) = base.CloseReceipt();
+            if (deviceStatus.Ok)
+                return (response, deviceStatus);
+
+            // The status bytes tell the condition of the printer, not the result of the command, and both arrive in the same answer.
+            // Error code 0 and a document number therefore mean the receipt is already in the fiscal memory.
+            var fields = response.Split('\t');
+            if (fields.Length >= 2 && fields[0] == "0" && !string.IsNullOrWhiteSpace(fields[1]))
+                return (response, new DeviceStatus());
+
+            return (response, deviceStatus);
+        }
+
         public override (string, DeviceStatus) GetLastDocumentNumber(string closeReceiptResponse)
         {
             var deviceStatus = new DeviceStatus();
