@@ -272,6 +272,10 @@ The item with type "discount-amount" and "surcharge-amount" can have the followi
 The item with type "comment" and "footer-comment" can have the following fields set:
 * **"text"** - the text of the comment
 
+**Note for the SIS Fiscal Module (`bg.sis.json`)**: a `"comment"` line accepts digits only in its first 31 characters. A digit further to the right is rejected with **E403** and the whole document is refused before it reaches the device.
+`"footer-comment"` items and `"sale"` item texts are not affected.
+See [the SIS driver README](ErpNet.FP.Core/Drivers/BgSis/README.md) for the details and for the printable line widths.
+
 ### "payments"
 This section contains the payment types and amounts for each payment. 
 
