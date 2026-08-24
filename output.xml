@@ -4,7 +4,7 @@
     <PropertyGroup>
         <OutputPath>Output</OutputPath>
         <PublishRoot>Published</PublishRoot>
-        <Version>1.1.0.1693</Version>
+        <Version>1.1.0.1694</Version>
     </PropertyGroup>
 
     <ItemGroup>
