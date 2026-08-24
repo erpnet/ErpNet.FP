@@ -135,10 +135,12 @@ namespace ErpNet.FP.Core.Drivers.BgSis
 
         protected DeviceStatus CashHandling(decimal amount, string @operator)
         {
-            var begin = new JObject
+            // The operator is only sent when the caller supplies one.
+            var begin = new JObject();
+            if (int.TryParse(@operator, out var operatorNumber))
             {
-                ["operatorNumber"] = int.TryParse(@operator, out var operatorNumber) ? operatorNumber : 1
-            };
+                begin["operatorNumber"] = operatorNumber;
+            }
 
             var posId = GetPosId();
             if (!string.IsNullOrEmpty(posId))
@@ -172,6 +174,11 @@ namespace ErpNet.FP.Core.Drivers.BgSis
             var status = base.ValidateReceipt(receipt);
             if (status.Ok)
             {
+                if (string.IsNullOrEmpty(receipt.UniqueSaleNumber))
+                {
+                    status.AddError("E405", "UniqueSaleNumber is required by this device");
+                }
+
                 ValidateCommentDigits(status, receipt);
             }
 

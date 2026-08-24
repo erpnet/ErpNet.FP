@@ -276,16 +276,15 @@ namespace ErpNet.FP.Core.Drivers.BgSis
 
         protected JObject BuildReceiptParams(Receipt receipt, ReversalReceipt? reversal)
         {
+            // Emit an operator only when the caller supplies one.
             var begin = new JObject();
             if (int.TryParse(receipt.Operator, out var operatorNumber))
             {
                 begin["operatorNumber"] = operatorNumber;
             }
-            else
+            else if (!string.IsNullOrEmpty(receipt.Operator))
             {
-                begin["operatorNumber"] = 1;
-                if (!string.IsNullOrEmpty(receipt.Operator))
-                    begin["operatorName"] = receipt.Operator;
+                begin["operatorName"] = receipt.Operator;
             }
 
             var posId = GetPosId();
