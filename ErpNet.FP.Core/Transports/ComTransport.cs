@@ -14,7 +14,11 @@
         public override string TransportName => "com";
 
         protected const int DefaultBaudRate = 115200;
-        protected const int DefaultTimeout = 800;
+        // FashionPoint patch: 800ms is too aggressive for slow fiscal devices
+        // (e.g. Daisy PerfectS pauses >800ms between SYN bytes while writing
+        // to fiscal memory on receipt close), causing E107 "no response",
+        // automatic receipt aborts (АНУЛИРАН БОН) and false failures.
+        protected const int DefaultTimeout = 3000;
         protected const int DefaultTimeoutToClose = 3000;   // dispose SerialPort object when specified time after communication is elapsed
 
         private readonly IDictionary<string, ComTransport.Channel?> openedChannels =
@@ -22,7 +26,7 @@
 
         public override IChannel OpenChannel(string address)
         {
-            var (comPort, baudRate) = ParseAddress(address);
+            var (comPort, baudRate, timeout) = ParseAddress(address);
             if (openedChannels.TryGetValue(comPort, out Channel? channel))
             {
                 if (channel != null)
@@ -30,19 +34,22 @@
                 else 
                     openedChannels.Remove(comPort);
             }
-            channel = new Channel(comPort, baudRate);
+            channel = new Channel(comPort, baudRate, timeout);
             // <address> is more specific (<Com>:<Speed>) than <comPort> and multiple addresses on one port can lead to locking or not finding device (only one can be opened)
             openedChannels.Add(comPort, channel); 
             return channel;
         }
 
-        protected (string, int) ParseAddress(string address)
+        // FashionPoint patch: address format is <Com>[:<Speed>[:<TimeoutMs>]],
+        // e.g. "COM5", "COM5:115200", "COM5:115200:5000".
+        protected (string, int, int) ParseAddress(string address)
         {
             var parts = address.Split(':');
-            if (parts.Length == 1) return (address, DefaultBaudRate);
+            if (parts.Length == 1) return (address, DefaultBaudRate, DefaultTimeout);
             var hostName = parts[0];
             var baudRate = parts.Length > 1 ? int.Parse(parts[1]) : DefaultBaudRate;
-            return (hostName, baudRate);
+            var timeout = parts.Length > 2 ? int.Parse(parts[2]) : DefaultTimeout;
+            return (hostName, baudRate, timeout);
         }
 
         public override void Drop(IChannel channel)
@@ -69,6 +76,7 @@
             internal /*readonly*/ SerialPort? serialPort;    // can be disposed and created multiple times
             private string portName;       
             private int baudRate;
+            private int timeout;
             protected Timer idleTimer;
             protected const int MinimalBaudRate = 9600;
 
@@ -88,7 +96,7 @@
                 }
             }
 
-            public SerialPort GetNewSerialPort(int timeout = DefaultTimeout)
+            public SerialPort GetNewSerialPort()
             {
                 idleTimer.Change(DefaultTimeoutToClose, 0);
                 return new SerialPort
@@ -107,6 +115,7 @@
             {
                 this.portName = portName;
                 this.baudRate = baudRate;
+                this.timeout = timeout;
 
                 serialPort = null;  // GetNewSerialPort();
                 idleTimer = new Timer(IdleTimerElapsed); 
