@@ -135,10 +135,29 @@
             return Ok(serverVariables);
         }
 
+        public class PrinterConfigUpdateRequest
+        {
+            public string OldId { get; set; } = string.Empty;
+            public string Id { get; set; } = string.Empty;
+            public string Uri { get; set; } = string.Empty;
+        }
+
         // GET printers
         [HttpGet("printers")]
         public ActionResult<Dictionary<string, PrinterConfig>> Configured()
-            => context.ConfiguredPrinters;
+        {
+            var response = new Dictionary<string, PrinterConfig>();
+            foreach (var configuredPrinter in context.ConfiguredPrinters)
+            {
+                response.Add(
+                    configuredPrinter.Key,
+                    new PrinterConfig
+                    {
+                        Uri = global::ErpNet.FP.Core.Provider.Provider.RedactDeviceUri(configuredPrinter.Value.Uri) ?? string.Empty
+                    });
+            }
+            return response;
+        }
 
         // POST printers/configure
         [HttpPost("printers/configure")]
@@ -147,6 +166,18 @@
         )
         {
             if (context.ConfigurePrinter(printerConfigWithId))
+            {
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            return StatusCode(StatusCodes.Status423Locked);
+        }
+
+        // POST printers/update
+        [HttpPost("printers/update")]
+        public ActionResult Update([FromBody] PrinterConfigUpdateRequest request)
+        {
+            var printerConfig = new PrinterConfigWithId { Id = request.Id, Uri = request.Uri };
+            if (context.UpdateConfiguredPrinter(request.OldId, printerConfig))
             {
                 return StatusCode(StatusCodes.Status200OK);
             }

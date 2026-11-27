@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net.Sockets;
+    using System.Text;
     using Serilog;
 
     /// <summary>
@@ -15,12 +16,48 @@
 
         protected readonly int DefaultPort = 9100;
 
-        private readonly IDictionary<string, TcpTransport.Channel?> openedChannels =
-            new Dictionary<string, TcpTransport.Channel?>();
+        private readonly IDictionary<(string Address, string? Password), TcpTransport.Channel?> openedChannels =
+            new Dictionary<(string Address, string? Password), TcpTransport.Channel?>();
+        private readonly IDictionary<(string Address, string? Password), TcpTransport.Channel?> openedTremolChannels =
+            new Dictionary<(string Address, string? Password), TcpTransport.Channel?>();
 
         public override IChannel OpenChannel(string address)
         {
-            if (openedChannels.TryGetValue(address, out Channel? channel))
+            return OpenChannel(address, null, openedChannels);
+        }
+
+        internal IChannel OpenTremolChannel(string address, string? connectionPassword)
+        {
+            return OpenChannel(address, connectionPassword, openedTremolChannels);
+        }
+
+        internal void InvalidateTremolChannel(string address, string? connectionPassword)
+        {
+            var channelKey = (address, connectionPassword);
+            if (openedTremolChannels.TryGetValue(channelKey, out Channel? channel))
+            {
+                openedTremolChannels.Remove(channelKey);
+                if (channel != null)
+                {
+                    try
+                    {
+                        channel.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Cannot close TREMOL TCP channel {address}: {ex.GetType().Name}");
+                    }
+                }
+            }
+        }
+
+        private IChannel OpenChannel(
+            string address,
+            string? connectionPassword,
+            IDictionary<(string Address, string? Password), TcpTransport.Channel?> channelCache)
+        {
+            var channelKey = (address, connectionPassword);
+            if (channelCache.TryGetValue(channelKey, out Channel? channel))
             {
                 if (channel == null)
                 {
@@ -33,13 +70,13 @@
                 try
                 {
                     var (hostName, port) = ParseAddress(address);
-                    channel = new Channel(hostName, port);
-                    openedChannels.Add(address, channel);
+                    channel = new Channel(hostName, port, connectionPassword);
+                    channelCache.Add(channelKey, channel);
                     return channel;
                 }
                 catch (TimeoutException)
                 {
-                    openedChannels.Add(address, null);
+                    channelCache.Add(channelKey, null);
                     throw;
                 }
             }
@@ -66,13 +103,20 @@
 
             private string HostName { get; }
             private int Port { get; }
+            private string? ConnectionPassword { get; }
 
             public string Descriptor => $"{HostName}:{Port}";
 
             public Channel(string hostName, int port)
+                : this(hostName, port, null)
+            {
+            }
+
+            internal Channel(string hostName, int port, string? connectionPassword)
             {
                 HostName = hostName;
                 Port = port;
+                ConnectionPassword = connectionPassword;
                 tcpClient = new TcpClient();
                 netStream = ConnectAndGetStream();
             }
@@ -82,7 +126,35 @@
                 var task = tcpClient.ConnectAsync(HostName, Port);
                 if (task.Wait(Math.Max(200, tcpClient.ReceiveTimeout)))
                 {
-                    return tcpClient.GetStream();
+                    NetworkStream stream;
+                    try
+                    {
+                        stream = tcpClient.GetStream();
+                    }
+                    catch
+                    {
+                        tcpClient.Dispose();
+                        throw;
+                    }
+
+                    try
+                    {
+                        if (ConnectionPassword != null)
+                        {
+                            var passwordBytes = Encoding.UTF8.GetBytes(ConnectionPassword);
+                            var authenticationBytes = new byte[passwordBytes.Length + 1];
+                            Array.Copy(passwordBytes, authenticationBytes, passwordBytes.Length);
+                            authenticationBytes[authenticationBytes.Length - 1] = 0x0A;
+                            stream.Write(authenticationBytes, 0, authenticationBytes.Length);
+                        }
+                        return stream;
+                    }
+                    catch
+                    {
+                        stream.Dispose();
+                        tcpClient.Dispose();
+                        throw;
+                    }
                 }
                 var errorMessage = $"Timeout occured while connecting to {HostName}:{Port}";
                 Log.Error(errorMessage);
