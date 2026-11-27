@@ -8,6 +8,7 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using ErpNet.FP.Core.Logging;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
@@ -139,11 +140,11 @@
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-                .WriteTo.Console(outputTemplate: logOutputTemplate)
+                .WriteTo.Console(formatter: new RedactingTextFormatter(logOutputTemplate))
                 .WriteTo.File(
-                    EnsureDebugLogHistory(pathToContentRoot),
-                    rollingInterval: RollingInterval.Day,
-                    outputTemplate: logOutputTemplate);
+                    formatter: new RedactingTextFormatter(logOutputTemplate),
+                    path: EnsureDebugLogHistory(pathToContentRoot),
+                    rollingInterval: RollingInterval.Day);
 
             if (Debugger.IsAttached)
             {

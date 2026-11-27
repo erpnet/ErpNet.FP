@@ -76,6 +76,7 @@
                     <ul>
                         <li><small>For tcp:// replace <b>&lt;ip-address&gt;</b> and <b>&lt;port&gt;</b> with the device's ip address and port, i.e. bg.dt.x.isl.tcp://<b>192.168.1.55</b>:<b>9001</b></small></li>
                         <li><small>For com:// replace <b>&lt;com-port&gt;</b> with the device's com port, i.e. bg.dt.x.isl.com://<b>COM5</b> on Windows, or bg.dt.x.isl.com://<b>/dev/ttyS0</b> on Linux</small></li>
+                        <li><small>For password-protected TREMOL ZFP TCP, append <b>:&lt;password&gt;</b> after the port in the Uri (bg.zk.zfp.tcp or bg.zk.v2.zfp.tcp). A missing or empty suffix means no password. Anything after the port of a TCP Uri is masked as &lt;password&gt; in logs and API.</small></li>
                     </ul>
                 </div>
             </div>
@@ -118,7 +119,7 @@
     <div id="ToastArea"></div>
 
     <script src="index.js"></script>
-    <script src="app.js?ver=F1C6C0E7E2DFCBAC4031C32F62775A25C9932BE11A5BCB84784C10CDE4CA715F"></script>
+    <script src="app.js?ver=D54F86DF75A2E1DDCC5E741366095D8F3556576A34D3F897DEE6D32324AECC46"></script>
 </body>
 
 </html>

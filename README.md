@@ -251,6 +251,8 @@ When a printer is detected, the http server saves something, called printer Uri.
 - bg.sis.json.http://192.168.1.77:5063
 - etc.
 
+For manual configuration of a password-protected TREMOL ZFP TCP printer, use `bg.zk.zfp.tcp://<host>:<port>:<password>` or `bg.zk.v2.zfp.tcp://<host>:<port>:<password>`. The password suffix is optional; a missing or empty suffix means no password. For every TCP Uri, everything after the port is treated as a secret: it is masked as `<password>` in API responses and logs, and only TREMOL ZFP drivers send it to the device.
+
 The printer Uri is currently used only internally in the http server. Still, it is exposed as part of the device info. In the future, there might be methods to use the printers through their Uri.
 
 # Supported devices and operating systems

@@ -41,6 +41,7 @@
         int DetectionTimeout { get; set; }
 
         bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId);
+        bool UpdateConfiguredPrinter(string existingId, PrinterConfigWithId printerConfigWithId);
 
         bool DeletePrinter(PrinterConfigWithId printerConfigWithId);
     }
@@ -179,7 +180,10 @@
                             Log.Information("Detecting configured printers...");
                             foreach (var printerSetting in configOptions.Printers)
                             {
-                                string logString = $"Trying {printerSetting.Key}: {printerSetting.Value.Uri}";
+                                var uriForLog = global::ErpNet.FP.Core.Provider.Provider.RedactDeviceUri(printerSetting.Value.Uri);
+                                string logString = uriForLog == null
+                                    ? $"Trying {printerSetting.Key}: device URI (address omitted)"
+                                    : $"Trying {printerSetting.Key}: {uriForLog}";
                                 var uri = printerSetting.Value.Uri;
                                 if (uri.Length > 0)
                                 {
@@ -410,7 +414,9 @@
 
         public bool ConfigurePrinter(PrinterConfigWithId printerConfigWithId)
         {
-            if (String.IsNullOrEmpty(printerConfigWithId.Id) || String.IsNullOrEmpty(printerConfigWithId.Uri))
+            if (String.IsNullOrEmpty(printerConfigWithId.Id)
+                || String.IsNullOrEmpty(printerConfigWithId.Uri)
+                || global::ErpNet.FP.Core.Provider.Provider.IsMaskedDeviceUri(printerConfigWithId.Uri))
             {
                 return false;
             }
@@ -418,6 +424,50 @@
             {
                 ConfiguredPrinters.Add(printerConfigWithId.Id, printerConfigWithId);
                 WriteOptions();
+                return true;
+            }
+        }
+
+        public bool UpdateConfiguredPrinter(string existingId, PrinterConfigWithId printerConfigWithId)
+        {
+            if (String.IsNullOrEmpty(existingId)
+                || String.IsNullOrEmpty(printerConfigWithId.Id)
+                || String.IsNullOrEmpty(printerConfigWithId.Uri))
+            {
+                return false;
+            }
+
+            lock (taskSyncLock)
+            {
+                if (!ConfiguredPrinters.TryGetValue(existingId, out var existingConfig)
+                    || (existingId != printerConfigWithId.Id && ConfiguredPrinters.ContainsKey(printerConfigWithId.Id))
+                    || !global::ErpNet.FP.Core.Provider.Provider.TryRestoreDeviceUriSecret(
+                        existingConfig.Uri,
+                        printerConfigWithId.Uri,
+                        out var uriToStore))
+                {
+                    return false;
+                }
+
+                var previousUri = existingConfig.Uri;
+                var updatedConfig = new PrinterConfig { Uri = uriToStore };
+                if (existingId == printerConfigWithId.Id)
+                {
+                    ConfiguredPrinters[existingId] = updatedConfig;
+                }
+                else
+                {
+                    ConfiguredPrinters.Remove(existingId);
+                    ConfiguredPrinters.Add(printerConfigWithId.Id, updatedConfig);
+                }
+
+                WriteOptions();
+                if (!global::ErpNet.FP.Core.Provider.Provider.HasSameDeviceConnection(previousUri, uriToStore)
+                    && !ConfiguredPrinters.Values.Any(config =>
+                        global::ErpNet.FP.Core.Provider.Provider.HasSameDeviceConnection(config.Uri, previousUri)))
+                {
+                    Provider.InvalidateTremolZfpTcpChannel(previousUri);
+                }
                 return true;
             }
         }
@@ -430,11 +480,17 @@
             }
             lock (taskSyncLock)
             {
-                if (!ConfiguredPrinters.Remove(printerConfigWithId.Id))
+                if (!ConfiguredPrinters.TryGetValue(printerConfigWithId.Id, out var deletedConfig)
+                    || !ConfiguredPrinters.Remove(printerConfigWithId.Id))
                 {
                     return false;
                 }
                 WriteOptions();
+                if (!ConfiguredPrinters.Values.Any(config =>
+                    global::ErpNet.FP.Core.Provider.Provider.HasSameDeviceConnection(config.Uri, deletedConfig.Uri)))
+                {
+                    Provider.InvalidateTremolZfpTcpChannel(deletedConfig.Uri);
+                }
                 return true;
             }
         }

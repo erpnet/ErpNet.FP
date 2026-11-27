@@ -96,7 +96,7 @@ E.g., the Printers section options have priority over the auto-detected printers
 
 ## Printers Sub-section
 Each element in this section contains information about a single printer:
-* **Uri** - contains the Uri of the configured printer.
+* **Uri** - contains the Uri of the configured printer. Password-protected TREMOL ZFP printers over TCP use `bg.zk.zfp.tcp://<host>:<port>:<password>` or `bg.zk.v2.zfp.tcp://<host>:<port>:<password>`; for every TCP Uri the part after the port is kept in this file, but masked as `<password>` in API responses and logs.
 
 Network devices (which cannot be auto-detected) are configured here with their full Uri, e.g. `"bn025335": { "Uri": "bg.sis.json.http://192.168.10.147:5063" }`.
 

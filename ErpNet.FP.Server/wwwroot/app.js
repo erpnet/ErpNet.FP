@@ -307,15 +307,16 @@ function showConfiguredPrinters() {
             this.html("")
             for (var printerId in data) {
                 var printer = data[printerId]
+                var printerUriForInput = printer.uri.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                 var section =
                     '<input type="radio" id="configured-section-' + printerId + '" aria-hidden="true" name="configured">' +
                     '<label style="overflow:hidden;display:inline-block;text-overflow: ellipsis;white-space: nowrap;" for="configured-section-' + printerId + '" aria-hidden="true"><strong>' + printerId + '</strong></label>' +
                     '<div class="input-group vertical">' +
                     '<label for="id-' + printerId + '">Id:</label><input id="id-' + printerId + '" value="' + printerId + '" />' +
-                    '<label for="uri-' + printerId + '">Uri:</label><input id="uri-' + printerId + '" value="' + printer.uri + '" />' +
+                    '<label for="uri-' + printerId + '">Uri:</label><input id="uri-' + printerId + '" value="' + printerUriForInput + '" />' +
                     '<div class="input-group horizontal">' +
                     '<button class="small primary" onclick="saveSettingsForPrinter(\'' + printerId + '\')">Save settings</button>' +
-                    '<button class="small secondary" onclick="deletePrinter(\'' + printerId + '\', \'' + printer.uri + '\')">Delete printer</button>' +
+                    '<button class="small secondary" onclick="deletePrinter(\'' + printerId + '\')">Delete printer</button>' +
                     '</div></div>'
                 this.append(section)
             }
@@ -421,13 +422,12 @@ function configurePrinter() {
     })
 }
 
-function deletePrinter(printerId, printerUri) {
+function deletePrinter(printerId) {
     $.ajax({
         type: 'POST',
         url: '/service/printers/delete',
         data: JSON.stringify({
-            "id": printerId,
-            "uri": printerUri
+            "id": printerId
         }),
         contentType: 'application/json',
         dataType: 'json',
@@ -444,34 +444,20 @@ function deletePrinter(printerId, printerUri) {
 function saveSettingsForPrinter(printerId) {
     $.ajax({
         type: 'POST',
-        url: '/service/printers/delete',
+        url: '/service/printers/update',
         data: JSON.stringify({
-            "id": printerId
+            "oldId": printerId,
+            "id": $("#id-" + printerId).val(),
+            "uri": $("#uri-" + printerId).val()
         }),
         contentType: 'application/json',
         dataType: 'json',
         timeout: 0,
         success: function (data) {
-            $.ajax({
-                type: 'POST',
-                url: '/service/printers/configure',
-                data: JSON.stringify({
-                    "id": $("#id-" + printerId).val(),
-                    "uri": $("#uri-" + printerId).val(),
-                }),
-                contentType: 'application/json',
-                dataType: 'json',
-                timeout: 0,
-                success: function (data) {
-                    detectAvailablePrinters()
-                },
-                error: function (xhr, type) {
-                    showToastMessage("Cannot save the changes for the printer.")
-                }
-            })
+            detectAvailablePrinters()
         },
         error: function (xhr, type) {
-            showToastMessage("Cannot delete the old settings.")
+            showToastMessage("Cannot save the changes for the printer.")
         }
     })
 }
